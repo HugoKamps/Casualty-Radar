@@ -15,6 +15,7 @@ namespace KBS_SE3 {
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
             // Test comment
+            // Mijn comment
         }
     }
 }
