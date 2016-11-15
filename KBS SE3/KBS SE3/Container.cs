@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KBS_SE3.Core;
+using KBS_SE3.Modules;
+using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;

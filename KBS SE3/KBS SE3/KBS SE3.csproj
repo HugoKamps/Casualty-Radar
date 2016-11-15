@@ -52,10 +52,27 @@
     <Compile Include="Container.Designer.cs">
       <DependentUpon>Container.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\IModule.cs" />
+    <Compile Include="Core\ModuleManager.cs" />
+    <Compile Include="Modules\HomeModule.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\HomeModule.Designer.cs">
+      <DependentUpon>HomeModule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\SettingsModule.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\SettingsModule.Designer.cs">
+      <DependentUpon>SettingsModule.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\HomeModule.resx">
+      <DependentUpon>HomeModule.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -82,7 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Modules\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\logo_final.png" />

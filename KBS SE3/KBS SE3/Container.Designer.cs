@@ -1,4 +1,9 @@
-﻿namespace KBS_SE3 {
+﻿using KBS_SE3.Core;
+using KBS_SE3.Modules;
+using System;
+using System.Windows.Forms;
+
+namespace KBS_SE3 {
     partial class Container {
         /// <summary>
         /// Required designer variable.
@@ -132,7 +137,6 @@
             this.topBar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).EndInit();
             this.ResumeLayout(false);
-
         }
 
         #endregion
