@@ -13,5 +13,9 @@ namespace KBS_SE3 {
         public Form1() {
             InitializeComponent();
         }
+
+        private void panel1_Paint(object sender, PaintEventArgs e) {
+
+        }
     }
 }
