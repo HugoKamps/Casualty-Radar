@@ -1,4 +1,5 @@
 ﻿using KBS_SE3.Core;
+using KBS_SE3.Models;
 using KBS_SE3.Modules;
 using System;
 using System.Drawing;
@@ -21,7 +22,11 @@ namespace KBS_SE3 {
             InitializeComponent();
             registerButtons();
         }
-
+        
+        /*
+        * Method that registers all buttons in the application menu
+        * Each button is bound to a Module; which is an instance of IModule
+        */
         private void registerButtons() {
             homeBtn.Tag = new HomeModule();
             settingsBtn.Tag = new SettingsModule();
@@ -64,7 +69,14 @@ namespace KBS_SE3 {
         }
 
         private void exitBtn_Click(object sender, EventArgs e) {
-            Dispose();
+            Application.Exit();
+        }
+
+        private void Container_Load(object sender, EventArgs e)
+        {
+            // Load the feed
+            Feed feed = new Feed();
+            FeedTicker feedTicker = new FeedTicker(3000, feed);
         }
     }
 }
