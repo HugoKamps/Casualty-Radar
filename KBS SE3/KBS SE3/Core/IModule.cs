@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 namespace KBS_SE3.Core {
     interface IModule {
 
+        /*
+        * Returns the name of the Module
+        */
         String GetModuleName();
     }
 }
