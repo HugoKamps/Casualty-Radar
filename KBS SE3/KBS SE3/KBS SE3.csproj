@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,6 +56,8 @@
     <Compile Include="Models\PushMessage.cs" />
     <Compile Include="Core\IModule.cs" />
     <Compile Include="Core\ModuleManager.cs" />
+    <Compile Include="Models\Feed.cs" />
+    <Compile Include="Models\FeedTicker.cs" />
     <Compile Include="Modules\HomeModule.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -102,6 +105,7 @@
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
     <Folder Include="Models\" />
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
