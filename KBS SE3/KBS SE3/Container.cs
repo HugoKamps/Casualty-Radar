@@ -1,4 +1,5 @@
 ﻿using KBS_SE3.Core;
+using KBS_SE3.Models;
 using KBS_SE3.Modules;
 using System;
 using System.Drawing;
@@ -11,17 +12,28 @@ namespace KBS_SE3 {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
+        private static Container _instance;
 
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
         [DllImport("user32.dll")]
         private static extern bool ReleaseCapture();
 
-        public Container() {
+        private Container() {
             InitializeComponent();
             registerButtons();
-        }
+            Models.PushMessage m1 = new Models.PushMessage("Titel", "Brandweer", "Nieuwe melding", "hanseflastStraat 8");
 
+        }
+        public static Container GetInstance() {
+            if (_instance == null) _instance = new Container();
+            return _instance;
+        }
+        
+        /*
+        * Method that registers all buttons in the application menu
+        * Each button is bound to a Module; which is an instance of IModule
+        */
         private void registerButtons() {
             homeBtn.Tag = new HomeModule();
             settingsBtn.Tag = new SettingsModule();
@@ -64,7 +76,14 @@ namespace KBS_SE3 {
         }
 
         private void exitBtn_Click(object sender, EventArgs e) {
-            Dispose();
+            Application.Exit();
+        }
+
+        private void Container_Load(object sender, EventArgs e)
+        {
+            // Load the feed
+            Feed feed = new Feed();
+            FeedTicker feedTicker = new FeedTicker(3000, feed);
         }
     }
 }
