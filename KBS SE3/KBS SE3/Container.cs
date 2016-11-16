@@ -19,6 +19,12 @@ namespace KBS_SE3 {
 
         public Container() {
             InitializeComponent();
+            registerButtons();
+        }
+
+        private void registerButtons() {
+            homeBtn.Tag = new HomeModule();
+            settingsBtn.Tag = new SettingsModule();
         }
 
         protected override CreateParams CreateParams {
@@ -27,10 +33,6 @@ namespace KBS_SE3 {
                 cp.ClassStyle |= CS_DROPSHADOW;
                 return cp;
             }
-        }
-
-        private void closeBtn_Click(object sender, EventArgs e) {
-            Dispose();
         }
 
         private void minimizeBtn_Click(object sender, EventArgs e) {
@@ -53,20 +55,16 @@ namespace KBS_SE3 {
             SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }
 
-        private void menuBtn_Click(object sender, EventArgs e)
-        {
+        private void menuBtn_Click(object sender, EventArgs e){
             homeBtn.BackColor = Color.FromArgb(52, 57, 61);
             settingsBtn.BackColor = Color.FromArgb(52, 57, 61);
             Button selectedButton = (Button) sender;
             selectedButton.BackColor = Color.FromArgb(236, 89, 71);
+            ModuleManager.GetInstance().UpdateModule(null, contentPanel, selectedButton.Tag);
         }
 
         private void exitBtn_Click(object sender, EventArgs e) {
             Dispose();
-        }
-
-        private void menuLabel_Click(object sender, EventArgs e) {
-
         }
     }
 }
