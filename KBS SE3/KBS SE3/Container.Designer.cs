@@ -211,6 +211,7 @@ namespace KBS_SE3 {
             this.MinimizeBox = false;
             this.Name = "Container";
             this.Text = "Casualty Radar";
+            this.Load += new System.EventHandler(this.Container_Load);
             this.topBar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).EndInit();
             this.menuPanel.ResumeLayout(false);
