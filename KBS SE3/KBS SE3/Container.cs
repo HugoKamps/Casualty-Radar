@@ -52,5 +52,21 @@ namespace KBS_SE3 {
             ReleaseCapture();
             SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }
+
+        private void menuBtn_Click(object sender, EventArgs e)
+        {
+            homeBtn.BackColor = Color.FromArgb(52, 57, 61);
+            settingsBtn.BackColor = Color.FromArgb(52, 57, 61);
+            Button selectedButton = (Button) sender;
+            selectedButton.BackColor = Color.FromArgb(236, 89, 71);
+        }
+
+        private void exitBtn_Click(object sender, EventArgs e) {
+            Dispose();
+        }
+
+        private void menuLabel_Click(object sender, EventArgs e) {
+
+        }
     }
 }
