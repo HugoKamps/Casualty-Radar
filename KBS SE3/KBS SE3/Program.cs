@@ -11,10 +11,14 @@ namespace KBS_SE3 {
         /// </summary>
         [STAThread]
         static void Main() {
+
+            Models.Message m1 = new Models.Message("Titel", "Brandweer", "Nieuwe melding", "hanseflastStraat 8");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-            //test
+
+             
+
         }
     }
 }
