@@ -55,10 +55,5 @@ namespace KBS_SE3.Models {
             // Activate the form.
             Container.GetInstance().Activate();
         }
-
-
-
-
-
     }
 }
