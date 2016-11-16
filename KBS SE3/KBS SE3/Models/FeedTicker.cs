@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
+//using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace KBS_SE3.Models
 {
@@ -19,17 +20,18 @@ namespace KBS_SE3.Models
             feed = f;
             timerOnOff = true;
 
-            TimerCallback callback = new TimerCallback(Tick);
-
-            Timer stateTimer = new Timer(callback, null, 0, tickTime);
-
-            while (timerOnOff)
-            {
-                Thread.Sleep(100);
-            }
+            startTimer();
         }
 
-        public static void Tick(Object stateInfo)
+        private void startTimer()
+        {
+            Timer stateTimer = new Timer();
+            stateTimer.Interval = (tickTime);
+            stateTimer.Tick += new EventHandler(Tick);
+            stateTimer.Start();
+        }
+
+        public static void Tick(Object sender, EventArgs e)
         {
             feed.UpdateFeed();
         }
