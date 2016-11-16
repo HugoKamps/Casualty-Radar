@@ -12,15 +12,22 @@ namespace KBS_SE3 {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
+        private static Container _instance;
 
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
         [DllImport("user32.dll")]
         private static extern bool ReleaseCapture();
 
-        public Container() {
+        private Container() {
             InitializeComponent();
             registerButtons();
+            Models.PushMessage m1 = new Models.PushMessage("Titel", "Brandweer", "Nieuwe melding", "hanseflastStraat 8");
+
+        }
+        public static Container GetInstance() {
+            if (_instance == null) _instance = new Container();
+            return _instance;
         }
         
         /*
