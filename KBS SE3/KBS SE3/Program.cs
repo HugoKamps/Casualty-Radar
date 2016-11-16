@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBS_SE3.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,12 +13,9 @@ namespace KBS_SE3 {
         [STAThread]
         static void Main() {
 
-            Models.Message m1 = new Models.Message("Titel", "Brandweer", "Nieuwe melding", "hanseflastStraat 8");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
-
-             
+            Application.Run(Container.GetInstance());
 
         }
     }
