@@ -1,9 +1,12 @@
-﻿using System;
+﻿using KBS_SE3.Core;
+using KBS_SE3.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace KBS_SE3.Models
@@ -27,9 +30,10 @@ namespace KBS_SE3.Models
 
         public void DisplayItems(SyndicationFeed items)
         {
+            HomeModule module = (HomeModule)ModuleManager.GetInstance().GetCurrentModule();
             foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate))
             {
-                // Print item
+                module.listBox1.Items.Add(item.Title.Text);
             }
         }
 
