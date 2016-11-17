@@ -11,14 +11,13 @@ using KBS_SE3.Core;
 using KBS_SE3.Models;
 
 namespace KBS_SE3.Modules {
-    partial class HomeModule : UserControl, IModule {
-        public HomeModule() {
+     partial class NavigationModule : UserControl, IModule {
+        public NavigationModule() {
             InitializeComponent();
         }
 
         public Breadcrumb GetBreadcrumb() {
-            return new Breadcrumb(this, "Home", new NavigationModule());
+            return new Breadcrumb(this, "Navigation", null, new HomeModule());
         }
-
     }
 }

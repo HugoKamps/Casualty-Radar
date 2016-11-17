@@ -1,5 +1,5 @@
 ﻿namespace KBS_SE3.Modules {
-    partial class HomeModule {
+    partial class NavigationModule {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -23,16 +23,8 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.SuspendLayout();
-            // 
-            // HomeModule
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "HomeModule";
-            this.Size = new System.Drawing.Size(953, 480);
-            this.ResumeLayout(false);
-
         }
 
         #endregion
