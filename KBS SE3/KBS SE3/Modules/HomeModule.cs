@@ -33,6 +33,7 @@ namespace KBS_SE3.Modules {
             {
                 listBox1.Items.Add(a.Title);
             }
+            listBox1.Refresh();
             //listBox1.DataSource = null;
             //listBox1.Items.Clear();
             //listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
