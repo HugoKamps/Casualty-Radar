@@ -22,6 +22,7 @@ namespace KBS_SE3 {
         private Container() {
             InitializeComponent();
             registerButtons();
+            ModuleManager.GetInstance().UpdateModule(null, contentPanel, new HomeModule());
             Models.PushMessage m1 = new Models.PushMessage("Titel", "Brandweer", "Nieuwe melding", "hanseflastStraat 8");
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             ModuleManager.GetInstance().UpdateModule(null, contentPanel, homeBtn.Tag);
@@ -84,7 +85,7 @@ namespace KBS_SE3 {
         {
             // Load the feed
             Feed feed = new Feed();
-            FeedTicker feedTicker = new FeedTicker(3000, feed);
+            FeedTicker feedTicker = new FeedTicker(20000, feed);
         }
     }
 }
