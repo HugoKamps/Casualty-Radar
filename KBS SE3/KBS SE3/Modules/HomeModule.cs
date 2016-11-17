@@ -13,6 +13,26 @@ namespace KBS_SE3.Modules {
     public partial class HomeModule : UserControl, IModule {
         public HomeModule() {
             InitializeComponent();
+
+            var points = new List<string>()
+            {
+                "52.501356,6.083451",
+                "52.501988,6.082142"
+            };
+            GetMap(LocationManager.GetLocationProperty(), points);
+            MessageBox.Show("2");
+        }
+
+        public void GetMap(string currentLocation, List<string> locations) {
+            var url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentLocation + "&zoom=15&size=700x480&maptype=terrain&";
+            url += "markers=color:blue%7Clabel:L%7C" + currentLocation + "&";
+
+            foreach (var location in locations) {
+                url += "markers=color:red%7Clabel:O%7C" + location + "&";
+            }
+            
+            url += "&key=AIzaSyDoRzUMAF3osX972CDWR2rDoWc9nKafV5A";
+                mapTest.Load(url);
         }
 
         public string GetModuleName() {
