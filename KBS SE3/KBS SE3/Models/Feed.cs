@@ -2,6 +2,7 @@
 using KBS_SE3.Modules;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel.Syndication;
@@ -15,21 +16,32 @@ namespace KBS_SE3.Models
 {
     class Feed
     {
+        private static Feed instance;
         private SyndicationFeed p2000;
         private string feedUrl = "http://feeds.livep2000.nl/";
         public List<Alert> Alerts = new List<Alert>();
+        HomeModule module;
+
+        public static Feed Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new Feed();
+                }
+                return instance;
+            }
+        }
 
         public Feed()
         {
+            module = (HomeModule)ModuleManager.GetInstance().GetCurrentModule();
+            instance = this;
             CreateFirstFeed();
             Alerts = CreateAlertList(p2000);
             DisplayItems(Alerts);
             UpdateFeed();
-        }
-
-        public SyndicationFeed P2000
-        {
-            get { return p2000; }
         }
 
         public List<Alert> CreateAlertList(SyndicationFeed items)
@@ -53,12 +65,20 @@ namespace KBS_SE3.Models
 
         public void DisplayItems(List<Alert> alerts)
         {
-            HomeModule module = (HomeModule)ModuleManager.GetInstance().GetCurrentModule();
-            foreach (Alert alert in alerts)
-            {
-                // Display item
-                module.listBox1.Items.Add(alert.Title);
-            }
+            HomeModule.Instance.UpdateAlerts();
+            //BindingList<Alert> a = new BindingList<Alert>(alerts);
+            // Empty current list
+            //module.listBox1.Items.Clear();
+            //module.listBox1.DataSource = null;
+            //module.listBox1.DataSource = a;
+            //module.listBox1.DisplayMember = "Title";
+            //module.listBox1.ValueMember = "Title";
+
+            //foreach (Alert alert in alerts)
+            //{
+            //    // Add new items
+            //    module.listBox1.Items.Add(alert.Title);
+            //}
         }
 
         public void CreateFirstFeed()
@@ -97,7 +117,12 @@ namespace KBS_SE3.Models
 
             newFeed.Items = newItems;
             List<Alert> newAlerts = CreateAlertList(newFeed);
-            DisplayItems(newAlerts);
+
+            // Send notification to client
+            // ...
+
+            // Display new feed
+            DisplayItems(Alerts);
         }
     }
 }
