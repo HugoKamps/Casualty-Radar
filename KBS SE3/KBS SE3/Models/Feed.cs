@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace KBS_SE3.Models
 {
@@ -12,11 +15,13 @@ namespace KBS_SE3.Models
     {
         private SyndicationFeed p2000;
         private string feedUrl = "http://feeds.livep2000.nl/";
+        public List<Alert> Alerts = new List<Alert>();
 
         public Feed()
         {
             CreateFirstFeed();
-            DisplayItems(p2000);
+            Alerts = CreateAlertList(p2000);
+            DisplayItems(Alerts);
             UpdateFeed();
         }
 
@@ -25,11 +30,31 @@ namespace KBS_SE3.Models
             get { return p2000; }
         }
 
-        public void DisplayItems(SyndicationFeed items)
+        public List<Alert> CreateAlertList(SyndicationFeed items)
         {
+            List<Alert> tempAlerts = new List<Alert>();
+            string lat;
+            string lng;
+
             foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate))
             {
-                // Print item
+                if (item.ElementExtensions.Count == 2)
+                {
+                    lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
+                    lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
+                    tempAlerts.Add(new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture)));
+                }
+            }
+
+            return tempAlerts;
+        }
+
+        public void DisplayItems(List<Alert> alerts)
+        {
+            foreach (Alert alert in alerts)
+            {
+                // Display item
+                
             }
         }
 
@@ -46,6 +71,7 @@ namespace KBS_SE3.Models
 
             // Load the feed
             p2000 = SyndicationFeed.Load(XmlReader.Create(feedUrl));
+            Alerts = CreateAlertList(p2000);
 
             // Get the first item from the previous feed
             SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
@@ -67,7 +93,8 @@ namespace KBS_SE3.Models
             }
 
             newFeed.Items = newItems;
-            DisplayItems(newFeed);
+            List<Alert> newAlerts = CreateAlertList(newFeed);
+            DisplayItems(newAlerts);
         }
     }
 }
