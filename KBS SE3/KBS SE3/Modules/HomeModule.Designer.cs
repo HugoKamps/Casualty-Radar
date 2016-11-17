@@ -23,35 +23,33 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.mapTest = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.mapTest)).BeginInit();
+            this.mapBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.mapBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // mapTest
+            // mapBox
             // 
-            this.mapTest.Dock = System.Windows.Forms.DockStyle.Left;
-            this.mapTest.Location = new System.Drawing.Point(0, 0);
-            this.mapTest.Name = "mapTest";
-            this.mapTest.Size = new System.Drawing.Size(700, 480);
-            this.mapTest.TabIndex = 2;
-            this.mapTest.TabStop = false;
-            // 
-            this.SuspendLayout();
+            this.mapBox.Dock = System.Windows.Forms.DockStyle.Left;
+            this.mapBox.Location = new System.Drawing.Point(0, 0);
+            this.mapBox.Name = "mapBox";
+            this.mapBox.Size = new System.Drawing.Size(700, 480);
+            this.mapBox.TabIndex = 2;
+            this.mapBox.TabStop = false;
             // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.mapTest);
+            this.Controls.Add(this.mapBox);
             this.Name = "HomeModule";
             this.Size = new System.Drawing.Size(953, 480);
-            ((System.ComponentModel.ISupportInitialize)(this.mapTest)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mapBox)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox mapTest;
+        private System.Windows.Forms.PictureBox mapBox;
     }
 }
