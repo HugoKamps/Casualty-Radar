@@ -22,8 +22,8 @@ namespace KBS_SE3 {
 
         private Container() {
             InitializeComponent();
-            registerButtons();
             this._modManager = ModuleManager.GetInstance();
+            registerButtons();
             //Models.PushMessage m1 = new Models.PushMessage("Titel", "Brandweer", "Nieuwe melding", "hanseflastStraat 8");
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
@@ -38,8 +38,8 @@ namespace KBS_SE3 {
         * Each button is bound to a Module; which is an instance of IModule
         */
         private void registerButtons() {
-            homeBtn.Tag = new HomeModule();
-            settingsBtn.Tag = new SettingsModule();
+            homeBtn.Tag = _modManager.ParseInstance(typeof(HomeModule));
+            settingsBtn.Tag = _modManager.ParseInstance(typeof(SettingsModule));
         }
 
         protected override CreateParams CreateParams {
