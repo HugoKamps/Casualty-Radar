@@ -20,7 +20,6 @@ namespace KBS_SE3.Models
         private SyndicationFeed p2000;
         private string feedUrl = "http://feeds.livep2000.nl/";
         public List<Alert> Alerts = new List<Alert>();
-        HomeModule module;
 
         public static Feed Instance
         {
@@ -36,7 +35,6 @@ namespace KBS_SE3.Models
 
         public Feed()
         {
-            module = (HomeModule)ModuleManager.GetInstance().GetCurrentModule();
             instance = this;
             CreateFirstFeed();
             Alerts = CreateAlertList(p2000);
@@ -65,20 +63,10 @@ namespace KBS_SE3.Models
 
         public void DisplayItems(List<Alert> alerts)
         {
-            HomeModule.Instance.UpdateAlerts();
-            //BindingList<Alert> a = new BindingList<Alert>(alerts);
-            // Empty current list
-            //module.listBox1.Items.Clear();
-            //module.listBox1.DataSource = null;
-            //module.listBox1.DataSource = a;
-            //module.listBox1.DisplayMember = "Title";
-            //module.listBox1.ValueMember = "Title";
-
-            //foreach (Alert alert in alerts)
-            //{
-            //    // Add new items
-            //    module.listBox1.Items.Add(alert.Title);
-            //}
+            if (HomeModule.Instance != null)
+            {
+                HomeModule.Instance.UpdateAlerts();
+            }
         }
 
         public void CreateFirstFeed()
@@ -122,7 +110,9 @@ namespace KBS_SE3.Models
             // ...
 
             // Display new feed
-            DisplayItems(Alerts);
+            //DisplayItems(Alerts);
+
+            HomeModule.Instance.UpdateAlerts();
         }
     }
 }

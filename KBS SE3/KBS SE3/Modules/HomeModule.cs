@@ -9,43 +9,59 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
+using System.Collections.ObjectModel;
+
 
 namespace KBS_SE3.Modules {
-    public partial class HomeModule : UserControl, IModule {
-        private BindingList<Alert> alerts;
+    partial class HomeModule : UserControl, IModule {
         private static HomeModule instance;
-
+        private BindingList<Alert> alerts;
         public HomeModule() {
             InitializeComponent();
             instance = this;
-            alerts = new BindingList<Alert>(Feed.Instance.Alerts);
-            listBox1.DataSource = alerts;
+            listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
+            //foreach(Alert a in Feed.Instance.Alerts)
+            //{
+            //    listBox1.Items.Add(a.Title);
+            //}
         }
 
         public void UpdateAlerts()
         {
+            //listBox1.Items.Clear();
+            //foreach (Alert a in Feed.Instance.Alerts)
+            //{
+            //    listBox1.Items.Add(a.Title);
+            //}
+            //listBox1.Refresh();
             listBox1.DataSource = null;
-            alerts = new BindingList<Alert>(Feed.Instance.Alerts);
-            listBox1.DataSource = alerts;
-        }
-
-
-        public string GetModuleName() {
-            return "Home";
+            //listBox1.Items.Clear();
+            listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
+            listBox1.DisplayMember = "Title";
         }
 
         public static HomeModule Instance
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new HomeModule();
-                }
                 return instance;
             }
         }
 
+        private void listBox1_DataSourceChanged(object sender, EventArgs e)
+        {
+            MessageBox.Show("Update");
+            UpdateAlerts();   
+        }
+
+        private void listBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            UpdateAlerts();
+        }
+
+        public Breadcrumb GetBreadcrumb() {
+            return new Breadcrumb(this, "Home", new NavigationModule());
+        }
     }
 }
 

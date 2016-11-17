@@ -44,6 +44,8 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(574, 238);
             this.listBox1.TabIndex = 1;
+            this.listBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseClick);
+            this.listBox1.DataSourceChanged += new System.EventHandler(this.listBox1_DataSourceChanged);
             // 
             // homeLabel
             // 
@@ -53,6 +55,8 @@
             this.homeLabel.Size = new System.Drawing.Size(100, 23);
             this.homeLabel.TabIndex = 1;
             this.homeLabel.Text = "Home";
+            // 
+            this.SuspendLayout();
             // 
             // HomeModule
             // 
@@ -73,6 +77,5 @@
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label homeLabel;
-
     }
 }
