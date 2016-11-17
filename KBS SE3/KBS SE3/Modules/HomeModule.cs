@@ -19,25 +19,25 @@ namespace KBS_SE3.Modules {
         public HomeModule() {
             InitializeComponent();
             instance = this;
-            //listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
-            foreach(Alert a in Feed.Instance.Alerts)
-            {
-                listBox1.Items.Add(a.Title);
-            }
+            listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
+            //foreach(Alert a in Feed.Instance.Alerts)
+            //{
+            //    listBox1.Items.Add(a.Title);
+            //}
         }
 
         public void UpdateAlerts()
         {
-            listBox1.Items.Clear();
-            foreach (Alert a in Feed.Instance.Alerts)
-            {
-                listBox1.Items.Add(a.Title);
-            }
-            listBox1.Refresh();
-            //listBox1.DataSource = null;
             //listBox1.Items.Clear();
-            //listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
-            //listBox1.DisplayMember = "Title";
+            //foreach (Alert a in Feed.Instance.Alerts)
+            //{
+            //    listBox1.Items.Add(a.Title);
+            //}
+            //listBox1.Refresh();
+            listBox1.DataSource = null;
+            //listBox1.Items.Clear();
+            listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
+            listBox1.DisplayMember = "Title";
         }
 
         public static HomeModule Instance
@@ -50,6 +50,7 @@ namespace KBS_SE3.Modules {
 
         private void listBox1_DataSourceChanged(object sender, EventArgs e)
         {
+            MessageBox.Show("Update");
             UpdateAlerts();   
         }
 
