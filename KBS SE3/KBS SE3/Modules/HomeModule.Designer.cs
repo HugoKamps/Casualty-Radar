@@ -44,6 +44,8 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(574, 238);
             this.listBox1.TabIndex = 1;
+            this.listBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseClick);
+            this.listBox1.DataSourceChanged += new System.EventHandler(this.listBox1_DataSourceChanged);
             // 
             // homeLabel
             // 
