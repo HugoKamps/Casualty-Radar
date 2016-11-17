@@ -37,13 +37,16 @@ namespace KBS_SE3 {
             this.closeBtn = new System.Windows.Forms.Label();
             this.subBar = new System.Windows.Forms.Panel();
             this.contentPanel = new System.Windows.Forms.Panel();
-            this.menuLabel = new System.Windows.Forms.Label();
             this.menuPanel = new System.Windows.Forms.Panel();
+            this.breadCrumbStart = new System.Windows.Forms.Label();
             this.exitBtn = new System.Windows.Forms.Button();
             this.settingsBtn = new System.Windows.Forms.Button();
             this.homeBtn = new System.Windows.Forms.Button();
+            this.menuLabel = new System.Windows.Forms.Label();
+            this.previousBtn = new System.Windows.Forms.Label();
             this.topBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).BeginInit();
+            this.subBar.SuspendLayout();
             this.menuPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -105,6 +108,8 @@ namespace KBS_SE3 {
             // subBar
             // 
             this.subBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(89)))), ((int)(((byte)(71)))));
+            this.subBar.Controls.Add(this.previousBtn);
+            this.subBar.Controls.Add(this.breadCrumbStart);
             this.subBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.subBar.Location = new System.Drawing.Point(0, 67);
             this.subBar.Name = "subBar";
@@ -120,19 +125,6 @@ namespace KBS_SE3 {
             this.contentPanel.Size = new System.Drawing.Size(953, 480);
             this.contentPanel.TabIndex = 2;
             // 
-            // menuLabel
-            // 
-            this.menuLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(73)))), ((int)(((byte)(57)))));
-            this.menuLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.menuLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menuLabel.ForeColor = System.Drawing.Color.White;
-            this.menuLabel.Location = new System.Drawing.Point(0, 20);
-            this.menuLabel.Name = "menuLabel";
-            this.menuLabel.Size = new System.Drawing.Size(142, 34);
-            this.menuLabel.TabIndex = 1;
-            this.menuLabel.Text = "Menu";
-            this.menuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // menuPanel
             // 
             this.menuPanel.Controls.Add(this.exitBtn);
@@ -146,6 +138,16 @@ namespace KBS_SE3 {
             this.menuPanel.Size = new System.Drawing.Size(142, 480);
             this.menuPanel.TabIndex = 3;
             // 
+            // breadCrumbStart
+            // 
+            this.breadCrumbStart.AutoSize = true;
+            this.breadCrumbStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.breadCrumbStart.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.breadCrumbStart.Location = new System.Drawing.Point(174, 2);
+            this.breadCrumbStart.Name = "breadCrumbStart";
+            this.breadCrumbStart.Size = new System.Drawing.Size(0, 15);
+            this.breadCrumbStart.TabIndex = 0;
+            // 
             // exitBtn
             // 
             this.exitBtn.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -157,7 +159,7 @@ namespace KBS_SE3 {
             this.exitBtn.Location = new System.Drawing.Point(0, 114);
             this.exitBtn.Name = "exitBtn";
             this.exitBtn.Size = new System.Drawing.Size(142, 30);
-            this.exitBtn.TabIndex = 6;
+            this.exitBtn.TabIndex = 11;
             this.exitBtn.Text = "Exit";
             this.exitBtn.UseVisualStyleBackColor = true;
             this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
@@ -173,7 +175,7 @@ namespace KBS_SE3 {
             this.settingsBtn.Location = new System.Drawing.Point(0, 84);
             this.settingsBtn.Name = "settingsBtn";
             this.settingsBtn.Size = new System.Drawing.Size(142, 30);
-            this.settingsBtn.TabIndex = 5;
+            this.settingsBtn.TabIndex = 10;
             this.settingsBtn.Text = "Settings";
             this.settingsBtn.UseVisualStyleBackColor = true;
             this.settingsBtn.Click += new System.EventHandler(this.menuBtn_Click);
@@ -189,10 +191,38 @@ namespace KBS_SE3 {
             this.homeBtn.Location = new System.Drawing.Point(0, 54);
             this.homeBtn.Name = "homeBtn";
             this.homeBtn.Size = new System.Drawing.Size(142, 30);
-            this.homeBtn.TabIndex = 4;
+            this.homeBtn.TabIndex = 9;
             this.homeBtn.Text = "Home";
             this.homeBtn.UseVisualStyleBackColor = true;
             this.homeBtn.Click += new System.EventHandler(this.menuBtn_Click);
+            // 
+            // menuLabel
+            // 
+            this.menuLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(73)))), ((int)(((byte)(57)))));
+            this.menuLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.menuLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menuLabel.ForeColor = System.Drawing.Color.White;
+            this.menuLabel.Location = new System.Drawing.Point(0, 20);
+            this.menuLabel.Name = "menuLabel";
+            this.menuLabel.Size = new System.Drawing.Size(142, 34);
+            this.menuLabel.TabIndex = 8;
+            this.menuLabel.Text = "Menu";
+            this.menuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // previousBtn
+            // 
+            this.previousBtn.AutoSize = true;
+            this.previousBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.previousBtn.Font = new System.Drawing.Font("Corbel", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.previousBtn.ForeColor = System.Drawing.Color.Gainsboro;
+            this.previousBtn.Location = new System.Drawing.Point(138, 0);
+            this.previousBtn.Name = "previousBtn";
+            this.previousBtn.Size = new System.Drawing.Size(25, 19);
+            this.previousBtn.TabIndex = 0;
+            this.previousBtn.Text = "<<";
+            this.previousBtn.Click += new System.EventHandler(this.prevBtn_Click);
+            this.previousBtn.MouseEnter += new System.EventHandler(this.prevBtn_MouseEnter);
+            this.previousBtn.MouseLeave += new System.EventHandler(this.prevBtn_MouseLeave);
             // 
             // Container
             // 
@@ -214,6 +244,8 @@ namespace KBS_SE3 {
             this.Load += new System.EventHandler(this.Container_Load);
             this.topBar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).EndInit();
+            this.subBar.ResumeLayout(false);
+            this.subBar.PerformLayout();
             this.menuPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -227,11 +259,13 @@ namespace KBS_SE3 {
         private System.Windows.Forms.Label closeBtn;
         private System.Windows.Forms.Panel contentPanel;
         private System.Windows.Forms.PictureBox logoTopBar;
-        private System.Windows.Forms.Label menuLabel;
         private System.Windows.Forms.Panel menuPanel;
-        private System.Windows.Forms.Button exitBtn;
-        private System.Windows.Forms.Button settingsBtn;
-        private System.Windows.Forms.Button homeBtn;
+        private Label breadCrumbStart;
+        private Button exitBtn;
+        private Button settingsBtn;
+        private Button homeBtn;
+        private Label menuLabel;
+        private Label previousBtn;
     }
 }
 

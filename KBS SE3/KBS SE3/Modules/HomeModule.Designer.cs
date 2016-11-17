@@ -56,6 +56,8 @@
             this.homeLabel.TabIndex = 1;
             this.homeLabel.Text = "Home";
             // 
+            this.SuspendLayout();
+            // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -75,6 +77,5 @@
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label homeLabel;
-
     }
 }
