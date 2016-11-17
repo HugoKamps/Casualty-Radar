@@ -56,6 +56,7 @@
     <Compile Include="Models\PushMessage.cs" />
     <Compile Include="Core\IModule.cs" />
     <Compile Include="Core\ModuleManager.cs" />
+    <Compile Include="Models\Alert.cs" />
     <Compile Include="Models\Feed.cs" />
     <Compile Include="Models\FeedTicker.cs" />
     <Compile Include="Modules\HomeModule.cs">
