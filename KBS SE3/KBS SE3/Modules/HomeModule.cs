@@ -11,11 +11,11 @@ using KBS_SE3.Core;
 using KBS_SE3.Models;
 using System.Collections.ObjectModel;
 
+
 namespace KBS_SE3.Modules {
-    public partial class HomeModule : UserControl, IModule {
+    partial class HomeModule : UserControl, IModule {
         private static HomeModule instance;
         private BindingList<Alert> alerts;
-
         public HomeModule() {
             InitializeComponent();
             instance = this;
@@ -40,11 +40,6 @@ namespace KBS_SE3.Modules {
             //listBox1.DisplayMember = "Title";
         }
 
-
-        public string GetModuleName() {
-            return "Home";
-        }
-
         public static HomeModule Instance
         {
             get
@@ -61,6 +56,10 @@ namespace KBS_SE3.Modules {
         private void listBox1_MouseClick(object sender, MouseEventArgs e)
         {
             UpdateAlerts();
+        }
+
+        public Breadcrumb GetBreadcrumb() {
+            return new Breadcrumb(this, "Home", new NavigationModule());
         }
     }
 }
