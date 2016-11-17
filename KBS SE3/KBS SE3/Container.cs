@@ -85,7 +85,7 @@ namespace KBS_SE3 {
         {
             // Load the feed
             Feed feed = new Feed();
-            FeedTicker feedTicker = new FeedTicker(3000, feed);
+            FeedTicker feedTicker = new FeedTicker(20000, feed);
         }
     }
 }
