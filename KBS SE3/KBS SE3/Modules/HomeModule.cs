@@ -8,9 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using KBS_SE3.Core;
+using KBS_SE3.Models;
 
 namespace KBS_SE3.Modules {
-    public partial class HomeModule : UserControl, IModule {
+    partial class HomeModule : UserControl, IModule {
         public HomeModule() {
             InitializeComponent();
 
@@ -20,7 +21,6 @@ namespace KBS_SE3.Modules {
                 "52.501988,6.082142"
             };
             GetMap(LocationManager.GetLocationProperty(), points);
-            MessageBox.Show("2");
         }
 
         public void GetMap(string currentLocation, List<string> locations) {
@@ -35,8 +35,9 @@ namespace KBS_SE3.Modules {
                 mapTest.Load(url);
         }
 
-        public string GetModuleName() {
-            return "Home";
+        public Breadcrumb GetBreadcrumb() {
+            return new Breadcrumb(this, "Home", new NavigationModule());
         }
+
     }
 }

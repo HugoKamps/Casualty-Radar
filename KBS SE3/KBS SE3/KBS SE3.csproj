@@ -55,6 +55,7 @@
       <DependentUpon>Container.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\LocationManager.cs" />
+    <Compile Include="Models\Breadcrumb.cs" />
     <Compile Include="Models\PushMessage.cs" />
     <Compile Include="Core\IModule.cs" />
     <Compile Include="Core\ModuleManager.cs" />
@@ -65,6 +66,12 @@
     </Compile>
     <Compile Include="Modules\HomeModule.Designer.cs">
       <DependentUpon>HomeModule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\NavigationModule.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\NavigationModule.Designer.cs">
+      <DependentUpon>NavigationModule.cs</DependentUpon>
     </Compile>
     <Compile Include="Modules\SettingsModule.cs">
       <SubType>UserControl</SubType>

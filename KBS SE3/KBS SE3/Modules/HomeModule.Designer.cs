@@ -36,6 +36,8 @@
             this.mapTest.TabIndex = 2;
             this.mapTest.TabStop = false;
             // 
+            this.SuspendLayout();
+            // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
