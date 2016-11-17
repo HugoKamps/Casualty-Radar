@@ -37,7 +37,6 @@ namespace KBS_SE3.Models {
             _icon.Visible = true;
             _icon.Icon = new Icon(FileUtil.GetResourcesPath() + "app_icon.ico");
             _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
-
             _icon.ShowBalloonTip(5000,
                 _title,
                  _type + " " + _message + " op " + _address,
