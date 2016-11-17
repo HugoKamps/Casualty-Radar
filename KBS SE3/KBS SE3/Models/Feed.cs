@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KBS_SE3.Core;
+using KBS_SE3.Modules;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -51,10 +53,11 @@ namespace KBS_SE3.Models
 
         public void DisplayItems(List<Alert> alerts)
         {
+            HomeModule module = (HomeModule)ModuleManager.GetInstance().GetCurrentModule();
             foreach (Alert alert in alerts)
             {
                 // Display item
-                
+                module.listBox1.Items.Add(alert.Title);
             }
         }
 

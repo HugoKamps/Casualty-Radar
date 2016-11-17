@@ -9,8 +9,11 @@ namespace KBS_SE3.Core {
     class ModuleManager {
 
         private static ModuleManager _instance;
+        private IModule _currentModule;
 
-        private ModuleManager() { }
+        private ModuleManager() {
+            this._currentModule = null;
+        }
 
         /*
         * Returns an instance of the ModuleManager class in singleton format
@@ -35,8 +38,13 @@ namespace KBS_SE3.Core {
                 IModule reInitialized = (IModule)Activator.CreateInstance(module.GetType());
                 if(headerLabel != null) headerLabel.Text = reInitialized.GetModuleName();
                 contentPanel.Controls.Clear();
+                this._currentModule = reInitialized;
                 contentPanel.Controls.Add((UserControl) module);
             }
+        }
+
+        public IModule GetCurrentModule(){
+            return _currentModule;
         }
     }
 }
