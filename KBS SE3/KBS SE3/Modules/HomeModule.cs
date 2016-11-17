@@ -14,6 +14,7 @@ namespace KBS_SE3.Modules {
     partial class HomeModule : UserControl, IModule {
         public HomeModule() {
             InitializeComponent();
+            var locationManager = new LocationManager(mapBox);
         }
 
         public Breadcrumb GetBreadcrumb() {
