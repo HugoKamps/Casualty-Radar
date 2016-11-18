@@ -23,31 +23,33 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.homeLabel = new System.Windows.Forms.Label();
+            this.mapBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.mapBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // homeLabel
+            // mapBox
             // 
-            this.homeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.homeLabel.Location = new System.Drawing.Point(3, 0);
-            this.homeLabel.Name = "homeLabel";
-            this.homeLabel.Size = new System.Drawing.Size(100, 23);
-            this.homeLabel.TabIndex = 1;
-            this.homeLabel.Text = "Home";
+            this.mapBox.Dock = System.Windows.Forms.DockStyle.Left;
+            this.mapBox.Location = new System.Drawing.Point(0, 0);
+            this.mapBox.Name = "mapBox";
+            this.mapBox.Size = new System.Drawing.Size(700, 480);
+            this.mapBox.TabIndex = 2;
+            this.mapBox.TabStop = false;
             // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.homeLabel);
+            this.Controls.Add(this.mapBox);
             this.Name = "HomeModule";
             this.Size = new System.Drawing.Size(953, 480);
+            ((System.ComponentModel.ISupportInitialize)(this.mapBox)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label homeLabel;
+        private System.Windows.Forms.PictureBox mapBox;
     }
 }

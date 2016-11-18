@@ -11,15 +11,13 @@ using KBS_SE3.Core;
 using KBS_SE3.Models;
 
 namespace KBS_SE3.Modules {
-    partial class HomeModule : UserControl, IModule {
-        public HomeModule() {
+     partial class NavigationModule : UserControl, IModule {
+        public NavigationModule() {
             InitializeComponent();
-            var locationManager = new LocationManager(mapBox);
         }
 
         public Breadcrumb GetBreadcrumb() {
-            return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
+            return new Breadcrumb(this, "Navigation", null, ModuleManager.GetInstance().ParseInstance(typeof(HomeModule)));
         }
-
     }
 }
