@@ -54,6 +54,11 @@ namespace KBS_SE3.Modules {
         public Breadcrumb GetBreadcrumb() {
             return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
         }
+
+        private void refreshFeedButton_Click(object sender, EventArgs e)
+        {
+            UpdateAlerts();
+        }
     }
 }
 

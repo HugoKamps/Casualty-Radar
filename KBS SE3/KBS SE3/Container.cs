@@ -100,7 +100,7 @@ namespace KBS_SE3 {
         private void Container_Load(object sender, EventArgs e){
             // Load the feed
             Feed feed = new Feed();
-            FeedTicker feedTicker = new FeedTicker(3000, feed);
+            FeedTicker feedTicker = new FeedTicker(30000, feed);
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
