@@ -53,6 +53,8 @@
     <Compile Include="Container.Designer.cs">
       <DependentUpon>Container.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Breadcrumb.cs" />
+    <Compile Include="Models\PushMessage.cs" />
     <Compile Include="Core\IModule.cs" />
     <Compile Include="Core\ModuleManager.cs" />
     <Compile Include="Models\Alert.cs" />
@@ -64,6 +66,12 @@
     <Compile Include="Modules\HomeModule.Designer.cs">
       <DependentUpon>HomeModule.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\NavigationModule.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\NavigationModule.Designer.cs">
+      <DependentUpon>NavigationModule.cs</DependentUpon>
+    </Compile>
     <Compile Include="Modules\SettingsModule.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -72,11 +80,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FileUtil.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\HomeModule.resx">
       <DependentUpon>HomeModule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\SettingsModule.resx">
+      <DependentUpon>SettingsModule.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -102,11 +114,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\app_icon.ico" />
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
     <Content Include="Resources\logo_final.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
