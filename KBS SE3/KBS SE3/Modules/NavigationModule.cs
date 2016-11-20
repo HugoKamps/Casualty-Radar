@@ -17,7 +17,7 @@ namespace KBS_SE3.Modules {
         }
 
         public Breadcrumb GetBreadcrumb() {
-            return new Breadcrumb(this, "Navigation", null, new HomeModule());
+            return new Breadcrumb(this, "Navigation", null, HomeModule.Instance);
         }
     }
 }
