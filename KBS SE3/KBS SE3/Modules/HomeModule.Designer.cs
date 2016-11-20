@@ -25,26 +25,18 @@ namespace KBS_SE3.Modules {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.homeLabel = new System.Windows.Forms.Label();
+            this.mapBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.mapBox)).BeginInit();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(169, 124);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
             // 
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(316, 33);
+            this.listBox1.Location = new System.Drawing.Point(698, 33);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(574, 238);
+            this.listBox1.Size = new System.Drawing.Size(255, 446);
             this.listBox1.TabIndex = 1;
             // 
             // homeLabel
@@ -56,26 +48,32 @@ namespace KBS_SE3.Modules {
             this.homeLabel.TabIndex = 1;
             this.homeLabel.Text = "Home";
             // 
-            this.SuspendLayout();
+            // mapBox
+            // 
+            this.mapBox.Dock = System.Windows.Forms.DockStyle.Left;
+            this.mapBox.Location = new System.Drawing.Point(0, 0);
+            this.mapBox.Name = "mapBox";
+            this.mapBox.Size = new System.Drawing.Size(700, 480);
+            this.mapBox.TabIndex = 2;
+            this.mapBox.TabStop = false;
             // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.homeLabel);
+            this.Controls.Add(this.mapBox);
             this.Name = "HomeModule";
             this.Size = new System.Drawing.Size(953, 480);
+            ((System.ComponentModel.ISupportInitialize)(this.mapBox)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
         public System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label homeLabel;
+        private System.Windows.Forms.PictureBox mapBox;
     }
 }

@@ -22,8 +22,8 @@ namespace KBS_SE3 {
 
         private Container() {
             InitializeComponent();
-            registerButtons();
             this._modManager = ModuleManager.GetInstance();
+            registerButtons();
             //Models.PushMessage m1 = new Models.PushMessage("Titel", "Brandweer", "Nieuwe melding", "hanseflastStraat 8");
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
@@ -38,8 +38,10 @@ namespace KBS_SE3 {
         * Each button is bound to a Module; which is an instance of IModule
         */
         private void registerButtons() {
-            homeBtn.Tag = HomeModule.Instance;
-            settingsBtn.Tag = new SettingsModule();
+            //homeBtn.Tag = HomeModule.Instance;
+            //settingsBtn.Tag = new SettingsModule();
+            homeBtn.Tag = _modManager.ParseInstance(typeof(HomeModule));
+            settingsBtn.Tag = _modManager.ParseInstance(typeof(SettingsModule));
         }
 
         protected override CreateParams CreateParams {
@@ -49,11 +51,14 @@ namespace KBS_SE3 {
                 return cp;
             }
         }
-
+        
+        //This event is triggered when the minimize button is clicked. It minimizes the window
         private void minimizeBtn_Click(object sender, EventArgs e) {
             WindowState = FormWindowState.Minimized;
         }
 
+        /* This event is triggered when the user's mouse hovers over the minimize or exit button. 
+        It changes the color to show which button is being hovered over. */
         private void topBarButtons_MouseEnter(object sender, EventArgs e) {
             Label selected = (Label) sender;
             selected.BackColor = Color.FromArgb(220, 82, 66);
@@ -95,7 +100,7 @@ namespace KBS_SE3 {
         private void Container_Load(object sender, EventArgs e){
             // Load the feed
             Feed feed = new Feed();
-            FeedTicker feedTicker = new FeedTicker(30000, feed);
+            FeedTicker feedTicker = new FeedTicker(3000, feed);
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {

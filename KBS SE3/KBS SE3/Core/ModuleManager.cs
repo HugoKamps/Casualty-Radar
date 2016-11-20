@@ -11,9 +11,27 @@ namespace KBS_SE3.Core {
 
         private static ModuleManager _instance;
         private IModule _defaultModule;
+        private List<IModule> _registeredModules;
 
         private ModuleManager() {
-            this._defaultModule = HomeModule.Instance;
+            this._registeredModules = new List<IModule>();
+            registerModules();
+            this._defaultModule = ParseInstance(typeof(HomeModule));
+        }
+
+        public IModule ParseInstance(Type type) {
+            foreach(IModule mod in _registeredModules) {
+                if (mod.GetType() == type) return mod;
+            }
+            return null;
+        }
+
+        private void registerModules() {
+            _registeredModules.AddRange( new IModule[] {
+                new HomeModule(),
+                new SettingsModule(),
+                new NavigationModule()
+            });
         }
 
         /*
@@ -36,7 +54,7 @@ namespace KBS_SE3.Core {
         */
         public void UpdateModule(Label headerLabel, Panel contentPanel, Object module) {
             if(module != null) {
-                IModule reInitialized = (IModule)Activator.CreateInstance(module.GetType());
+                IModule reInitialized = ParseInstance(module.GetType());
                 if (headerLabel != null) updateBreadcrumb(headerLabel, reInitialized);
                 contentPanel.Controls.Clear();
                 this._defaultModule = reInitialized;

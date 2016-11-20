@@ -18,6 +18,7 @@ namespace KBS_SE3.Modules {
 
         public HomeModule() {
             InitializeComponent();
+            var locationManager = new LocationManager(mapBox);
 
             // If there is not an instance yet, set it
             if (_instance == null)
@@ -51,7 +52,7 @@ namespace KBS_SE3.Modules {
         }
 
         public Breadcrumb GetBreadcrumb() {
-            return new Breadcrumb(this, "Home", new NavigationModule());
+            return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
         }
     }
 }
