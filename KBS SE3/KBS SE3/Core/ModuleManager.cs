@@ -13,7 +13,7 @@ namespace KBS_SE3.Core {
         private IModule _defaultModule;
 
         private ModuleManager() {
-            this._defaultModule = new HomeModule();
+            this._defaultModule = HomeModule.Instance;
         }
 
         /*

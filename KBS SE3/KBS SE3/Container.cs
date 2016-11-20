@@ -38,7 +38,7 @@ namespace KBS_SE3 {
         * Each button is bound to a Module; which is an instance of IModule
         */
         private void registerButtons() {
-            homeBtn.Tag = new HomeModule();
+            homeBtn.Tag = HomeModule.Instance;
             settingsBtn.Tag = new SettingsModule();
         }
 
@@ -95,8 +95,7 @@ namespace KBS_SE3 {
         private void Container_Load(object sender, EventArgs e){
             // Load the feed
             Feed feed = new Feed();
-            FeedTicker feedTicker = new FeedTicker(5000, feed);
-            HomeModule.Instance.UpdateAlerts();
+            FeedTicker feedTicker = new FeedTicker(30000, feed);
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
