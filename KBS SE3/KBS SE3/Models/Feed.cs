@@ -101,7 +101,8 @@ namespace KBS_SE3.Models
             // ...
 
             // Update the displayed feed
-            HomeModule.Instance.UpdateAlerts();
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            hm.UpdateAlerts();
         }
     }
 }

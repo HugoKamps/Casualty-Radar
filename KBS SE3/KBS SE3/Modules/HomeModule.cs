@@ -14,17 +14,9 @@ using System.Runtime.CompilerServices;
 
 namespace KBS_SE3.Modules {
     partial class HomeModule : UserControl, IModule {
-        private static HomeModule _instance;
-
         public HomeModule() {
             InitializeComponent();
             var locationManager = new LocationManager(mapBox);
-
-            // If there is not an instance yet, set it
-            if (_instance == null)
-            {
-                _instance = this;
-            }
             
             // Set the datasource for the listbox
             listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
@@ -36,19 +28,6 @@ namespace KBS_SE3.Modules {
             listBox1.DataSource = null;
             listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
             listBox1.DisplayMember = "Title";
-        }
-
-        public static HomeModule Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                   _instance = new HomeModule();
-                }
-                   
-                return _instance;
-            }
         }
 
         public Breadcrumb GetBreadcrumb() {
