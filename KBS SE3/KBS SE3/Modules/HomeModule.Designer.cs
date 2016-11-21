@@ -26,7 +26,6 @@ namespace KBS_SE3.Modules {
         /// </summary>
         private void InitializeComponent() {
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.homeLabel = new System.Windows.Forms.Label();
             this.mapBox = new System.Windows.Forms.PictureBox();
             this.refreshFeedButton = new System.Windows.Forms.Button();
             this.alertsTitleLabel = new System.Windows.Forms.Label();
@@ -43,15 +42,6 @@ namespace KBS_SE3.Modules {
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(314, 444);
             this.listBox1.TabIndex = 1;
-            // 
-            // homeLabel
-            // 
-            this.homeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.homeLabel.Location = new System.Drawing.Point(3, 0);
-            this.homeLabel.Name = "homeLabel";
-            this.homeLabel.Size = new System.Drawing.Size(100, 23);
-            this.homeLabel.TabIndex = 1;
-            this.homeLabel.Text = "Home";
             // 
             // mapBox
             // 
@@ -89,7 +79,6 @@ namespace KBS_SE3.Modules {
             this.Controls.Add(this.alertsTitleLabel);
             this.Controls.Add(this.refreshFeedButton);
             this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.homeLabel);
             this.Controls.Add(this.mapBox);
             this.Name = "HomeModule";
             this.Size = new System.Drawing.Size(953, 480);
@@ -101,7 +90,6 @@ namespace KBS_SE3.Modules {
 
         #endregion
         public System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Label homeLabel;
         private System.Windows.Forms.PictureBox mapBox;
         private Button refreshFeedButton;
         private Label alertsTitleLabel;
