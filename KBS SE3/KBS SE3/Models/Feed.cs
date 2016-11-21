@@ -100,9 +100,6 @@ namespace KBS_SE3.Models
             // Send list with new alerts to PushMessage
             PushMessage m1 = new PushMessage(newAlerts);
 
-            // Send notification to client
-            // ...
-
             // Update the displayed feed
             HomeModule.Instance.UpdateAlerts();
         }
