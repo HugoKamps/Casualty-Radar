@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="welcomeInstructionsLabel.Text" xml:space="preserve">
+    <value>Leuk dat je deze app gebruikt. Om te beginnen moet je eerst even een standaardlocatie opgeven. Deze wordt gebruikt als je bijvoorbeeld een computer zonder locatiebepaling hebt. Deze locatie kan je altijd wijzigen in je instellingen.</value>
+  </data>
 </root>
