@@ -23,7 +23,6 @@ namespace KBS_SE3 {
             InitializeComponent();
             registerButtons();
             ModuleManager.GetInstance().UpdateModule(null, contentPanel, new HomeModule());
-            Models.PushMessage m1 = new Models.PushMessage("Titel", "Brandweer", "Nieuwe melding", "hanseflastStraat 8");
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             ModuleManager.GetInstance().UpdateModule(null, contentPanel, homeBtn.Tag);
         }

@@ -118,6 +118,9 @@ namespace KBS_SE3.Models
             newFeed.Items = newItems;
             List<Alert> newAlerts = CreateAlertList(newFeed);
 
+            // Send list with new alerts to PushMessage
+            PushMessage m1 = new PushMessage(newAlerts);
+
             // Send notification to client
             // ...
 
