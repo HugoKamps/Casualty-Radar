@@ -1,5 +1,6 @@
 ﻿using KBS_SE3.Core;
 using KBS_SE3.Modules;
+using KBS_SE3.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -41,7 +42,18 @@ namespace KBS_SE3.Models
                 if (item.ElementExtensions.Count == 2) {
                     lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
                     lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
-                    tempAlerts.Add(new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture)));
+                    Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
+                    for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++)
+                    {
+                        if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0]))
+                        {
+                            newAlert.Code = AlertUtil.P2000[i, 0];
+                            newAlert.Type = AlertUtil.P2000[i, 1];
+                            newAlert.Info = AlertUtil.P2000[i, 2];
+                            tempAlerts.Add(newAlert);
+                            break;
+                        }
+                    }
                 }
             }
             return tempAlerts;
@@ -87,7 +99,7 @@ namespace KBS_SE3.Models
             ListBox box = hm.feedListBox;
             box.DataSource = null;
             box.DataSource = new BindingList<Alert>(_alerts);
-            box.DisplayMember = "Title"; 
+            box.DisplayMember = "Title";
         }
     }
 }
