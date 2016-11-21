@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KBS_SE3.Utils
 {
-    class AlertUtil
+    static class AlertUtil
     {
     }
 }
