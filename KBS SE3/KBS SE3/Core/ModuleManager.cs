@@ -16,7 +16,13 @@ namespace KBS_SE3.Core {
         private ModuleManager() {
             this._registeredModules = new List<IModule>();
             registerModules();
-            this._defaultModule = ParseInstance(typeof(HomeModule));
+            if (Properties.Settings.Default.userLocation != "") {
+                this._defaultModule = ParseInstance(typeof (HomeModule));
+            }
+            else {
+                this._defaultModule = ParseInstance(typeof(GetStartedModule));
+            }
+
         }
 
         public IModule ParseInstance(Type type) {
