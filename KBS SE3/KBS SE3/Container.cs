@@ -3,6 +3,7 @@ using KBS_SE3.Models;
 using KBS_SE3.Modules;
 using System;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -24,13 +25,18 @@ namespace KBS_SE3 {
             InitializeComponent();
             this._modManager = ModuleManager.GetInstance();
             registerButtons();
-            //Models.PushMessage m1 = new Models.PushMessage("Titel", "Brandweer", "Nieuwe melding", "hanseflastStraat 8");
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
         }
+
         public static Container GetInstance() {
             if (_instance == null) _instance = new Container();
             return _instance;
+        }
+
+        public Label GetBreadcrumbStart()
+        {
+            return breadCrumbStart;
         }
         
         /*
@@ -97,8 +103,7 @@ namespace KBS_SE3 {
 
         private void Container_Load(object sender, EventArgs e){
             // Load the feed
-            Feed feed = new Feed();
-            FeedTicker feedTicker = new FeedTicker(3000, feed);
+            FeedTicker feedTicker = new FeedTicker(30000, Feed.GetInstance());
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
