@@ -16,9 +16,21 @@ namespace KBS_SE3.Modules {
             InitializeComponent();
         }
 
-        public Breadcrumb GetBreadcrumb()
-        {
-            return new Breadcrumb(this, "Get started", null, ModuleManager.GetInstance().ParseInstance(typeof(HomeModule)));   
+        public Breadcrumb GetBreadcrumb() {
+            return new Breadcrumb(this, "Get started");   
+        }
+
+        private void continueBtn_Click(object sender, EventArgs e) {
+            if (locationTextBox.Text != "") {
+                Container c = KBS_SE3.Container.GetInstance();
+                Properties.Settings.Default.userLocation = locationTextBox.Text;
+                Properties.Settings.Default.Save();
+                var s = (SettingsModule) ModuleManager.GetInstance().ParseInstance(typeof (SettingsModule));
+                s.locationTextBox.Text = locationTextBox.Text;
+                ModuleManager.GetInstance().UpdateModule(c.breadCrumbStart, c.contentPanel, ModuleManager.GetInstance().ParseInstance(typeof (HomeModule)));
+            } else {
+                warningLabel.Show();
+            }
         }
     }
 }

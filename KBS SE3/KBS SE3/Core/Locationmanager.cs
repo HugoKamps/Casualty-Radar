@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Device.Location;
+﻿using System.Device.Location;
 using System.Windows.Forms;
 using KBS_SE3.Models;
+using KBS_SE3.Properties;
+using KBS_SE3.Utils;
 
 namespace KBS_SE3.Core
 {
@@ -12,7 +12,6 @@ namespace KBS_SE3.Core
         private double _currentLongitude;
         private double _currentLatitude;
         private string _currentLocation;
-        private bool _locationFound;
 
         public LocationManager(PictureBox pictureBox)
         {
@@ -24,15 +23,19 @@ namespace KBS_SE3.Core
         }
 
         public string GetMap(string currentLocation) {
-            var url = "https://maps.googleapis.com/maps/api/staticmap?center=the,netherlands&zoom=7&size=700x480&maptype=roadmap&";
-            url += "markers=color:blue%7Clabel:L%7C" + currentLocation + "&";
+            if (MainMethods.CheckForInternetConnection()) {
+                var url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentLocation +
+                          "&zoom=7&size=700x480&maptype=roadmap&";
+                url += "markers=color:blue%7Clabel:L%7C" + currentLocation + "&";
 
-            foreach (var alert in Feed.Instance.Alerts) {
-                url += "markers=size:mid%7Ccolor:red%7Clabel:O%7C" + alert.Lat + "," + alert.Lng + "&";
+                foreach (var alert in Feed.GetInstance().GetAlerts()) {
+                    url += "markers=size:mid%7Ccolor:red%7Clabel:O%7C" + alert.Lat + "," + alert.Lng + "&";
+                }
+
+                url += "&key=AIzaSyDoRzUMAF3osX972CDWR2rDoWc9nKafV5A";
+                return url;
             }
-
-            url += "&key=AIzaSyDoRzUMAF3osX972CDWR2rDoWc9nKafV5A";
-            return url;
+            return FileUtil.GetResourcesPath() + "wifi_icon.png";
         }
 
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
@@ -53,11 +56,11 @@ namespace KBS_SE3.Core
                     break;
 
                 case GeoPositionStatus.NoData:
-                    _currentLocation = Properties.Settings.Default.userLocation;
+                    _currentLocation = Settings.Default.userLocation;
                     break;
 
                 case GeoPositionStatus.Disabled:
-                    _currentLocation = Properties.Settings.Default.userLocation;
+                    _currentLocation = Settings.Default.userLocation;
                     break;
             }
             _pictureBox.Load(GetMap(_currentLocation));

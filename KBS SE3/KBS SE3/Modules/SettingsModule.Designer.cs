@@ -82,7 +82,7 @@
         #endregion
 
         private System.Windows.Forms.Label locationLabel;
-        private System.Windows.Forms.TextBox locationTextBox;
+        public System.Windows.Forms.TextBox locationTextBox;
         private System.Windows.Forms.Label locationExampleLabel;
         private System.Windows.Forms.Button saveBtn;
     }

@@ -27,10 +27,17 @@ namespace KBS_SE3.Models
         }
 
         private Feed() {
-            this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
-            this._alerts = CreateAlertList(_p2000);
-            /* Initial update - Only updates after the P2000 is read.*/
-            UpdateFeed();
+            if (MainMethods.CheckForInternetConnection()) {
+                this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+                this._alerts = CreateAlertList(_p2000);
+                /* Initial update - Only updates after the P2000 is read.*/
+                UpdateFeed();
+            }
+        }
+
+        //Returns the list with alerts
+        public List<Alert> GetAlerts() {
+            return _alerts;
         }
 
         public List<Alert> CreateAlertList(SyndicationFeed items) {
