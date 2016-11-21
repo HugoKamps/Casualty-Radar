@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBS_SE3.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,28 @@ namespace KBS_SE3.Core {
     class ModuleManager {
 
         private static ModuleManager _instance;
-        private IModule _currentModule;
+        private IModule _defaultModule;
+        private List<IModule> _registeredModules;
 
         private ModuleManager() {
-            this._currentModule = null;
+            this._registeredModules = new List<IModule>();
+            registerModules();
+            this._defaultModule = ParseInstance(typeof(HomeModule));
+        }
+
+        public IModule ParseInstance(Type type) {
+            foreach(IModule mod in _registeredModules) {
+                if (mod.GetType() == type) return mod;
+            }
+            return null;
+        }
+
+        private void registerModules() {
+            _registeredModules.AddRange( new IModule[] {
+                new HomeModule(),
+                new SettingsModule(),
+                new NavigationModule()
+            });
         }
 
         /*
@@ -35,16 +54,34 @@ namespace KBS_SE3.Core {
         */
         public void UpdateModule(Label headerLabel, Panel contentPanel, Object module) {
             if(module != null) {
-                IModule reInitialized = (IModule)Activator.CreateInstance(module.GetType());
-                if(headerLabel != null) headerLabel.Text = reInitialized.GetModuleName();
+                IModule reInitialized = ParseInstance(module.GetType());
+                if (headerLabel != null) updateBreadcrumb(headerLabel, reInitialized);
                 contentPanel.Controls.Clear();
-                this._currentModule = reInitialized;
+                this._defaultModule = reInitialized;
                 contentPanel.Controls.Add((UserControl) module);
             }
         }
 
-        public IModule GetCurrentModule(){
-            return _currentModule;
+        private IModule getTopLevel(IModule current) {
+            IModule topLevel = current;
+            while (topLevel.GetBreadcrumb().Parent != null) {
+                topLevel = topLevel.GetBreadcrumb().Parent;
+            }
+            return topLevel;
+        }
+
+        private void updateBreadcrumb(Label origin, IModule content) {
+            IModule current = getTopLevel(content);
+            String crumbText = current.GetBreadcrumb().Name;
+            while (current.GetType() != content.GetType()) {
+                current = current.GetBreadcrumb().Child;
+                crumbText += " > " + current.GetBreadcrumb().Name;
+            }
+            origin.Text = crumbText;
+        }
+
+        public IModule GetDefaultModule() {
+            return _defaultModule;
         }
     }
 }

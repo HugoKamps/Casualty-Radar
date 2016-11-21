@@ -16,31 +16,28 @@ namespace KBS_SE3.Models
 {
     class Feed
     {
-        private static Feed instance;
-        private SyndicationFeed p2000;
-        private string feedUrl = "http://feeds.livep2000.nl/";
+        private static Feed _instance;
+        private SyndicationFeed _p2000;
+        private string _feedUrl = "http://feeds.livep2000.nl/";
         public List<Alert> Alerts = new List<Alert>();
-        HomeModule module;
 
         public static Feed Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new Feed();
+                    _instance = new Feed();
                 }
-                return instance;
+                return _instance;
             }
         }
 
         public Feed()
         {
-            module = (HomeModule)ModuleManager.GetInstance().GetCurrentModule();
-            instance = this;
+            _instance = this;
             CreateFirstFeed();
-            Alerts = CreateAlertList(p2000);
-            DisplayItems(Alerts);
+            Alerts = CreateAlertList(_p2000);
             UpdateFeed();
         }
 
@@ -63,44 +60,26 @@ namespace KBS_SE3.Models
             return tempAlerts;
         }
 
-        public void DisplayItems(List<Alert> alerts)
-        {
-            HomeModule.Instance.UpdateAlerts();
-            //BindingList<Alert> a = new BindingList<Alert>(alerts);
-            // Empty current list
-            //module.listBox1.Items.Clear();
-            //module.listBox1.DataSource = null;
-            //module.listBox1.DataSource = a;
-            //module.listBox1.DisplayMember = "Title";
-            //module.listBox1.ValueMember = "Title";
-
-            //foreach (Alert alert in alerts)
-            //{
-            //    // Add new items
-            //    module.listBox1.Items.Add(alert.Title);
-            //}
-        }
-
         public void CreateFirstFeed()
         {
-            p2000 = SyndicationFeed.Load(XmlReader.Create(feedUrl));
+            _p2000 = SyndicationFeed.Load(XmlReader.Create(_feedUrl));
         }
 
         public void UpdateFeed()
         {
-            SyndicationFeed oldP2000 = p2000;
+            SyndicationFeed oldP2000 = _p2000;
             List<SyndicationItem> newItems = new List<SyndicationItem>();
             SyndicationFeed newFeed = new SyndicationFeed();
 
             // Load the feed
-            p2000 = SyndicationFeed.Load(XmlReader.Create(feedUrl));
-            Alerts = CreateAlertList(p2000);
+            _p2000 = SyndicationFeed.Load(XmlReader.Create(_feedUrl));
+            Alerts = CreateAlertList(_p2000);
 
             // Get the first item from the previous feed
             SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
 
             // Loop through the new feed
-            foreach (SyndicationItem item in p2000.Items)
+            foreach (SyndicationItem item in _p2000.Items)
             {
                 // If the first item from the old feed is identical to the first item of the new feed
                 if (item.Title.Text != first.Title.Text)
@@ -124,8 +103,8 @@ namespace KBS_SE3.Models
             // Send notification to client
             // ...
 
-            // Display new feed
-            DisplayItems(Alerts);
+            // Update the displayed feed
+            HomeModule.Instance.UpdateAlerts();
         }
     }
 }

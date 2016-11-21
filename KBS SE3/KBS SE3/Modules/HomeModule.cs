@@ -9,43 +9,56 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
+using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 
 namespace KBS_SE3.Modules {
-    public partial class HomeModule : UserControl, IModule {
-        private BindingList<Alert> alerts;
-        private static HomeModule instance;
+    partial class HomeModule : UserControl, IModule {
+        private static HomeModule _instance;
 
         public HomeModule() {
             InitializeComponent();
-            instance = this;
-            alerts = new BindingList<Alert>(Feed.Instance.Alerts);
-            listBox1.DataSource = alerts;
+            var locationManager = new LocationManager(mapBox);
+
+            // If there is not an instance yet, set it
+            if (_instance == null)
+            {
+                _instance = this;
+            }
+            
+            // Set the datasource for the listbox
+            listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
         }
 
         public void UpdateAlerts()
         {
+            // Change the datasource so the listbox will update it's items
             listBox1.DataSource = null;
-            alerts = new BindingList<Alert>(Feed.Instance.Alerts);
-            listBox1.DataSource = alerts;
-        }
-
-
-        public string GetModuleName() {
-            return "Home";
+            listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
+            listBox1.DisplayMember = "Title";
         }
 
         public static HomeModule Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new HomeModule();
+                   _instance = new HomeModule();
                 }
-                return instance;
+                   
+                return _instance;
             }
         }
 
+        public Breadcrumb GetBreadcrumb() {
+            return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
+        }
+
+        private void refreshFeedButton_Click(object sender, EventArgs e)
+        {
+            UpdateAlerts();
+        }
     }
 }
 
