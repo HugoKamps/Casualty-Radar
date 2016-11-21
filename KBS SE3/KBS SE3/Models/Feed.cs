@@ -97,8 +97,8 @@ namespace KBS_SE3.Models
             newFeed.Items = newItems;
             List<Alert> newAlerts = CreateAlertList(newFeed);
 
-            // Send notification to client
-            // ...
+            // Send list with new alerts to PushMessage
+            PushMessage m1 = new PushMessage(newAlerts);
 
             // Update the displayed feed
             HomeModule.Instance.UpdateAlerts();
