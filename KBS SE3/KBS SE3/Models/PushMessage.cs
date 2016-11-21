@@ -22,12 +22,12 @@ namespace KBS_SE3.Models {
 
         // Constructor for making a message + push message
         public PushMessage(string title, string type, string message, string address) {
-            this._title = title;
-            this._type = type;
-            this._message = message;
-            this._address = address;
-            this._icon = new NotifyIcon();
-            setPushMessage();
+           _title = title;
+           _type = type;
+           _message = message;
+           _address = address;
+           _icon = new NotifyIcon();
+           setPushMessage();
 
         }
 
@@ -36,8 +36,7 @@ namespace KBS_SE3.Models {
             _icon.Icon = SystemIcons.Exclamation;
             _icon.Visible = true;
             _icon.Icon = new Icon(FileUtil.GetResourcesPath() + "app_icon.ico");
-            _icon.DoubleClick += new System.EventHandler(this.icon_DoubleClick);
-
+            _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
             _icon.ShowBalloonTip(5000,
                 _title,
                  _type + " " + _message + " op " + _address,
@@ -45,7 +44,7 @@ namespace KBS_SE3.Models {
         }
 
         // Function for opening form after double clicking pushMessage
-        private void icon_DoubleClick(object Sender, EventArgs e) {
+        private void notifyIcon_BalloonTipClicked(object Sender, EventArgs e) {
             // Show the form when the user double clicks on the notify icon.
 
             // Set the WindowState to normal if the form is minimized.
