@@ -14,7 +14,6 @@ namespace KBS_SE3.Core {
         private List<IModule> _registeredModules;
 
         private ModuleManager() {
-            MessageBox.Show("modules");
             this._registeredModules = new List<IModule>();
             registerModules();
             this._defaultModule = ParseInstance(typeof(HomeModule));
