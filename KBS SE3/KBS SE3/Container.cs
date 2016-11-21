@@ -24,7 +24,6 @@ namespace KBS_SE3 {
             InitializeComponent();
             this._modManager = ModuleManager.GetInstance();
             registerButtons();
-            //Models.PushMessage m1 = new Models.PushMessage("Titel", "Brandweer", "Nieuwe melding", "hanseflastStraat 8");
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
         }
@@ -98,7 +97,7 @@ namespace KBS_SE3 {
         private void Container_Load(object sender, EventArgs e){
             // Load the feed
             Feed feed = new Feed();
-            FeedTicker feedTicker = new FeedTicker(3000, feed);
+            FeedTicker feedTicker = new FeedTicker(30000, feed);
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
