@@ -13,34 +13,31 @@ namespace KBS_SE3.Models {
         Police, Ambulance, FireDepartment
     }
 
-    public class PushMessage {
-        NotifyIcon _icon;
-        private string _title;
-        private string _type;
-        private string _message;
-        private string _address;
+     class PushMessage {
+        private NotifyIcon _icon;
+        private List<Alert> _alert;
 
         // Constructor for making a message + push message
-        public PushMessage(string title, string type, string message, string address) {
-           _title = title;
-           _type = type;
-           _message = message;
-           _address = address;
+        public PushMessage(List<Alert> alert) {
+           _alert = alert;
            _icon = new NotifyIcon();
-           setPushMessage();
+           setPushMessage(_alert);
 
         }
 
         // Function for pushing message to user
-        private void setPushMessage() {
-            _icon.Icon = SystemIcons.Exclamation;
-            _icon.Visible = true;
-            _icon.Icon = new Icon(FileUtil.GetResourcesPath() + "app_icon.ico");
-            _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
-            _icon.ShowBalloonTip(5000,
-                _title,
-                 _type + " " + _message + " op " + _address,
-                ToolTipIcon.None);
+        private void setPushMessage(List<Alert> alert) {
+
+            if (_alert.Count != 0 && Container.GetInstance().WindowState == FormWindowState.Minimized) {
+                _icon.Icon = SystemIcons.Exclamation;
+                _icon.Visible = true;
+                _icon.Icon = new Icon(FileUtil.GetResourcesPath() + "app_icon.ico");
+                _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
+                _icon.ShowBalloonTip(5000,
+                    _alert.Count() + " nieuwe ongevallen",
+                     "Klik hier om de meldingen te bekijken",
+                    ToolTipIcon.None);
+            }
         }
 
         // Function for opening form after double clicking pushMessage
