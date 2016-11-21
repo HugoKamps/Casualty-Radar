@@ -57,6 +57,7 @@ namespace KBS_SE3.Core {
                 IModule reInitialized = ParseInstance(module.GetType());
                 if (headerLabel != null) updateBreadcrumb(headerLabel, reInitialized);
                 contentPanel.Controls.Clear();
+                this._defaultModule = reInitialized;
                 contentPanel.Controls.Add((UserControl) module);
             }
         }
