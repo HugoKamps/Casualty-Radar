@@ -10,7 +10,7 @@ namespace KBS_SE3.Core {
     class ModuleManager {
 
         private static ModuleManager _instance;
-        private IModule _defaultModule;
+        private IModule _defaultModule, _currentModule;
         private List<IModule> _registeredModules;
 
         private ModuleManager() {
@@ -25,6 +25,10 @@ namespace KBS_SE3.Core {
 
         }
 
+        /*
+        * Returns an existing instance of the given Type
+        * The Type should be an instance from IModule.
+        */
         public IModule ParseInstance(Type type) {
             foreach(IModule mod in _registeredModules) {
                 if (mod.GetType() == type) return mod;
@@ -32,6 +36,10 @@ namespace KBS_SE3.Core {
             return null;
         }
 
+        /*
+        * Registers all modules into cache so we can request them later.
+        * This method will make sure all modules are loaded in once.
+        */
         private void registerModules() {
             _registeredModules.AddRange( new IModule[] {
                 new HomeModule(),
@@ -45,7 +53,9 @@ namespace KBS_SE3.Core {
         * Creates the instance if it doesn't exist yet
         */
         public static ModuleManager GetInstance() {
-            if (_instance == null) _instance = new ModuleManager();
+            if (_instance == null) {
+                _instance = new ModuleManager();
+            }
             return _instance;
         }
 
@@ -61,6 +71,7 @@ namespace KBS_SE3.Core {
         public void UpdateModule(Label headerLabel, Panel contentPanel, Object module) {
             if(module != null) {
                 IModule reInitialized = ParseInstance(module.GetType());
+                this._currentModule = reInitialized;
                 if (headerLabel != null) updateBreadcrumb(headerLabel, reInitialized);
                 contentPanel.Controls.Clear();
                 this._defaultModule = reInitialized;
@@ -68,6 +79,19 @@ namespace KBS_SE3.Core {
             }
         }
 
+        /*
+        * Returns the current module that is active in the container.
+        * If there is no active module it returns null
+        */
+        public IModule GetCurrentModule() {
+            return _currentModule;
+        }
+
+        /*
+        * Returns the top level page based on the given IModule.
+        * If you're currently active in 'Home > Subpage1 > Subpage2' and request the top Level of Subpage2 you'll
+        * get the Home module. 
+        */
         private IModule getTopLevel(IModule current) {
             IModule topLevel = current;
             while (topLevel.GetBreadcrumb().Parent != null) {
@@ -75,7 +99,10 @@ namespace KBS_SE3.Core {
             }
             return topLevel;
         }
-
+        
+        /*
+        * Updates the breadcrumb label in top of the content panel.
+        */
         private void updateBreadcrumb(Label origin, IModule content) {
             IModule current = getTopLevel(content);
             String crumbText = current.GetBreadcrumb().Name;
@@ -86,6 +113,9 @@ namespace KBS_SE3.Core {
             origin.Text = crumbText;
         }
 
+        /*
+        * Returns the default module that will be shown when the app starts.
+        */
         public IModule GetDefaultModule() {
             return _defaultModule;
         }
