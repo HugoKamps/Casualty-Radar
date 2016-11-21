@@ -49,11 +49,14 @@ namespace KBS_SE3 {
                 return cp;
             }
         }
-
+        
+        //This event is triggered when the minimize button is clicked. It minimizes the window
         private void minimizeBtn_Click(object sender, EventArgs e) {
             WindowState = FormWindowState.Minimized;
         }
 
+        /* This event is triggered when the user's mouse hovers over the minimize or exit button. 
+        It changes the color to show which button is being hovered over. */
         private void topBarButtons_MouseEnter(object sender, EventArgs e) {
             Label selected = (Label) sender;
             selected.BackColor = Color.FromArgb(220, 82, 66);
