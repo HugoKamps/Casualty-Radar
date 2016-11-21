@@ -14,89 +14,80 @@ using System.Xml.Linq;
 
 namespace KBS_SE3.Models
 {
-    class Feed
-    {
+    class Feed {
+
         private static Feed _instance;
         private SyndicationFeed _p2000;
-        private string _feedUrl = "http://feeds.livep2000.nl/";
-        public List<Alert> Alerts = new List<Alert>();
+        private readonly string FEED_URL = "http://feeds.livep2000.nl/";
+        private List<Alert> _alerts;
 
-        public static Feed GetInstance()
-        {
+        public static Feed GetInstance() {
             if (_instance == null)  _instance = new Feed();
             return _instance;
         }
 
-        private Feed()
-        {
-            _instance = this;
-            CreateFirstFeed();
-            Alerts = CreateAlertList(_p2000);
+        private Feed() {
+            this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+            this._alerts = CreateAlertList(_p2000);
+            /* Initial update - Only updates after the P2000 is read.*/
             UpdateFeed();
         }
 
-        public List<Alert> CreateAlertList(SyndicationFeed items)
-        {
+        public List<Alert> CreateAlertList(SyndicationFeed items) {
             List<Alert> tempAlerts = new List<Alert>();
-            string lat;
-            string lng;
+            string lat, lng;
 
-            foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate))
-            {
-                if (item.ElementExtensions.Count == 2)
-                {
+            foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate)) {
+                if (item.ElementExtensions.Count == 2) {
                     lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
                     lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
                     tempAlerts.Add(new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture)));
                 }
             }
-
             return tempAlerts;
         }
 
-        public void CreateFirstFeed()
-        {
-            _p2000 = SyndicationFeed.Load(XmlReader.Create(_feedUrl));
-        }
-
-        public void UpdateFeed()
-        {
+        public void UpdateFeed() {
             SyndicationFeed oldP2000 = _p2000;
             List<SyndicationItem> newItems = new List<SyndicationItem>();
             SyndicationFeed newFeed = new SyndicationFeed();
 
             // Load the feed
-            _p2000 = SyndicationFeed.Load(XmlReader.Create(_feedUrl));
-            Alerts = CreateAlertList(_p2000);
-
+            this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+            this._alerts = CreateAlertList(_p2000);
+            
             // Get the first item from the previous feed
             SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
-
+            
             // Loop through the new feed
-            foreach (SyndicationItem item in _p2000.Items)
-            {
+            foreach (SyndicationItem item in _p2000.Items) {
                 // If the first item from the old feed is identical to the first item of the new feed
-                if (item.Title.Text != first.Title.Text)
-                {
+                if (item.Title.Text != first.Title.Text) {
                     // The item is a new item
                     newItems.Add(item);
-                }
-                else
-                {
+                } else {
                     // The item is not a new item, end of loop
                     break;
                 }
             }
-
+            
             newFeed.Items = newItems;
             List<Alert> newAlerts = CreateAlertList(newFeed);
-
+            
             // Send list with new alerts to PushMessage
-            PushMessage m1 = new PushMessage(newAlerts);
+            new PushMessage(newAlerts);
+            UpdateAlerts();
+        }
 
-            // Update the displayed feed
+        /*
+        * Update the displayed alerts with the new feed
+        */
+        public void UpdateAlerts() {
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            hm.UpdateAlerts();
+            ListBox box = hm.feedListBox;
+            box.DataSource = null;
+            box.DataSource = new BindingList<Alert>(_alerts);
+            box.DisplayMember = "Title"; 
         }
     }
 }
