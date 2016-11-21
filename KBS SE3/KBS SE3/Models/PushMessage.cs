@@ -13,34 +13,35 @@ namespace KBS_SE3.Models {
         Police, Ambulance, FireDepartment
     }
 
-    public class PushMessage {
-        NotifyIcon _icon;
-        private string _title;
-        private string _type;
-        private string _message;
-        private string _address;
+     class PushMessage {
+        private NotifyIcon _icon;
+        private List<Alert> _alert;
 
         // Constructor for making a message + push message
-        public PushMessage(string title, string type, string message, string address) {
-           _title = title;
-           _type = type;
-           _message = message;
-           _address = address;
-           _icon = new NotifyIcon();
-           setPushMessage();
-
+        public PushMessage(List<Alert> alert) {
+            _icon = new NotifyIcon();
+            _alert = alert;
+           setPushMessage(_alert);
         }
 
         // Function for pushing message to user
-        private void setPushMessage() {
-            _icon.Icon = SystemIcons.Exclamation;
-            _icon.Visible = true;
-            _icon.Icon = new Icon(FileUtil.GetResourcesPath() + "app_icon.ico");
-            _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
-            _icon.ShowBalloonTip(5000,
-                _title,
-                 _type + " " + _message + " op " + _address,
-                ToolTipIcon.None);
+        private void setPushMessage(List<Alert> alert) {
+
+            if (_alert.Count != 0 && Container.GetInstance().WindowState == FormWindowState.Minimized) {
+                _icon.Icon = SystemIcons.Exclamation;
+                _icon.Visible = true;
+                _icon.Icon = new Icon(FileUtil.GetResourcesPath() + "app_icon.ico");
+                _icon.BalloonTipClosed += new EventHandler(BalloonTipClosed);
+                _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
+                _icon.ShowBalloonTip(5000,
+                    _alert.Count() + " nieuwe ongevallen",
+                     "Klik hier om de meldingen te bekijken",
+                    ToolTipIcon.None);
+            }
+        }
+
+        private void BalloonTipClosed(object Sender, EventArgs e) {
+            _icon.Dispose();
         }
 
         // Function for opening form after double clicking pushMessage
@@ -53,6 +54,7 @@ namespace KBS_SE3.Models {
 
             // Activate the form.
             Container.GetInstance().Activate();
+            _icon.Dispose();
         }
     }
 }
