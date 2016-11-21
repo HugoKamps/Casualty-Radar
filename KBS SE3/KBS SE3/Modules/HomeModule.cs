@@ -19,14 +19,14 @@ namespace KBS_SE3.Modules {
             var locationManager = new LocationManager(mapBox);
             
             // Set the datasource for the listbox
-            listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
+            listBox1.DataSource = new BindingList<Alert>(Feed.GetInstance().Alerts);
         }
 
         public void UpdateAlerts()
         {
             // Change the datasource so the listbox will update it's items
             listBox1.DataSource = null;
-            listBox1.DataSource = new BindingList<Alert>(Feed.Instance.Alerts);
+            listBox1.DataSource = new BindingList<Alert>(Feed.GetInstance().Alerts);
             listBox1.DisplayMember = "Title";
         }
 

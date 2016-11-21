@@ -21,19 +21,13 @@ namespace KBS_SE3.Models
         private string _feedUrl = "http://feeds.livep2000.nl/";
         public List<Alert> Alerts = new List<Alert>();
 
-        public static Feed Instance
+        public static Feed GetInstance()
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new Feed();
-                }
-                return _instance;
-            }
+            if (_instance == null)  _instance = new Feed();
+            return _instance;
         }
 
-        public Feed()
+        private Feed()
         {
             _instance = this;
             CreateFirstFeed();
