@@ -25,33 +25,23 @@ namespace KBS_SE3.Modules {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.homeLabel = new System.Windows.Forms.Label();
+            this.feedListBox = new System.Windows.Forms.ListBox();
             this.mapBox = new System.Windows.Forms.PictureBox();
             this.refreshFeedButton = new System.Windows.Forms.Button();
             this.alertsTitleLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.mapBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // listBox1
+            // feedListBox
             // 
-            this.listBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(639, 36);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(314, 444);
-            this.listBox1.TabIndex = 1;
-            // 
-            // homeLabel
-            // 
-            this.homeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.homeLabel.Location = new System.Drawing.Point(3, 0);
-            this.homeLabel.Name = "homeLabel";
-            this.homeLabel.Size = new System.Drawing.Size(100, 23);
-            this.homeLabel.TabIndex = 1;
-            this.homeLabel.Text = "Home";
+            this.feedListBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.feedListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.feedListBox.FormattingEnabled = true;
+            this.feedListBox.ItemHeight = 20;
+            this.feedListBox.Location = new System.Drawing.Point(639, 36);
+            this.feedListBox.Name = "feedListBox";
+            this.feedListBox.Size = new System.Drawing.Size(314, 444);
+            this.feedListBox.TabIndex = 1;
             // 
             // mapBox
             // 
@@ -88,8 +78,7 @@ namespace KBS_SE3.Modules {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.alertsTitleLabel);
             this.Controls.Add(this.refreshFeedButton);
-            this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.homeLabel);
+            this.Controls.Add(this.feedListBox);
             this.Controls.Add(this.mapBox);
             this.Name = "HomeModule";
             this.Size = new System.Drawing.Size(953, 480);
@@ -100,8 +89,7 @@ namespace KBS_SE3.Modules {
         }
 
         #endregion
-        public System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Label homeLabel;
+        public System.Windows.Forms.ListBox feedListBox;
         private System.Windows.Forms.PictureBox mapBox;
         private Button refreshFeedButton;
         private Label alertsTitleLabel;
