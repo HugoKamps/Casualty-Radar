@@ -13,7 +13,7 @@ namespace KBS_SE3.Models
         public double Lat { get; set; }
         public double Lng { get; set; }
 
-        public Alert(string title, string description, DateTimeOffset pubDate, double lat, double lng){
+        public Alert(string title, string description, DateTimeOffset pubDate, double lat, double lng) {
             Title = title;
             Description = description;
             PubDate = pubDate;
@@ -21,7 +21,7 @@ namespace KBS_SE3.Models
             Lng = lng;
         }
 
-        public override string ToString(){
+        public override string ToString() {
             string returnString = "Alert: \n" + Title + "\n" + Description + "\n" + PubDate + "\n" + Lat + "\n" + Lng + "\n";
             return returnString;
         }

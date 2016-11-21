@@ -26,7 +26,7 @@ namespace KBS_SE3.Models
             return _instance;
         }
 
-        private Feed(){
+        private Feed() {
             this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
             this._alerts = CreateAlertList(_p2000);
             /* Initial update - Only updates after the P2000 is read.*/
@@ -47,7 +47,7 @@ namespace KBS_SE3.Models
             return tempAlerts;
         }
 
-        public void UpdateFeed(){
+        public void UpdateFeed() {
             SyndicationFeed oldP2000 = _p2000;
             List<SyndicationItem> newItems = new List<SyndicationItem>();
             SyndicationFeed newFeed = new SyndicationFeed();
