@@ -143,7 +143,7 @@ namespace KBS_SE3 {
             this.breadCrumbStart.AutoSize = true;
             this.breadCrumbStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.breadCrumbStart.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.breadCrumbStart.Location = new System.Drawing.Point(174, 2);
+            this.breadCrumbStart.Location = new System.Drawing.Point(175, 1);
             this.breadCrumbStart.Name = "breadCrumbStart";
             this.breadCrumbStart.Size = new System.Drawing.Size(0, 15);
             this.breadCrumbStart.TabIndex = 0;

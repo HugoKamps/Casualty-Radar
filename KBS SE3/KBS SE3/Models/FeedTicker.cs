@@ -11,30 +11,34 @@ namespace KBS_SE3.Models
 {
     class FeedTicker
     {
-        private int tickTime = 30000;
-        private static Feed feed;
+        private int _tickTime = 30000;
+        private static Feed _feed;
         public Boolean timerOnOff { get; set; }
 
         public FeedTicker(int t, Feed f)
         {
-            tickTime = t;
-            feed = f;
-            timerOnOff = true;
+            _tickTime = t;
+            _feed = f;
 
+            // Start the timer
             startTimer();
         }
 
         private void startTimer()
         {
+            // Create a new timer
             Timer stateTimer = new Timer();
-            stateTimer.Interval = (tickTime);
+            // Set the interval
+            stateTimer.Interval = (_tickTime);
+            // Add event handler and start the timer
             stateTimer.Tick += new EventHandler(Tick);
             stateTimer.Start();
         }
 
         public static void Tick(Object sender, EventArgs e)
         {
-            feed.UpdateFeed();
+            // Update the feed on timer tick
+            _feed.UpdateFeed();
         }
     }
 }
