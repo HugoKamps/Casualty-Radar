@@ -24,10 +24,7 @@ namespace KBS_SE3 {
             InitializeComponent();
             this._modManager = ModuleManager.GetInstance();
             registerButtons();
-<<<<<<< HEAD
             ModuleManager.GetInstance().UpdateModule(null, contentPanel, new HomeModule());
-=======
->>>>>>> refs/remotes/Dubehh/master
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
         }
