@@ -24,7 +24,6 @@ namespace KBS_SE3 {
             InitializeComponent();
             this._modManager = ModuleManager.GetInstance();
             registerButtons();
-            ModuleManager.GetInstance().UpdateModule(null, contentPanel, new HomeModule());
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
         }
