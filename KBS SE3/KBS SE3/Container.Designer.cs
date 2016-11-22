@@ -32,22 +32,22 @@ namespace KBS_SE3 {
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Container));
             this.topBar = new System.Windows.Forms.Panel();
-            this.logoTopBar = new System.Windows.Forms.PictureBox();
             this.minimizeBtn = new System.Windows.Forms.Label();
             this.closeBtn = new System.Windows.Forms.Label();
             this.subBar = new System.Windows.Forms.Panel();
+            this.previousBtn = new System.Windows.Forms.Label();
+            this.breadCrumbStart = new System.Windows.Forms.Label();
             this.contentPanel = new System.Windows.Forms.Panel();
             this.menuPanel = new System.Windows.Forms.Panel();
-            this.breadCrumbStart = new System.Windows.Forms.Label();
             this.exitBtn = new System.Windows.Forms.Button();
             this.settingsBtn = new System.Windows.Forms.Button();
             this.homeBtn = new System.Windows.Forms.Button();
             this.menuLabel = new System.Windows.Forms.Label();
-            this.previousBtn = new System.Windows.Forms.Label();
+            this.logoTopBar = new System.Windows.Forms.PictureBox();
             this.topBar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).BeginInit();
             this.subBar.SuspendLayout();
             this.menuPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).BeginInit();
             this.SuspendLayout();
             // 
             // topBar
@@ -62,16 +62,6 @@ namespace KBS_SE3 {
             this.topBar.Size = new System.Drawing.Size(1095, 67);
             this.topBar.TabIndex = 0;
             this.topBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.topBar_MouseDown);
-            // 
-            // logoTopBar
-            // 
-            this.logoTopBar.Image = global::KBS_SE3.Properties.Resources.logo_final;
-            this.logoTopBar.Location = new System.Drawing.Point(10, 11);
-            this.logoTopBar.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-            this.logoTopBar.Name = "logoTopBar";
-            this.logoTopBar.Size = new System.Drawing.Size(287, 50);
-            this.logoTopBar.TabIndex = 2;
-            this.logoTopBar.TabStop = false;
             // 
             // minimizeBtn
             // 
@@ -116,6 +106,31 @@ namespace KBS_SE3 {
             this.subBar.Size = new System.Drawing.Size(1095, 20);
             this.subBar.TabIndex = 1;
             // 
+            // previousBtn
+            // 
+            this.previousBtn.AutoSize = true;
+            this.previousBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.previousBtn.Font = new System.Drawing.Font("Corbel", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.previousBtn.ForeColor = System.Drawing.Color.Gainsboro;
+            this.previousBtn.Location = new System.Drawing.Point(138, 0);
+            this.previousBtn.Name = "previousBtn";
+            this.previousBtn.Size = new System.Drawing.Size(25, 19);
+            this.previousBtn.TabIndex = 0;
+            this.previousBtn.Text = "<<";
+            this.previousBtn.Click += new System.EventHandler(this.prevBtn_Click);
+            this.previousBtn.MouseEnter += new System.EventHandler(this.prevBtn_MouseEnter);
+            this.previousBtn.MouseLeave += new System.EventHandler(this.prevBtn_MouseLeave);
+            // 
+            // breadCrumbStart
+            // 
+            this.breadCrumbStart.AutoSize = true;
+            this.breadCrumbStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.breadCrumbStart.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.breadCrumbStart.Location = new System.Drawing.Point(175, 1);
+            this.breadCrumbStart.Name = "breadCrumbStart";
+            this.breadCrumbStart.Size = new System.Drawing.Size(0, 15);
+            this.breadCrumbStart.TabIndex = 0;
+            // 
             // contentPanel
             // 
             this.contentPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(233)))), ((int)(((byte)(232)))), ((int)(((byte)(228)))));
@@ -138,16 +153,6 @@ namespace KBS_SE3 {
             this.menuPanel.Size = new System.Drawing.Size(142, 480);
             this.menuPanel.TabIndex = 3;
             // 
-            // breadCrumbStart
-            // 
-            this.breadCrumbStart.AutoSize = true;
-            this.breadCrumbStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.breadCrumbStart.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.breadCrumbStart.Location = new System.Drawing.Point(175, 1);
-            this.breadCrumbStart.Name = "breadCrumbStart";
-            this.breadCrumbStart.Size = new System.Drawing.Size(0, 15);
-            this.breadCrumbStart.TabIndex = 0;
-            // 
             // exitBtn
             // 
             this.exitBtn.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -160,7 +165,7 @@ namespace KBS_SE3 {
             this.exitBtn.Name = "exitBtn";
             this.exitBtn.Size = new System.Drawing.Size(142, 30);
             this.exitBtn.TabIndex = 11;
-            this.exitBtn.Text = "Exit";
+            this.exitBtn.Text = "Afsluiten";
             this.exitBtn.UseVisualStyleBackColor = true;
             this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
             // 
@@ -176,7 +181,7 @@ namespace KBS_SE3 {
             this.settingsBtn.Name = "settingsBtn";
             this.settingsBtn.Size = new System.Drawing.Size(142, 30);
             this.settingsBtn.TabIndex = 10;
-            this.settingsBtn.Text = "Settings";
+            this.settingsBtn.Text = "Instellingen";
             this.settingsBtn.UseVisualStyleBackColor = true;
             this.settingsBtn.Click += new System.EventHandler(this.menuBtn_Click);
             // 
@@ -209,20 +214,15 @@ namespace KBS_SE3 {
             this.menuLabel.Text = "Menu";
             this.menuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // previousBtn
+            // logoTopBar
             // 
-            this.previousBtn.AutoSize = true;
-            this.previousBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.previousBtn.Font = new System.Drawing.Font("Corbel", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.previousBtn.ForeColor = System.Drawing.Color.Gainsboro;
-            this.previousBtn.Location = new System.Drawing.Point(138, 0);
-            this.previousBtn.Name = "previousBtn";
-            this.previousBtn.Size = new System.Drawing.Size(25, 19);
-            this.previousBtn.TabIndex = 0;
-            this.previousBtn.Text = "<<";
-            this.previousBtn.Click += new System.EventHandler(this.prevBtn_Click);
-            this.previousBtn.MouseEnter += new System.EventHandler(this.prevBtn_MouseEnter);
-            this.previousBtn.MouseLeave += new System.EventHandler(this.prevBtn_MouseLeave);
+            this.logoTopBar.Image = global::KBS_SE3.Properties.Resources.logo_final;
+            this.logoTopBar.Location = new System.Drawing.Point(10, 11);
+            this.logoTopBar.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.logoTopBar.Name = "logoTopBar";
+            this.logoTopBar.Size = new System.Drawing.Size(287, 50);
+            this.logoTopBar.TabIndex = 2;
+            this.logoTopBar.TabStop = false;
             // 
             // Container
             // 
@@ -243,10 +243,10 @@ namespace KBS_SE3 {
             this.Text = "Casualty Radar";
             this.Load += new System.EventHandler(this.Container_Load);
             this.topBar.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).EndInit();
             this.subBar.ResumeLayout(false);
             this.subBar.PerformLayout();
             this.menuPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -257,10 +257,10 @@ namespace KBS_SE3 {
         private System.Windows.Forms.Panel subBar;
         private System.Windows.Forms.Label minimizeBtn;
         private System.Windows.Forms.Label closeBtn;
-        private System.Windows.Forms.Panel contentPanel;
+        public System.Windows.Forms.Panel contentPanel;
         private System.Windows.Forms.PictureBox logoTopBar;
         private System.Windows.Forms.Panel menuPanel;
-        private Label breadCrumbStart;
+        public Label breadCrumbStart;
         private Button exitBtn;
         private Button settingsBtn;
         private Button homeBtn;
