@@ -19,10 +19,9 @@ namespace KBS_SE3.Models {
 
         // Constructor for making a message + push message
         public PushMessage(List<Alert> alert) {
-           _alert = alert;
-           _icon = new NotifyIcon();
+            _icon = new NotifyIcon();
+            _alert = alert;
            setPushMessage(_alert);
-
         }
 
         // Function for pushing message to user
@@ -32,12 +31,17 @@ namespace KBS_SE3.Models {
                 _icon.Icon = SystemIcons.Exclamation;
                 _icon.Visible = true;
                 _icon.Icon = new Icon(FileUtil.GetResourcesPath() + "app_icon.ico");
+                _icon.BalloonTipClosed += new EventHandler(BalloonTipClosed);
                 _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
                 _icon.ShowBalloonTip(5000,
                     _alert.Count() + " nieuwe ongevallen",
                      "Klik hier om de meldingen te bekijken",
                     ToolTipIcon.None);
             }
+        }
+
+        private void BalloonTipClosed(object Sender, EventArgs e) {
+            _icon.Dispose();
         }
 
         // Function for opening form after double clicking pushMessage
@@ -50,6 +54,7 @@ namespace KBS_SE3.Models {
 
             // Activate the form.
             Container.GetInstance().Activate();
+            _icon.Dispose();
         }
     }
 }

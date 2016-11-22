@@ -17,7 +17,7 @@ namespace KBS_SE3.Models
         public string TypeString { get; set; }
         public string Info { get; set; }
 
-        public Alert(string title, string description, DateTimeOffset pubDate, double lat, double lng){
+        public Alert(string title, string description, DateTimeOffset pubDate, double lat, double lng) {
             Title = title;
             Description = description;
             PubDate = pubDate;

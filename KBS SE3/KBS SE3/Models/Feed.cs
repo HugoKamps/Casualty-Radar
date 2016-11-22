@@ -35,6 +35,11 @@ namespace KBS_SE3.Models
             UpdateFeed();
         }
 
+        public List<Alert> GetAlerts()
+        {
+            return _alerts;
+        }
+
         public List<Alert> CreateAlertList(SyndicationFeed items) {
             List<Alert> tempAlerts = new List<Alert>();
             string lat, lng;
@@ -118,9 +123,7 @@ namespace KBS_SE3.Models
             {
                 _filteredAlerts = _alerts;
             }
-
             box.DataSource = new BindingList<Alert>(_filteredAlerts);
-
             box.DisplayMember = "Title";
         }
     }
