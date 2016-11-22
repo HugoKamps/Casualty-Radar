@@ -29,6 +29,7 @@ namespace KBS_SE3.Modules {
             this.mapBox = new System.Windows.Forms.PictureBox();
             this.refreshFeedButton = new System.Windows.Forms.Button();
             this.alertsTitleLabel = new System.Windows.Forms.Label();
+            this.alertTypeComboBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.mapBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -72,10 +73,25 @@ namespace KBS_SE3.Modules {
             this.alertsTitleLabel.TabIndex = 4;
             this.alertsTitleLabel.Text = "Meldingen";
             // 
+            // alertTypeComboBox
+            // 
+            this.alertTypeComboBox.FormattingEnabled = true;
+            this.alertTypeComboBox.Items.AddRange(new object[] {
+            "Alle",
+            "Ambulance",
+            "Brandweer"});
+            this.alertTypeComboBox.Location = new System.Drawing.Point(765, 9);
+            this.alertTypeComboBox.Name = "alertTypeComboBox";
+            this.alertTypeComboBox.Size = new System.Drawing.Size(81, 21);
+            this.alertTypeComboBox.TabIndex = 5;
+            this.alertTypeComboBox.Text = "Alle";
+            this.alertTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.alertTypeComboBox_SelectedIndexChanged);
+            // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.alertTypeComboBox);
             this.Controls.Add(this.alertsTitleLabel);
             this.Controls.Add(this.refreshFeedButton);
             this.Controls.Add(this.feedListBox);
@@ -93,5 +109,6 @@ namespace KBS_SE3.Modules {
         private System.Windows.Forms.PictureBox mapBox;
         private Button refreshFeedButton;
         private Label alertsTitleLabel;
+        public ComboBox alertTypeComboBox;
     }
 }

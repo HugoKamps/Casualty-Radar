@@ -12,6 +12,10 @@ namespace KBS_SE3.Models
         public DateTimeOffset PubDate { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
+        public string Code { get; set; }
+        public int Type { get; set; }
+        public string TypeString { get; set; }
+        public string Info { get; set; }
 
         public Alert(string title, string description, DateTimeOffset pubDate, double lat, double lng) {
             Title = title;
@@ -21,8 +25,8 @@ namespace KBS_SE3.Models
             Lng = lng;
         }
 
-        public override string ToString() {
-            string returnString = "Alert: \n" + Title + "\n" + Description + "\n" + PubDate + "\n" + Lat + "\n" + Lng + "\n";
+        public override string ToString(){
+            string returnString = Code + ": " + Type + ", " + Info;
             return returnString;
         }
     }
