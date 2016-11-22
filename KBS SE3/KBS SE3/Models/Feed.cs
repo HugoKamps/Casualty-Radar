@@ -21,6 +21,7 @@ namespace KBS_SE3.Models
         private SyndicationFeed _p2000;
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
         private List<Alert> _alerts;
+        private List<Alert> _filteredAlerts;
 
         public static Feed GetInstance() {
             if (_instance == null)  _instance = new Feed();
@@ -48,8 +49,9 @@ namespace KBS_SE3.Models
                         if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0]))
                         {
                             newAlert.Code = AlertUtil.P2000[i, 0];
-                            newAlert.Type = AlertUtil.P2000[i, 1];
-                            newAlert.Info = AlertUtil.P2000[i, 2];
+                            newAlert.Type = Int32.Parse(AlertUtil.P2000[i, 1]);
+                            newAlert.TypeString = AlertUtil.P2000[i, 2];
+                            newAlert.Info = AlertUtil.P2000[i, 3];
                             tempAlerts.Add(newAlert);
                             break;
                         }
@@ -97,8 +99,28 @@ namespace KBS_SE3.Models
         public void UpdateAlerts() {
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             ListBox box = hm.feedListBox;
+            int selectedFilter = hm.alertTypeComboBox.SelectedIndex;
             box.DataSource = null;
-            box.DataSource = new BindingList<Alert>(_alerts);
+
+            // Check which filter is selected and apply the filter
+            if (selectedFilter == 1 || selectedFilter == 2)
+            {
+                _filteredAlerts = new List<Alert>();
+                foreach (Alert a in _alerts)
+                {
+                    if (a.Type == selectedFilter)
+                    {
+                        _filteredAlerts.Add(a);
+                    }
+                }
+            }
+            else
+            {
+                _filteredAlerts = _alerts;
+            }
+
+            box.DataSource = new BindingList<Alert>(_filteredAlerts);
+
             box.DisplayMember = "Title";
         }
     }

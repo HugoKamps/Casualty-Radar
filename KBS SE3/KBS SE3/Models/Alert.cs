@@ -13,7 +13,8 @@ namespace KBS_SE3.Models
         public double Lat { get; set; }
         public double Lng { get; set; }
         public string Code { get; set; }
-        public string Type { get; set; }
+        public int Type { get; set; }
+        public string TypeString { get; set; }
         public string Info { get; set; }
 
         public Alert(string title, string description, DateTimeOffset pubDate, double lat, double lng){
