@@ -261,9 +261,9 @@ namespace KBS_SE3 {
         private System.Windows.Forms.PictureBox logoTopBar;
         private System.Windows.Forms.Panel menuPanel;
         public Label breadCrumbStart;
-        private Button exitBtn;
-        private Button settingsBtn;
-        private Button homeBtn;
+        public Button exitBtn;
+        public Button settingsBtn;
+        public Button homeBtn;
         private Label menuLabel;
         private Label previousBtn;
     }

@@ -27,7 +27,7 @@ namespace KBS_SE3.Models
         }
 
         private Feed() {
-            if (MainMethods.CheckForInternetConnection()) {
+            if (ConnectionUtil.HasInternetConnection()) {
                 this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
                 this._alerts = CreateAlertList(_p2000);
                 /* Initial update - Only updates after the P2000 is read.*/
