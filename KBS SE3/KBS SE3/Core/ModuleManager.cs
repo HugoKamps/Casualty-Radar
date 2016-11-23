@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using KBS_SE3.Modules;
 using KBS_SE3.Properties;
+using KBS_SE3.Utils;
 
 namespace KBS_SE3.Core {
     class ModuleManager {
@@ -14,7 +15,7 @@ namespace KBS_SE3.Core {
         private ModuleManager() {
             _registeredModules = new List<IModule>();
             registerModules();
-            if (MainMethods.CheckForInternetConnection())
+            if (CoreUtil.CheckForInternetConnection())
             {
                 if (Settings.Default.userLocation != "")
                 {

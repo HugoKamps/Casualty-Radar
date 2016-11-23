@@ -23,7 +23,7 @@ namespace KBS_SE3.Core
         }
 
         public string GetMap(string currentLocation) {
-            if (MainMethods.CheckForInternetConnection()) {
+            if (CoreUtil.CheckForInternetConnection()) {
                 var url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentLocation +
                           "&zoom=7&size=700x480&maptype=roadmap&";
                 url += "markers=color:blue%7Clabel:L%7C" + currentLocation + "&";
@@ -35,7 +35,7 @@ namespace KBS_SE3.Core
                 url += "&key=AIzaSyDoRzUMAF3osX972CDWR2rDoWc9nKafV5A";
                 return url;
             }
-            return FileUtil.GetResourcesPath() + "wifi_icon.png";
+            return @"..\..\Resources\wifi_icon.png";
         }
 
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {

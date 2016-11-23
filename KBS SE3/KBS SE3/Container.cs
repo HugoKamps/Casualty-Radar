@@ -34,8 +34,7 @@ namespace KBS_SE3 {
             return _instance;
         }
 
-        public Label GetBreadcrumbStart()
-        {
+        public Label GetBreadcrumbStart(){
             return breadCrumbStart;
         }
         

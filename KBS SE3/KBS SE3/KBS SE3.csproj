@@ -95,7 +95,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FileUtil.cs" />
     <Compile Include="Utils\AlertUtil.cs" />
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Container.resx">
