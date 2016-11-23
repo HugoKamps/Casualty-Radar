@@ -15,7 +15,12 @@ namespace KBS_SE3.Modules {
             return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
         }
 
-        private void refreshFeedButton_Click(object sender, EventArgs e){
+        private void refreshFeedButton_Click(object sender, EventArgs e) {
+            Feed.GetInstance().UpdateFeed();
+        }
+
+        private void alertTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
             Feed.GetInstance().UpdateAlerts();
         }
     }

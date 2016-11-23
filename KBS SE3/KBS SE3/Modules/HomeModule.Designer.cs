@@ -29,11 +29,12 @@ namespace KBS_SE3.Modules {
             this.alertsTitleLabel = new System.Windows.Forms.Label();
             this.map = new GMap.NET.WindowsForms.GMapControl();
             this.refreshPanel = new System.Windows.Forms.Panel();
-            this.rightPanel = new System.Windows.Forms.Panel();
+            this.alertTypeComboBox = new System.Windows.Forms.ComboBox();
             this.refreshFeedButton = new System.Windows.Forms.PictureBox();
+            this.rightPanel = new System.Windows.Forms.Panel();
             this.refreshPanel.SuspendLayout();
-            this.rightPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).BeginInit();
+            this.rightPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // feedListBox
@@ -51,12 +52,12 @@ namespace KBS_SE3.Modules {
             // alertsTitleLabel
             // 
             this.alertsTitleLabel.BackColor = System.Drawing.Color.White;
-            this.alertsTitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.alertsTitleLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.alertsTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.alertsTitleLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.alertsTitleLabel.Location = new System.Drawing.Point(0, 0);
             this.alertsTitleLabel.Name = "alertsTitleLabel";
-            this.alertsTitleLabel.Size = new System.Drawing.Size(338, 37);
+            this.alertsTitleLabel.Size = new System.Drawing.Size(248, 37);
             this.alertsTitleLabel.TabIndex = 4;
             this.alertsTitleLabel.Text = "Meldingen";
             this.alertsTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -89,6 +90,8 @@ namespace KBS_SE3.Modules {
             // 
             // refreshPanel
             // 
+            this.refreshPanel.BackColor = System.Drawing.Color.White;
+            this.refreshPanel.Controls.Add(this.alertTypeComboBox);
             this.refreshPanel.Controls.Add(this.refreshFeedButton);
             this.refreshPanel.Controls.Add(this.alertsTitleLabel);
             this.refreshPanel.Dock = System.Windows.Forms.DockStyle.Top;
@@ -96,6 +99,34 @@ namespace KBS_SE3.Modules {
             this.refreshPanel.Name = "refreshPanel";
             this.refreshPanel.Size = new System.Drawing.Size(338, 37);
             this.refreshPanel.TabIndex = 6;
+            // 
+            // alertTypeComboBox
+            // 
+            this.alertTypeComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.alertTypeComboBox.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.alertTypeComboBox.FormattingEnabled = true;
+            this.alertTypeComboBox.Items.AddRange(new object[] {
+            "Alle",
+            "Ambulance",
+            "Brandweer"});
+            this.alertTypeComboBox.Location = new System.Drawing.Point(200, 6);
+            this.alertTypeComboBox.Name = "alertTypeComboBox";
+            this.alertTypeComboBox.Size = new System.Drawing.Size(101, 28);
+            this.alertTypeComboBox.TabIndex = 6;
+            this.alertTypeComboBox.Text = "Alle";
+            this.alertTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.alertTypeComboBox_SelectedIndexChanged);
+            // 
+            // refreshFeedButton
+            // 
+            this.refreshFeedButton.BackColor = System.Drawing.Color.White;
+            this.refreshFeedButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
+            this.refreshFeedButton.Location = new System.Drawing.Point(307, 0);
+            this.refreshFeedButton.Name = "refreshFeedButton";
+            this.refreshFeedButton.Size = new System.Drawing.Size(31, 37);
+            this.refreshFeedButton.TabIndex = 5;
+            this.refreshFeedButton.TabStop = false;
+            this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
             // 
             // rightPanel
             // 
@@ -107,17 +138,6 @@ namespace KBS_SE3.Modules {
             this.rightPanel.Size = new System.Drawing.Size(338, 480);
             this.rightPanel.TabIndex = 7;
             // 
-            // refreshFeedButton
-            // 
-            this.refreshFeedButton.BackColor = System.Drawing.Color.White;
-            this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
-            this.refreshFeedButton.Location = new System.Drawing.Point(307, 3);
-            this.refreshFeedButton.Name = "refreshFeedButton";
-            this.refreshFeedButton.Size = new System.Drawing.Size(28, 29);
-            this.refreshFeedButton.TabIndex = 5;
-            this.refreshFeedButton.TabStop = false;
-            this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
-            // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -127,8 +147,8 @@ namespace KBS_SE3.Modules {
             this.Name = "HomeModule";
             this.Size = new System.Drawing.Size(953, 480);
             this.refreshPanel.ResumeLayout(false);
-            this.rightPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).EndInit();
+            this.rightPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -140,5 +160,6 @@ namespace KBS_SE3.Modules {
         private Panel refreshPanel;
         private Panel rightPanel;
         private PictureBox refreshFeedButton;
+        public ComboBox alertTypeComboBox;
     }
 }
