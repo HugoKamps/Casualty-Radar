@@ -33,6 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GMap.NET.Core, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <HintPath>..\packages\GMap.NET.WindowsForms.1.7.1\lib\net40\GMap.NET.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <HintPath>..\packages\GMap.NET.WindowsForms.1.7.1\lib\net40\GMap.NET.WindowsForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Device" />
@@ -55,6 +63,7 @@
       <DependentUpon>Container.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\LocationManager.cs" />
+    <Compile Include="ConnectionUtil.cs" />
     <Compile Include="Models\Breadcrumb.cs" />
     <Compile Include="Models\Graph\Member.cs" />
     <Compile Include="Models\Graph\Nd.cs" />
@@ -68,6 +77,12 @@
     <Compile Include="Models\Alert.cs" />
     <Compile Include="Models\Feed.cs" />
     <Compile Include="Models\FeedTicker.cs" />
+    <Compile Include="Modules\GetStartedModule.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\GetStartedModule.Designer.cs">
+      <DependentUpon>GetStartedModule.cs</DependentUpon>
+    </Compile>
     <Compile Include="Modules\HomeModule.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -80,6 +95,12 @@
     <Compile Include="Modules\NavigationModule.Designer.cs">
       <DependentUpon>NavigationModule.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\NoConnectionModule.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\NoConnectionModule.Designer.cs">
+      <DependentUpon>NoConnectionModule.cs</DependentUpon>
+    </Compile>
     <Compile Include="Modules\SettingsModule.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -89,11 +110,22 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileUtil.cs" />
+    <Compile Include="Utils\AlertUtil.cs" />
+    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Modules\GetStartedModule.resx">
+      <DependentUpon>GetStartedModule.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Modules\HomeModule.resx">
       <DependentUpon>HomeModule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\NavigationModule.resx">
+      <DependentUpon>NavigationModule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\NoConnectionModule.resx">
+      <DependentUpon>NoConnectionModule.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\SettingsModule.resx">
       <DependentUpon>SettingsModule.cs</DependentUpon>
@@ -124,15 +156,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
+    <None Include="Resources\refresh_icon.png" />
+    <None Include="Resources\wifi_icon.png" />
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
     <Content Include="Resources\logo_final.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

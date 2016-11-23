@@ -1,23 +1,30 @@
-﻿using KBS_SE3.Modules;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using KBS_SE3.Modules;
+using KBS_SE3.Properties;
+using static System.String;
 
 namespace KBS_SE3.Core {
     class ModuleManager {
 
         private static ModuleManager _instance;
         private IModule _defaultModule, _currentModule;
-        private List<IModule> _registeredModules;
+        private readonly List<IModule> _registeredModules;
 
         private ModuleManager() {
-            MessageBox.Show("modules");
-            this._registeredModules = new List<IModule>();
+            _registeredModules = new List<IModule>();
             registerModules();
-            this._defaultModule = ParseInstance(typeof(HomeModule));
+            if (ConnectionUtil.HasInternetConnection()) {
+                if (Settings.Default.userLocation != "") {
+                    _defaultModule = ParseInstance(typeof(HomeModule));
+                } else {
+                    _defaultModule = ParseInstance(typeof(GetStartedModule));
+                }
+            } else {
+                _defaultModule = ParseInstance(typeof(NoConnectionModule));
+            }
         }
 
         /*
@@ -25,10 +32,7 @@ namespace KBS_SE3.Core {
         * The Type should be an instance from IModule.
         */
         public IModule ParseInstance(Type type) {
-            foreach(IModule mod in _registeredModules) {
-                if (mod.GetType() == type) return mod;
-            }
-            return null;
+            return _registeredModules.FirstOrDefault(mod => mod.GetType() == type);
         }
 
         /*
@@ -39,7 +43,9 @@ namespace KBS_SE3.Core {
             _registeredModules.AddRange( new IModule[] {
                 new HomeModule(),
                 new SettingsModule(),
-                new NavigationModule()
+                new NavigationModule(),
+                new GetStartedModule(),
+                new NoConnectionModule() 
             });
         }
 
@@ -48,10 +54,7 @@ namespace KBS_SE3.Core {
         * Creates the instance if it doesn't exist yet
         */
         public static ModuleManager GetInstance() {
-            if (_instance == null) {
-                _instance = new ModuleManager();
-            }
-            return _instance;
+            return _instance ?? (_instance = new ModuleManager());
         }
 
         /*
@@ -66,10 +69,10 @@ namespace KBS_SE3.Core {
         public void UpdateModule(Label headerLabel, Panel contentPanel, Object module) {
             if(module != null) {
                 IModule reInitialized = ParseInstance(module.GetType());
-                this._currentModule = reInitialized;
+                _currentModule = reInitialized;
                 if (headerLabel != null) updateBreadcrumb(headerLabel, reInitialized);
                 contentPanel.Controls.Clear();
-                this._defaultModule = reInitialized;
+                _defaultModule = reInitialized;
                 contentPanel.Controls.Add((UserControl) module);
             }
         }

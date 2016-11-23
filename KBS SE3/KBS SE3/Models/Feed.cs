@@ -1,5 +1,6 @@
 ﻿using KBS_SE3.Core;
 using KBS_SE3.Modules;
+using KBS_SE3.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,17 +21,25 @@ namespace KBS_SE3.Models
         private SyndicationFeed _p2000;
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
         private List<Alert> _alerts;
+        private List<Alert> _filteredAlerts;
 
         public static Feed GetInstance() {
             if (_instance == null)  _instance = new Feed();
             return _instance;
         }
 
-        private Feed(){
-            this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
-            this._alerts = CreateAlertList(_p2000);
-            /* Initial update - Only updates after the P2000 is read.*/
-            UpdateFeed();
+        private Feed() {
+            if (ConnectionUtil.HasInternetConnection()) {
+                this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+                this._alerts = CreateAlertList(_p2000);
+                /* Initial update - Only updates after the P2000 is read.*/
+                UpdateFeed();
+            }
+        }
+
+        public List<Alert> GetAlerts()
+        {
+            return _alerts;
         }
 
         public List<Alert> CreateAlertList(SyndicationFeed items) {
@@ -41,7 +50,19 @@ namespace KBS_SE3.Models
                 if (item.ElementExtensions.Count == 2) {
                     lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
                     lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
-                    tempAlerts.Add(new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture)));
+                    Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
+                    for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++)
+                    {
+                        if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0]))
+                        {
+                            newAlert.Code = AlertUtil.P2000[i, 0];
+                            newAlert.Type = Int32.Parse(AlertUtil.P2000[i, 1]);
+                            newAlert.TypeString = AlertUtil.P2000[i, 2];
+                            newAlert.Info = AlertUtil.P2000[i, 3];
+                            tempAlerts.Add(newAlert);
+                            break;
+                        }
+                    }
                 }
             }
             return tempAlerts;
@@ -85,9 +106,27 @@ namespace KBS_SE3.Models
         public void UpdateAlerts() {
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             ListBox box = hm.feedListBox;
+            int selectedFilter = hm.alertTypeComboBox.SelectedIndex;
             box.DataSource = null;
-            box.DataSource = new BindingList<Alert>(_alerts);
-            box.DisplayMember = "Title"; 
+
+            // Check which filter is selected and apply the filter
+            if (selectedFilter == 1 || selectedFilter == 2)
+            {
+                _filteredAlerts = new List<Alert>();
+                foreach (Alert a in _alerts)
+                {
+                    if (a.Type == selectedFilter)
+                    {
+                        _filteredAlerts.Add(a);
+                    }
+                }
+            }
+            else
+            {
+                _filteredAlerts = _alerts;
+            }
+            box.DataSource = new BindingList<Alert>(_filteredAlerts);
+            box.DisplayMember = "Title";
         }
     }
 }

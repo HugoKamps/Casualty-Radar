@@ -3,6 +3,7 @@ using KBS_SE3.Models;
 using KBS_SE3.Modules;
 using System;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -27,9 +28,14 @@ namespace KBS_SE3 {
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
         }
+
         public static Container GetInstance() {
             if (_instance == null) _instance = new Container();
             return _instance;
+        }
+
+        public Label GetBreadcrumbStart() {
+            return breadCrumbStart;
         }
         
         /*
