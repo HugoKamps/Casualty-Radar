@@ -66,7 +66,6 @@
     <Compile Include="ConnectionUtil.cs" />
     <Compile Include="Models\Breadcrumb.cs" />
     <Compile Include="Models\Graph\Member.cs" />
-    <Compile Include="Models\Graph\Nd.cs" />
     <Compile Include="Models\Graph\Node.cs" />
     <Compile Include="Models\Graph\Relation.cs" />
     <Compile Include="Models\Graph\Tag.cs" />
