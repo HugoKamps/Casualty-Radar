@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using KBS_SE3.Modules;
 using KBS_SE3.Properties;
 using KBS_SE3.Utils;
+using static System.String;
 
 namespace KBS_SE3.Core {
     class ModuleManager {
@@ -15,22 +17,11 @@ namespace KBS_SE3.Core {
         private ModuleManager() {
             _registeredModules = new List<IModule>();
             registerModules();
-            if (CoreUtil.CheckForInternetConnection())
-            {
-                if (Settings.Default.userLocation != "")
-                {
-                    _defaultModule = ParseInstance(typeof (HomeModule));
-                }
-                else
-                {
-                    _defaultModule = ParseInstance(typeof (GetStartedModule));
-                }
+            if (ConnectionUtil.HasInternetConnection()) {
+                this._defaultModule = ParseInstance(Settings.Default.userLocation == "" ? typeof(GetStartedModule) : typeof(HomeModule));
+            } else {
+                this._defaultModule = ParseInstance(typeof(NoConnectionModule));
             }
-            else
-            {
-                _defaultModule = ParseInstance(typeof (NoConnectionModule));
-            }
-
         }
 
         /*
@@ -38,10 +29,7 @@ namespace KBS_SE3.Core {
         * The Type should be an instance from IModule.
         */
         public IModule ParseInstance(Type type) {
-            foreach(IModule mod in _registeredModules) {
-                if (mod.GetType() == type) return mod;
-            }
-            return null;
+            return _registeredModules.FirstOrDefault(mod => mod.GetType() == type);
         }
 
         /*
@@ -63,10 +51,7 @@ namespace KBS_SE3.Core {
         * Creates the instance if it doesn't exist yet
         */
         public static ModuleManager GetInstance() {
-            if (_instance == null) {
-                _instance = new ModuleManager();
-            }
-            return _instance;
+            return _instance ?? (_instance = new ModuleManager());
         }
 
         /*
