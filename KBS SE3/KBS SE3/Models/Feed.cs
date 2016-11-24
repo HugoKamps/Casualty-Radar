@@ -29,11 +29,22 @@ namespace KBS_SE3.Models
         }
 
         private Feed() {
-            if (ConnectionUtil.HasInternetConnection()) {
+            //if (ConnectionUtil.HasInternetConnection()) {
+            //    this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+            //    this._alerts = CreateAlertList(_p2000);
+            //    /* Initial update - Only updates after the P2000 is read.*/
+            //    UpdateFeed();
+            //}
+
+            try
+            {
                 this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
                 this._alerts = CreateAlertList(_p2000);
                 /* Initial update - Only updates after the P2000 is read.*/
                 UpdateFeed();
+            } catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
             }
         }
 
@@ -52,16 +63,19 @@ namespace KBS_SE3.Models
                 if (newAlert != null)
                     tempAlerts.Add(newAlert);
             }
+            tempAlerts.Reverse();
             return tempAlerts;
         }
 
         private Alert _createAlert(SyndicationItem item)
         {
+            // Check if the item has 2 attributes which are Lat & Long
             if (item.ElementExtensions.Count == 2)
             {
                 string lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
                 string lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
                 Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
+                // Use the AlertUtil for setting attributes
                 for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++)
                 {
                     if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0]))
@@ -83,30 +97,36 @@ namespace KBS_SE3.Models
             SyndicationFeed newFeed = new SyndicationFeed();
 
             // Load the feed
-            this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
-            this._alerts = CreateAlertList(_p2000);
-            
-            // Get the first item from the previous feed
-            SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
-            
-            // Loop through the new feed
-            foreach (SyndicationItem item in _p2000.Items) {
-                // If the first item from the old feed is identical to the first item of the new feed
-                if (item.Title.Text != first.Title.Text) {
-                    // The item is a new item
-                    newItems.Add(item);
-                } else {
-                    // The item is not a new item, end of loop
-                    break;
+            try
+            {
+                this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+                this._alerts = CreateAlertList(_p2000);
+
+                // Get the first item from the previous feed
+                SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
+
+                // Loop through the new feed
+                foreach (SyndicationItem item in _p2000.Items) {
+                    // If the first item from the old feed is identical to the first item of the new feed
+                    if (item.Title.Text != first.Title.Text) {
+                        // The item is a new item
+                        newItems.Add(item);
+                    } else {
+                        // The item is not a new item, end of loop
+                        break;
+                    }
                 }
+
+                newFeed.Items = newItems;
+                List<Alert> newAlerts = CreateAlertList(newFeed);
+
+                // Send list with new alerts to PushMessage
+                new PushMessage(newAlerts);
+                UpdateAlerts();
+            } catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
             }
-            
-            newFeed.Items = newItems;
-            List<Alert> newAlerts = CreateAlertList(newFeed);
-            
-            // Send list with new alerts to PushMessage
-            new PushMessage(newAlerts);
-            UpdateAlerts();
         }
 
         /*
@@ -135,7 +155,7 @@ namespace KBS_SE3.Models
                 _filteredAlerts = _alerts;
             }
             box.DataSource = new BindingList<Alert>(_filteredAlerts);
-            box.DisplayMember = "Title";
+            box.DisplayMember = "PubDate";
         }
     }
 }
