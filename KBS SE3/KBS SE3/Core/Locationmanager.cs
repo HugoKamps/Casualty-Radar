@@ -1,5 +1,10 @@
-﻿using System.Device.Location;
+﻿using System;
+using System.Device.Location;
 using System.Drawing;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Xml.Linq;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
@@ -52,6 +57,21 @@ namespace KBS_SE3.Core
                     markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
                 }
             }
+        }
+
+        public void GetCoordinatesByLocationSetting() {
+            var requestUri = $"http://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(Properties.Settings.Default.userLocation)}&sensor=false";
+
+            var request = WebRequest.Create(requestUri);
+            var response = request.GetResponse();
+            var xdoc = XDocument.Load(response.GetResponseStream());
+
+            var result = xdoc.Element("GeocodeResponse").Element("result");
+            var locationElement = result.Element("geometry").Element("location");
+            var lat = int.Parse(Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", String.Empty));
+            var lng = int.Parse(Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", String.Empty));
+            _currentLatitude = lat;
+            _currentLongitude = lng;
         }
 
         //Returns a marker that will be placed on a given location. The color and type are variable
