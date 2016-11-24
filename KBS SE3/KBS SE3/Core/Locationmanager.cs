@@ -1,5 +1,11 @@
-﻿using System.Device.Location;
+﻿using System;
+using System.Device.Location;
 using System.Drawing;
+using System.Globalization;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Xml.Linq;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
@@ -20,14 +26,13 @@ namespace KBS_SE3.Core
         public LocationManager(GMapControl map)
         {
             hasLocationservice = false;
+            SetCoordinatesByLocationSetting();
             _map = map;
             var watcher = new GeoCoordinateWatcher();
             watcher.PositionChanged += watcher_PositionChanged;
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
-            if(hasLocationservice) _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
-            else _map.SetPositionByKeywords(Settings.Default.userLocation);
-
+            _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
         }
 
         /* 
@@ -43,13 +48,39 @@ namespace KBS_SE3.Core
                 var markersOverlay = new GMapOverlay("markers");
                 _map.Overlays.Add(markersOverlay);
 
-                if (hasLocationService) markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
-                else markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
+                if (hasLocationService) {
+                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
+                } else {
+                    SetCoordinatesByLocationSetting();
+                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
+                }
 
                 foreach (var alert in Feed.GetInstance().GetAlerts()) {
                     int type = alert.Type == 1 ? 1 : 2;
                     markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
                 }
+            }
+        }
+
+        public void SetCoordinatesByLocationSetting() {
+            var location = Settings.Default.userLocation + ", The Netherlands";
+            var requestUri = $"http://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(location)}&sensor=false";
+
+            var request = WebRequest.Create(requestUri);
+            var response = request.GetResponse();
+            var xdoc = XDocument.Load(response.GetResponseStream());
+
+            var result = xdoc.Element("GeocodeResponse").Element("result");
+            if (result != null)
+            {
+                var locationElement = result.Element("geometry").Element("location");
+                var lat = Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", string.Empty);
+                var lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
+                _currentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
+                _currentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
+            } else
+            {
+                
             }
         }
 
