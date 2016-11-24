@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Device.Location;
 using System.Drawing;
+using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -25,14 +26,13 @@ namespace KBS_SE3.Core
         public LocationManager(GMapControl map)
         {
             hasLocationservice = false;
+            SetCoordinatesByLocationSetting();
             _map = map;
             var watcher = new GeoCoordinateWatcher();
             watcher.PositionChanged += watcher_PositionChanged;
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
-            if(hasLocationservice) _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
-            else _map.SetPositionByKeywords(Settings.Default.userLocation);
-
+            _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
         }
 
         /* 
@@ -48,8 +48,12 @@ namespace KBS_SE3.Core
                 var markersOverlay = new GMapOverlay("markers");
                 _map.Overlays.Add(markersOverlay);
 
-                if (hasLocationService) markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
-                else markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
+                if (hasLocationService) {
+                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
+                } else {
+                    SetCoordinatesByLocationSetting();
+                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
+                }
 
                 foreach (var alert in Feed.GetInstance().GetAlerts()) {
                     int type = alert.Type == 1 ? 1 : 2;
@@ -58,19 +62,26 @@ namespace KBS_SE3.Core
             }
         }
 
-        public void GetCoordinatesByLocationSetting() {
-            var requestUri = $"http://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(Properties.Settings.Default.userLocation)}&sensor=false";
+        public void SetCoordinatesByLocationSetting() {
+            var location = Settings.Default.userLocation + ", The Netherlands";
+            var requestUri = $"http://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(location)}&sensor=false";
 
             var request = WebRequest.Create(requestUri);
             var response = request.GetResponse();
             var xdoc = XDocument.Load(response.GetResponseStream());
 
             var result = xdoc.Element("GeocodeResponse").Element("result");
-            var locationElement = result.Element("geometry").Element("location");
-            var lat = int.Parse(Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", String.Empty));
-            var lng = int.Parse(Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", String.Empty));
-            _currentLatitude = lat;
-            _currentLongitude = lng;
+            if (result != null)
+            {
+                var locationElement = result.Element("geometry").Element("location");
+                var lat = Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", string.Empty);
+                var lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
+                _currentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
+                _currentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
+            } else
+            {
+                
+            }
         }
 
         //Returns a marker that will be placed on a given location. The color and type are variable
