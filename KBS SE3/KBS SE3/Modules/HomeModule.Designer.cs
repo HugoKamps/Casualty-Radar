@@ -25,13 +25,13 @@ namespace KBS_SE3.Modules {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.feedListBox = new System.Windows.Forms.ListBox();
             this.alertsTitleLabel = new System.Windows.Forms.Label();
             this.map = new GMap.NET.WindowsForms.GMapControl();
             this.refreshPanel = new System.Windows.Forms.Panel();
             this.alertTypeComboBox = new System.Windows.Forms.ComboBox();
             this.refreshFeedButton = new System.Windows.Forms.PictureBox();
             this.rightPanel = new System.Windows.Forms.Panel();
+            this.feedPanel = new System.Windows.Forms.Panel();
             this.legendaPanel = new System.Windows.Forms.Panel();
             this.yourLocationLabel = new System.Windows.Forms.Label();
             this.fireFighterLabel = new System.Windows.Forms.Label();
@@ -47,18 +47,6 @@ namespace KBS_SE3.Modules {
             ((System.ComponentModel.ISupportInitialize)(this.redMarkerPicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellowMarkerPicturebox)).BeginInit();
             this.SuspendLayout();
-            // 
-            // feedListBox
-            // 
-            this.feedListBox.BackColor = System.Drawing.Color.White;
-            this.feedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.feedListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.feedListBox.FormattingEnabled = true;
-            this.feedListBox.ItemHeight = 20;
-            this.feedListBox.Location = new System.Drawing.Point(0, 37);
-            this.feedListBox.Name = "feedListBox";
-            this.feedListBox.Size = new System.Drawing.Size(338, 443);
-            this.feedListBox.TabIndex = 1;
             // 
             // alertsTitleLabel
             // 
@@ -140,7 +128,7 @@ namespace KBS_SE3.Modules {
             // 
             // rightPanel
             // 
-            this.rightPanel.Controls.Add(this.feedListBox);
+            this.rightPanel.Controls.Add(this.feedPanel);
             this.rightPanel.Controls.Add(this.refreshPanel);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightPanel.Location = new System.Drawing.Point(615, 0);
@@ -148,6 +136,15 @@ namespace KBS_SE3.Modules {
             this.rightPanel.Size = new System.Drawing.Size(338, 480);
             this.rightPanel.TabIndex = 7;
             // 
+            // feedPanel
+            // 
+            this.feedPanel.BackColor = System.Drawing.Color.White;
+            this.feedPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.feedPanel.Location = new System.Drawing.Point(0, 37);
+            this.feedPanel.Name = "feedPanel";
+            this.feedPanel.Size = new System.Drawing.Size(338, 443);
+            this.feedPanel.TabIndex = 7;
+            //
             // legendaPanel
             // 
             this.legendaPanel.BackColor = System.Drawing.Color.White;
@@ -249,13 +246,13 @@ namespace KBS_SE3.Modules {
         }
 
         #endregion
-        public System.Windows.Forms.ListBox feedListBox;
         private Label alertsTitleLabel;
         private GMap.NET.WindowsForms.GMapControl map;
         private Panel refreshPanel;
         private Panel rightPanel;
         private PictureBox refreshFeedButton;
         public ComboBox alertTypeComboBox;
+        public Panel feedPanel;
         private Panel legendaPanel;
         private Label yourLocationLabel;
         private Label fireFighterLabel;

@@ -30,7 +30,7 @@ namespace KBS_SE3.Core
         It creates a marker on the user's current location and on all the incidents coming from the Feed.
         */
         public void GetMap(bool hasLocationService) {
-            if (ConnectionUtil.HasInternetConnection()) { 
+            if (ConnectionUtil.HasInternetConnection()) {
                 _map.Overlays.Clear();
                 _map.ShowCenter = false;
                 _map.MapProvider = GoogleMapProvider.Instance;
