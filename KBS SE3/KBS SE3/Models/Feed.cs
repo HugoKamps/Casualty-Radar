@@ -148,6 +148,7 @@ namespace KBS_SE3.Models
                 y += 105;
             }
 
+            hm.alertsCountLabel.Text = "(" + _filteredAlerts.Count.ToString() + ")";
         }
 
         public void createAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
