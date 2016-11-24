@@ -21,8 +21,8 @@ namespace KBS_SE3.Modules {
         }
 
         private void continueBtn_Click(object sender, EventArgs e) {
-            if (locationTextBox.Text != "") {
-                Container c = KBS_SE3.Container.GetInstance();
+            if (!string.IsNullOrWhiteSpace(locationTextBox.Text)) {
+                var c = KBS_SE3.Container.GetInstance();
                 Properties.Settings.Default.userLocation = locationTextBox.Text;
                 Properties.Settings.Default.Save();
                 var s = (SettingsModule) ModuleManager.GetInstance().ParseInstance(typeof (SettingsModule));
@@ -32,5 +32,5 @@ namespace KBS_SE3.Modules {
                 warningLabel.Show();
             }
         }
-    }
+     }
 }
