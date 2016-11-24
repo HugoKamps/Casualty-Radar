@@ -37,34 +37,43 @@ namespace KBS_SE3.Models
 
         public List<Alert> GetAlerts()
         {
-            return _alerts;
+            return _filteredAlerts;
         }
 
-        public List<Alert> CreateAlertList(SyndicationFeed items) {
+        public List<Alert> CreateAlertList(SyndicationFeed items)
+        {
             List<Alert> tempAlerts = new List<Alert>();
-            string lat, lng;
+            foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate))
+            {
+                Alert newAlert = _createAlert(item);
 
-            foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate)) {
-                if (item.ElementExtensions.Count == 2) {
-                    lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
-                    lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
-                    Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
-                    for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++)
-                    {
-                        if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0]))
-                        {
-                            newAlert.Code = AlertUtil.P2000[i, 0];
-                            newAlert.Type = Int32.Parse(AlertUtil.P2000[i, 1]);
-                            newAlert.TypeString = AlertUtil.P2000[i, 2];
-                            newAlert.Info = AlertUtil.P2000[i, 3];
-                            tempAlerts.Add(newAlert);
-                            break;
-                        }
-                    }
-                }
+                if (newAlert != null)
+                    tempAlerts.Add(newAlert);
             }
             return tempAlerts;
         }
+
+        private Alert _createAlert(SyndicationItem item)
+        {
+            if (item.ElementExtensions.Count == 2)
+            {
+                string lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
+                string lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
+                Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
+                for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++)
+                {
+                    if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0]))
+                    {
+                        newAlert.Code = AlertUtil.P2000[i, 0];
+                        newAlert.Type = Int32.Parse(AlertUtil.P2000[i, 1]);
+                        newAlert.TypeString = AlertUtil.P2000[i, 2];
+                        newAlert.Info = AlertUtil.P2000[i, 3];
+                        return newAlert;
+                    }
+                }
+            }
+            return null;
+        } 
 
         public void UpdateFeed(){
             SyndicationFeed oldP2000 = _p2000;
