@@ -48,6 +48,7 @@ namespace KBS_SE3.Core
                 var markersOverlay = new GMapOverlay("markers");
                 _map.Overlays.Add(markersOverlay);
 
+                //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
                 if (hasLocationService) {
                     markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
                 } else {
@@ -56,12 +57,13 @@ namespace KBS_SE3.Core
                 }
 
                 foreach (var alert in Feed.GetInstance().GetAlerts()) {
-                    int type = alert.Type == 1 ? 1 : 2;
+                    var type = alert.Type == 1 ? 1 : 2;
                     markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
                 }
             }
         }
 
+        //Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
         public void SetCoordinatesByLocationSetting() {
             var location = Settings.Default.userLocation + ", The Netherlands";
             var requestUri = $"http://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(location)}&sensor=false";
@@ -78,15 +80,11 @@ namespace KBS_SE3.Core
                 var lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
                 _currentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
                 _currentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
-            } else
-            {
-                
             }
         }
 
         //Returns a marker that will be placed on a given location. The color and type are variable
-        public GMarkerGoogle CreateMarker(double lat, double lng, int type)
-        {
+        public GMarkerGoogle CreateMarker(double lat, double lng, int type) {
             var imgLocation = "../../Resources../marker_icon_";
             if (type == 0) imgLocation += "blue.png";
             if (type == 1) imgLocation += "yellow.png";
