@@ -32,9 +32,20 @@ namespace KBS_SE3.Modules {
             this.alertTypeComboBox = new System.Windows.Forms.ComboBox();
             this.refreshFeedButton = new System.Windows.Forms.PictureBox();
             this.rightPanel = new System.Windows.Forms.Panel();
+            this.legendaPanel = new System.Windows.Forms.Panel();
+            this.yourLocationLabel = new System.Windows.Forms.Label();
+            this.fireFighterLabel = new System.Windows.Forms.Label();
+            this.blueMarkerPicturebox = new System.Windows.Forms.PictureBox();
+            this.redMarkerPicturebox = new System.Windows.Forms.PictureBox();
+            this.yellowMarkerPicturebox = new System.Windows.Forms.PictureBox();
+            this.ambulanceLabel = new System.Windows.Forms.Label();
             this.refreshPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).BeginInit();
             this.rightPanel.SuspendLayout();
+            this.legendaPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.redMarkerPicturebox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.yellowMarkerPicturebox)).BeginInit();
             this.SuspendLayout();
             // 
             // feedListBox
@@ -109,7 +120,7 @@ namespace KBS_SE3.Modules {
             "Alle",
             "Ambulance",
             "Brandweer"});
-            this.alertTypeComboBox.Location = new System.Drawing.Point(200, 6);
+            this.alertTypeComboBox.Location = new System.Drawing.Point(197, 5);
             this.alertTypeComboBox.Name = "alertTypeComboBox";
             this.alertTypeComboBox.Size = new System.Drawing.Size(101, 28);
             this.alertTypeComboBox.TabIndex = 6;
@@ -119,11 +130,10 @@ namespace KBS_SE3.Modules {
             // refreshFeedButton
             // 
             this.refreshFeedButton.BackColor = System.Drawing.Color.White;
-            this.refreshFeedButton.Dock = System.Windows.Forms.DockStyle.Right;
             this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
-            this.refreshFeedButton.Location = new System.Drawing.Point(307, 0);
+            this.refreshFeedButton.Location = new System.Drawing.Point(304, 3);
             this.refreshFeedButton.Name = "refreshFeedButton";
-            this.refreshFeedButton.Size = new System.Drawing.Size(31, 37);
+            this.refreshFeedButton.Size = new System.Drawing.Size(31, 31);
             this.refreshFeedButton.TabIndex = 5;
             this.refreshFeedButton.TabStop = false;
             this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
@@ -138,10 +148,90 @@ namespace KBS_SE3.Modules {
             this.rightPanel.Size = new System.Drawing.Size(338, 480);
             this.rightPanel.TabIndex = 7;
             // 
+            // legendaPanel
+            // 
+            this.legendaPanel.BackColor = System.Drawing.Color.White;
+            this.legendaPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.legendaPanel.Controls.Add(this.yourLocationLabel);
+            this.legendaPanel.Controls.Add(this.fireFighterLabel);
+            this.legendaPanel.Controls.Add(this.blueMarkerPicturebox);
+            this.legendaPanel.Controls.Add(this.redMarkerPicturebox);
+            this.legendaPanel.Controls.Add(this.yellowMarkerPicturebox);
+            this.legendaPanel.Controls.Add(this.ambulanceLabel);
+            this.legendaPanel.ForeColor = System.Drawing.Color.White;
+            this.legendaPanel.Location = new System.Drawing.Point(12, 15);
+            this.legendaPanel.Name = "legendaPanel";
+            this.legendaPanel.Size = new System.Drawing.Size(120, 116);
+            this.legendaPanel.TabIndex = 14;
+            // 
+            // yourLocationLabel
+            // 
+            this.yourLocationLabel.AutoSize = true;
+            this.yourLocationLabel.BackColor = System.Drawing.Color.Transparent;
+            this.yourLocationLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.yourLocationLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.yourLocationLabel.Location = new System.Drawing.Point(37, 89);
+            this.yourLocationLabel.Name = "yourLocationLabel";
+            this.yourLocationLabel.Size = new System.Drawing.Size(74, 15);
+            this.yourLocationLabel.TabIndex = 19;
+            this.yourLocationLabel.Text = "Uw locatie";
+            // 
+            // fireFighterLabel
+            // 
+            this.fireFighterLabel.AutoSize = true;
+            this.fireFighterLabel.BackColor = System.Drawing.Color.Transparent;
+            this.fireFighterLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.fireFighterLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.fireFighterLabel.Location = new System.Drawing.Point(37, 51);
+            this.fireFighterLabel.Name = "fireFighterLabel";
+            this.fireFighterLabel.Size = new System.Drawing.Size(76, 15);
+            this.fireFighterLabel.TabIndex = 18;
+            this.fireFighterLabel.Text = "Brandweer";
+            // 
+            // blueMarkerPicturebox
+            // 
+            this.blueMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_blue;
+            this.blueMarkerPicturebox.Location = new System.Drawing.Point(3, 79);
+            this.blueMarkerPicturebox.Name = "blueMarkerPicturebox";
+            this.blueMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
+            this.blueMarkerPicturebox.TabIndex = 17;
+            this.blueMarkerPicturebox.TabStop = false;
+            // 
+            // redMarkerPicturebox
+            // 
+            this.redMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_red;
+            this.redMarkerPicturebox.Location = new System.Drawing.Point(3, 41);
+            this.redMarkerPicturebox.Name = "redMarkerPicturebox";
+            this.redMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
+            this.redMarkerPicturebox.TabIndex = 16;
+            this.redMarkerPicturebox.TabStop = false;
+            // 
+            // yellowMarkerPicturebox
+            // 
+            this.yellowMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_yellow;
+            this.yellowMarkerPicturebox.Location = new System.Drawing.Point(3, 3);
+            this.yellowMarkerPicturebox.Name = "yellowMarkerPicturebox";
+            this.yellowMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
+            this.yellowMarkerPicturebox.TabIndex = 15;
+            this.yellowMarkerPicturebox.TabStop = false;
+            // 
+            // ambulanceLabel
+            // 
+            this.ambulanceLabel.AutoSize = true;
+            this.ambulanceLabel.BackColor = System.Drawing.Color.Transparent;
+            this.ambulanceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.ambulanceLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.ambulanceLabel.Location = new System.Drawing.Point(37, 13);
+            this.ambulanceLabel.Name = "ambulanceLabel";
+            this.ambulanceLabel.Size = new System.Drawing.Size(78, 15);
+            this.ambulanceLabel.TabIndex = 14;
+            this.ambulanceLabel.Text = "Ambulance";
+            // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.legendaPanel);
             this.Controls.Add(this.rightPanel);
             this.Controls.Add(this.map);
             this.Name = "HomeModule";
@@ -149,6 +239,11 @@ namespace KBS_SE3.Modules {
             this.refreshPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).EndInit();
             this.rightPanel.ResumeLayout(false);
+            this.legendaPanel.ResumeLayout(false);
+            this.legendaPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.redMarkerPicturebox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.yellowMarkerPicturebox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -161,5 +256,12 @@ namespace KBS_SE3.Modules {
         private Panel rightPanel;
         private PictureBox refreshFeedButton;
         public ComboBox alertTypeComboBox;
+        private Panel legendaPanel;
+        private Label yourLocationLabel;
+        private Label fireFighterLabel;
+        private PictureBox blueMarkerPicturebox;
+        private PictureBox redMarkerPicturebox;
+        private PictureBox yellowMarkerPicturebox;
+        private Label ambulanceLabel;
     }
 }

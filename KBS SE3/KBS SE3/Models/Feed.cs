@@ -37,9 +37,8 @@ namespace KBS_SE3.Models
             }
         }
 
-        public List<Alert> GetAlerts()
-        {
-            return _alerts;
+        public List<Alert> GetAlerts() {
+            return _filteredAlerts;
         }
 
         public List<Alert> CreateAlertList(SyndicationFeed items) {
@@ -51,10 +50,8 @@ namespace KBS_SE3.Models
                     lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
                     lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
                     Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
-                    for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++)
-                    {
-                        if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0]))
-                        {
+                    for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++) {
+                        if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0])) {
                             newAlert.Code = AlertUtil.P2000[i, 0];
                             newAlert.Type = Int32.Parse(AlertUtil.P2000[i, 1]);
                             newAlert.TypeString = AlertUtil.P2000[i, 2];
@@ -68,7 +65,7 @@ namespace KBS_SE3.Models
             return tempAlerts;
         }
 
-        public void UpdateFeed(){
+        public void UpdateFeed() {
             SyndicationFeed oldP2000 = _p2000;
             List<SyndicationItem> newItems = new List<SyndicationItem>();
             SyndicationFeed newFeed = new SyndicationFeed();
@@ -110,8 +107,7 @@ namespace KBS_SE3.Models
             box.DataSource = null;
 
             // Check which filter is selected and apply the filter
-            if (selectedFilter == 1 || selectedFilter == 2)
-            {
+            if (selectedFilter == 1 || selectedFilter == 2) {
                 _filteredAlerts = new List<Alert>();
                 foreach (Alert a in _alerts)
                 {
@@ -121,8 +117,7 @@ namespace KBS_SE3.Models
                     }
                 }
             }
-            else
-            {
+            else {
                 _filteredAlerts = _alerts;
             }
             box.DataSource = new BindingList<Alert>(_filteredAlerts);

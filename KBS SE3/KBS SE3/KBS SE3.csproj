@@ -150,6 +150,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
+    <None Include="Resources\marker_icon_yellow.png" />
+    <None Include="Resources\marker_icon_red.png" />
+    <None Include="Resources\marker_icon_blue.png" />
     <None Include="Resources\refresh_icon.png" />
     <None Include="Resources\wifi_icon.png" />
     <WCFMetadata Include="Service References\" />
