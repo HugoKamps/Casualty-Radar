@@ -128,7 +128,7 @@ namespace KBS_SE3.Models
         public void UpdateAlerts() {
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             int selectedFilter = hm.alertTypeComboBox.SelectedIndex;
-            int y = 15;
+            int y = 0;
             // Check which filter is selected and apply the filter
             if (selectedFilter == 1 || selectedFilter == 2) {
                 _filteredAlerts = new List<Alert>();

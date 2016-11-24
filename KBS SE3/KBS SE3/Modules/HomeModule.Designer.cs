@@ -36,17 +36,18 @@ namespace KBS_SE3.Modules {
             this.legendaPanel = new System.Windows.Forms.Panel();
             this.yourLocationLabel = new System.Windows.Forms.Label();
             this.fireFighterLabel = new System.Windows.Forms.Label();
+            this.ambulanceLabel = new System.Windows.Forms.Label();
             this.blueMarkerPicturebox = new System.Windows.Forms.PictureBox();
             this.redMarkerPicturebox = new System.Windows.Forms.PictureBox();
             this.yellowMarkerPicturebox = new System.Windows.Forms.PictureBox();
-            this.ambulanceLabel = new System.Windows.Forms.Label();
+            this.refreshFeedButton = new System.Windows.Forms.PictureBox();
             this.refreshPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).BeginInit();
             this.rightPanel.SuspendLayout();
             this.legendaPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.redMarkerPicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellowMarkerPicturebox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).BeginInit();
             this.SuspendLayout();
             // 
             // alertsTitleLabel
@@ -73,8 +74,8 @@ namespace KBS_SE3.Modules {
             this.map.LevelsKeepInMemmory = 5;
             this.map.Location = new System.Drawing.Point(0, 0);
             this.map.MarkersEnabled = true;
-            this.map.MaxZoom = 10;
-            this.map.MinZoom = 7;
+            this.map.MaxZoom = 16;
+            this.map.MinZoom = 1;
             this.map.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.map.Name = "map";
             this.map.NegativeMode = false;
@@ -205,6 +206,18 @@ namespace KBS_SE3.Modules {
             this.fireFighterLabel.TabIndex = 18;
             this.fireFighterLabel.Text = "Brandweer";
             // 
+            // ambulanceLabel
+            // 
+            this.ambulanceLabel.AutoSize = true;
+            this.ambulanceLabel.BackColor = System.Drawing.Color.Transparent;
+            this.ambulanceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.ambulanceLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.ambulanceLabel.Location = new System.Drawing.Point(37, 13);
+            this.ambulanceLabel.Name = "ambulanceLabel";
+            this.ambulanceLabel.Size = new System.Drawing.Size(78, 15);
+            this.ambulanceLabel.TabIndex = 14;
+            this.ambulanceLabel.Text = "Ambulance";
+            // 
             // blueMarkerPicturebox
             // 
             this.blueMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_blue;
@@ -232,17 +245,16 @@ namespace KBS_SE3.Modules {
             this.yellowMarkerPicturebox.TabIndex = 15;
             this.yellowMarkerPicturebox.TabStop = false;
             // 
-            // ambulanceLabel
+            // refreshFeedButton
             // 
-            this.ambulanceLabel.AutoSize = true;
-            this.ambulanceLabel.BackColor = System.Drawing.Color.Transparent;
-            this.ambulanceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
-            this.ambulanceLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ambulanceLabel.Location = new System.Drawing.Point(37, 13);
-            this.ambulanceLabel.Name = "ambulanceLabel";
-            this.ambulanceLabel.Size = new System.Drawing.Size(78, 15);
-            this.ambulanceLabel.TabIndex = 14;
-            this.ambulanceLabel.Text = "Ambulance";
+            this.refreshFeedButton.BackColor = System.Drawing.Color.White;
+            this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
+            this.refreshFeedButton.Location = new System.Drawing.Point(304, 3);
+            this.refreshFeedButton.Name = "refreshFeedButton";
+            this.refreshFeedButton.Size = new System.Drawing.Size(31, 31);
+            this.refreshFeedButton.TabIndex = 5;
+            this.refreshFeedButton.TabStop = false;
+            this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
             // 
             // HomeModule
             // 
@@ -262,6 +274,7 @@ namespace KBS_SE3.Modules {
             ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.redMarkerPicturebox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellowMarkerPicturebox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).EndInit();
             this.ResumeLayout(false);
 
         }
