@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml.Linq;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -20,12 +19,11 @@ namespace KBS_SE3.Core
         private readonly GMapControl _map;  //Control which the map will be placed on
         private double _currentLatitude;    //The user's current latitude
         private double _currentLongitude;   //The user's current longitude
-        private bool hasLocationservice;
+        private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
 
         //Initializes the GPS watcher and it's events and initializes the Map control of the HomeModule which the map will be placed on
-        public LocationManager(GMapControl map)
-        {
-            hasLocationservice = false;
+        public LocationManager(GMapControl map) {
+            _hasLocationservice = false;
             SetCoordinatesByLocationSetting();
             _map = map;
             var watcher = new GeoCoordinateWatcher();
@@ -104,22 +102,22 @@ namespace KBS_SE3.Core
         private void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
             switch (e.Status) {
                 case GeoPositionStatus.Initializing:
-                    hasLocationservice = true;
+                    _hasLocationservice = true;
                     break;
 
                 case GeoPositionStatus.Ready:
-                    hasLocationservice = true;
+                    _hasLocationservice = true;
                     break;
 
                 case GeoPositionStatus.NoData:
-                    hasLocationservice = false;
+                    _hasLocationservice = false;
                     break;
 
                 case GeoPositionStatus.Disabled:
-                    hasLocationservice = false;
+                    _hasLocationservice = false;
                     break;
             }
-            GetMap(hasLocationservice);
+            GetMap(_hasLocationservice);
         }
     }
 }
