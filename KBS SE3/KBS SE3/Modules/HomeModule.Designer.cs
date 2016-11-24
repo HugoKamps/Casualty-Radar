@@ -28,6 +28,8 @@ namespace KBS_SE3.Modules {
             this.alertsTitleLabel = new System.Windows.Forms.Label();
             this.map = new GMap.NET.WindowsForms.GMapControl();
             this.refreshPanel = new System.Windows.Forms.Panel();
+            this.alertsCountLabel = new System.Windows.Forms.Label();
+            this.refreshFeedButton = new System.Windows.Forms.PictureBox();
             this.alertTypeComboBox = new System.Windows.Forms.ComboBox();
             this.rightPanel = new System.Windows.Forms.Panel();
             this.feedPanel = new System.Windows.Forms.Panel();
@@ -50,13 +52,13 @@ namespace KBS_SE3.Modules {
             // 
             // alertsTitleLabel
             // 
-            this.alertsTitleLabel.BackColor = System.Drawing.Color.White;
+            this.alertsTitleLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
             this.alertsTitleLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.alertsTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.alertsTitleLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.alertsTitleLabel.ForeColor = System.Drawing.Color.White;
             this.alertsTitleLabel.Location = new System.Drawing.Point(0, 0);
             this.alertsTitleLabel.Name = "alertsTitleLabel";
-            this.alertsTitleLabel.Size = new System.Drawing.Size(248, 37);
+            this.alertsTitleLabel.Size = new System.Drawing.Size(106, 37);
             this.alertsTitleLabel.TabIndex = 4;
             this.alertsTitleLabel.Text = "Meldingen";
             this.alertsTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -89,9 +91,10 @@ namespace KBS_SE3.Modules {
             // 
             // refreshPanel
             // 
-            this.refreshPanel.BackColor = System.Drawing.Color.White;
-            this.refreshPanel.Controls.Add(this.alertTypeComboBox);
+            this.refreshPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
+            this.refreshPanel.Controls.Add(this.alertsCountLabel);
             this.refreshPanel.Controls.Add(this.refreshFeedButton);
+            this.refreshPanel.Controls.Add(this.alertTypeComboBox);
             this.refreshPanel.Controls.Add(this.alertsTitleLabel);
             this.refreshPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.refreshPanel.Location = new System.Drawing.Point(0, 0);
@@ -99,20 +102,49 @@ namespace KBS_SE3.Modules {
             this.refreshPanel.Size = new System.Drawing.Size(338, 37);
             this.refreshPanel.TabIndex = 6;
             // 
+            // alertsCountLabel
+            // 
+            this.alertsCountLabel.AutoSize = true;
+            this.alertsCountLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.alertsCountLabel.ForeColor = System.Drawing.Color.White;
+            this.alertsCountLabel.Location = new System.Drawing.Point(94, 8);
+            this.alertsCountLabel.Name = "alertsCountLabel";
+            this.alertsCountLabel.Size = new System.Drawing.Size(31, 20);
+            this.alertsCountLabel.TabIndex = 7;
+            this.alertsCountLabel.Text = "(0)";
+            // 
+            // refreshFeedButton
+            // 
+            this.refreshFeedButton.BackColor = System.Drawing.Color.White;
+            this.refreshFeedButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
+            this.refreshFeedButton.Location = new System.Drawing.Point(298, 3);
+            this.refreshFeedButton.Name = "refreshFeedButton";
+            this.refreshFeedButton.Size = new System.Drawing.Size(25, 25);
+            this.refreshFeedButton.TabIndex = 5;
+            this.refreshFeedButton.TabStop = false;
+            this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
+            this.refreshFeedButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.refreshFeedButton_MouseDown);
+            this.refreshFeedButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.refreshFeedButton_MouseUp);
+            // 
             // alertTypeComboBox
             // 
-            this.alertTypeComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.alertTypeComboBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.alertTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.alertTypeComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.alertTypeComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.alertTypeComboBox.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.alertTypeComboBox.FormattingEnabled = true;
+            this.alertTypeComboBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.alertTypeComboBox.Items.AddRange(new object[] {
             "Alle",
             "Ambulance",
             "Brandweer"});
-            this.alertTypeComboBox.Location = new System.Drawing.Point(197, 5);
+            this.alertTypeComboBox.Location = new System.Drawing.Point(191, 5);
             this.alertTypeComboBox.Name = "alertTypeComboBox";
-            this.alertTypeComboBox.Size = new System.Drawing.Size(101, 28);
+            this.alertTypeComboBox.Size = new System.Drawing.Size(101, 26);
             this.alertTypeComboBox.TabIndex = 6;
-            this.alertTypeComboBox.Text = "Alle";
+            this.alertTypeComboBox.SelectedItem = "Alle";
             this.alertTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.alertTypeComboBox_SelectedIndexChanged);
             // 
             // rightPanel
@@ -213,17 +245,6 @@ namespace KBS_SE3.Modules {
             this.yellowMarkerPicturebox.TabIndex = 15;
             this.yellowMarkerPicturebox.TabStop = false;
             // 
-            // refreshFeedButton
-            // 
-            this.refreshFeedButton.BackColor = System.Drawing.Color.White;
-            this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
-            this.refreshFeedButton.Location = new System.Drawing.Point(304, 3);
-            this.refreshFeedButton.Name = "refreshFeedButton";
-            this.refreshFeedButton.Size = new System.Drawing.Size(31, 31);
-            this.refreshFeedButton.TabIndex = 5;
-            this.refreshFeedButton.TabStop = false;
-            this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
-            // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -234,6 +255,8 @@ namespace KBS_SE3.Modules {
             this.Name = "HomeModule";
             this.Size = new System.Drawing.Size(953, 480);
             this.refreshPanel.ResumeLayout(false);
+            this.refreshPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).EndInit();
             this.rightPanel.ResumeLayout(false);
             this.legendaPanel.ResumeLayout(false);
             this.legendaPanel.PerformLayout();
@@ -250,7 +273,7 @@ namespace KBS_SE3.Modules {
         private GMap.NET.WindowsForms.GMapControl map;
         private Panel refreshPanel;
         private Panel rightPanel;
-        private PictureBox refreshFeedButton;
+        public PictureBox refreshFeedButton;
         public ComboBox alertTypeComboBox;
         public Panel feedPanel;
         private Panel legendaPanel;
@@ -260,5 +283,6 @@ namespace KBS_SE3.Modules {
         private PictureBox redMarkerPicturebox;
         private PictureBox yellowMarkerPicturebox;
         private Label ambulanceLabel;
+        public Label alertsCountLabel;
     }
 }
