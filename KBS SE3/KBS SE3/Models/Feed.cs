@@ -39,7 +39,7 @@ namespace KBS_SE3.Models
         }
 
         public List<Alert> GetAlerts() {
-            return _alerts;
+            return _filteredAlerts;
         }
 
         public List<Alert> CreateAlertList(SyndicationFeed items) {
