@@ -65,6 +65,11 @@
     <Compile Include="Core\LocationManager.cs" />
     <Compile Include="Utils\ConnectionUtil.cs" />
     <Compile Include="Models\Breadcrumb.cs" />
+    <Compile Include="Models\Graph\Member.cs" />
+    <Compile Include="Models\Graph\Node.cs" />
+    <Compile Include="Models\Graph\Relation.cs" />
+    <Compile Include="Models\Graph\Tag.cs" />
+    <Compile Include="Models\Graph\Way.cs" />
     <Compile Include="Models\PushMessage.cs" />
     <Compile Include="Core\IModule.cs" />
     <Compile Include="Core\ModuleManager.cs" />
