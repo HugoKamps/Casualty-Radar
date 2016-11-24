@@ -245,17 +245,6 @@ namespace KBS_SE3.Modules {
             this.yellowMarkerPicturebox.TabIndex = 15;
             this.yellowMarkerPicturebox.TabStop = false;
             // 
-            // refreshFeedButton
-            // 
-            this.refreshFeedButton.BackColor = System.Drawing.Color.White;
-            this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
-            this.refreshFeedButton.Location = new System.Drawing.Point(304, 3);
-            this.refreshFeedButton.Name = "refreshFeedButton";
-            this.refreshFeedButton.Size = new System.Drawing.Size(31, 31);
-            this.refreshFeedButton.TabIndex = 5;
-            this.refreshFeedButton.TabStop = false;
-            this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
-            // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
