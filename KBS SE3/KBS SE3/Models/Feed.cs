@@ -174,7 +174,6 @@ namespace KBS_SE3.Models
         }
 
         void feedPanelItem_MouseEnter(object sender, EventArgs e) {
-
             if (sender.GetType() == typeof(Panel)) {
                 Panel panel = (Panel)sender;
                 panel.BackColor = Color.FromArgb(210, 73, 57);
