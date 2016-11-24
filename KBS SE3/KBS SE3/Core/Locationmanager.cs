@@ -14,15 +14,20 @@ namespace KBS_SE3.Core
         private readonly GMapControl _map;  //Control which the map will be placed on
         private double _currentLatitude;    //The user's current latitude
         private double _currentLongitude;   //The user's current longitude
+        private bool hasLocationservice;
 
         //Initializes the GPS watcher and it's events and initializes the Map control of the HomeModule which the map will be placed on
         public LocationManager(GMapControl map)
         {
+            hasLocationservice = false;
             _map = map;
             var watcher = new GeoCoordinateWatcher();
             watcher.PositionChanged += watcher_PositionChanged;
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
+            if(hasLocationservice) _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
+            else _map.SetPositionByKeywords(Settings.Default.userLocation);
+
         }
 
         /* 
@@ -38,14 +43,8 @@ namespace KBS_SE3.Core
                 var markersOverlay = new GMapOverlay("markers");
                 _map.Overlays.Add(markersOverlay);
 
-                if (hasLocationService) {
-                    _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
-                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
-                }
-                else {
-                    _map.SetPositionByKeywords(Settings.Default.userLocation);
-                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
-                }
+                if (hasLocationService) markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
+                else markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
 
                 foreach (var alert in Feed.GetInstance().GetAlerts()) {
                     int type = alert.Type == 1 ? 1 : 2;
@@ -76,21 +75,22 @@ namespace KBS_SE3.Core
         private void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
             switch (e.Status) {
                 case GeoPositionStatus.Initializing:
-                    GetMap(true);
+                    hasLocationservice = true;
                     break;
 
                 case GeoPositionStatus.Ready:
-                    GetMap(true);
+                    hasLocationservice = true;
                     break;
 
                 case GeoPositionStatus.NoData:
-                    GetMap(false);
+                    hasLocationservice = false;
                     break;
 
                 case GeoPositionStatus.Disabled:
-                    GetMap(false);
+                    hasLocationservice = false;
                     break;
             }
+            GetMap(hasLocationservice);
         }
     }
 }
