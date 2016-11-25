@@ -1,69 +1,127 @@
-﻿using System.Device.Location;
+﻿using System;
+using System.Device.Location;
+using System.Drawing;
+using System.Globalization;
+using System.Net;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using GMap.NET;
+using GMap.NET.MapProviders;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Models;
 using KBS_SE3.Properties;
-using KBS_SE3.Utils;
 
 namespace KBS_SE3.Core
 {
     internal class LocationManager
     {
-        private readonly PictureBox _pictureBox;
-        private double _currentLongitude;
-        private double _currentLatitude;
-        private string _currentLocation;
+        private readonly GMapControl _map;  //Control which the map will be placed on
+        private double _currentLatitude;    //The user's current latitude
+        private double _currentLongitude;   //The user's current longitude
+        private bool hasLocationservice;
 
-        public LocationManager(PictureBox pictureBox)
+        //Initializes the GPS watcher and it's events and initializes the Map control of the HomeModule which the map will be placed on
+        public LocationManager(GMapControl map)
         {
-            _pictureBox = pictureBox;
+            hasLocationservice = false;
+            SetCoordinatesByLocationSetting();
+            _map = map;
             var watcher = new GeoCoordinateWatcher();
             watcher.PositionChanged += watcher_PositionChanged;
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
+            _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
         }
 
-        public string GetMap(string currentLocation) {
-            if (MainMethods.CheckForInternetConnection()) {
-                var url = "https://maps.googleapis.com/maps/api/staticmap?center=" + currentLocation +
-                          "&zoom=7&size=700x480&maptype=roadmap&";
-                url += "markers=color:blue%7Clabel:L%7C" + currentLocation + "&";
+        /* 
+        Function that displays a map in the HomeModule. First it checks if the user has a working internet connection. 
+        It creates a marker on the user's current location and on all the incidents coming from the Feed.
+        */
+        public void GetMap(bool hasLocationService) {
+            if (ConnectionUtil.HasInternetConnection()) {
+                _map.Overlays.Clear();
+                _map.ShowCenter = false;
+                _map.MapProvider = GoogleMapProvider.Instance;
+                GMaps.Instance.Mode = AccessMode.ServerOnly;
+                var markersOverlay = new GMapOverlay("markers");
+                _map.Overlays.Add(markersOverlay);
 
-                foreach (var alert in Feed.GetInstance().GetAlerts()) {
-                    url += "markers=size:mid%7Ccolor:red%7Clabel:O%7C" + alert.Lat + "," + alert.Lng + "&";
+                if (hasLocationService) {
+                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
+                } else {
+                    SetCoordinatesByLocationSetting();
+                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
                 }
 
-                url += "&key=AIzaSyDoRzUMAF3osX972CDWR2rDoWc9nKafV5A";
-                return url;
+                foreach (var alert in Feed.GetInstance().GetAlerts()) {
+                    int type = alert.Type == 1 ? 1 : 2;
+                    markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
+                }
             }
-            return FileUtil.GetResourcesPath() + "wifi_icon.png";
         }
 
+        public void SetCoordinatesByLocationSetting() {
+            var location = Settings.Default.userLocation + ", The Netherlands";
+            var requestUri = $"http://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(location)}&sensor=false";
+
+            var request = WebRequest.Create(requestUri);
+            var response = request.GetResponse();
+            var xdoc = XDocument.Load(response.GetResponseStream());
+
+            var result = xdoc.Element("GeocodeResponse").Element("result");
+            if (result != null)
+            {
+                var locationElement = result.Element("geometry").Element("location");
+                var lat = Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", string.Empty);
+                var lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
+                _currentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
+                _currentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
+            } else
+            {
+                
+            }
+        }
+
+        //Returns a marker that will be placed on a given location. The color and type are variable
+        public GMarkerGoogle CreateMarker(double lat, double lng, int type)
+        {
+            var imgLocation = "../../Resources../marker_icon_";
+            if (type == 0) imgLocation += "blue.png";
+            if (type == 1) imgLocation += "yellow.png";
+            if (type == 2) imgLocation += "red.png";
+            var image = (Image) new Bitmap(@imgLocation);
+            return new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
+        }
+
+        //Keeps track of the user's current location. Everytime the location changes the map is renewed and the coordinates are updated
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
             _currentLatitude = e.Position.Location.Latitude;
             _currentLongitude = e.Position.Location.Longitude;
-            _currentLocation = _currentLatitude + "," + _currentLongitude;
-            _pictureBox.Load(GetMap(_currentLocation));
+            GetMap(true);
         }
 
+        //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
         private void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
             switch (e.Status) {
                 case GeoPositionStatus.Initializing:
-                    _currentLocation = _currentLatitude + "," + _currentLongitude;
+                    hasLocationservice = true;
                     break;
 
                 case GeoPositionStatus.Ready:
-                    _currentLocation = _currentLatitude + "," + _currentLongitude;
+                    hasLocationservice = true;
                     break;
 
                 case GeoPositionStatus.NoData:
-                    _currentLocation = Settings.Default.userLocation;
+                    hasLocationservice = false;
                     break;
 
                 case GeoPositionStatus.Disabled:
-                    _currentLocation = Settings.Default.userLocation;
+                    hasLocationservice = false;
                     break;
             }
-            _pictureBox.Load(GetMap(_currentLocation));
+            GetMap(hasLocationservice);
         }
     }
 }

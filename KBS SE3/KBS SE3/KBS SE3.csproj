@@ -33,6 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GMap.NET.Core, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <HintPath>..\packages\GMap.NET.WindowsForms.1.7.1\lib\net40\GMap.NET.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <HintPath>..\packages\GMap.NET.WindowsForms.1.7.1\lib\net40\GMap.NET.WindowsForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Device" />
@@ -55,8 +63,13 @@
       <DependentUpon>Container.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\LocationManager.cs" />
-    <Compile Include="MainMethods.cs" />
+    <Compile Include="ConnectionUtil.cs" />
     <Compile Include="Models\Breadcrumb.cs" />
+    <Compile Include="Models\Graph\Member.cs" />
+    <Compile Include="Models\Graph\Node.cs" />
+    <Compile Include="Models\Graph\Relation.cs" />
+    <Compile Include="Models\Graph\Tag.cs" />
+    <Compile Include="Models\Graph\Way.cs" />
     <Compile Include="Models\PushMessage.cs" />
     <Compile Include="Core\IModule.cs" />
     <Compile Include="Core\ModuleManager.cs" />
@@ -96,6 +109,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileUtil.cs" />
+    <Compile Include="Utils\AlertUtil.cs" />
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
@@ -141,16 +155,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
+    <None Include="Resources\marker_icon_yellow.png" />
+    <None Include="Resources\marker_icon_red.png" />
+    <None Include="Resources\marker_icon_blue.png" />
+    <None Include="Resources\refresh_icon.png" />
     <None Include="Resources\wifi_icon.png" />
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
+    <Content Include="Resources\case-medic-icon-22.png" />
+    <Content Include="Resources\Firefighter.png" />
     <Content Include="Resources\logo_final.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

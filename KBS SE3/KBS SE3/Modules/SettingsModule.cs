@@ -15,9 +15,14 @@ namespace KBS_SE3.Modules {
             return new Breadcrumb(this, "Settings");
         }
 
+        //If the user changed the value of the textbox the Setting is changed
         private void saveBtn_Click(object sender, EventArgs e) {
-            Settings.Default.userLocation = locationTextBox.Text;
-            Settings.Default.Save();
+            if (locationTextBox.Text != "") {
+                Settings.Default.userLocation = locationTextBox.Text;
+                Settings.Default.Save();
+            } else {
+                warningLabel.Show();
+            }
         }
     }
 }

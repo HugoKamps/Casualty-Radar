@@ -20,9 +20,10 @@ namespace KBS_SE3.Modules {
             return new Breadcrumb(this, "Get started");   
         }
 
+        //This function checks if the user filled in a location. If so, the user is redirected to the HomeModule, if not, a warning is displayed.
         private void continueBtn_Click(object sender, EventArgs e) {
-            if (locationTextBox.Text != "") {
-                Container c = KBS_SE3.Container.GetInstance();
+            if (!string.IsNullOrWhiteSpace(locationTextBox.Text)) {
+                var c = KBS_SE3.Container.GetInstance();
                 Properties.Settings.Default.userLocation = locationTextBox.Text;
                 Properties.Settings.Default.Save();
                 var s = (SettingsModule) ModuleManager.GetInstance().ParseInstance(typeof (SettingsModule));
@@ -32,5 +33,5 @@ namespace KBS_SE3.Modules {
                 warningLabel.Show();
             }
         }
-    }
+     }
 }
