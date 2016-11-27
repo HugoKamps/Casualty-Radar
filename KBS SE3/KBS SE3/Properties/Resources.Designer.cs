@@ -63,9 +63,56 @@ namespace KBS_SE3.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Firefighter {
+            get {
+                object obj = ResourceManager.GetObject("Firefighter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap logo_final {
             get {
                 object obj = ResourceManager.GetObject("logo_final", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+
+        internal static System.Drawing.Bitmap Medic {
+            get {
+                object obj = ResourceManager.GetObject("Medic", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        internal static System.Drawing.Bitmap marker_icon_blue {
+            get {
+                object obj = ResourceManager.GetObject("marker_icon_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap marker_icon_red {
+            get {
+                object obj = ResourceManager.GetObject("marker_icon_red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap marker_icon_yellow {
+            get {
+                object obj = ResourceManager.GetObject("marker_icon_yellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

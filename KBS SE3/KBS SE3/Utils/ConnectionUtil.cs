@@ -2,6 +2,8 @@
 
 namespace KBS_SE3 {
     static class ConnectionUtil {
+
+        //Function that returns true if the user has a working internet connection
         public static bool HasInternetConnection() {
             try {
                 using (var client = new WebClient()) {
