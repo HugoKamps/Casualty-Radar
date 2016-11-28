@@ -23,6 +23,8 @@ namespace KBS_SE3.Models
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
+        private Panel _selectedPanel;
+        public bool TriggerEvent { get; set; }
 
         public static Feed GetInstance() {
             if (_instance == null) _instance = new Feed();
@@ -30,6 +32,7 @@ namespace KBS_SE3.Models
         }
 
         private Feed() {
+            TriggerEvent = true;
             if (ConnectionUtil.HasInternetConnection()) {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
                 _alerts = CreateAlertList(_p2000);
@@ -127,6 +130,8 @@ namespace KBS_SE3.Models
 
         }
 
+        public Panel GetSelectedPanel => _selectedPanel;
+
         public void CreateAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
             //The panel which will be filled with all of the controls below
             var newPanel = new Panel {
@@ -153,6 +158,22 @@ namespace KBS_SE3.Models
                 Text = title + "\n" + info
             };
 
+            if (_selectedPanel != null)
+            {
+                foreach (var control in _selectedPanel.Controls)
+                {
+                    if (control is Label)
+                    {
+                        var selectedLabel = (Label) control;
+                        if (selectedLabel.Text == label.Text)
+                        {
+                            newPanel.BackColor = Color.FromArgb(210,93,0);
+                            _selectedPanel = newPanel;
+                        }
+                    }
+                }
+            }
+
             //The label which will be filled with the time of the alert
             var timeLabel = new Label
             {
@@ -167,17 +188,22 @@ namespace KBS_SE3.Models
             //Events for each control in the panel;
             newPictureBox.MouseEnter += feedPanelItem_MouseEnter;
             newPictureBox.MouseLeave += feedPanelItem_MouseLeave;
+            newPictureBox.Click += feedPanelItem_Click;
 
             label.MouseEnter += feedPanelItem_MouseEnter;
             label.MouseLeave += feedPanelItem_MouseLeave;
+            label.Click += feedPanelItem_Click;
             label.TextAlign = ContentAlignment.MiddleCenter;
 
             timeLabel.MouseEnter += feedPanelItem_MouseEnter;
             timeLabel.MouseLeave += feedPanelItem_MouseLeave;
+            timeLabel.Click += feedPanelItem_Click;
             timeLabel.TextAlign = ContentAlignment.MiddleCenter;
 
             newPanel.MouseEnter += feedPanelItem_MouseEnter;
             newPanel.MouseLeave += feedPanelItem_MouseLeave;
+            newPanel.Click += feedPanelItem_Click;
+            newPanel.Cursor = Cursors.Hand;
 
             //The panel is filled with all the controls initialized above
             hm.feedPanel.AutoScroll = true;
@@ -187,25 +213,60 @@ namespace KBS_SE3.Models
             hm.feedPanel.Controls.Add(newPanel);
         }
 
-        private static void feedPanelItem_MouseEnter(object sender, EventArgs e) {
-            if (sender.GetType() == typeof(Panel)) {
-                var panel = (Panel)sender;
-                panel.BackColor = Color.FromArgb(210, 73, 57);
+        private void feedPanelItem_Click(object sender, EventArgs e) {
+            if (!TriggerEvent) return;
+            var homeModule = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof (HomeModule));
+
+            if (sender.GetType() == typeof (Panel)) {
+                var panel = (Panel) sender;
+                if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
+                if (_selectedPanel == panel) {
+                    _selectedPanel = null;
+                    homeModule.navigationBtn.Enabled = false;
+                    homeModule.navigationBtn.BackColor = Color.Gray;
+                }
+                else {
+                    _selectedPanel = panel;
+                    _selectedPanel.BackColor = Color.FromArgb(210, 93, 0);
+                    homeModule.navigationBtn.Enabled = true;
+                }
             }
             else {
-                var control = (Control)sender;
-                control.Parent.BackColor = Color.FromArgb(210, 73, 57);
+                var control = (Control) sender;
+                if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
+                if (_selectedPanel == control.Parent) {
+                    _selectedPanel = null;
+                    homeModule.navigationBtn.Enabled = false;
+                }
+                else {
+                    _selectedPanel = (Panel) control.Parent;
+                    _selectedPanel.BackColor = Color.FromArgb(210, 93, 0);
+                    homeModule.navigationBtn.Enabled = true;
+                }
             }
         }
 
-        private static void feedPanelItem_MouseLeave(object sender, EventArgs e) {
+        private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
+            if (!TriggerEvent) return;
             if (sender.GetType() == typeof(Panel)) {
                 var panel = (Panel)sender;
-                panel.BackColor = Color.FromArgb(236, 86, 71);
+                if(panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
             }
             else {
                 var control = (Control)sender;
-                control.Parent.BackColor = Color.FromArgb(236, 86, 71);
+                if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(210, 73, 57);
+            }
+        }
+
+        private void feedPanelItem_MouseLeave(object sender, EventArgs e) {
+            if (!TriggerEvent) return;
+            if (sender.GetType() == typeof(Panel)) {
+                var panel = (Panel)sender;
+                if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
+            }
+            else {
+                var control = (Control)sender;
+                if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(236, 86, 71);
             }
         }
     }
