@@ -62,7 +62,7 @@ namespace KBS_SE3.Modules {
 
         private void refreshFeedButton_MouseUp(object sender, MouseEventArgs e)
         {
-            refreshFeedButton.Image = KBS_SE3.Properties.Resources.refresh_icon;
+            refreshFeedButton.Image = Properties.Resources.refresh_icon;
             refreshFeedButton.Width = 25;
             refreshFeedButton.Height = 25;
             refreshFeedButton.Left = refreshFeedButton.Left - 2;

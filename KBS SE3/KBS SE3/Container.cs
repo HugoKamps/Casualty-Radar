@@ -4,7 +4,6 @@ using KBS_SE3.Models;
 using KBS_SE3.Modules;
 using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static KBS_SE3.Core.Dialog.DialogType;
@@ -26,8 +25,8 @@ namespace KBS_SE3 {
 
         private Container() {
             InitializeComponent();
-            this._modManager = ModuleManager.GetInstance();
-            this._dialog = new Dialog();
+            _modManager = ModuleManager.GetInstance();
+            _dialog = new Dialog();
             registerButtons();
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
@@ -38,7 +37,7 @@ namespace KBS_SE3 {
             return _instance;
         }
 
-        public void DisplayDialog(DialogMessageType type, String title, String msg) {
+        public void DisplayDialog(DialogMessageType type, string title, string msg) {
             using(new DialogOverlay()) {
                 _dialog.StartPosition = FormStartPosition.CenterParent;
                 _dialog.Display(type, title, msg);

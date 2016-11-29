@@ -1,10 +1,5 @@
-﻿using KBS_SE3.Modules;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 //using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace KBS_SE3.Models
@@ -21,7 +16,7 @@ namespace KBS_SE3.Models
             startTimer();
         }
 
-        public static void Tick(Object sender, EventArgs e) { 
+        public static void Tick(object sender, EventArgs e) { 
             _feed.UpdateFeed();
         }
 
