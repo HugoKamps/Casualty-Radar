@@ -16,58 +16,82 @@ using System.Xml.Linq;
 
 namespace KBS_SE3.Models
 {
-    class Feed {
+    internal class Feed
+    {
 
         private static Feed _instance;
         private SyndicationFeed _p2000;
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
+        private readonly string LOCAL_FEED_URL = @"../../feed.xml";
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
         private Panel _selectedPanel;
         public bool TriggerEvent { get; set; }
 
-        public static Feed GetInstance() {
+        public static Feed GetInstance()
+        {
             if (_instance == null) _instance = new Feed();
             return _instance;
         }
 
-        private Feed() {
+        private Feed()
+        {
             TriggerEvent = true;
-            if (ConnectionUtil.HasInternetConnection()) {
-                _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
-                _alerts = CreateAlertList(_p2000);
+            try
+            {
+                this._p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
+                this._alerts = CreateAlertList(_p2000);
                 /* Initial update - Only updates after the P2000 is read.*/
                 UpdateFeed();
             }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
+    
 
-        public List<Alert> GetAlerts() {
+    public List<Alert> GetAlerts() {
             return _filteredAlerts;
         }
 
-        public List<Alert> CreateAlertList(SyndicationFeed items) {
-            var tempAlerts = new List<Alert>();
-            string lat, lng;
+        public List<Alert> CreateAlertList(SyndicationFeed items)
+        {
+            List<Alert> tempAlerts = new List<Alert>();
+            foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate))
+            {
+                Alert newAlert = _createAlert(item);
 
-            foreach (var item in items.Items.OrderBy(x => x.PublishDate)) {
-                if (item.ElementExtensions.Count == 2) {
-                    lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
-                    lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
-                    var newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
-                    for (var i = 0; i < AlertUtil.P2000.GetLength(0); i++) {
-                        if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0])) {
-                            newAlert.Code = AlertUtil.P2000[i, 0];
-                            newAlert.Type = Int32.Parse(AlertUtil.P2000[i, 1]);
-                            newAlert.TypeString = AlertUtil.P2000[i, 2];
-                            newAlert.Info = AlertUtil.P2000[i, 3];
-                            tempAlerts.Add(newAlert);
-                            break;
-                        }
+                if (newAlert != null)
+                    tempAlerts.Add(newAlert);
+            }
+            tempAlerts.Reverse();
+            return tempAlerts;
+        }
+
+        private Alert _createAlert(SyndicationItem item)
+        {
+            // Check if the item has 2 attributes which are Lat & Long
+            if (item.ElementExtensions.Count == 2)
+            {
+                string lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
+                string lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
+                Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
+                // Use the AlertUtil for setting attributes
+                for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++)
+                {
+                    if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0]))
+                    {
+                        newAlert.Code = AlertUtil.P2000[i, 0];
+                        newAlert.Type = Int32.Parse(AlertUtil.P2000[i, 1]);
+                        newAlert.TypeString = AlertUtil.P2000[i, 2];
+                        newAlert.Info = AlertUtil.P2000[i, 3];
+                        return newAlert;
                     }
                 }
             }
-            return tempAlerts;
-        }
+            return null;
+        } 
 
         public void UpdateFeed() {
             var oldP2000 = _p2000;
@@ -75,31 +99,36 @@ namespace KBS_SE3.Models
             var newFeed = new SyndicationFeed();
 
             // Load the feed
-            _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
-            _alerts = CreateAlertList(_p2000);
+            try
+            {
+                this._p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
+                this._alerts = CreateAlertList(_p2000);
 
-            // Get the first item from the previous feed
-            var first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
+                // Get the first item from the previous feed
+                SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
 
-            // Loop through the new feed
-            foreach (var item in _p2000.Items) {
-                // If the first item from the old feed is identical to the first item of the new feed
-                if (item.Title.Text != first.Title.Text) {
-                    // The item is a new item
-                    newItems.Add(item);
+                // Loop through the new feed
+                foreach (SyndicationItem item in _p2000.Items) {
+                    // If the first item from the old feed is identical to the first item of the new feed
+                    if (item.Title.Text != first.Title.Text) {
+                        // The item is a new item
+                        newItems.Add(item);
+                    } else {
+                        // The item is not a new item, end of loop
+                        break;
+                    }
                 }
-                else {
-                    // The item is not a new item, end of loop
-                    break;
-                }
+
+                newFeed.Items = newItems;
+                List<Alert> newAlerts = CreateAlertList(newFeed);
+
+                // Send list with new alerts to PushMessage
+                new PushMessage(newAlerts);
+                UpdateAlerts();
+            } catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
             }
-
-            newFeed.Items = newItems;
-            var newAlerts = CreateAlertList(newFeed);
-
-            // Send list with new alerts to PushMessage
-            new PushMessage(newAlerts);
-            UpdateAlerts();
         }
 
         /*
@@ -128,6 +157,7 @@ namespace KBS_SE3.Models
                 y += 105;
             }
 
+            hm.alertsCountLabel.Text = "(" + _filteredAlerts.Count.ToString() + ")";
         }
 
         public Panel GetSelectedPanel => _selectedPanel;
