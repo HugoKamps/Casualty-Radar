@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using GMap.NET;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
-using System.Drawing;
 
 namespace KBS_SE3.Modules {
     partial class HomeModule : UserControl, IModule

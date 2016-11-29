@@ -157,7 +157,7 @@ namespace KBS_SE3.Models
                 y += 105;
             }
 
-            hm.alertsCountLabel.Text = "(" + _filteredAlerts.Count.ToString() + ")";
+            hm.alertsTitleLabel.Text = "Meldingen (" + _filteredAlerts.Count.ToString() + ")";
         }
 
         public Panel GetSelectedPanel => _selectedPanel;
@@ -166,8 +166,8 @@ namespace KBS_SE3.Models
         public void CreateAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
             //The panel which will be filled with all of the controls below
             var newPanel = new Panel {
-                Location = new Point(8, y),
-                Size = new Size(305, 100),
+                Location = new Point(0, y),
+                Size = new Size(320, 100),
                 BackColor = Color.FromArgb(236, 89, 71)
             };
 
