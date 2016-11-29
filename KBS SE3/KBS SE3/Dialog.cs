@@ -26,6 +26,10 @@ namespace KBS_SE3 {
             InitializeComponent();
         }
 
+        /*
+        * Initializes the dialog interface with the given properties.
+        * This method is purely for initialization purposes and shouldn't be called randomly.
+        */
         public void Display(DialogMessageType type, String title, String content) {
             dialogHeaderTitle.Text = DialogType.ParseHeaderMessage(type)+": ";
             dialogHeaderText.Text = title;

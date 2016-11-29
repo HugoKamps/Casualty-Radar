@@ -11,6 +11,10 @@ namespace KBS_SE3.Core.Dialog {
 
         private List<Form> _forms;
 
+        /*
+        * Creates a form with a black background above all forms except the 
+        * form called after the overlay.
+        */
         public DialogOverlay() {
             this._forms = new List<Form>();
             var cnt = Application.OpenForms.Count;
