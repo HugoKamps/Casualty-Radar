@@ -29,16 +29,16 @@
             this.routeInfoLabel = new System.Windows.Forms.Label();
             this.alertInfoPanel = new System.Windows.Forms.Panel();
             this.timeLabel = new System.Windows.Forms.Label();
-            this.alertTypePicturebox = new System.Windows.Forms.PictureBox();
             this.infoTitleLabel = new System.Windows.Forms.Label();
             this.alertInfoLabelPanel = new System.Windows.Forms.Panel();
             this.alertInfoLabel = new System.Windows.Forms.Label();
             this.mapPanel = new System.Windows.Forms.Panel();
+            this.alertTypePicturebox = new System.Windows.Forms.PictureBox();
             this.routePanel.SuspendLayout();
             this.routeInfoLabelPanel.SuspendLayout();
             this.alertInfoPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).BeginInit();
             this.alertInfoLabelPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).BeginInit();
             this.SuspendLayout();
             // 
             // routePanel
@@ -108,19 +108,10 @@
             this.timeLabel.TabIndex = 2;
             this.timeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // alertTypePicturebox
-            // 
-            this.alertTypePicturebox.Location = new System.Drawing.Point(242, 15);
-            this.alertTypePicturebox.Name = "alertTypePicturebox";
-            this.alertTypePicturebox.Size = new System.Drawing.Size(60, 60);
-            this.alertTypePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.alertTypePicturebox.TabIndex = 1;
-            this.alertTypePicturebox.TabStop = false;
-            // 
             // infoTitleLabel
             // 
             this.infoTitleLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.infoTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.infoTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.infoTitleLabel.ForeColor = System.Drawing.Color.White;
             this.infoTitleLabel.Location = new System.Drawing.Point(0, 0);
             this.infoTitleLabel.Name = "infoTitleLabel";
@@ -159,6 +150,15 @@
             this.mapPanel.Size = new System.Drawing.Size(615, 480);
             this.mapPanel.TabIndex = 1;
             // 
+            // alertTypePicturebox
+            // 
+            this.alertTypePicturebox.Location = new System.Drawing.Point(242, 15);
+            this.alertTypePicturebox.Name = "alertTypePicturebox";
+            this.alertTypePicturebox.Size = new System.Drawing.Size(60, 60);
+            this.alertTypePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.alertTypePicturebox.TabIndex = 1;
+            this.alertTypePicturebox.TabStop = false;
+            // 
             // NavigationModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -171,8 +171,8 @@
             this.routeInfoLabelPanel.ResumeLayout(false);
             this.alertInfoPanel.ResumeLayout(false);
             this.alertInfoPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).EndInit();
             this.alertInfoLabelPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).EndInit();
             this.ResumeLayout(false);
 
         }

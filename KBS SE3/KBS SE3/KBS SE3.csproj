@@ -70,6 +70,7 @@
     <Compile Include="Models\Graph\Relation.cs" />
     <Compile Include="Models\Graph\Tag.cs" />
     <Compile Include="Models\Graph\Way.cs" />
+    <Compile Include="Models\Navigation\NavigationStep.cs" />
     <Compile Include="Models\PushMessage.cs" />
     <Compile Include="Core\IModule.cs" />
     <Compile Include="Core\ModuleManager.cs" />
@@ -156,6 +157,9 @@
   <ItemGroup>
     <Content Include="feed.xml" />
     <Content Include="Resources\app_icon.ico" />
+    <None Include="Resources\turn_right_icon.png" />
+    <None Include="Resources\turn_left_icon.png" />
+    <None Include="Resources\straight_icon.png" />
     <None Include="Resources\marker_icon_yellow.png" />
     <None Include="Resources\marker_icon_red.png" />
     <None Include="Resources\marker_icon_blue.png" />
