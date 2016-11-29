@@ -62,7 +62,15 @@
     <Compile Include="Container.Designer.cs">
       <DependentUpon>Container.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\Dialog\DialogOverlay.cs" />
+    <Compile Include="Core\Dialog\DialogType.cs" />
     <Compile Include="Core\LocationManager.cs" />
+    <Compile Include="Dialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog.Designer.cs">
+      <DependentUpon>Dialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils\ConnectionUtil.cs" />
     <Compile Include="Models\Breadcrumb.cs" />
     <Compile Include="Models\Graph\Member.cs" />
@@ -112,6 +120,9 @@
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog.resx">
+      <DependentUpon>Dialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\GetStartedModule.resx">
       <DependentUpon>GetStartedModule.cs</DependentUpon>
