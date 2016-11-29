@@ -94,6 +94,7 @@ namespace KBS_SE3 {
             Button selectedButton = (Button) sender;
             selectedButton.BackColor = Color.FromArgb(236, 89, 71);
             ModuleManager.GetInstance().UpdateModule(breadCrumbStart, contentPanel, selectedButton.Tag);
+            Feed.GetInstance().TriggerEvent = true;
         }
 
         private void exitBtn_Click(object sender, EventArgs e) {
@@ -106,7 +107,8 @@ namespace KBS_SE3 {
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
-
+            Feed.GetInstance().TriggerEvent = true;
+            ModuleManager.GetInstance().UpdateModule(breadCrumbStart, contentPanel, ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent);
         }
     }
 }
