@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using KBS_SE3.Modules;
 using KBS_SE3.Properties;
+using KBS_SE3.Utils;
 using static System.String;
 
 namespace KBS_SE3.Core {
@@ -17,13 +18,9 @@ namespace KBS_SE3.Core {
             _registeredModules = new List<IModule>();
             registerModules();
             if (ConnectionUtil.HasInternetConnection()) {
-                if (Settings.Default.userLocation != "") {
-                    _defaultModule = ParseInstance(typeof(HomeModule));
-                } else {
-                    _defaultModule = ParseInstance(typeof(GetStartedModule));
-                }
+                this._defaultModule = ParseInstance(Settings.Default.userLocation == "" ? typeof(GetStartedModule) : typeof(HomeModule));
             } else {
-                _defaultModule = ParseInstance(typeof(NoConnectionModule));
+                this._defaultModule = ParseInstance(typeof(NoConnectionModule));
             }
         }
 

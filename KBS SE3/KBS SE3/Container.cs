@@ -1,4 +1,5 @@
 ﻿using KBS_SE3.Core;
+using KBS_SE3.Core.Dialog;
 using KBS_SE3.Models;
 using KBS_SE3.Modules;
 using System;
@@ -6,13 +7,15 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static KBS_SE3.Core.Dialog.DialogType;
 
 namespace KBS_SE3 {
-    public partial class Container : Form {
+    partial class Container : Form {
 
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
+        private Dialog _dialog;
         private static Container _instance;
         private ModuleManager _modManager;
 
@@ -24,6 +27,7 @@ namespace KBS_SE3 {
         private Container() {
             InitializeComponent();
             this._modManager = ModuleManager.GetInstance();
+            this._dialog = new Dialog();
             registerButtons();
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
             _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
@@ -32,6 +36,14 @@ namespace KBS_SE3 {
         public static Container GetInstance() {
             if (_instance == null) _instance = new Container();
             return _instance;
+        }
+
+        public void DisplayDialog(DialogMessageType type, String title, String msg) {
+            using(new DialogOverlay()) {
+                _dialog.StartPosition = FormStartPosition.CenterParent;
+                _dialog.Display(type, title, msg);
+                _dialog.ShowDialog();
+            }
         }
 
         public Label GetBreadcrumbStart() {
