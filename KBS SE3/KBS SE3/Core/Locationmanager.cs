@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml.Linq;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -20,12 +19,11 @@ namespace KBS_SE3.Core
         private readonly GMapControl _map;  //Control which the map will be placed on
         private double _currentLatitude;    //The user's current latitude
         private double _currentLongitude;   //The user's current longitude
-        private bool hasLocationservice;
+        private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
 
         //Initializes the GPS watcher and it's events and initializes the Map control of the HomeModule which the map will be placed on
-        public LocationManager(GMapControl map)
-        {
-            hasLocationservice = false;
+        public LocationManager(GMapControl map) {
+            _hasLocationservice = false;
             SetCoordinatesByLocationSetting();
             _map = map;
             var watcher = new GeoCoordinateWatcher();
@@ -48,6 +46,7 @@ namespace KBS_SE3.Core
                 var markersOverlay = new GMapOverlay("markers");
                 _map.Overlays.Add(markersOverlay);
 
+                //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
                 if (hasLocationService) {
                     markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
                 } else {
@@ -56,12 +55,13 @@ namespace KBS_SE3.Core
                 }
 
                 foreach (var alert in Feed.GetInstance().GetAlerts()) {
-                    int type = alert.Type == 1 ? 1 : 2;
+                    var type = alert.Type == 1 ? 1 : 2;
                     markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
                 }
             }
         }
 
+        //Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
         public void SetCoordinatesByLocationSetting() {
             var location = Settings.Default.userLocation + ", The Netherlands";
             var requestUri = $"http://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(location)}&sensor=false";
@@ -78,15 +78,11 @@ namespace KBS_SE3.Core
                 var lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
                 _currentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
                 _currentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
-            } else
-            {
-                
             }
         }
 
         //Returns a marker that will be placed on a given location. The color and type are variable
-        public GMarkerGoogle CreateMarker(double lat, double lng, int type)
-        {
+        public GMarkerGoogle CreateMarker(double lat, double lng, int type) {
             var imgLocation = "../../Resources../marker_icon_";
             if (type == 0) imgLocation += "blue.png";
             if (type == 1) imgLocation += "yellow.png";
@@ -106,22 +102,22 @@ namespace KBS_SE3.Core
         private void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
             switch (e.Status) {
                 case GeoPositionStatus.Initializing:
-                    hasLocationservice = true;
+                    _hasLocationservice = true;
                     break;
 
                 case GeoPositionStatus.Ready:
-                    hasLocationservice = true;
+                    _hasLocationservice = true;
                     break;
 
                 case GeoPositionStatus.NoData:
-                    hasLocationservice = false;
+                    _hasLocationservice = false;
                     break;
 
                 case GeoPositionStatus.Disabled:
-                    hasLocationservice = false;
+                    _hasLocationservice = false;
                     break;
             }
-            GetMap(hasLocationservice);
+            GetMap(_hasLocationservice);
         }
     }
 }
