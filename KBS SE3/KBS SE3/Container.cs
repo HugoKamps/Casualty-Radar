@@ -70,7 +70,6 @@ namespace KBS_SE3 {
         //This event is triggered when the minimize button is clicked. It minimizes the window
         private void minimizeBtn_Click(object sender, EventArgs e) {
             WindowState = FormWindowState.Minimized;
-            //DisplayDialog(Core.Dialog.DialogType.DialogMessageType.ERROR, "Locatie niet beschikbaar", "Uw locatie is niet beschikbaar");
         }
 
         /* This event is triggered when the user's mouse hovers over the minimize or exit button. 

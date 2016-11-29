@@ -25,11 +25,17 @@ namespace KBS_SE3 {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dialog));
             this.dialogHeader = new System.Windows.Forms.Panel();
             this.dialogHeaderText = new System.Windows.Forms.Label();
             this.dialogHeaderTitle = new System.Windows.Forms.Label();
             this.dialogCloseBtn = new System.Windows.Forms.Label();
+            this.dialogIconPicturebox = new System.Windows.Forms.PictureBox();
+            this.dialogContentLabel = new System.Windows.Forms.Label();
+            this.dialogContentPanel = new System.Windows.Forms.Panel();
             this.dialogHeader.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dialogIconPicturebox)).BeginInit();
+            this.dialogContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // dialogHeader
@@ -88,19 +94,53 @@ namespace KBS_SE3 {
             this.dialogCloseBtn.MouseEnter += new System.EventHandler(this.dialogCloseBtn_MouseEnter);
             this.dialogCloseBtn.MouseLeave += new System.EventHandler(this.dialogCloseBtn_MouseLeave);
             // 
+            // dialogIconPicturebox
+            // 
+            this.dialogIconPicturebox.Location = new System.Drawing.Point(9, 39);
+            this.dialogIconPicturebox.Name = "dialogIconPicturebox";
+            this.dialogIconPicturebox.Size = new System.Drawing.Size(51, 52);
+            this.dialogIconPicturebox.TabIndex = 1;
+            this.dialogIconPicturebox.TabStop = false;
+            // 
+            // dialogContentLabel
+            // 
+            this.dialogContentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dialogContentLabel.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dialogContentLabel.Location = new System.Drawing.Point(0, 0);
+            this.dialogContentLabel.Name = "dialogContentLabel";
+            this.dialogContentLabel.Padding = new System.Windows.Forms.Padding(5);
+            this.dialogContentLabel.Size = new System.Drawing.Size(355, 121);
+            this.dialogContentLabel.TabIndex = 2;
+            this.dialogContentLabel.Text = "lore jasd hasdeh d shade hehha sadhdasdd e heha asdashs ehehehe asdsahds ehassdah" +
+    "a";
+            this.dialogContentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // dialogContentPanel
+            // 
+            this.dialogContentPanel.Controls.Add(this.dialogContentLabel);
+            this.dialogContentPanel.Location = new System.Drawing.Point(56, 32);
+            this.dialogContentPanel.Name = "dialogContentPanel";
+            this.dialogContentPanel.Size = new System.Drawing.Size(355, 121);
+            this.dialogContentPanel.TabIndex = 3;
+            // 
             // Dialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(448, 172);
+            this.Controls.Add(this.dialogContentPanel);
+            this.Controls.Add(this.dialogIconPicturebox);
             this.Controls.Add(this.dialogHeader);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Dialog";
             this.Text = "Dialog";
             this.dialogHeader.ResumeLayout(false);
             this.dialogHeader.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dialogIconPicturebox)).EndInit();
+            this.dialogContentPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -111,5 +151,8 @@ namespace KBS_SE3 {
         private System.Windows.Forms.Label dialogCloseBtn;
         private System.Windows.Forms.Label dialogHeaderText;
         private Label dialogHeaderTitle;
+        private PictureBox dialogIconPicturebox;
+        private Label dialogContentLabel;
+        private Panel dialogContentPanel;
     }
 }
