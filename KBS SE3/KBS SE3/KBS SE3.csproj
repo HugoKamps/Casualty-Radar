@@ -62,8 +62,16 @@
     <Compile Include="Container.Designer.cs">
       <DependentUpon>Container.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\Dialog\DialogOverlay.cs" />
+    <Compile Include="Core\Dialog\DialogType.cs" />
     <Compile Include="Core\LocationManager.cs" />
-    <Compile Include="ConnectionUtil.cs" />
+    <Compile Include="Dialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog.Designer.cs">
+      <DependentUpon>Dialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\ConnectionUtil.cs" />
     <Compile Include="Models\Breadcrumb.cs" />
     <Compile Include="Models\Graph\Member.cs" />
     <Compile Include="Models\Graph\Node.cs" />
@@ -109,11 +117,13 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FileUtil.cs" />
     <Compile Include="Utils\AlertUtil.cs" />
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog.resx">
+      <DependentUpon>Dialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\GetStartedModule.resx">
       <DependentUpon>GetStartedModule.cs</DependentUpon>
@@ -170,6 +180,9 @@
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
     <Content Include="Resources\case-medic-icon-22.png" />
+    <Content Include="Resources\dialog_icon_error.png" />
+    <Content Include="Resources\dialog_icon_success.png" />
+    <Content Include="Resources\dialog_icon_warning.png" />
     <Content Include="Resources\Firefighter.png" />
     <Content Include="Resources\logo_final.png" />
   </ItemGroup>

@@ -9,8 +9,7 @@
     internal sealed partial class Settings {
         
         public Settings() {
-            this.SettingChanging += this.SettingChangingEventHandler;
-            
+            this.SettingChanging += this.SettingChangingEventHandler; 
             this.SettingsSaving += this.SettingsSavingEventHandler;
             
         }
