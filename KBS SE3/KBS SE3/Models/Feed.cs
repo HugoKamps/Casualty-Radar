@@ -26,7 +26,7 @@ namespace KBS_SE3.Models
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
         private Panel _selectedPanel;
-        public bool TriggerEvent { get; set; }
+        private List<Panel> _alertPanels = new List<Panel>();
 
         public static Feed GetInstance()
         {
@@ -36,7 +36,6 @@ namespace KBS_SE3.Models
 
         private Feed()
         {
-            TriggerEvent = true;
             try
             {
                 this._p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
@@ -152,6 +151,7 @@ namespace KBS_SE3.Models
             }
 
             hm.feedPanel.Controls.Clear();
+            _alertPanels.Clear();
             foreach (var a in _filteredAlerts) {
                 CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y, hm);
                 y += 105;
@@ -161,6 +161,7 @@ namespace KBS_SE3.Models
         }
 
         public Panel GetSelectedPanel => _selectedPanel;
+        public List<Panel> GetAlertPanels => _alertPanels;
 
         public void CreateAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
             //The panel which will be filled with all of the controls below
@@ -241,10 +242,11 @@ namespace KBS_SE3.Models
             newPanel.Controls.Add(label);
             newPanel.Controls.Add(timeLabel);
             hm.feedPanel.Controls.Add(newPanel);
+
+            _alertPanels.Add(newPanel);
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
-            if (!TriggerEvent) return;
             var homeModule = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof (HomeModule));
 
             if (sender.GetType() == typeof (Panel)) {
@@ -277,7 +279,6 @@ namespace KBS_SE3.Models
         }
 
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
-            if (!TriggerEvent) return;
             if (sender.GetType() == typeof(Panel)) {
                 var panel = (Panel)sender;
                 if(panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
@@ -289,7 +290,6 @@ namespace KBS_SE3.Models
         }
 
         private void feedPanelItem_MouseLeave(object sender, EventArgs e) {
-            if (!TriggerEvent) return;
             if (sender.GetType() == typeof(Panel)) {
                 var panel = (Panel)sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
