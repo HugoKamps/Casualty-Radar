@@ -30,13 +30,18 @@ namespace KBS_SE3.Modules {
         }
 
         private void navigationBtn_Click(object sender, EventArgs e) {
-            Feed.GetInstance().TriggerEvent = false;
-            var navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            var selectedPanel = Feed.GetInstance().GetSelectedPanel;
+            var alertPanels = Feed.GetInstance().GetAlertPanels;
+            Alert selectedAlert = null;
 
-            foreach (Control c in Feed.GetInstance().GetSelectedPanel.Controls) {
-                navigationModule.alertInfoPanel.Controls.Add(c);
+            for (var i = 0; i < alertPanels.Count; i++) {
+                if (selectedPanel != alertPanels[i]) continue;
+                selectedAlert = Feed.GetInstance().GetAlerts()[i];
+                break;
             }
 
+            var navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            if (selectedAlert != null) navigationModule.SetAlertInfo(selectedAlert.Title, selectedAlert.Info, selectedAlert.Type, selectedAlert.PubDate.TimeOfDay.ToString());
             ModuleManager.GetInstance().UpdateModule(KBS_SE3.Container.GetInstance().breadCrumbStart, KBS_SE3.Container.GetInstance().contentPanel, navigationModule);
         }
 
