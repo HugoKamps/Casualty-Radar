@@ -69,15 +69,13 @@ namespace KBS_SE3.Core {
             var xdoc = XDocument.Load(response.GetResponseStream());
 
             var result = xdoc.Element("GeocodeResponse").Element("result");
-            if (result != null)
-            {
+            if (result != null){
                 var locationElement = result.Element("geometry").Element("location");
                 var lat = Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", string.Empty);
                 var lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
                 _currentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
                 _currentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
-            } else
-            {
+            } else{
                 
             }
         }
