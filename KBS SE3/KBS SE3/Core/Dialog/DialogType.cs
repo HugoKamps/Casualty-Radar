@@ -16,7 +16,7 @@ namespace KBS_SE3.Core.Dialog {
         */
         public static Bitmap GetDialogIcon(DialogMessageType type) {
             string fileName = Enum.GetName(typeof(DialogMessageType), type);
-            string path = @"../../../Resources/dialog_icon_" + fileName.ToLower() + ".png";
+            string path = @"../../Resources/dialog_icon_" + fileName.ToLower() + ".png";
             return new Bitmap(path);
         }
 
