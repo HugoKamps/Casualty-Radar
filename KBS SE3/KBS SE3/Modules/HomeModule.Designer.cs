@@ -74,7 +74,7 @@ namespace KBS_SE3.Modules {
             this.map.LevelsKeepInMemmory = 5;
             this.map.Location = new System.Drawing.Point(0, 0);
             this.map.MarkersEnabled = true;
-            this.map.MaxZoom = 16;
+            this.map.MaxZoom = 32;
             this.map.MinZoom = 1;
             this.map.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.map.Name = "map";
@@ -144,19 +144,7 @@ namespace KBS_SE3.Modules {
             this.alertTypeComboBox.Name = "alertTypeComboBox";
             this.alertTypeComboBox.Size = new System.Drawing.Size(101, 26);
             this.alertTypeComboBox.TabIndex = 6;
-            this.alertTypeComboBox.SelectedItem = "Alle";
             this.alertTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.alertTypeComboBox_SelectedIndexChanged);
-            // 
-            // refreshFeedButton
-            // 
-            this.refreshFeedButton.BackColor = System.Drawing.Color.White;
-            this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
-            this.refreshFeedButton.Location = new System.Drawing.Point(304, 3);
-            this.refreshFeedButton.Name = "refreshFeedButton";
-            this.refreshFeedButton.Size = new System.Drawing.Size(31, 31);
-            this.refreshFeedButton.TabIndex = 5;
-            this.refreshFeedButton.TabStop = false;
-            this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
             // 
             // rightPanel
             // 

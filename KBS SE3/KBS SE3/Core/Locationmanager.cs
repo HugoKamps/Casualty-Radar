@@ -11,6 +11,7 @@ using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Models;
 using KBS_SE3.Properties;
+using System.Collections.Generic;
 
 namespace KBS_SE3.Core
 {
@@ -20,6 +21,7 @@ namespace KBS_SE3.Core
         private double _currentLatitude;    //The user's current latitude
         private double _currentLongitude;   //The user's current longitude
         private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
+        private GMapOverlay _routeOverlay;
 
         //Initializes the GPS watcher and it's events and initializes the Map control of the HomeModule which the map will be placed on
         public LocationManager(GMapControl map) {
@@ -44,7 +46,9 @@ namespace KBS_SE3.Core
                 _map.MapProvider = GoogleMapProvider.Instance;
                 GMaps.Instance.Mode = AccessMode.ServerOnly;
                 var markersOverlay = new GMapOverlay("markers");
+                _routeOverlay = new GMapOverlay("routes");
                 _map.Overlays.Add(markersOverlay);
+                _map.Overlays.Add(_routeOverlay);
 
                 //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
                 if (hasLocationService) {
@@ -58,6 +62,13 @@ namespace KBS_SE3.Core
                     var type = alert.Type == 1 ? 1 : 2;
                     markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
                 }
+
+                // Dummy data for drawing a route
+                var points = new List<PointLatLng>();
+                points.Add(new PointLatLng(52.1744700, 5.3933600));
+                points.Add(new PointLatLng(52.1746868, 5.3938107));
+                points.Add(new PointLatLng(52.1748315, 5.3942292));
+                DrawRoute(points);
             }
         }
 
@@ -118,6 +129,15 @@ namespace KBS_SE3.Core
                     break;
             }
             GetMap(_hasLocationservice);
+        }
+
+        private void DrawRoute(IList<PointLatLng> points)
+        {
+            _routeOverlay.Routes.Clear();
+            var r = new GMapRoute(points, "MyRoute");
+            r.Stroke.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            r.Stroke.Color = Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(73)))), ((int)(((byte)(57)))));
+            _routeOverlay.Routes.Add(r);
         }
     }
 }
