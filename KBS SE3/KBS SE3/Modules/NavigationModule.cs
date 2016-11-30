@@ -19,5 +19,9 @@ namespace KBS_SE3.Modules {
         public Breadcrumb GetBreadcrumb() {
             return new Breadcrumb(this, "Navigation", null, ModuleManager.GetInstance().ParseInstance(typeof(HomeModule)));
         }
+
+         public void SetInfoPanel(Panel panel) {
+             alertInfoPanel = panel;
+         }
     }
 }

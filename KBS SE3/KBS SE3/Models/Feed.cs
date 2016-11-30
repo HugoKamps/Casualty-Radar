@@ -16,33 +16,42 @@ using System.Xml.Linq;
 
 namespace KBS_SE3.Models
 {
-    class Feed {
+    internal class Feed
+    {
 
         private static Feed _instance;
         private SyndicationFeed _p2000;
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
+        private readonly string LOCAL_FEED_URL = @"../../feed.xml";
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
+        private Panel _selectedPanel;
+        public bool TriggerEvent { get; set; }
 
-        public static Feed GetInstance() {
+        public static Feed GetInstance()
+        {
             if (_instance == null) _instance = new Feed();
             return _instance;
         }
 
-        private Feed() {
+        private Feed()
+        {
+            TriggerEvent = true;
             try
             {
-                this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+                this._p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
                 this._alerts = CreateAlertList(_p2000);
                 /* Initial update - Only updates after the P2000 is read.*/
                 UpdateFeed();
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
         }
+    
 
-        public List<Alert> GetAlerts() {
+    public List<Alert> GetAlerts() {
             return _filteredAlerts;
         }
 
@@ -85,14 +94,14 @@ namespace KBS_SE3.Models
         } 
 
         public void UpdateFeed() {
-            SyndicationFeed oldP2000 = _p2000;
-            List<SyndicationItem> newItems = new List<SyndicationItem>();
-            SyndicationFeed newFeed = new SyndicationFeed();
+            var oldP2000 = _p2000;
+            var newItems = new List<SyndicationItem>();
+            var newFeed = new SyndicationFeed();
 
             // Load the feed
             try
             {
-                this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+                this._p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
                 this._alerts = CreateAlertList(_p2000);
 
                 // Get the first item from the previous feed
@@ -126,13 +135,13 @@ namespace KBS_SE3.Models
         * Update the displayed alerts with the new feed
         */
         public void UpdateAlerts() {
-            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            int selectedFilter = hm.alertTypeComboBox.SelectedIndex;
-            int y = 0;
+            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            var selectedFilter = hm.alertTypeComboBox.SelectedIndex;
+            var y = 0;
             // Check which filter is selected and apply the filter
             if (selectedFilter == 1 || selectedFilter == 2) {
                 _filteredAlerts = new List<Alert>();
-                foreach (Alert a in _alerts) {
+                foreach (var a in _alerts) {
                     if (a.Type == selectedFilter) {
                         _filteredAlerts.Add(a);
                     }
@@ -143,53 +152,90 @@ namespace KBS_SE3.Models
             }
 
             hm.feedPanel.Controls.Clear();
-            foreach (Alert a in _filteredAlerts) {
-                createAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y, hm);
+            foreach (var a in _filteredAlerts) {
+                CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y, hm);
                 y += 105;
             }
 
             hm.alertsCountLabel.Text = "(" + _filteredAlerts.Count.ToString() + ")";
         }
 
-        public void createAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
-            Panel newPanel = new Panel();
-            newPanel.Location = new System.Drawing.Point(8, y);
-            newPanel.Size = new System.Drawing.Size(305, 100);
-            newPanel.BackColor = Color.FromArgb(236, 89, 71);
+        public Panel GetSelectedPanel => _selectedPanel;
 
-            PictureBox newPictureBox = new PictureBox();
-            newPictureBox.Location = new System.Drawing.Point(220, 10);
-            newPictureBox.Size = new System.Drawing.Size(60, 60);
-            newPictureBox.Image = type == 1 ? Properties.Resources.Medic : Properties.Resources.Firefighter;
-            newPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+        public void CreateAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
+            //The panel which will be filled with all of the controls below
+            var newPanel = new Panel {
+                Location = new Point(8, y),
+                Size = new Size(305, 100),
+                BackColor = Color.FromArgb(236, 89, 71)
+            };
+
+            //The picture which indicates the type of alert (Firefighter or ambulance)
+            var newPictureBox = new PictureBox {
+                Location = new Point(220, 10),
+                Size = new Size(60, 60),
+                Image = type == 1 ? Properties.Resources.Medic : Properties.Resources.Firefighter,
+                SizeMode = PictureBoxSizeMode.StretchImage
+            };
+
+            //The label which will be filled with the information about the alert
+            var label = new Label {
+                ForeColor = Color.White,
+                Location = new Point(10, 5),
+                Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
+                Size = new Size(200, 90),
+                BackColor = Color.Transparent,
+                Text = title + "\n" + info
+            };
+
+            if (_selectedPanel != null)
+            {
+                foreach (var control in _selectedPanel.Controls)
+                {
+                    if (control is Label)
+                    {
+                        var selectedLabel = (Label) control;
+                        if (selectedLabel.Text == label.Text)
+                        {
+                            newPanel.BackColor = Color.FromArgb(210,93,0);
+                            _selectedPanel = newPanel;
+                        }
+                    }
+                }
+            }
+
+            //The label which will be filled with the time of the alert
+            var timeLabel = new Label
+            {
+                ForeColor = Color.White,
+                Location = new Point(150, 65),
+                Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
+                Size = new Size(200, 30),
+                BackColor = Color.Transparent,
+                Text = time
+            };
+
+            //Events for each control in the panel;
             newPictureBox.MouseEnter += feedPanelItem_MouseEnter;
             newPictureBox.MouseLeave += feedPanelItem_MouseLeave;
+            newPictureBox.Click += feedPanelItem_Click;
 
-            Label label = new Label();
-            label.ForeColor = Color.White;
-            label.Location = new System.Drawing.Point(10, 5);
-            label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10, FontStyle.Bold);
-            label.Size = new System.Drawing.Size(200, 90);
-            label.BackColor = Color.Transparent;
-            label.Text = title + "\n" + info;
             label.MouseEnter += feedPanelItem_MouseEnter;
             label.MouseLeave += feedPanelItem_MouseLeave;
+            label.Click += feedPanelItem_Click;
             label.TextAlign = ContentAlignment.MiddleCenter;
 
-            Label timeLabel = new Label();
-            timeLabel.ForeColor = Color.White;
-            timeLabel.Location = new System.Drawing.Point(150, 65);
-            timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10, FontStyle.Bold);
-            timeLabel.Size = new System.Drawing.Size(200, 30);
-            timeLabel.BackColor = Color.Transparent;
-            timeLabel.Text = time;
             timeLabel.MouseEnter += feedPanelItem_MouseEnter;
             timeLabel.MouseLeave += feedPanelItem_MouseLeave;
+            timeLabel.Click += feedPanelItem_Click;
             timeLabel.TextAlign = ContentAlignment.MiddleCenter;
 
             newPanel.MouseEnter += feedPanelItem_MouseEnter;
             newPanel.MouseLeave += feedPanelItem_MouseLeave;
+            newPanel.Click += feedPanelItem_Click;
+            newPanel.Cursor = Cursors.Hand;
 
+            //The panel is filled with all the controls initialized above
             hm.feedPanel.AutoScroll = true;
             newPanel.Controls.Add(newPictureBox);
             newPanel.Controls.Add(label);
@@ -197,25 +243,60 @@ namespace KBS_SE3.Models
             hm.feedPanel.Controls.Add(newPanel);
         }
 
-        void feedPanelItem_MouseEnter(object sender, EventArgs e) {
-            if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel)sender;
-                panel.BackColor = Color.FromArgb(210, 73, 57);
+        private void feedPanelItem_Click(object sender, EventArgs e) {
+            if (!TriggerEvent) return;
+            var homeModule = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof (HomeModule));
+
+            if (sender.GetType() == typeof (Panel)) {
+                var panel = (Panel) sender;
+                if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
+                if (_selectedPanel == panel) {
+                    _selectedPanel = null;
+                    homeModule.navigationBtn.Enabled = false;
+                    homeModule.navigationBtn.BackColor = Color.Gray;
+                }
+                else {
+                    _selectedPanel = panel;
+                    _selectedPanel.BackColor = Color.FromArgb(210, 93, 0);
+                    homeModule.navigationBtn.Enabled = true;
+                }
             }
             else {
-                Control control = (Control)sender;
-                control.Parent.BackColor = Color.FromArgb(210, 73, 57);
+                var control = (Control) sender;
+                if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
+                if (_selectedPanel == control.Parent) {
+                    _selectedPanel = null;
+                    homeModule.navigationBtn.Enabled = false;
+                }
+                else {
+                    _selectedPanel = (Panel) control.Parent;
+                    _selectedPanel.BackColor = Color.FromArgb(210, 93, 0);
+                    homeModule.navigationBtn.Enabled = true;
+                }
             }
         }
 
-        void feedPanelItem_MouseLeave(object sender, EventArgs e) {
+        private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
+            if (!TriggerEvent) return;
             if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel)sender;
-                panel.BackColor = Color.FromArgb(236, 86, 71);
+                var panel = (Panel)sender;
+                if(panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
             }
             else {
-                Control control = (Control)sender;
-                control.Parent.BackColor = Color.FromArgb(236, 86, 71);
+                var control = (Control)sender;
+                if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(210, 73, 57);
+            }
+        }
+
+        private void feedPanelItem_MouseLeave(object sender, EventArgs e) {
+            if (!TriggerEvent) return;
+            if (sender.GetType() == typeof(Panel)) {
+                var panel = (Panel)sender;
+                if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
+            }
+            else {
+                var control = (Control)sender;
+                if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(236, 86, 71);
             }
         }
     }
