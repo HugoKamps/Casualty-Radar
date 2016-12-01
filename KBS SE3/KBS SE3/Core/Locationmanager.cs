@@ -12,10 +12,8 @@ using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Models;
 using KBS_SE3.Properties;
 
-namespace KBS_SE3.Core
-{
-    internal class LocationManager
-    {
+namespace KBS_SE3.Core {
+    internal class LocationManager {
         private readonly GMapControl _map;  //Control which the map will be placed on
         private double _currentLatitude;    //The user's current latitude
         private double _currentLongitude;   //The user's current longitude
@@ -30,7 +28,8 @@ namespace KBS_SE3.Core
             watcher.PositionChanged += watcher_PositionChanged;
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
-            _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
+            if (_hasLocationservice) _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
+            else _map.SetPositionByKeywords(Settings.Default.userLocation);
         }
 
         /* 
@@ -87,7 +86,7 @@ namespace KBS_SE3.Core
             if (type == 0) imgLocation += "blue.png";
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
-            var image = (Image) new Bitmap(@imgLocation);
+            var image = (Image)new Bitmap(@imgLocation);
             return new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
         }
 
