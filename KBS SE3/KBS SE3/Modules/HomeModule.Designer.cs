@@ -29,24 +29,24 @@ namespace KBS_SE3.Modules {
             this.map = new GMap.NET.WindowsForms.GMapControl();
             this.refreshPanel = new System.Windows.Forms.Panel();
             this.alertTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.refreshFeedButton = new System.Windows.Forms.PictureBox();
             this.rightPanel = new System.Windows.Forms.Panel();
             this.feedPanel = new System.Windows.Forms.Panel();
             this.legendaPanel = new System.Windows.Forms.Panel();
             this.yourLocationLabel = new System.Windows.Forms.Label();
             this.fireFighterLabel = new System.Windows.Forms.Label();
-            this.ambulanceLabel = new System.Windows.Forms.Label();
-            this.navigationBtn = new System.Windows.Forms.Button();
             this.blueMarkerPicturebox = new System.Windows.Forms.PictureBox();
             this.redMarkerPicturebox = new System.Windows.Forms.PictureBox();
             this.yellowMarkerPicturebox = new System.Windows.Forms.PictureBox();
-            this.refreshFeedButton = new System.Windows.Forms.PictureBox();
+            this.ambulanceLabel = new System.Windows.Forms.Label();
+            this.navigationBtn = new System.Windows.Forms.Button();
             this.refreshPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).BeginInit();
             this.rightPanel.SuspendLayout();
             this.legendaPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.redMarkerPicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellowMarkerPicturebox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).BeginInit();
             this.SuspendLayout();
             // 
             // alertsTitleLabel
@@ -75,7 +75,7 @@ namespace KBS_SE3.Modules {
             this.map.LevelsKeepInMemmory = 5;
             this.map.Location = new System.Drawing.Point(0, 0);
             this.map.MarkersEnabled = true;
-            this.map.MaxZoom = 32;
+            this.map.MaxZoom = 20;
             this.map.MinZoom = 1;
             this.map.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.map.Name = "map";
@@ -121,6 +121,22 @@ namespace KBS_SE3.Modules {
             this.alertTypeComboBox.Size = new System.Drawing.Size(129, 26);
             this.alertTypeComboBox.TabIndex = 6;
             this.alertTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.alertTypeComboBox_SelectedIndexChanged);
+            // 
+            // refreshFeedButton
+            // 
+            this.refreshFeedButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
+            this.refreshFeedButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.refreshFeedButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
+            this.refreshFeedButton.Location = new System.Drawing.Point(309, 0);
+            this.refreshFeedButton.Name = "refreshFeedButton";
+            this.refreshFeedButton.Size = new System.Drawing.Size(29, 37);
+            this.refreshFeedButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.refreshFeedButton.TabIndex = 5;
+            this.refreshFeedButton.TabStop = false;
+            this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
+            this.refreshFeedButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.refreshFeedButton_MouseDown);
+            this.refreshFeedButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.refreshFeedButton_MouseUp);
             // 
             // rightPanel
             // 
@@ -181,6 +197,33 @@ namespace KBS_SE3.Modules {
             this.fireFighterLabel.TabIndex = 18;
             this.fireFighterLabel.Text = "Brandweer";
             // 
+            // blueMarkerPicturebox
+            // 
+            this.blueMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_blue;
+            this.blueMarkerPicturebox.Location = new System.Drawing.Point(3, 79);
+            this.blueMarkerPicturebox.Name = "blueMarkerPicturebox";
+            this.blueMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
+            this.blueMarkerPicturebox.TabIndex = 17;
+            this.blueMarkerPicturebox.TabStop = false;
+            // 
+            // redMarkerPicturebox
+            // 
+            this.redMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_red;
+            this.redMarkerPicturebox.Location = new System.Drawing.Point(3, 41);
+            this.redMarkerPicturebox.Name = "redMarkerPicturebox";
+            this.redMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
+            this.redMarkerPicturebox.TabIndex = 16;
+            this.redMarkerPicturebox.TabStop = false;
+            // 
+            // yellowMarkerPicturebox
+            // 
+            this.yellowMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_yellow;
+            this.yellowMarkerPicturebox.Location = new System.Drawing.Point(3, 3);
+            this.yellowMarkerPicturebox.Name = "yellowMarkerPicturebox";
+            this.yellowMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
+            this.yellowMarkerPicturebox.TabIndex = 15;
+            this.yellowMarkerPicturebox.TabStop = false;
+            // 
             // ambulanceLabel
             // 
             this.ambulanceLabel.AutoSize = true;
@@ -209,49 +252,6 @@ namespace KBS_SE3.Modules {
             this.navigationBtn.EnabledChanged += new System.EventHandler(this.navigationBtn_EnabledChanged);
             this.navigationBtn.Click += new System.EventHandler(this.navigationBtn_Click);
             // 
-            // blueMarkerPicturebox
-            // 
-            this.blueMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_blue;
-            this.blueMarkerPicturebox.Location = new System.Drawing.Point(3, 79);
-            this.blueMarkerPicturebox.Name = "blueMarkerPicturebox";
-            this.blueMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
-            this.blueMarkerPicturebox.TabIndex = 17;
-            this.blueMarkerPicturebox.TabStop = false;
-            // 
-            // redMarkerPicturebox
-            // 
-            this.redMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_red;
-            this.redMarkerPicturebox.Location = new System.Drawing.Point(3, 41);
-            this.redMarkerPicturebox.Name = "redMarkerPicturebox";
-            this.redMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
-            this.redMarkerPicturebox.TabIndex = 16;
-            this.redMarkerPicturebox.TabStop = false;
-            // 
-            // yellowMarkerPicturebox
-            // 
-            this.yellowMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_yellow;
-            this.yellowMarkerPicturebox.Location = new System.Drawing.Point(3, 3);
-            this.yellowMarkerPicturebox.Name = "yellowMarkerPicturebox";
-            this.yellowMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
-            this.yellowMarkerPicturebox.TabIndex = 15;
-            this.yellowMarkerPicturebox.TabStop = false;
-            // 
-            // refreshFeedButton
-            // 
-            this.refreshFeedButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
-            this.refreshFeedButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.refreshFeedButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
-            this.refreshFeedButton.Location = new System.Drawing.Point(309, 0);
-            this.refreshFeedButton.Name = "refreshFeedButton";
-            this.refreshFeedButton.Size = new System.Drawing.Size(29, 37);
-            this.refreshFeedButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.refreshFeedButton.TabIndex = 5;
-            this.refreshFeedButton.TabStop = false;
-            this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
-            this.refreshFeedButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.refreshFeedButton_MouseDown);
-            this.refreshFeedButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.refreshFeedButton_MouseUp);
-            // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -263,13 +263,13 @@ namespace KBS_SE3.Modules {
             this.Name = "HomeModule";
             this.Size = new System.Drawing.Size(953, 480);
             this.refreshPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).EndInit();
             this.rightPanel.ResumeLayout(false);
             this.legendaPanel.ResumeLayout(false);
             this.legendaPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.redMarkerPicturebox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellowMarkerPicturebox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).EndInit();
             this.ResumeLayout(false);
 
         }

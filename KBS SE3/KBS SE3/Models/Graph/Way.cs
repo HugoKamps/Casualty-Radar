@@ -2,14 +2,13 @@
 
 namespace KBS_SE3.Models.Graph {
     public class Way {
-        private int _id;
-        private List<Node> _nodeList;
-        private List<Tag> _tagList;
+        public List<Node> Nodes { get; private set; }
+        public long ID { get; set; }
+        public string Name { get; set; }
+        public bool OneWay { get; set; }
 
-        public Way(int id, List<Node> nodeList, List<Tag> tagList) {
-            _id = id;
-            _nodeList = nodeList;
-            _tagList = tagList;
+        public Way() {
+            Nodes = new List<Node>();
         }
     }
 }

@@ -17,6 +17,8 @@ namespace KBS_SE3.Modules {
             return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
         }
 
+        public LocationManager GetLocationManager() => _locationManager;
+
         private void refreshFeedButton_Click(object sender, EventArgs e) {
             Feed.GetInstance().UpdateFeed();
             _locationManager.GetMap(false);

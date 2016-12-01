@@ -1,13 +1,13 @@
-﻿namespace KBS_SE3.Models.Graph {
-    public class Node {
-        private int _id;
-        private double _lat;
-        private double _lon;
+﻿using GMap.NET;
 
-        public Node(int id, double lat, double lon) {
-            _id = id;
-            _lat = lat;
-            _lon = lon;
+namespace KBS_SE3.Models.Graph {
+    public class Node {
+        public long ID { get; set; }
+        public PointLatLng LatLng { get; set; }
+
+        public Node(long id, PointLatLng latLng) {
+            ID = id;
+            LatLng = latLng;
         }
     }
 }

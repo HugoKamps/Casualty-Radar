@@ -13,7 +13,7 @@ namespace KBS_SE3.Models
         public FeedTicker(int t, Feed f) { 
             _tickTime = t;
             _feed = f;
-            startTimer();
+            //startTimer();
         }
 
         public static void Tick(object sender, EventArgs e) { 

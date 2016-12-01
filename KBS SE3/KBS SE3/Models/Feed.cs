@@ -19,6 +19,7 @@ namespace KBS_SE3.Models
         private static Feed _instance;
         private SyndicationFeed _p2000;
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
+        private readonly string CACHED_FEED_URL = "http://web.archive.org/web/http://feeds.livep2000.nl/";
         private readonly string LOCAL_FEED_URL = @"../../feed.xml";
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
@@ -35,7 +36,7 @@ namespace KBS_SE3.Models
         {
             try
             {
-                _p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
                 _alerts = CreateAlertList(_p2000);
                 /* Initial update - Only updates after the P2000 is read.*/
                 UpdateFeed();
@@ -56,7 +57,7 @@ namespace KBS_SE3.Models
             var tempAlerts = new List<Alert>();
             foreach (var item in items.Items.OrderBy(x => x.PublishDate))
             {
-                var newAlert = _createAlert(item);
+                Alert newAlert = _createAlert(item);
 
                 if (newAlert != null)
                     tempAlerts.Add(newAlert);
@@ -70,9 +71,9 @@ namespace KBS_SE3.Models
             // Check if the item has 2 attributes which are Lat & Long
             if (item.ElementExtensions.Count == 2)
             {
-                var lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
-                var lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
-                var newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
+                string lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
+                string lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
+                Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
                 // Use the AlertUtil for setting attributes
                 for (var i = 0; i < AlertUtil.P2000.GetLength(0); i++)
                 {
@@ -90,18 +91,18 @@ namespace KBS_SE3.Models
         } 
 
         public void UpdateFeed() {
-            var oldP2000 = _p2000;
-            var newItems = new List<SyndicationItem>();
-            var newFeed = new SyndicationFeed();
+            SyndicationFeed oldP2000 = _p2000;
+            List<SyndicationItem> newItems = new List<SyndicationItem>();
+            SyndicationFeed newFeed = new SyndicationFeed();
 
             // Load the feed
             try
             {
-                _p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
                 _alerts = CreateAlertList(_p2000);
 
                 // Get the first item from the previous feed
-                var first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
+                SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
 
                 // Loop through the new feed
                 foreach (var item in _p2000.Items) {
@@ -116,7 +117,7 @@ namespace KBS_SE3.Models
                 }
 
                 newFeed.Items = newItems;
-                var newAlerts = CreateAlertList(newFeed);
+                List<Alert> newAlerts = CreateAlertList(newFeed);
 
                 // Send list with new alerts to PushMessage
                 new PushMessage(newAlerts);
@@ -132,8 +133,8 @@ namespace KBS_SE3.Models
         */
         public void UpdateAlerts() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            var selectedFilter = hm.alertTypeComboBox.SelectedIndex;
-            var y = 0;
+            int selectedFilter = hm.alertTypeComboBox.SelectedIndex;
+            int y = 0;
             // Check which filter is selected and apply the filter
             if (selectedFilter == 1 || selectedFilter == 2) {
                 _filteredAlerts = new List<Alert>();

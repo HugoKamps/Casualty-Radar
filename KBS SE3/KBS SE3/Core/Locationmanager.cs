@@ -12,6 +12,8 @@ using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Models;
 using KBS_SE3.Properties;
 using System.Collections.Generic;
+using System.Diagnostics;
+using KBS_SE3.Utils;
 
 namespace KBS_SE3.Core {
     internal class LocationManager {
@@ -62,12 +64,14 @@ namespace KBS_SE3.Core {
                     markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
                 }
 
+                XMLUtil.read();
+
                 // Dummy data for drawing a route
-                var points = new List<PointLatLng>();
-                points.Add(new PointLatLng(52.1744700, 5.3933600));
-                points.Add(new PointLatLng(52.1746868, 5.3938107));
-                points.Add(new PointLatLng(52.1748315, 5.3942292));
-                DrawRoute(points);
+                //var points = new List<PointLatLng>();
+                //points.Add(new PointLatLng(52.1744700, 5.3933600));
+                //points.Add(new PointLatLng(52.1746868, 5.3938107));
+                //points.Add(new PointLatLng(52.1748315, 5.3942292));
+                //DrawRoute(points);
             }
         }
 
@@ -130,12 +134,16 @@ namespace KBS_SE3.Core {
             GetMap(_hasLocationservice);
         }
 
-        private void DrawRoute(IList<PointLatLng> points)
+        public void DrawRoute(IList<PointLatLng> points)
         {
-            _routeOverlay.Routes.Clear();
-            var r = new GMapRoute(points, "MyRoute");
-            r.Stroke.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            r.Stroke.Color = Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(73)))), ((int)(((byte)(57)))));
+            //_routeOverlay.Routes.Clear();
+            GMapRoute r = new GMapRoute(points, "MyRoute")
+            {
+                Stroke = {
+                    DashStyle = System.Drawing.Drawing2D.DashStyle.Solid,
+                    Color = Color.FromArgb(210, 73, 57)
+                }
+            };
             _routeOverlay.Routes.Add(r);
         }
     }
