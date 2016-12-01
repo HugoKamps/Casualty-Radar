@@ -45,7 +45,7 @@ namespace KBS_SE3 {
             }
         }
 
-        public Label GetBreadcrumbStart() => return breadCrumbStart;
+        public Label GetBreadcrumbStart() => breadCrumbStart;
         
         /*
         * Method that registers all buttons in the application menu
