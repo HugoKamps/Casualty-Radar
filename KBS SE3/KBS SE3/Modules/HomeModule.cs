@@ -3,10 +3,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
+using KBS_SE3.Properties;
 
 namespace KBS_SE3.Modules {
-    partial class HomeModule : UserControl, IModule
-    {
+    partial class HomeModule : UserControl, IModule {
         private readonly LocationManager _locationManager;
         public HomeModule() {
             InitializeComponent();
@@ -16,6 +16,8 @@ namespace KBS_SE3.Modules {
         public Breadcrumb GetBreadcrumb() {
             return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
         }
+
+        public static Image ResizeImage(Image imgToResize, Size size) => new Bitmap(imgToResize, size);
 
         private void refreshFeedButton_Click(object sender, EventArgs e) {
             Feed.GetInstance().UpdateFeed();
@@ -43,36 +45,29 @@ namespace KBS_SE3.Modules {
             ModuleManager.GetInstance().UpdateModule(KBS_SE3.Container.GetInstance().breadCrumbStart, KBS_SE3.Container.GetInstance().contentPanel, navigationModule);
         }
 
-        private void navigationBtn_EnabledChanged(object sender, EventArgs e)
-        {
-            var button = (Button) sender;
+        private void navigationBtn_EnabledChanged(object sender, EventArgs e) {
+            var button = (Button)sender;
             button.ForeColor = Color.White;
             button.BackColor = button.Enabled ? Color.FromArgb(210, 73, 57) : Color.Gray;
         }
 
-        private void refreshFeedButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            refreshFeedButton.Image = resizeImage(refreshFeedButton.Image, new Size(23, 23));
+        private void refreshFeedButton_MouseDown(object sender, MouseEventArgs e) {
+            refreshFeedButton.Image = ResizeImage(refreshFeedButton.Image, new Size(23, 23));
             refreshFeedButton.Left = refreshFeedButton.Left + 2;
             refreshFeedButton.Top = refreshFeedButton.Top + 2;
             refreshFeedButton.Width = 23;
             refreshFeedButton.Height = 23;
-            
+
         }
 
-        private void refreshFeedButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            refreshFeedButton.Image = Properties.Resources.refresh_icon;
+        private void refreshFeedButton_MouseUp(object sender, MouseEventArgs e) {
+            refreshFeedButton.Image = Resources.refresh_icon;
             refreshFeedButton.Width = 25;
             refreshFeedButton.Height = 25;
             refreshFeedButton.Left = refreshFeedButton.Left - 2;
             refreshFeedButton.Top = refreshFeedButton.Top - 2;
         }
 
-        public static Image resizeImage(Image imgToResize, Size size)
-        {
-            return (Image)(new Bitmap(imgToResize, size));
-        }
     }
 }
 

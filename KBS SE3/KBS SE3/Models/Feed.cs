@@ -87,7 +87,7 @@ namespace KBS_SE3.Models {
                 _alerts = CreateAlertList(_p2000);
 
                 // Get the first item from the previous feed
-                var first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
+                var first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault();
 
                 // Loop through the new feed
                 foreach (var item in _p2000.Items) {

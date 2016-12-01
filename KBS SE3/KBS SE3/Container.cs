@@ -45,9 +45,7 @@ namespace KBS_SE3 {
             }
         }
 
-        public Label GetBreadcrumbStart() {
-            return breadCrumbStart;
-        }
+        public Label GetBreadcrumbStart() => return breadCrumbStart;
         
         /*
         * Method that registers all buttons in the application menu
@@ -60,7 +58,7 @@ namespace KBS_SE3 {
 
         protected override CreateParams CreateParams {
             get {
-                CreateParams cp = base.CreateParams;
+                var cp = base.CreateParams;
                 cp.ClassStyle |= CS_DROPSHADOW;
                 return cp;
             }
@@ -75,22 +73,22 @@ namespace KBS_SE3 {
         /* This event is triggered when the user's mouse hovers over the minimize or exit button. 
         It changes the color to show which button is being hovered over. */
         private void topBarButtons_MouseEnter(object sender, EventArgs e) {
-            Label selected = (Label) sender;
+            var selected = (Label) sender;
             selected.BackColor = Color.FromArgb(220, 82, 66);
         }
 
         private void prevBtn_MouseEnter(object sender, EventArgs e) {
-            Label selected = (Label)sender;
+            var selected = (Label)sender;
             selected.ForeColor = Color.White;
         }
 
         private void prevBtn_MouseLeave(object sender, EventArgs e) {
-            Label selected = (Label)sender;
+            var selected = (Label)sender;
             selected.ForeColor = Color.Gainsboro;
         }
 
         private void topBarButtons_MouseLeave(object sender, EventArgs e) {
-            Label selected = (Label)sender;
+            var selected = (Label)sender;
             selected.BackColor = Color.FromArgb(210, 73, 57);
         }
 
@@ -108,14 +106,9 @@ namespace KBS_SE3 {
             ModuleManager.GetInstance().UpdateModule(breadCrumbStart, contentPanel, selectedButton.Tag);
         }
 
-        private void exitBtn_Click(object sender, EventArgs e) {
-            Application.Exit();
-        }
+        private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
 
-        private void Container_Load(object sender, EventArgs e){
-            // Load the feed
-            FeedTicker feedTicker = new FeedTicker(30000, Feed.GetInstance());
-        }
+        private void Container_Load(object sender, EventArgs e) => new FeedTicker(30000, Feed.GetInstance());
 
         private void prevBtn_Click(object sender, EventArgs e) {
             ModuleManager.GetInstance().UpdateModule(breadCrumbStart, contentPanel, ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent);
