@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using KBS_SE3.Modules;
 using KBS_SE3.Properties;
-using static System.String;
 
 namespace KBS_SE3.Core {
     class ModuleManager {
@@ -17,11 +16,7 @@ namespace KBS_SE3.Core {
             _registeredModules = new List<IModule>();
             registerModules();
             if (ConnectionUtil.HasInternetConnection()) {
-                if (Settings.Default.userLocation != "") {
-                    _defaultModule = ParseInstance(typeof(HomeModule));
-                } else {
-                    _defaultModule = ParseInstance(typeof(GetStartedModule));
-                }
+                _defaultModule = ParseInstance(Settings.Default.userLocation == "" ? typeof(GetStartedModule) : typeof(HomeModule));
             } else {
                 _defaultModule = ParseInstance(typeof(NoConnectionModule));
             }
@@ -66,7 +61,7 @@ namespace KBS_SE3.Core {
         *
         * An header label inside the main container (if existent) will be renamed to the module name.
         */
-        public void UpdateModule(Label headerLabel, Panel contentPanel, Object module) {
+        public void UpdateModule(Label headerLabel, Panel contentPanel, object module) {
             if(module != null) {
                 IModule reInitialized = ParseInstance(module.GetType());
                 _currentModule = reInitialized;
@@ -103,7 +98,7 @@ namespace KBS_SE3.Core {
         */
         private void updateBreadcrumb(Label origin, IModule content) {
             IModule current = getTopLevel(content);
-            String crumbText = current.GetBreadcrumb().Name;
+            string crumbText = current.GetBreadcrumb().Name;
             while (current.GetType() != content.GetType()) {
                 current = current.GetBreadcrumb().Child;
                 crumbText += " > " + current.GetBreadcrumb().Name;

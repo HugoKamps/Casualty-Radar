@@ -1,10 +1,7 @@
-﻿using KBS_SE3.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace KBS_SE3.Models {
@@ -26,11 +23,10 @@ namespace KBS_SE3.Models {
 
         // Function for pushing message to user
         private void setPushMessage(List<Alert> alert) {
-
             if (_alert.Count != 0 && Container.GetInstance().WindowState == FormWindowState.Minimized) {
                 _icon.Icon = SystemIcons.Exclamation;
                 _icon.Visible = true;
-                _icon.Icon = new Icon(FileUtil.GetResourcesPath() + "app_icon.ico");
+                _icon.Icon = new Icon(@"..\..\Resources\app_icon.ico");
                 _icon.BalloonTipClosed += new EventHandler(BalloonTipClosed);
                 _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
                 _icon.ShowBalloonTip(5000,

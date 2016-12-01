@@ -3,13 +3,10 @@ using KBS_SE3.Modules;
 using KBS_SE3.Utils;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel.Syndication;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -26,7 +23,7 @@ namespace KBS_SE3.Models
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
         private Panel _selectedPanel;
-        public bool TriggerEvent { get; set; }
+        private List<Panel> _alertPanels = new List<Panel>();
 
         public static Feed GetInstance()
         {
@@ -36,11 +33,10 @@ namespace KBS_SE3.Models
 
         private Feed()
         {
-            TriggerEvent = true;
             try
             {
-                this._p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
-                this._alerts = CreateAlertList(_p2000);
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
+                _alerts = CreateAlertList(_p2000);
                 /* Initial update - Only updates after the P2000 is read.*/
                 UpdateFeed();
             }
@@ -57,10 +53,10 @@ namespace KBS_SE3.Models
 
         public List<Alert> CreateAlertList(SyndicationFeed items)
         {
-            List<Alert> tempAlerts = new List<Alert>();
-            foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate))
+            var tempAlerts = new List<Alert>();
+            foreach (var item in items.Items.OrderBy(x => x.PublishDate))
             {
-                Alert newAlert = _createAlert(item);
+                var newAlert = _createAlert(item);
 
                 if (newAlert != null)
                     tempAlerts.Add(newAlert);
@@ -74,16 +70,16 @@ namespace KBS_SE3.Models
             // Check if the item has 2 attributes which are Lat & Long
             if (item.ElementExtensions.Count == 2)
             {
-                string lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
-                string lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
-                Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
+                var lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
+                var lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
+                var newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
                 // Use the AlertUtil for setting attributes
-                for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++)
+                for (var i = 0; i < AlertUtil.P2000.GetLength(0); i++)
                 {
                     if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0]))
                     {
                         newAlert.Code = AlertUtil.P2000[i, 0];
-                        newAlert.Type = Int32.Parse(AlertUtil.P2000[i, 1]);
+                        newAlert.Type = int.Parse(AlertUtil.P2000[i, 1]);
                         newAlert.TypeString = AlertUtil.P2000[i, 2];
                         newAlert.Info = AlertUtil.P2000[i, 3];
                         return newAlert;
@@ -101,14 +97,14 @@ namespace KBS_SE3.Models
             // Load the feed
             try
             {
-                this._p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
-                this._alerts = CreateAlertList(_p2000);
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
+                _alerts = CreateAlertList(_p2000);
 
                 // Get the first item from the previous feed
-                SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
+                var first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
 
                 // Loop through the new feed
-                foreach (SyndicationItem item in _p2000.Items) {
+                foreach (var item in _p2000.Items) {
                     // If the first item from the old feed is identical to the first item of the new feed
                     if (item.Title.Text != first.Title.Text) {
                         // The item is a new item
@@ -120,7 +116,7 @@ namespace KBS_SE3.Models
                 }
 
                 newFeed.Items = newItems;
-                List<Alert> newAlerts = CreateAlertList(newFeed);
+                var newAlerts = CreateAlertList(newFeed);
 
                 // Send list with new alerts to PushMessage
                 new PushMessage(newAlerts);
@@ -152,21 +148,23 @@ namespace KBS_SE3.Models
             }
 
             hm.feedPanel.Controls.Clear();
+            _alertPanels.Clear();
             foreach (var a in _filteredAlerts) {
                 CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y, hm);
                 y += 105;
             }
 
-            hm.alertsCountLabel.Text = "(" + _filteredAlerts.Count.ToString() + ")";
+            hm.alertsTitleLabel.Text = "Meldingen (" + _filteredAlerts.Count.ToString() + ")";
         }
 
         public Panel GetSelectedPanel => _selectedPanel;
+        public List<Panel> GetAlertPanels => _alertPanels;
 
         public void CreateAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
             //The panel which will be filled with all of the controls below
             var newPanel = new Panel {
-                Location = new Point(8, y),
-                Size = new Size(305, 100),
+                Location = new Point(0, y),
+                Size = new Size(320, 100),
                 BackColor = Color.FromArgb(236, 89, 71)
             };
 
@@ -241,10 +239,11 @@ namespace KBS_SE3.Models
             newPanel.Controls.Add(label);
             newPanel.Controls.Add(timeLabel);
             hm.feedPanel.Controls.Add(newPanel);
+
+            _alertPanels.Add(newPanel);
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
-            if (!TriggerEvent) return;
             var homeModule = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof (HomeModule));
 
             if (sender.GetType() == typeof (Panel)) {
@@ -277,7 +276,6 @@ namespace KBS_SE3.Models
         }
 
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
-            if (!TriggerEvent) return;
             if (sender.GetType() == typeof(Panel)) {
                 var panel = (Panel)sender;
                 if(panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
@@ -289,7 +287,6 @@ namespace KBS_SE3.Models
         }
 
         private void feedPanelItem_MouseLeave(object sender, EventArgs e) {
-            if (!TriggerEvent) return;
             if (sender.GetType() == typeof(Panel)) {
                 var panel = (Panel)sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
