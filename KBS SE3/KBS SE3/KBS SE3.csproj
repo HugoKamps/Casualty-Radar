@@ -143,7 +143,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\AlertUtil.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Utils\DatabaseUtil.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
     </EmbeddedResource>
