@@ -5,7 +5,6 @@ using KBS_SE3.Core;
 using KBS_SE3.Models;
 using KBS_SE3.Models.Navigation;
 using KBS_SE3.Properties;
-using ContentAlignment = System.Drawing.ContentAlignment;
 
 namespace KBS_SE3.Modules {
     partial class NavigationModule : UserControl, IModule {
@@ -14,8 +13,7 @@ namespace KBS_SE3.Modules {
             var y = 0;
             var color = Color.Gainsboro;
 
-            var navSteps = new List<NavigationStep>
-            {
+            var navSteps = new List<NavigationStep> {
                 new NavigationStep("Sla rechtsaf", "100m", RouteStepType.Right),
                 new NavigationStep("Sla linksaf", "500m", RouteStepType.Left),
                 new NavigationStep("Ga rechtdoor", "1.2km", RouteStepType.Straight),
@@ -62,7 +60,7 @@ namespace KBS_SE3.Modules {
             //The panel which will be filled with all of the controls below
             var newPanel = new Panel {
                 Location = new Point(0, y),
-                Size = new Size(321, 50),
+                Size = new Size(338, 50),
                 BackColor = color
             };
 

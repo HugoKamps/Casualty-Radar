@@ -11,10 +11,8 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace KBS_SE3.Models
-{
-    internal class Feed
-    {
+namespace KBS_SE3.Models {
+    internal class Feed {
 
         private static Feed _instance;
         private SyndicationFeed _p2000;
@@ -25,37 +23,30 @@ namespace KBS_SE3.Models
         private Panel _selectedPanel;
         private List<Panel> _alertPanels = new List<Panel>();
 
-        public static Feed GetInstance()
-        {
+        public static Feed GetInstance() {
             if (_instance == null) _instance = new Feed();
             return _instance;
         }
 
-        private Feed()
-        {
-            try
-            {
+        private Feed() {
+            try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
                 _alerts = CreateAlertList(_p2000);
                 /* Initial update - Only updates after the P2000 is read.*/
                 UpdateFeed();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 MessageBox.Show(e.Message);
             }
         }
-    
 
-    public List<Alert> GetAlerts() {
+
+        public List<Alert> GetAlerts() {
             return _filteredAlerts;
         }
 
-        public List<Alert> CreateAlertList(SyndicationFeed items)
-        {
+        public List<Alert> CreateAlertList(SyndicationFeed items) {
             var tempAlerts = new List<Alert>();
-            foreach (var item in items.Items.OrderBy(x => x.PublishDate))
-            {
+            foreach (var item in items.Items.OrderBy(x => x.PublishDate)) {
                 var newAlert = _createAlert(item);
 
                 if (newAlert != null)
@@ -65,19 +56,15 @@ namespace KBS_SE3.Models
             return tempAlerts;
         }
 
-        private Alert _createAlert(SyndicationItem item)
-        {
+        private Alert _createAlert(SyndicationItem item) {
             // Check if the item has 2 attributes which are Lat & Long
-            if (item.ElementExtensions.Count == 2)
-            {
+            if (item.ElementExtensions.Count == 2) {
                 var lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
                 var lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
                 var newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
                 // Use the AlertUtil for setting attributes
-                for (var i = 0; i < AlertUtil.P2000.GetLength(0); i++)
-                {
-                    if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0]))
-                    {
+                for (var i = 0; i < AlertUtil.P2000.GetLength(0); i++) {
+                    if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0])) {
                         newAlert.Code = AlertUtil.P2000[i, 0];
                         newAlert.Type = int.Parse(AlertUtil.P2000[i, 1]);
                         newAlert.TypeString = AlertUtil.P2000[i, 2];
@@ -87,7 +74,7 @@ namespace KBS_SE3.Models
                 }
             }
             return null;
-        } 
+        }
 
         public void UpdateFeed() {
             var oldP2000 = _p2000;
@@ -95,8 +82,7 @@ namespace KBS_SE3.Models
             var newFeed = new SyndicationFeed();
 
             // Load the feed
-            try
-            {
+            try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(LOCAL_FEED_URL));
                 _alerts = CreateAlertList(_p2000);
 
@@ -121,8 +107,7 @@ namespace KBS_SE3.Models
                 // Send list with new alerts to PushMessage
                 new PushMessage(newAlerts);
                 UpdateAlerts();
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 MessageBox.Show(e.Message);
             }
         }
@@ -142,8 +127,7 @@ namespace KBS_SE3.Models
                         _filteredAlerts.Add(a);
                     }
                 }
-            }
-            else {
+            } else {
                 _filteredAlerts = _alerts;
             }
 
@@ -180,22 +164,18 @@ namespace KBS_SE3.Models
             var label = new Label {
                 ForeColor = Color.White,
                 Location = new Point(10, 5),
-                Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
+                Font = new Font("Microsoft Sans Serif", 10),
                 Size = new Size(200, 90),
                 BackColor = Color.Transparent,
                 Text = title + "\n" + info
             };
 
-            if (_selectedPanel != null)
-            {
-                foreach (var control in _selectedPanel.Controls)
-                {
-                    if (control is Label)
-                    {
-                        var selectedLabel = (Label) control;
-                        if (selectedLabel.Text == label.Text)
-                        {
-                            newPanel.BackColor = Color.FromArgb(210,93,0);
+            if (_selectedPanel != null) {
+                foreach (var control in _selectedPanel.Controls) {
+                    if (control is Label) {
+                        var selectedLabel = (Label)control;
+                        if (selectedLabel.Text == label.Text) {
+                            newPanel.BackColor = Color.FromArgb(245, 120, 105);
                             _selectedPanel = newPanel;
                         }
                     }
@@ -203,8 +183,7 @@ namespace KBS_SE3.Models
             }
 
             //The label which will be filled with the time of the alert
-            var timeLabel = new Label
-            {
+            var timeLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(150, 65),
                 Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
@@ -244,32 +223,29 @@ namespace KBS_SE3.Models
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
-            var homeModule = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof (HomeModule));
+            var homeModule = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
-            if (sender.GetType() == typeof (Panel)) {
-                var panel = (Panel) sender;
+            if (sender.GetType() == typeof(Panel)) {
+                var panel = (Panel)sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == panel) {
                     _selectedPanel = null;
                     homeModule.navigationBtn.Enabled = false;
                     homeModule.navigationBtn.BackColor = Color.Gray;
-                }
-                else {
+                } else {
                     _selectedPanel = panel;
-                    _selectedPanel.BackColor = Color.FromArgb(210, 93, 0);
+                    _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
                     homeModule.navigationBtn.Enabled = true;
                 }
-            }
-            else {
-                var control = (Control) sender;
+            } else {
+                var control = (Control)sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == control.Parent) {
                     _selectedPanel = null;
                     homeModule.navigationBtn.Enabled = false;
-                }
-                else {
-                    _selectedPanel = (Panel) control.Parent;
-                    _selectedPanel.BackColor = Color.FromArgb(210, 93, 0);
+                } else {
+                    _selectedPanel = (Panel)control.Parent;
+                    _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
                     homeModule.navigationBtn.Enabled = true;
                 }
             }
@@ -278,9 +254,8 @@ namespace KBS_SE3.Models
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
                 var panel = (Panel)sender;
-                if(panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
-            }
-            else {
+                if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
+            } else {
                 var control = (Control)sender;
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(210, 73, 57);
             }
@@ -290,8 +265,7 @@ namespace KBS_SE3.Models
             if (sender.GetType() == typeof(Panel)) {
                 var panel = (Panel)sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
-            }
-            else {
+            } else {
                 var control = (Control)sender;
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(236, 86, 71);
             }

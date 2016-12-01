@@ -29,16 +29,16 @@
             this.routeInfoLabel = new System.Windows.Forms.Label();
             this.alertInfoPanel = new System.Windows.Forms.Panel();
             this.timeLabel = new System.Windows.Forms.Label();
+            this.alertTypePicturebox = new System.Windows.Forms.PictureBox();
             this.infoTitleLabel = new System.Windows.Forms.Label();
             this.alertInfoLabelPanel = new System.Windows.Forms.Panel();
             this.alertInfoLabel = new System.Windows.Forms.Label();
             this.mapPanel = new System.Windows.Forms.Panel();
-            this.alertTypePicturebox = new System.Windows.Forms.PictureBox();
             this.routePanel.SuspendLayout();
             this.routeInfoLabelPanel.SuspendLayout();
             this.alertInfoPanel.SuspendLayout();
-            this.alertInfoLabelPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).BeginInit();
+            this.alertInfoLabelPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // routePanel
@@ -58,18 +58,18 @@
             // 
             this.routeInfoPanel.BackColor = System.Drawing.Color.White;
             this.routeInfoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeInfoPanel.Location = new System.Drawing.Point(0, 175);
+            this.routeInfoPanel.Location = new System.Drawing.Point(0, 179);
             this.routeInfoPanel.Name = "routeInfoPanel";
-            this.routeInfoPanel.Size = new System.Drawing.Size(338, 305);
+            this.routeInfoPanel.Size = new System.Drawing.Size(338, 301);
             this.routeInfoPanel.TabIndex = 6;
             // 
             // routeInfoLabelPanel
             // 
             this.routeInfoLabelPanel.Controls.Add(this.routeInfoLabel);
             this.routeInfoLabelPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.routeInfoLabelPanel.Location = new System.Drawing.Point(0, 140);
+            this.routeInfoLabelPanel.Location = new System.Drawing.Point(0, 142);
             this.routeInfoLabelPanel.Name = "routeInfoLabelPanel";
-            this.routeInfoLabelPanel.Size = new System.Drawing.Size(338, 35);
+            this.routeInfoLabelPanel.Size = new System.Drawing.Size(338, 37);
             this.routeInfoLabelPanel.TabIndex = 5;
             // 
             // routeInfoLabel
@@ -80,7 +80,7 @@
             this.routeInfoLabel.Location = new System.Drawing.Point(0, 0);
             this.routeInfoLabel.Name = "routeInfoLabel";
             this.routeInfoLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.routeInfoLabel.Size = new System.Drawing.Size(338, 35);
+            this.routeInfoLabel.Size = new System.Drawing.Size(338, 37);
             this.routeInfoLabel.TabIndex = 0;
             this.routeInfoLabel.Text = "Routebeschrijving";
             this.routeInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -88,34 +88,41 @@
             // alertInfoPanel
             // 
             this.alertInfoPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(89)))), ((int)(((byte)(71)))));
+            this.alertInfoPanel.Controls.Add(this.infoTitleLabel);
             this.alertInfoPanel.Controls.Add(this.timeLabel);
             this.alertInfoPanel.Controls.Add(this.alertTypePicturebox);
-            this.alertInfoPanel.Controls.Add(this.infoTitleLabel);
             this.alertInfoPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.alertInfoPanel.Location = new System.Drawing.Point(0, 35);
+            this.alertInfoPanel.Location = new System.Drawing.Point(0, 37);
             this.alertInfoPanel.Name = "alertInfoPanel";
             this.alertInfoPanel.Size = new System.Drawing.Size(338, 105);
             this.alertInfoPanel.TabIndex = 4;
             // 
             // timeLabel
             // 
-            this.timeLabel.AutoSize = true;
             this.timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.timeLabel.ForeColor = System.Drawing.Color.White;
-            this.timeLabel.Location = new System.Drawing.Point(235, 78);
+            this.timeLabel.Location = new System.Drawing.Point(150, 65);
             this.timeLabel.Name = "timeLabel";
-            this.timeLabel.Size = new System.Drawing.Size(0, 17);
+            this.timeLabel.Size = new System.Drawing.Size(200, 30);
             this.timeLabel.TabIndex = 2;
             this.timeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // alertTypePicturebox
+            // 
+            this.alertTypePicturebox.Location = new System.Drawing.Point(220, 10);
+            this.alertTypePicturebox.Name = "alertTypePicturebox";
+            this.alertTypePicturebox.Size = new System.Drawing.Size(60, 60);
+            this.alertTypePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.alertTypePicturebox.TabIndex = 1;
+            this.alertTypePicturebox.TabStop = false;
+            // 
             // infoTitleLabel
             // 
-            this.infoTitleLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.infoTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.infoTitleLabel.ForeColor = System.Drawing.Color.White;
-            this.infoTitleLabel.Location = new System.Drawing.Point(0, 0);
+            this.infoTitleLabel.Location = new System.Drawing.Point(10, 5);
             this.infoTitleLabel.Name = "infoTitleLabel";
-            this.infoTitleLabel.Size = new System.Drawing.Size(200, 105);
+            this.infoTitleLabel.Size = new System.Drawing.Size(200, 90);
             this.infoTitleLabel.TabIndex = 0;
             this.infoTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -125,7 +132,7 @@
             this.alertInfoLabelPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.alertInfoLabelPanel.Location = new System.Drawing.Point(0, 0);
             this.alertInfoLabelPanel.Name = "alertInfoLabelPanel";
-            this.alertInfoLabelPanel.Size = new System.Drawing.Size(338, 35);
+            this.alertInfoLabelPanel.Size = new System.Drawing.Size(338, 37);
             this.alertInfoLabelPanel.TabIndex = 3;
             // 
             // alertInfoLabel
@@ -136,7 +143,7 @@
             this.alertInfoLabel.Location = new System.Drawing.Point(0, 0);
             this.alertInfoLabel.Name = "alertInfoLabel";
             this.alertInfoLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.alertInfoLabel.Size = new System.Drawing.Size(338, 35);
+            this.alertInfoLabel.Size = new System.Drawing.Size(338, 37);
             this.alertInfoLabel.TabIndex = 0;
             this.alertInfoLabel.Text = "Informatie ongeval";
             this.alertInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -150,15 +157,6 @@
             this.mapPanel.Size = new System.Drawing.Size(615, 480);
             this.mapPanel.TabIndex = 1;
             // 
-            // alertTypePicturebox
-            // 
-            this.alertTypePicturebox.Location = new System.Drawing.Point(242, 15);
-            this.alertTypePicturebox.Name = "alertTypePicturebox";
-            this.alertTypePicturebox.Size = new System.Drawing.Size(60, 60);
-            this.alertTypePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.alertTypePicturebox.TabIndex = 1;
-            this.alertTypePicturebox.TabStop = false;
-            // 
             // NavigationModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -170,9 +168,8 @@
             this.routePanel.ResumeLayout(false);
             this.routeInfoLabelPanel.ResumeLayout(false);
             this.alertInfoPanel.ResumeLayout(false);
-            this.alertInfoPanel.PerformLayout();
-            this.alertInfoLabelPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).EndInit();
+            this.alertInfoLabelPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
