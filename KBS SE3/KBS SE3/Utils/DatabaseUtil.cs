@@ -10,14 +10,10 @@ namespace KBS_SE3.Utils
 {
     class DatabaseUtil
     {
+        
             private static DatabaseUtil _dbInstance;
         MySqlConnection connection = new MySqlConnection(
            "Server=studiomajestic.nl;user id=studiop52_radar;password=koffie;database=studiop52_radar;");
-
-
-            private DatabaseUtil()
-            {
-            }
 
             public static DatabaseUtil getDbInstance()
             {
