@@ -10,10 +10,10 @@ namespace KBS_SE3.Models
         private static Feed _feed;
         private Timer _stateTimer = new Timer();
 
-        public FeedTicker(int t, Feed f) { 
+        public FeedTicker(int t, Feed f) {
             _tickTime = t;
             _feed = f;
-            //startTimer();
+            startTimer();
         }
 
         public static void Tick(object sender, EventArgs e) { 

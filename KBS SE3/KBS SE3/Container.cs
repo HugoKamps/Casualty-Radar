@@ -113,8 +113,8 @@ namespace KBS_SE3 {
         }
 
         private void Container_Load(object sender, EventArgs e){
-            // Load the feed
-            FeedTicker feedTicker = new FeedTicker(30000, Feed.GetInstance());
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            this.Shown += hm.FormLoaded;
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {

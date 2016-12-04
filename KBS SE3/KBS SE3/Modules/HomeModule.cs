@@ -3,14 +3,15 @@ using System.Drawing;
 using System.Windows.Forms;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
+using System.Threading.Tasks;
 
 namespace KBS_SE3.Modules {
     partial class HomeModule : UserControl, IModule
     {
-        private readonly LocationManager _locationManager;
+        private LocationManager _locationManager;
+
         public HomeModule() {
             InitializeComponent();
-            _locationManager = new LocationManager(map);
         }
 
         public Breadcrumb GetBreadcrumb() {
@@ -74,6 +75,17 @@ namespace KBS_SE3.Modules {
         public static Image resizeImage(Image imgToResize, Size size)
         {
             return (Image)(new Bitmap(imgToResize, size));
+        }
+
+        public async void FormLoaded(object sender, EventArgs e)
+        {
+            if (_locationManager == null)
+            {
+                await Task.Delay(50);
+                // Load the feed & instantiate the location manager
+                FeedTicker feedTicker = new FeedTicker(30000, Feed.GetInstance());
+                _locationManager = new LocationManager(map);
+            }
         }
     }
 }

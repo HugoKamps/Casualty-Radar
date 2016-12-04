@@ -14,6 +14,7 @@ using KBS_SE3.Properties;
 using System.Collections.Generic;
 using System.Diagnostics;
 using KBS_SE3.Utils;
+using System.Windows.Forms;
 
 namespace KBS_SE3.Core {
     internal class LocationManager {
@@ -58,7 +59,6 @@ namespace KBS_SE3.Core {
                     SetCoordinatesByLocationSetting();
                     markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
                 }
-
                 foreach (var alert in Feed.GetInstance().GetAlerts()) {
                     var type = alert.Type == 1 ? 1 : 2;
                     markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));

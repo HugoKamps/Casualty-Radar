@@ -48,7 +48,7 @@ namespace KBS_SE3.Models
         }
     
 
-    public List<Alert> GetAlerts() {
+        public List<Alert> GetAlerts() {
             return _filteredAlerts;
         }
 
@@ -151,9 +151,12 @@ namespace KBS_SE3.Models
             hm.feedPanel.Controls.Clear();
             _alertPanels.Clear();
             foreach (var a in _filteredAlerts) {
-                CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y, hm);
+                _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y, hm));
                 y += 105;
             }
+
+            foreach (Panel p in _alertPanels)
+                hm.feedPanel.Controls.Add(p);
 
             hm.alertsTitleLabel.Text = "Meldingen (" + _filteredAlerts.Count.ToString() + ")";
         }
@@ -161,7 +164,7 @@ namespace KBS_SE3.Models
         public Panel GetSelectedPanel => _selectedPanel;
         public List<Panel> GetAlertPanels => _alertPanels;
 
-        public void CreateAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
+        public Panel CreateAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
             //The panel which will be filled with all of the controls below
             var newPanel = new Panel {
                 Location = new Point(0, y),
@@ -239,9 +242,8 @@ namespace KBS_SE3.Models
             newPanel.Controls.Add(newPictureBox);
             newPanel.Controls.Add(label);
             newPanel.Controls.Add(timeLabel);
-            hm.feedPanel.Controls.Add(newPanel);
 
-            _alertPanels.Add(newPanel);
+            return newPanel;
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
