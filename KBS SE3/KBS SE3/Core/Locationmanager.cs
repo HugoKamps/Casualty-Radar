@@ -65,13 +65,6 @@ namespace KBS_SE3.Core {
                 }
 
                 XMLUtil.read();
-
-                // Dummy data for drawing a route
-                //var points = new List<PointLatLng>();
-                //points.Add(new PointLatLng(52.1744700, 5.3933600));
-                //points.Add(new PointLatLng(52.1746868, 5.3938107));
-                //points.Add(new PointLatLng(52.1748315, 5.3942292));
-                //DrawRoute(points);
             }
         }
 
