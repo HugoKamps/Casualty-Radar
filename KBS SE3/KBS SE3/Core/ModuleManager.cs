@@ -63,7 +63,9 @@ namespace KBS_SE3.Core {
         *
         * An header label inside the main container (if existent) will be renamed to the module name.
         */
-        public void UpdateModule(Label headerLabel, Panel contentPanel, Object module) {
+        public void UpdateModule(Object module) {
+            Label headerLabel = Container.GetInstance().breadCrumbStart;
+            Panel contentPanel = Container.GetInstance().contentPanel;
             if(module != null) {
                 IModule reInitialized = ParseInstance(module.GetType());
                 _currentModule = reInitialized;

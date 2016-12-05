@@ -28,7 +28,7 @@ namespace KBS_SE3.Modules {
                 Properties.Settings.Default.Save();
                 var s = (SettingsModule) ModuleManager.GetInstance().ParseInstance(typeof (SettingsModule));
                 s.locationTextBox.Text = locationTextBox.Text;
-                ModuleManager.GetInstance().UpdateModule(c.breadCrumbStart, c.contentPanel, ModuleManager.GetInstance().ParseInstance(typeof (HomeModule)));
+                ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().ParseInstance(typeof (HomeModule)));
             } else {
                 warningLabel.Show();
             }

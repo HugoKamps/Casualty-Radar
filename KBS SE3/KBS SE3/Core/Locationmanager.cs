@@ -57,6 +57,8 @@ namespace KBS_SE3.Core {
                     var type = alert.Type == 1 ? 1 : 2;
                     markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
                 }
+            } else {
+                Container.GetInstance().DisplayDialog(Dialog.DialogType.DialogMessageType.ERROR, "Geen map beschikbaar", "Er kon geen verbinding gemaakt worden met het internet.");
             }
         }
 
@@ -101,17 +103,10 @@ namespace KBS_SE3.Core {
         private void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
             switch (e.Status) {
                 case GeoPositionStatus.Initializing:
-                    _hasLocationservice = true;
-                    break;
-
                 case GeoPositionStatus.Ready:
                     _hasLocationservice = true;
                     break;
-
                 case GeoPositionStatus.NoData:
-                    _hasLocationservice = false;
-                    break;
-
                 case GeoPositionStatus.Disabled:
                     _hasLocationservice = false;
                     break;

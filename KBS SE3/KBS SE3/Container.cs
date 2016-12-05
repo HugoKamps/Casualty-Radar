@@ -30,7 +30,6 @@ namespace KBS_SE3 {
             this._dialog = new Dialog();
             registerButtons();
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
-            _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
         }
 
         public static Container GetInstance() {
@@ -44,10 +43,6 @@ namespace KBS_SE3 {
                 _dialog.Display(type, title, msg);
                 _dialog.ShowDialog();
             }
-        }
-
-        public Label GetBreadcrumbStart() {
-            return breadCrumbStart;
         }
         
         /*
@@ -105,7 +100,7 @@ namespace KBS_SE3 {
             settingsBtn.BackColor = Color.FromArgb(52, 57, 61);
             Button selectedButton = (Button) sender;
             selectedButton.BackColor = Color.FromArgb(236, 89, 71);
-            ModuleManager.GetInstance().UpdateModule(breadCrumbStart, contentPanel, selectedButton.Tag);
+            ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
         }
 
         private void exitBtn_Click(object sender, EventArgs e) {
@@ -115,10 +110,11 @@ namespace KBS_SE3 {
         private void Container_Load(object sender, EventArgs e){
             // Load the feed
             FeedTicker feedTicker = new FeedTicker(30000, Feed.GetInstance());
+            _modManager.UpdateModule(_modManager.GetDefaultModule());
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
-            ModuleManager.GetInstance().UpdateModule(breadCrumbStart, contentPanel, ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent);
+            ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent);
         }
     }
 }
