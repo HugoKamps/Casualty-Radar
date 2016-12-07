@@ -178,7 +178,6 @@ namespace KBS_SE3.Models
                     _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y, hm));
                     y += 105;
                 }
-
             });
 
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(

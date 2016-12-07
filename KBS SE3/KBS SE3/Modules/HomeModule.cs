@@ -31,7 +31,12 @@ namespace KBS_SE3.Modules {
             return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
         }
 
-        public LocationManager GetLocationManager() => _locationManager;
+        public LocationManager GetLocationManager()
+        {
+            if (_locationManager == null)
+                _locationManager = new LocationManager(map);
+            return _locationManager;
+        }
 
         private void refreshFeedButton_Click(object sender, EventArgs e) {
             if (!_isRefreshing) {
@@ -79,7 +84,6 @@ namespace KBS_SE3.Modules {
             if (_locationManager == null)
             {
                 // Load the feed & instantiate the location manager
-                _locationManager = new LocationManager(map);
                 int tickTime = Settings.Default.feedTickerTime * 1000;
                 _feedTicker = new FeedTicker(tickTime, Feed.GetInstance());
             }
