@@ -1,4 +1,4 @@
-﻿namespace KBS_SE3.Models.Graph {
+﻿namespace KBS_SE3.Models.Graph.DbGraph {
     public class Node {
         private int _id;
         private double _lat;

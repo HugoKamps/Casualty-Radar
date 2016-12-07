@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBS_SE3.Utils;
+using System;
 using System.Windows.Forms;
 
 namespace KBS_SE3 {
@@ -12,6 +13,7 @@ namespace KBS_SE3 {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(Container.GetInstance());
+            DatabaseUtil.getDbInstance().SetDBConnection();
         }
     }
 }
