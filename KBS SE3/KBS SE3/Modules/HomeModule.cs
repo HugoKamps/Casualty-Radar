@@ -1,17 +1,30 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
 using System.Threading.Tasks;
+using KBS_SE3.Properties;
 
 namespace KBS_SE3.Modules {
     partial class HomeModule : UserControl, IModule
     {
         private LocationManager _locationManager;
+        private FeedTicker _feedTicker;
+        private bool _isRefreshing = false;
 
         public HomeModule() {
             InitializeComponent();
+        }
+
+        public bool IsRefreshing {
+            get { return _isRefreshing; }
+            set { _isRefreshing = value; }
+        }
+
+        public FeedTicker FeedTicker {
+            get { return _feedTicker; }
         }
 
         public Breadcrumb GetBreadcrumb() {
@@ -21,13 +34,15 @@ namespace KBS_SE3.Modules {
         public LocationManager GetLocationManager() => _locationManager;
 
         private void refreshFeedButton_Click(object sender, EventArgs e) {
-            Feed.GetInstance().UpdateFeed();
-            _locationManager.GetMap(false);
+            if (!_isRefreshing) {
+                _feedTicker.StopTimerIfEnabled();
+                Feed.GetInstance().UpdateFeed();
+                _feedTicker.StartTimerIfEnabled();
+            }
         }
 
         private void alertTypeComboBox_SelectedIndexChanged(object sender, EventArgs e) {
             Feed.GetInstance().UpdateAlerts();
-            _locationManager.GetMap(false);
         }
 
         private void navigationBtn_Click(object sender, EventArgs e) {
@@ -53,38 +68,20 @@ namespace KBS_SE3.Modules {
             button.BackColor = button.Enabled ? Color.FromArgb(210, 73, 57) : Color.Gray;
         }
 
-        private void refreshFeedButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            refreshFeedButton.Image = resizeImage(refreshFeedButton.Image, new Size(23, 23));
-            refreshFeedButton.Left = refreshFeedButton.Left + 2;
-            refreshFeedButton.Top = refreshFeedButton.Top + 2;
-            refreshFeedButton.Width = 23;
-            refreshFeedButton.Height = 23;
-            
-        }
-
-        private void refreshFeedButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            refreshFeedButton.Image = Properties.Resources.refresh_icon;
-            refreshFeedButton.Width = 25;
-            refreshFeedButton.Height = 25;
-            refreshFeedButton.Left = refreshFeedButton.Left - 2;
-            refreshFeedButton.Top = refreshFeedButton.Top - 2;
-        }
-
         public static Image resizeImage(Image imgToResize, Size size)
         {
             return (Image)(new Bitmap(imgToResize, size));
         }
 
-        public async void FormLoaded(object sender, EventArgs e)
+        public void FormLoaded(object sender, EventArgs e)
         {
+            var bw = new BackgroundWorker();
             if (_locationManager == null)
             {
-                await Task.Delay(50);
                 // Load the feed & instantiate the location manager
-                FeedTicker feedTicker = new FeedTicker(30000, Feed.GetInstance());
                 _locationManager = new LocationManager(map);
+                int tickTime = Settings.Default.feedTickerTime * 1000;
+                _feedTicker = new FeedTicker(tickTime, Feed.GetInstance());
             }
         }
     }

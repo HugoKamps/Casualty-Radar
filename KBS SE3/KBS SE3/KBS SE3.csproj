@@ -204,6 +204,7 @@
     <Content Include="Resources\app_icon.ico" />
     <Content Include="Resources\case-medic-icon-22.png" />
     <Content Include="Resources\Firefighter.png" />
+    <Content Include="Resources\load_feed.gif" />
     <Content Include="Resources\logo_final.png" />
   </ItemGroup>
   <ItemGroup />
