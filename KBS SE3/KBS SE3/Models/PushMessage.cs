@@ -25,7 +25,7 @@ namespace KBS_SE3.Models {
         private void setPushMessage(List<Alert> alert) {
             string message = "";
             if(alert.Count == 1) {
-                message = "Er is één nieuwe melding";
+                message = alert[0].ToString();
             }else {
                 message = "Er zijn " + alert.Count + " nieuwe meldingen";
             }
