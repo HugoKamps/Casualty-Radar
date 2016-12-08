@@ -1,4 +1,4 @@
-﻿namespace KBS_SE3.Models.Graph {
+﻿namespace KBS_SE3.Models.Graph.XmlClasses {
    public class Tag {
         private int _id;
         private string _key;

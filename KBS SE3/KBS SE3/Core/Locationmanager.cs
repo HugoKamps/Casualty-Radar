@@ -12,6 +12,10 @@ using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Models;
 using KBS_SE3.Properties;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using KBS_SE3.Utils;
+using System.Windows.Forms;
 
 namespace KBS_SE3.Core {
     internal class LocationManager {
@@ -56,17 +60,21 @@ namespace KBS_SE3.Core {
             return marker;
         }
 
-    public PointLatLng GetLocationPoint() => new PointLatLng(_currentLatitude, _currentLongitude);
+        public PointLatLng GetLocationPoint() => new PointLatLng(_currentLatitude, _currentLongitude);
 
-    public void DrawRoute(IList<PointLatLng> points, GMapOverlay _routeOverlay) {
-        _routeOverlay.Routes.Clear();
-        var r = new GMapRoute(points, "MyRoute");
-        r.Stroke.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-        r.Stroke.Color = Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(73)))), ((int)(((byte)(57)))));
-        _routeOverlay.Routes.Add(r);
+        public void DrawRoute(IList<PointLatLng> points, GMapOverlay _routeOverlay) {
+            //_routeOverlay.Routes.Clear();
+            GMapRoute r = new GMapRoute(points, "MyRoute") {
+                Stroke = {
+                    DashStyle = System.Drawing.Drawing2D.DashStyle.Solid,
+                    Color = Color.FromArgb(210, 73, 57)
+                }
+            };
+            _routeOverlay.Routes.Add(r);
+        }
+
+
+        public double GetCurrentLatitude() => _currentLatitude;
+        public double GetCurrentLongitude() => _currentLongitude;
     }
-
-    public double GetCurrentLatitude() => _currentLatitude;
-    public double GetCurrentLongitude() => _currentLongitude;
-}
 }

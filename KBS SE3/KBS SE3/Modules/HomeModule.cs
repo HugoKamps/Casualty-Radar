@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Device.Location;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using GMap.NET;
@@ -11,20 +12,29 @@ using KBS_SE3.Properties;
 
 namespace KBS_SE3.Modules {
     partial class HomeModule : UserControl, IModule {
-        private readonly LocationManager _locationManager;
+        private LocationManager _locationManager;
         private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
-
+        private FeedTicker _feedTicker;
+        private bool _isRefreshing = false;
 
         public HomeModule() {
             InitializeComponent();
-            _locationManager = new LocationManager();
+        }
+
+        public bool IsRefreshing {
+            get { return _isRefreshing; }
+            set { _isRefreshing = value; }
+        }
+
+        public FeedTicker FeedTicker {
+            get { return _feedTicker; }
         }
 
         public Breadcrumb GetBreadcrumb() {
             return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
         }
 
-                /* 
+        /* 
         Function that displays a map in the HomeModule. First it checks if the user has a working internet connection. 
         It creates a marker on the user's current location and on all the incidents coming from the Feed.
         */
@@ -83,14 +93,24 @@ namespace KBS_SE3.Modules {
             GetAlertsMap(_hasLocationservice);
         }
 
+        public LocationManager GetLocationManager() {
+            if (_locationManager == null) {
+                _locationManager = new LocationManager();
+                LoadLocationManager();
+            }
+            return _locationManager;
+        }
+
         private void refreshFeedButton_Click(object sender, EventArgs e) {
-            Feed.GetInstance().UpdateFeed();
-            GetAlertsMap(false);
+            if (!_isRefreshing) {
+                _feedTicker.StopTimerIfEnabled();
+                Feed.GetInstance().UpdateFeed();
+                _feedTicker.StartTimerIfEnabled();
+            }
         }
 
         private void alertTypeComboBox_SelectedIndexChanged(object sender, EventArgs e) {
             Feed.GetInstance().UpdateAlerts();
-            GetAlertsMap(false);
         }
 
         private void navigationBtn_Click(object sender, EventArgs e) {
@@ -115,32 +135,27 @@ namespace KBS_SE3.Modules {
             button.BackColor = button.Enabled ? Color.FromArgb(210, 73, 57) : Color.Gray;
         }
 
-        private void refreshFeedButton_MouseDown(object sender, MouseEventArgs e) {
-            refreshFeedButton.Image = ResizeImage(refreshFeedButton.Image, new Size(23, 23));
-            refreshFeedButton.Left = refreshFeedButton.Left + 2;
-            refreshFeedButton.Top = refreshFeedButton.Top + 2;
-            refreshFeedButton.Width = 23;
-            refreshFeedButton.Height = 23;
+        public void HomeModule_Load(object sender, EventArgs e) {
+            if (_locationManager == null) {
+                // Load the feed & instantiate the location manager
+                int tickTime = Settings.Default.feedTickerTime * 1000;
+                _feedTicker = new FeedTicker(tickTime, Feed.GetInstance());
+            }
         }
 
-        private void refreshFeedButton_MouseUp(object sender, MouseEventArgs e) {
-            refreshFeedButton.Image = Resources.refresh_icon;
-            refreshFeedButton.Width = 25;
-            refreshFeedButton.Height = 25;
-            refreshFeedButton.Left = refreshFeedButton.Left - 2;
-            refreshFeedButton.Top = refreshFeedButton.Top - 2;
-        }
-
-        private void HomeModule_Load(object sender, EventArgs e) {
-            _hasLocationservice = false;
+        private void LoadLocationManager()
+        {
             _locationManager.SetCoordinatesByLocationSetting();
+            _hasLocationservice = false;
             var watcher = new GeoCoordinateWatcher();
             watcher.PositionChanged += watcher_PositionChanged;
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
-            if (_hasLocationservice) map.Position = new PointLatLng(_locationManager._currentLatitude, _locationManager._currentLongitude);
+            if (_hasLocationservice)
+                map.Position = new PointLatLng(_locationManager._currentLatitude, _locationManager._currentLongitude);
             else map.SetPositionByKeywords(Settings.Default.userLocation);
         }
+
     }
 }
 

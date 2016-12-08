@@ -31,6 +31,8 @@ namespace KBS_SE3.Modules {
             this.alertTypeComboBox = new System.Windows.Forms.ComboBox();
             this.refreshFeedButton = new System.Windows.Forms.PictureBox();
             this.rightPanel = new System.Windows.Forms.Panel();
+            this.loadFeedLabel = new System.Windows.Forms.Label();
+            this.loadFeedPictureBox = new System.Windows.Forms.PictureBox();
             this.feedPanel = new System.Windows.Forms.Panel();
             this.legendaPanel = new System.Windows.Forms.Panel();
             this.yourLocationLabel = new System.Windows.Forms.Label();
@@ -43,6 +45,8 @@ namespace KBS_SE3.Modules {
             this.refreshPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).BeginInit();
             this.rightPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loadFeedPictureBox)).BeginInit();
+            this.feedPanel.SuspendLayout();
             this.legendaPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.redMarkerPicturebox)).BeginInit();
@@ -75,7 +79,7 @@ namespace KBS_SE3.Modules {
             this.map.LevelsKeepInMemmory = 5;
             this.map.Location = new System.Drawing.Point(0, 0);
             this.map.MarkersEnabled = true;
-            this.map.MaxZoom = 32;
+            this.map.MaxZoom = 20;
             this.map.MinZoom = 1;
             this.map.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.map.Name = "map";
@@ -135,11 +139,12 @@ namespace KBS_SE3.Modules {
             this.refreshFeedButton.TabIndex = 5;
             this.refreshFeedButton.TabStop = false;
             this.refreshFeedButton.Click += new System.EventHandler(this.refreshFeedButton_Click);
-            this.refreshFeedButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.refreshFeedButton_MouseDown);
-            this.refreshFeedButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.refreshFeedButton_MouseUp);
             // 
             // rightPanel
             // 
+            this.rightPanel.BackColor = System.Drawing.Color.White;
+            this.rightPanel.Controls.Add(this.loadFeedLabel);
+            this.rightPanel.Controls.Add(this.loadFeedPictureBox);
             this.rightPanel.Controls.Add(this.feedPanel);
             this.rightPanel.Controls.Add(this.refreshPanel);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -147,6 +152,25 @@ namespace KBS_SE3.Modules {
             this.rightPanel.Name = "rightPanel";
             this.rightPanel.Size = new System.Drawing.Size(338, 480);
             this.rightPanel.TabIndex = 7;
+            // 
+            // loadFeedLabel
+            // 
+            this.loadFeedLabel.AutoSize = true;
+            this.loadFeedLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.loadFeedLabel.Location = new System.Drawing.Point(92, 200);
+            this.loadFeedLabel.Name = "loadFeedLabel";
+            this.loadFeedLabel.Size = new System.Drawing.Size(156, 13);
+            this.loadFeedLabel.TabIndex = 0;
+            this.loadFeedLabel.Text = "Meldingen worden opgehaald...";
+            // 
+            // loadFeedPictureBox
+            // 
+            this.loadFeedPictureBox.Image = global::KBS_SE3.Properties.Resources.load_feed;
+            this.loadFeedPictureBox.Location = new System.Drawing.Point(118, 91);
+            this.loadFeedPictureBox.Name = "loadFeedPictureBox";
+            this.loadFeedPictureBox.Size = new System.Drawing.Size(100, 99);
+            this.loadFeedPictureBox.TabIndex = 16;
+            this.loadFeedPictureBox.TabStop = false;
             // 
             // feedPanel
             // 
@@ -266,6 +290,9 @@ namespace KBS_SE3.Modules {
             this.refreshPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).EndInit();
             this.rightPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.loadFeedPictureBox)).EndInit();
+            this.feedPanel.ResumeLayout(false);
+            this.feedPanel.PerformLayout();
             this.legendaPanel.ResumeLayout(false);
             this.legendaPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).EndInit();
@@ -291,5 +318,7 @@ namespace KBS_SE3.Modules {
         private Label ambulanceLabel;
         public Button navigationBtn;
         public Label alertsTitleLabel;
+        public PictureBox loadFeedPictureBox;
+        public Label loadFeedLabel;
     }
 }

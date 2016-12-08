@@ -2,6 +2,7 @@
 using KBS_SE3.Core.Dialog;
 using KBS_SE3.Models;
 using KBS_SE3.Modules;
+using KBS_SE3.Utils;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -108,7 +109,10 @@ namespace KBS_SE3 {
 
         private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
 
-        private void Container_Load(object sender, EventArgs e) => new FeedTicker(30000, Feed.GetInstance());
+        private void Container_Load(object sender, EventArgs e){
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            this.Shown += hm.HomeModule_Load;
+        }
 
         private void prevBtn_Click(object sender, EventArgs e) {
             ModuleManager.GetInstance().UpdateModule(breadCrumbStart, contentPanel, ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent);
