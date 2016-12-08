@@ -54,6 +54,7 @@ namespace KBS_SE3.Modules {
             map.Overlays.Clear();
             map.ShowCenter = false;
             map.MapProvider = GoogleMapProvider.Instance;
+            map.IgnoreMarkerOnMouseWheel = true;
             GMaps.Instance.Mode = AccessMode.ServerOnly;
             map.Position = new PointLatLng((startLat + destLat) / 2, (startLng + destLng) / 2);
             var markersOverlay = new GMapOverlay("markers");
