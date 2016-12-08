@@ -29,6 +29,7 @@ namespace KBS_SE3.Modules {
                 y += 50;
                 color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
             }
+
         }
 
         public Breadcrumb GetBreadcrumb() {
