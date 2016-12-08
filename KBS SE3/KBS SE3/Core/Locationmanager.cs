@@ -64,8 +64,6 @@ namespace KBS_SE3.Core {
                     var type = alert.Type == 1 ? 1 : 2;
                     markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
                 }
-
-                XMLUtil.read();
             }
         }
 
@@ -103,7 +101,7 @@ namespace KBS_SE3.Core {
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
             _currentLatitude = e.Position.Location.Latitude;
             _currentLongitude = e.Position.Location.Longitude;
-            //GetMap(true);
+            GetMap(true);
         }
 
         //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
@@ -125,7 +123,7 @@ namespace KBS_SE3.Core {
                     _hasLocationservice = false;
                     break;
             }
-            //GetMap(_hasLocationservice);
+            GetMap(_hasLocationservice);
         }
 
         public void DrawRoute(IList<PointLatLng> points)
