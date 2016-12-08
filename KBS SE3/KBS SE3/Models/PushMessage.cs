@@ -23,6 +23,12 @@ namespace KBS_SE3.Models {
 
         // Function for pushing message to user
         private void setPushMessage(List<Alert> alert) {
+            string message = "";
+            if(alert.Count == 1) {
+                message = alert[0].ToString();
+            }else {
+                message = "Er zijn " + alert.Count + " nieuwe meldingen";
+            }
             if (_alert.Count != 0 && Container.GetInstance().WindowState == FormWindowState.Minimized) {
                 _icon.Icon = SystemIcons.Exclamation;
                 _icon.Visible = true;
@@ -30,7 +36,7 @@ namespace KBS_SE3.Models {
                 _icon.BalloonTipClosed += new EventHandler(BalloonTipClosed);
                 _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
                 _icon.ShowBalloonTip(5000,
-                    _alert.Count() + " nieuwe ongevallen",
+                    message,
                      "Klik hier om de meldingen te bekijken",
                     ToolTipIcon.None);
             }
