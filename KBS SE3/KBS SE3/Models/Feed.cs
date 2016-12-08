@@ -10,6 +10,10 @@ using System.ServiceModel.Syndication;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
+using KBS_SE3.Properties;
 
 namespace KBS_SE3.Models {
     internal class Feed {
@@ -249,6 +253,9 @@ namespace KBS_SE3.Models {
                     homeModule.navigationBtn.Enabled = true;
                 }
             }
+
+            var marker = homeModule.map.Overlays[0].Markers[_alertPanels.FindIndex(panel => panel == _selectedPanel) + 1];
+            marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
         }
 
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {

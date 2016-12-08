@@ -83,6 +83,9 @@
     <Compile Include="Container.Designer.cs">
       <DependentUpon>Container.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\Algorithms\AStar\Node.cs" />
+    <Compile Include="Core\Algorithms\AStar\Pathfinder.cs" />
+    <Compile Include="Core\Algorithms\SearchParameters.cs" />
     <Compile Include="Core\Dialog\DialogOverlay.cs" />
     <Compile Include="Core\Dialog\DialogType.cs" />
     <Compile Include="Core\LocationManager.cs" />
@@ -96,7 +99,6 @@
     <Compile Include="Models\Graph\DbGraph\Node.cs" />
     <Compile Include="Models\Graph\DbGraph\Relation.cs" />
     <Compile Include="Models\Graph\DbGraph\Tag.cs" />
-    <Compile Include="Models\Graph\DbGraph\Way.cs" />
     <Compile Include="Models\Graph\Graph.cs" />
     <Compile Include="Utils\ConnectionUtil.cs" />
     <Compile Include="Models\Breadcrumb.cs" />
@@ -211,7 +213,9 @@
     <Content Include="Resources\Firefighter.png" />
     <Content Include="Resources\logo_final.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\Algorithms\Dijkstra\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

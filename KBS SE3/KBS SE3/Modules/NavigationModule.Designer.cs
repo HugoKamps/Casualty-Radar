@@ -28,12 +28,13 @@
             this.routeInfoLabelPanel = new System.Windows.Forms.Panel();
             this.routeInfoLabel = new System.Windows.Forms.Label();
             this.alertInfoPanel = new System.Windows.Forms.Panel();
+            this.infoTitleLabel = new System.Windows.Forms.Label();
             this.timeLabel = new System.Windows.Forms.Label();
             this.alertTypePicturebox = new System.Windows.Forms.PictureBox();
-            this.infoTitleLabel = new System.Windows.Forms.Label();
             this.alertInfoLabelPanel = new System.Windows.Forms.Panel();
             this.alertInfoLabel = new System.Windows.Forms.Label();
             this.mapPanel = new System.Windows.Forms.Panel();
+            this.map = new GMap.NET.WindowsForms.GMapControl();
             this.routePanel.SuspendLayout();
             this.routeInfoLabelPanel.SuspendLayout();
             this.alertInfoPanel.SuspendLayout();
@@ -97,6 +98,16 @@
             this.alertInfoPanel.Size = new System.Drawing.Size(338, 105);
             this.alertInfoPanel.TabIndex = 4;
             // 
+            // infoTitleLabel
+            // 
+            this.infoTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.infoTitleLabel.ForeColor = System.Drawing.Color.White;
+            this.infoTitleLabel.Location = new System.Drawing.Point(10, 5);
+            this.infoTitleLabel.Name = "infoTitleLabel";
+            this.infoTitleLabel.Size = new System.Drawing.Size(200, 90);
+            this.infoTitleLabel.TabIndex = 0;
+            this.infoTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // timeLabel
             // 
             this.timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
@@ -115,16 +126,6 @@
             this.alertTypePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.alertTypePicturebox.TabIndex = 1;
             this.alertTypePicturebox.TabStop = false;
-            // 
-            // infoTitleLabel
-            // 
-            this.infoTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.infoTitleLabel.ForeColor = System.Drawing.Color.White;
-            this.infoTitleLabel.Location = new System.Drawing.Point(10, 5);
-            this.infoTitleLabel.Name = "infoTitleLabel";
-            this.infoTitleLabel.Size = new System.Drawing.Size(200, 90);
-            this.infoTitleLabel.TabIndex = 0;
-            this.infoTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // alertInfoLabelPanel
             // 
@@ -157,10 +158,37 @@
             this.mapPanel.Size = new System.Drawing.Size(615, 480);
             this.mapPanel.TabIndex = 1;
             // 
+            // map
+            // 
+            this.map.Bearing = 0F;
+            this.map.CanDragMap = true;
+            this.map.Dock = System.Windows.Forms.DockStyle.Left;
+            this.map.EmptyTileColor = System.Drawing.Color.Navy;
+            this.map.GrayScaleMode = false;
+            this.map.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.map.LevelsKeepInMemmory = 5;
+            this.map.Location = new System.Drawing.Point(0, 0);
+            this.map.MarkersEnabled = true;
+            this.map.MaxZoom = 32;
+            this.map.MinZoom = 1;
+            this.map.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.map.Name = "map";
+            this.map.NegativeMode = false;
+            this.map.PolygonsEnabled = true;
+            this.map.RetryLoadTile = 0;
+            this.map.RoutesEnabled = true;
+            this.map.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.map.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.map.ShowTileGridLines = false;
+            this.map.Size = new System.Drawing.Size(615, 480);
+            this.map.TabIndex = 6;
+            this.map.Zoom = 7D;
+            // 
             // NavigationModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.map);
             this.Controls.Add(this.mapPanel);
             this.Controls.Add(this.routePanel);
             this.Name = "NavigationModule";
@@ -187,5 +215,6 @@
         private System.Windows.Forms.Panel routeInfoLabelPanel;
         private System.Windows.Forms.Label routeInfoLabel;
         private System.Windows.Forms.Panel routeInfoPanel;
+        private GMap.NET.WindowsForms.GMapControl map;
     }
 }
