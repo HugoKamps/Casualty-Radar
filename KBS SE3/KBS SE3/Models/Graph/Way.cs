@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KBS_SE3.Models.Graph.XmlClasses {
+namespace KBS_SE3.Models.Graph {
     public class Way {
         public List<Node> Nodes { get; private set; }
         public long ID { get; set; }
