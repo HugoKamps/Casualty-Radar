@@ -86,16 +86,15 @@
     <Compile Include="Core\Dialog\DialogOverlay.cs" />
     <Compile Include="Core\Dialog\DialogType.cs" />
     <Compile Include="Core\LocationManager.cs" />
-    <Compile Include="Core\Queries\GraphQueries.cs" />
     <Compile Include="Dialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialog.Designer.cs">
       <DependentUpon>Dialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Graph\DbGraph\Node.cs" />
-    <Compile Include="Models\Graph\DbGraph\Tag.cs" />
-    <Compile Include="Models\Graph\DbGraph\Way.cs" />
+    <Compile Include="Models\Graph\XmlClasses\Node.cs" />
+    <Compile Include="Models\Graph\XmlClasses\Tag.cs" />
+    <Compile Include="Models\Graph\XmlClasses\Way.cs" />
     <Compile Include="Models\Graph\Graph.cs" />
     <Compile Include="Utils\ConnectionUtil.cs" />
     <Compile Include="Models\Breadcrumb.cs" />

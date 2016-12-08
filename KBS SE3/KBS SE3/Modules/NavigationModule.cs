@@ -6,7 +6,6 @@ using KBS_SE3.Models;
 using KBS_SE3.Models.Navigation;
 using KBS_SE3.Properties;
 using ContentAlignment = System.Drawing.ContentAlignment;
-using KBS_SE3.Core.Queries;
 
 namespace KBS_SE3.Modules {
     partial class NavigationModule : UserControl, IModule {
@@ -41,8 +40,6 @@ namespace KBS_SE3.Modules {
             infoTitleLabel.Text = title + "\n" + info;
             alertTypePicturebox.Image = type == 1 ? Resources.Medic : Resources.Firefighter;
             timeLabel.Text = time;
-            MessageBox.Show(GraphQueries.SelectAllNodes()[0].ToString());
-
         }
 
         public void CreateRouteStepPanel(NavigationStep step, Color color, int y) {

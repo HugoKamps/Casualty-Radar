@@ -13,7 +13,6 @@ namespace KBS_SE3 {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(Container.GetInstance());
-            DatabaseUtil.getDbInstance().SetDBConnection();
         }
     }
 }
