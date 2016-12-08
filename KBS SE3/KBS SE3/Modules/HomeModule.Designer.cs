@@ -286,6 +286,7 @@ namespace KBS_SE3.Modules {
             this.Controls.Add(this.map);
             this.Name = "HomeModule";
             this.Size = new System.Drawing.Size(953, 480);
+            this.Load += new System.EventHandler(this.HomeModule_Load);
             this.refreshPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).EndInit();
             this.rightPanel.ResumeLayout(false);
@@ -302,7 +303,7 @@ namespace KBS_SE3.Modules {
         }
 
         #endregion
-        private GMap.NET.WindowsForms.GMapControl map;
+        public GMap.NET.WindowsForms.GMapControl map;
         private Panel refreshPanel;
         private Panel rightPanel;
         public PictureBox refreshFeedButton;
