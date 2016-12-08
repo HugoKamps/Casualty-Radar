@@ -3,40 +3,34 @@
 using System.Windows.Forms;
 using KBS_SE3.Properties;
 
-namespace KBS_SE3.Models
-{
-    class FeedTicker
-    {
-        private int _tickTime ;
+namespace KBS_SE3.Models {
+    class FeedTicker {
+        private int _tickTime;
         private static Feed _feed;
         private Timer _stateTimer = new Timer();
 
-        public FeedTicker(int t, Feed f)
-        {
+        public FeedTicker(int t, Feed f) {
             _tickTime = t;
             _feed = f;
             _startTimer();
         }
 
-        public void StartTimerIfEnabled()
-        {
+        public void StartTimerIfEnabled() {
             if (Settings.Default.feedTickerEnabled) _stateTimer.Start();
         }
 
-        public void StopTimerIfEnabled()
-        {
+        public void StopTimerIfEnabled() {
             if (_stateTimer.Enabled) _stateTimer.Stop();
         }
 
-        public void TimerStateChanged(bool state)
-        {
+        public void TimerStateChanged(bool state) {
             if (state) _stateTimer.Start();
             else _stateTimer.Stop();
         }
 
         public void ChangeTickTime(int tickTime) {
             _stateTimer.Stop();
-            _tickTime = tickTime*1000;
+            _tickTime = tickTime * 1000;
             _stateTimer.Interval = _tickTime;
             StartTimerIfEnabled();
         }

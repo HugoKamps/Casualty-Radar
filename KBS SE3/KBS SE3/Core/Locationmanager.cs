@@ -19,53 +19,8 @@ using System.Windows.Forms;
 
 namespace KBS_SE3.Core {
     internal class LocationManager {
-        private readonly GMapControl _map;  //Control which the map will be placed on
-        private double _currentLatitude;    //The user's current latitude
-        private double _currentLongitude;   //The user's current longitude
-        private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
-        private GMapOverlay _routeOverlay;
-
-        //Initializes the GPS watcher and it's events and initializes the Map control of the HomeModule which the map will be placed on
-        public LocationManager(GMapControl map) {
-            _hasLocationservice = false;
-            SetCoordinatesByLocationSetting();
-            _map = map;
-            var watcher = new GeoCoordinateWatcher();
-            watcher.PositionChanged += watcher_PositionChanged;
-            watcher.StatusChanged += watcher_StatusChanged;
-            watcher.Start();
-            if (_hasLocationservice) _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
-            else _map.SetPositionByKeywords(Settings.Default.userLocation);
-        }
-
-        /* 
-        Function that displays a map in the HomeModule. First it checks if the user has a working internet connection. 
-        It creates a marker on the user's current location and on all the incidents coming from the Feed.
-        */
-        public void GetMap(bool hasLocationService) {
-            if (ConnectionUtil.HasInternetConnection()) {
-                _map.Overlays.Clear();
-                _map.ShowCenter = false;
-                _map.MapProvider = GoogleMapProvider.Instance;
-                GMaps.Instance.Mode = AccessMode.ServerOnly;
-                var markersOverlay = new GMapOverlay("markers");
-                _routeOverlay = new GMapOverlay("routes");
-                _map.Overlays.Add(markersOverlay);
-                _map.Overlays.Add(_routeOverlay);
-
-                //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
-                if (hasLocationService) {
-                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
-                } else {
-                    SetCoordinatesByLocationSetting();
-                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
-                }
-                foreach (var alert in Feed.GetInstance().GetAlerts()) {
-                    var type = alert.Type == 1 ? 1 : 2;
-                    markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
-                }
-            }
-        }
+        public double _currentLatitude { get; set; }  //The user's current latitude
+        public double _currentLongitude { get; set; }  //The user's current longitude
 
         //Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
         public void SetCoordinatesByLocationSetting() {
@@ -77,8 +32,7 @@ namespace KBS_SE3.Core {
             var xdoc = XDocument.Load(response.GetResponseStream());
 
             var result = xdoc.Element("GeocodeResponse").Element("result");
-            if (result != null)
-            {
+            if (result != null) {
                 var locationElement = result.Element("geometry").Element("location");
                 var lat = Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", string.Empty);
                 var lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
@@ -94,43 +48,23 @@ namespace KBS_SE3.Core {
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
             var image = (Image)new Bitmap(@imgLocation);
-            return new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
+
+            var marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
+
+            marker.ToolTip = new GMapToolTip(marker) {
+                Fill = new SolidBrush(Color.White),
+                Font = new Font("Microsoft Sans Serif", 10),
+                Foreground = new SolidBrush(Color.FromArgb(210, 73, 57))
+            };
+
+            return marker;
         }
 
-        //Keeps track of the user's current location. Everytime the location changes the map is renewed and the coordinates are updated
-        private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
-            _currentLatitude = e.Position.Location.Latitude;
-            _currentLongitude = e.Position.Location.Longitude;
-            GetMap(true);
-        }
+        public PointLatLng GetLocationPoint() => new PointLatLng(_currentLatitude, _currentLongitude);
 
-        //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
-        private void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
-            switch (e.Status) {
-                case GeoPositionStatus.Initializing:
-                    _hasLocationservice = true;
-                    break;
-
-                case GeoPositionStatus.Ready:
-                    _hasLocationservice = true;
-                    break;
-
-                case GeoPositionStatus.NoData:
-                    _hasLocationservice = false;
-                    break;
-
-                case GeoPositionStatus.Disabled:
-                    _hasLocationservice = false;
-                    break;
-            }
-            GetMap(_hasLocationservice);
-        }
-
-        public void DrawRoute(IList<PointLatLng> points)
-        {
+        public void DrawRoute(IList<PointLatLng> points, GMapOverlay _routeOverlay) {
             //_routeOverlay.Routes.Clear();
-            GMapRoute r = new GMapRoute(points, "MyRoute")
-            {
+            GMapRoute r = new GMapRoute(points, "MyRoute") {
                 Stroke = {
                     DashStyle = System.Drawing.Drawing2D.DashStyle.Solid,
                     Color = Color.FromArgb(210, 73, 57)
@@ -138,5 +72,9 @@ namespace KBS_SE3.Core {
             };
             _routeOverlay.Routes.Add(r);
         }
+
+
+        public double GetCurrentLatitude() => _currentLatitude;
+        public double GetCurrentLongitude() => _currentLongitude;
     }
 }

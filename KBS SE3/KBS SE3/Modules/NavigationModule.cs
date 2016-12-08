@@ -1,21 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using GMap.NET;
+using GMap.NET.MapProviders;
+using GMap.NET.WindowsForms;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
 using KBS_SE3.Models.Navigation;
 using KBS_SE3.Properties;
-using ContentAlignment = System.Drawing.ContentAlignment;
+using KBS_SE3.Utils;
 
 namespace KBS_SE3.Modules {
-    partial class NavigationModule : UserControl, IModule {
+    partial class NavigationModule : UserControl, IModule
+    {
+        private readonly LocationManager _locationManager;
+        private GMapOverlay _routeOverlay;
+
         public NavigationModule() {
             InitializeComponent();
+            _locationManager = new LocationManager();
             var y = 0;
             var color = Color.Gainsboro;
 
-            var navSteps = new List<NavigationStep>
-            {
+            var navSteps = new List<NavigationStep> {
                 new NavigationStep("Sla rechtsaf", "100m", RouteStepType.Right),
                 new NavigationStep("Sla linksaf", "500m", RouteStepType.Left),
                 new NavigationStep("Ga rechtdoor", "1.2km", RouteStepType.Straight),
@@ -36,10 +43,33 @@ namespace KBS_SE3.Modules {
             return new Breadcrumb(this, "Navigation", null, ModuleManager.GetInstance().ParseInstance(typeof(HomeModule)));
         }
 
-        public void SetAlertInfo(string title, string info, int type, string time) {
+        public void SetAlertInfo(string title, string info, int type, string time, PointLatLng start, PointLatLng dest) {
             infoTitleLabel.Text = title + "\n" + info;
             alertTypePicturebox.Image = type == 1 ? Resources.Medic : Resources.Firefighter;
             timeLabel.Text = time;
+            GetRouteMap(start.Lat, start.Lng, dest.Lat, dest.Lng);
+        }
+
+        public void GetRouteMap(double startLat, double startLng, double destLat, double destLng) {
+            map.Overlays.Clear();
+            map.ShowCenter = false;
+            map.MapProvider = GoogleMapProvider.Instance;
+            GMaps.Instance.Mode = AccessMode.ServerOnly;
+            map.Position = new PointLatLng((startLat + destLat) / 2, (startLng + destLng) / 2);
+            var markersOverlay = new GMapOverlay("markers");
+            _routeOverlay = new GMapOverlay("routes");
+            map.Overlays.Add(markersOverlay);
+            map.Overlays.Add(_routeOverlay);
+
+            markersOverlay.Markers.Add(_locationManager.CreateMarker(startLat, startLng, 0));
+            markersOverlay.Markers.Add(_locationManager.CreateMarker(destLat, destLng, 2));
+
+            // Dummy data for drawing a route
+            var points = new List<PointLatLng>();
+            points.Add(new PointLatLng(52.1744700, 5.3933600));
+            points.Add(new PointLatLng(52.1746868, 5.3938107));
+            points.Add(new PointLatLng(52.1748315, 5.3942292));
+            _locationManager.DrawRoute(points, _routeOverlay);
         }
 
         public void CreateRouteStepPanel(NavigationStep step, Color color, int y) {
@@ -63,7 +93,7 @@ namespace KBS_SE3.Modules {
             //The panel which will be filled with all of the controls below
             var newPanel = new Panel {
                 Location = new Point(0, y),
-                Size = new Size(321, 50),
+                Size = new Size(338, 50),
                 BackColor = color
             };
 
