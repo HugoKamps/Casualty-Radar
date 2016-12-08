@@ -59,7 +59,7 @@ namespace KBS_SE3 {
 
         protected override CreateParams CreateParams {
             get {
-                var cp = base.CreateParams;
+                CreateParams cp = base.CreateParams;
                 cp.ClassStyle |= CS_DROPSHADOW;
                 return cp;
             }
@@ -67,29 +67,29 @@ namespace KBS_SE3 {
         
         //This event is triggered when the minimize button is clicked. It minimizes the window
         private void minimizeBtn_Click(object sender, EventArgs e) {
-            //WindowState = FormWindowState.Minimized;
+            WindowState = FormWindowState.Minimized;
             DisplayDialog(DialogMessageType.SUCCESS, "Goed", "Vind niet kunnen");
         }
 
         /* This event is triggered when the user's mouse hovers over the minimize or exit button. 
         It changes the color to show which button is being hovered over. */
         private void topBarButtons_MouseEnter(object sender, EventArgs e) {
-            var selected = (Label) sender;
+            Label selected = (Label) sender;
             selected.BackColor = Color.FromArgb(220, 82, 66);
         }
 
         private void prevBtn_MouseEnter(object sender, EventArgs e) {
-            var selected = (Label)sender;
+            Label selected = (Label)sender;
             selected.ForeColor = Color.White;
         }
 
         private void prevBtn_MouseLeave(object sender, EventArgs e) {
-            var selected = (Label)sender;
+            Label selected = (Label)sender;
             selected.ForeColor = Color.Gainsboro;
         }
 
         private void topBarButtons_MouseLeave(object sender, EventArgs e) {
-            var selected = (Label)sender;
+            Label selected = (Label)sender;
             selected.BackColor = Color.FromArgb(210, 73, 57);
         }
 
