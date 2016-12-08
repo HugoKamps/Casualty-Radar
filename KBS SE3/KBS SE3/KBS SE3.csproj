@@ -93,11 +93,9 @@
       <DependentUpon>Dialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Breadcrumb.cs" />
-    <Compile Include="Models\Graph\DbGraph\Member.cs" />
-    <Compile Include="Models\Graph\DbGraph\Node.cs" />
-    <Compile Include="Models\Graph\DbGraph\Relation.cs" />
-    <Compile Include="Models\Graph\DbGraph\Tag.cs" />
-    <Compile Include="Models\Graph\DbGraph\Way.cs" />
+    <Compile Include="Models\Graph\XmlClasses\Node.cs" />
+    <Compile Include="Models\Graph\XmlClasses\Tag.cs" />
+    <Compile Include="Models\Graph\XmlClasses\Way.cs" />
     <Compile Include="Models\Graph\Graph.cs" />
     <Compile Include="Utils\ConnectionUtil.cs" />
     <Compile Include="Models\Graph\Edge.cs" />
