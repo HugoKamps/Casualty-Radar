@@ -122,12 +122,14 @@ namespace KBS_SE3.Models
                         break;
                     }
                 }
-
                 newFeed.Items = newItems;
                 List<Alert> newAlerts = CreateAlertList(newFeed);
 
-                // Send list with new alerts to PushMessage
-                new PushMessage(newAlerts);
+                if (newAlerts.Count() > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized)
+                {
+                    // Send list with new alerts to PushMessage
+                    new PushMessage(newAlerts);
+                }
                 UpdateAlerts();
             }
             catch (Exception e)
