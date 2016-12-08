@@ -21,15 +21,18 @@ namespace KBS_SE3.Models {
 
         // Function for pushing message to user
         private void _setPushMessage(List<Alert> alerts) {
+            string message = "";
+            if (alerts.Count == 1)  message = alerts[0].ToString();
+            else  message = "Er zijn " + alerts.Count + " nieuwe meldingen";
             _icon.Icon = SystemIcons.Exclamation;
             _icon.Visible = true;
             _icon.Icon = new Icon(@"..\..\Resources\app_icon.ico");
             _icon.BalloonTipClosed += new EventHandler(BalloonTipClosed);
             _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
             _icon.ShowBalloonTip(5000,
-                alerts.Count() + " nieuwe ongevallen",
-                    "Klik hier om de meldingen te bekijken",
-                    ToolTipIcon.None);
+                message,
+                "Klik hier om de meldingen te bekijken",
+                ToolTipIcon.None);
         }
 
         private void BalloonTipClosed(object Sender, EventArgs e) {
