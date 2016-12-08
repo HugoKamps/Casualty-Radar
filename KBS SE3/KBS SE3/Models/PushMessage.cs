@@ -10,20 +10,20 @@ namespace KBS_SE3.Models {
         Police, Ambulance, FireDepartment
     }
 
-     class PushMessage {
+    class PushMessage {
         private NotifyIcon _icon;
 
         // Constructor for making a message + push message
         public PushMessage(List<Alert> alerts) {
             _icon = new NotifyIcon();
-           _setPushMessage(alerts);
+            _setPushMessage(alerts);
         }
 
         // Function for pushing message to user
         private void _setPushMessage(List<Alert> alerts) {
             string message = "";
-            if (alerts.Count == 1)  message = alerts[0].ToString();
-            else  message = "Er zijn " + alerts.Count + " nieuwe meldingen";
+            if (alerts.Count == 1) message = alerts[0].ToString();
+            else message = "Er zijn " + alerts.Count + " nieuwe meldingen";
             _icon.Icon = SystemIcons.Exclamation;
             _icon.Visible = true;
             _icon.Icon = new Icon(@"..\..\Resources\app_icon.ico");
