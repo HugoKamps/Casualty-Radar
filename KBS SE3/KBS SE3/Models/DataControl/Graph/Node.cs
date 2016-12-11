@@ -1,4 +1,5 @@
 ﻿using GMap.NET;
+using KBS_SE3.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,11 @@ namespace KBS_SE3.Models.DataControl.Graph {
         // Returns the Geo location from the Node based on the Longitude and Latitude of the Node.
         public PointLatLng GetPoint() {
             return new PointLatLng(this.Lat, this.Lon); 
+        }
+
+        // Returns the distance between the current node and the given node
+        public double DistanceTo(Node node) {
+            return MapUtil.GetDistance(this, node);
         }
 
 
