@@ -8,10 +8,6 @@ using System.Xml.Serialization;
 
 namespace KBS_SE3.Models.DataControl {
 
-    /// <summary>
-    /// This text should automatically show up as the summary when hovering over
-    /// an instance of this class in VS
-    /// </summary>
     [XmlRoot("osm")]
     public class DataCollection {
 
