@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KBS_SE3.Core.Dialog {
     public static class DialogType {
@@ -21,7 +17,7 @@ namespace KBS_SE3.Core.Dialog {
         }
 
         //Returns a proper display message based on the given message type.
-        public static String ParseHeaderMessage(DialogMessageType type) {
+        public static string ParseHeaderMessage(DialogMessageType type) {
             switch (type) {
                 case DialogMessageType.WARNING: return "Waarschuwing";
                 case DialogMessageType.ERROR:   return "Foutmelding";

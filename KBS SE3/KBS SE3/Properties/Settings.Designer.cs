@@ -34,5 +34,29 @@ namespace KBS_SE3.Properties {
                 this["userLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int feedTickerTime {
+            get {
+                return ((int)(this["feedTickerTime"]));
+            }
+            set {
+                this["feedTickerTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool feedTickerEnabled {
+            get {
+                return ((bool)(this["feedTickerEnabled"]));
+            }
+            set {
+                this["feedTickerEnabled"] = value;
+            }
+        }
     }
 }

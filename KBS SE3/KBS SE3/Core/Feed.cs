@@ -4,22 +4,27 @@ using KBS_SE3.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel.Syndication;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
+using KBS_SE3.Properties;
 
 namespace KBS_SE3.Models {
     internal class Feed {
-
         private static Feed _instance;
         private SyndicationFeed _p2000;
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
+        private readonly string CACHED_FEED_URL = "http://web.archive.org/web/http://feeds.livep2000.nl/";
         private readonly string LOCAL_FEED_URL = @"../../feed.xml";
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
@@ -33,24 +38,22 @@ namespace KBS_SE3.Models {
 
         private Feed() {
             try {
-                this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
-                this._alerts = CreateAlertList(_p2000);
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+                _alerts = CreateAlertList(_p2000);
                 /* Initial update - Only updates after the P2000 is read.*/
                 UpdateFeed();
             } catch (Exception e) {
-                Container.GetInstance().DisplayDialog(Core.Dialog.DialogType.DialogMessageType.ERROR, "Geen meldingen beschikbaar.", "Het lijkt erop dat er op dit moment geen meldingen beschikbaar zijn om te laten zien.");
+                MessageBox.Show(e.Message);
             }
         }
 
 
-        public List<Alert> GetAlerts() {
-            return _filteredAlerts;
-        }
+        public List<Alert> GetAlerts() => _filteredAlerts;
 
         public List<Alert> CreateAlertList(SyndicationFeed items) {
-            List<Alert> tempAlerts = new List<Alert>();
-            foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate)) {
-                Alert newAlert = _createAlert(item);
+            var tempAlerts = new List<Alert>();
+            foreach (var item in items.Items.OrderBy(x => x.PublishDate)) {
+                Alert newAlert = createAlert(item);
 
                 if (newAlert != null)
                     tempAlerts.Add(newAlert);
@@ -59,17 +62,18 @@ namespace KBS_SE3.Models {
             return tempAlerts;
         }
 
-        private Alert _createAlert(SyndicationItem item) {
+        private Alert createAlert(SyndicationItem item) {
             // Check if the item has 2 attributes which are Lat & Long
             if (item.ElementExtensions.Count == 2) {
-                string lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
-                string lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
+                var lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
+                var lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
                 Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, double.Parse(lat, CultureInfo.InvariantCulture), double.Parse(lng, CultureInfo.InvariantCulture));
+
                 // Use the AlertUtil for setting attributes
-                for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++) {
+                for (var i = 0; i < AlertUtil.P2000.GetLength(0); i++) {
                     if ((((item.Title.Text).Replace("(Directe Inzet: ", "")).ToUpper()).StartsWith(AlertUtil.P2000[i, 0])) {
                         newAlert.Code = AlertUtil.P2000[i, 0];
-                        newAlert.Type = Int32.Parse(AlertUtil.P2000[i, 1]);
+                        newAlert.Type = int.Parse(AlertUtil.P2000[i, 1]);
                         newAlert.TypeString = AlertUtil.P2000[i, 2];
                         newAlert.Info = AlertUtil.P2000[i, 3];
                         return newAlert;
@@ -80,20 +84,20 @@ namespace KBS_SE3.Models {
         }
 
         public void UpdateFeed() {
-            var oldP2000 = _p2000;
-            var newItems = new List<SyndicationItem>();
-            var newFeed = new SyndicationFeed();
+            SyndicationFeed oldP2000 = _p2000;
+            List<SyndicationItem> newItems = new List<SyndicationItem>();
+            SyndicationFeed newFeed = new SyndicationFeed();
 
             // Load the feed
             try {
-                this._p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
-                this._alerts = CreateAlertList(_p2000);
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+                _alerts = CreateAlertList(_p2000);
 
                 // Get the first item from the previous feed
                 SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(); ;
 
                 // Loop through the new feed
-                foreach (SyndicationItem item in _p2000.Items) {
+                foreach (var item in _p2000.Items) {
                     // If the first item from the old feed is identical to the first item of the new feed
                     if (item.Title.Text != first.Title.Text) {
                         // The item is a new item
@@ -103,13 +107,15 @@ namespace KBS_SE3.Models {
                         break;
                     }
                 }
-
                 newFeed.Items = newItems;
                 List<Alert> newAlerts = CreateAlertList(newFeed);
 
-                // Send list with new alerts to PushMessage
-                new PushMessage(newAlerts);
+                if (newAlerts.Count() > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized) {
+                    // Send list with new alerts to PushMessage
+                    new PushMessage(newAlerts);
+                }
                 UpdateAlerts();
+
             } catch (Exception e) {
                 MessageBox.Show(e.Message);
             }
@@ -120,8 +126,10 @@ namespace KBS_SE3.Models {
         */
         public void UpdateAlerts() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            var selectedFilter = hm.alertTypeComboBox.SelectedIndex;
-            var y = 0;
+            var bw = new BackgroundWorker();
+            int selectedFilter = hm.alertTypeComboBox.SelectedIndex;
+            int y = 0;
+
             // Check which filter is selected and apply the filter
             if (selectedFilter == 1 || selectedFilter == 2) {
                 _filteredAlerts = new List<Alert>();
@@ -134,24 +142,53 @@ namespace KBS_SE3.Models {
                 _filteredAlerts = _alerts;
             }
 
+            // Set load icon
+            hm.loadFeedPictureBox.Visible = true;
+            hm.loadFeedPictureBox.Refresh();
+            hm.loadFeedLabel.Visible = true;
+            hm.loadFeedLabel.Refresh();
+            hm.IsRefreshing = true;
             hm.feedPanel.Controls.Clear();
-            _alertPanels.Clear();
-            foreach (var a in _filteredAlerts) {
-                CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y, hm);
-                y += 105;
-            }
 
-            hm.alertsCountLabel.Text = "(" + _filteredAlerts.Count.ToString() + ")";
+            // Create panels in background thread
+            bw.DoWork += new DoWorkEventHandler(
+            delegate (object o, DoWorkEventArgs args) {
+                _alertPanels.Clear();
+                foreach (var a in _filteredAlerts) {
+                    _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y, hm));
+                    y += 105;
+                }
+            });
+
+            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+            delegate (object o, RunWorkerCompletedEventArgs args) {
+                // Remove load icon
+                hm.loadFeedPictureBox.Visible = false;
+                hm.loadFeedLabel.Visible = false;
+                hm.IsRefreshing = false;
+                hm.feedPanel.AutoScroll = true;
+                try {
+                    foreach (Panel p in _alertPanels)
+                        hm.feedPanel.Controls.Add(p);
+                } catch (InvalidOperationException e) {
+                    MessageBox.Show(e.ToString());
+                }
+                hm.alertsTitleLabel.Text = "Meldingen (" + _filteredAlerts.Count.ToString() + ")";
+                hm.GetLocationManager();
+                hm.GetAlertsMap(false);
+            });
+
+            bw.RunWorkerAsync();
         }
 
         public Panel GetSelectedPanel => _selectedPanel;
         public List<Panel> GetAlertPanels => _alertPanels;
 
-        public void CreateAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
+        public Panel CreateAlertPanel(int type, string title, string info, string time, int y, HomeModule hm) {
             //The panel which will be filled with all of the controls below
             var newPanel = new Panel {
-                Location = new Point(8, y),
-                Size = new Size(305, 100),
+                Location = new Point(0, y),
+                Size = new Size(320, 100),
                 BackColor = Color.FromArgb(236, 89, 71)
             };
 
@@ -167,7 +204,7 @@ namespace KBS_SE3.Models {
             var label = new Label {
                 ForeColor = Color.White,
                 Location = new Point(10, 5),
-                Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
+                Font = new Font("Microsoft Sans Serif", 10),
                 Size = new Size(200, 90),
                 BackColor = Color.Transparent,
                 Text = title + "\n" + info
@@ -178,7 +215,7 @@ namespace KBS_SE3.Models {
                     if (control is Label) {
                         var selectedLabel = (Label)control;
                         if (selectedLabel.Text == label.Text) {
-                            newPanel.BackColor = Color.FromArgb(210, 93, 0);
+                            newPanel.BackColor = Color.FromArgb(245, 120, 105);
                             _selectedPanel = newPanel;
                         }
                     }
@@ -216,13 +253,11 @@ namespace KBS_SE3.Models {
             newPanel.Cursor = Cursors.Hand;
 
             //The panel is filled with all the controls initialized above
-            hm.feedPanel.AutoScroll = true;
             newPanel.Controls.Add(newPictureBox);
             newPanel.Controls.Add(label);
             newPanel.Controls.Add(timeLabel);
-            hm.feedPanel.Controls.Add(newPanel);
 
-            _alertPanels.Add(newPanel);
+            return newPanel;
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
@@ -237,7 +272,7 @@ namespace KBS_SE3.Models {
                     homeModule.navigationBtn.BackColor = Color.Gray;
                 } else {
                     _selectedPanel = panel;
-                    _selectedPanel.BackColor = Color.FromArgb(210, 93, 0);
+                    _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
                     homeModule.navigationBtn.Enabled = true;
                 }
             } else {
@@ -248,10 +283,13 @@ namespace KBS_SE3.Models {
                     homeModule.navigationBtn.Enabled = false;
                 } else {
                     _selectedPanel = (Panel)control.Parent;
-                    _selectedPanel.BackColor = Color.FromArgb(210, 93, 0);
+                    _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
                     homeModule.navigationBtn.Enabled = true;
                 }
             }
+
+            var marker = homeModule.map.Overlays[0].Markers[_alertPanels.FindIndex(panel => panel == _selectedPanel) + 1];
+            marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
         }
 
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {

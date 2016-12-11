@@ -73,6 +73,16 @@ namespace KBS_SE3.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap load_feed {
+            get {
+                object obj = ResourceManager.GetObject("load_feed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap logo_final {
             get {
                 object obj = ResourceManager.GetObject("logo_final", resourceCulture);
@@ -83,13 +93,6 @@ namespace KBS_SE3.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-
-        internal static System.Drawing.Bitmap Medic {
-            get {
-                object obj = ResourceManager.GetObject("Medic", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
         internal static System.Drawing.Bitmap marker_icon_blue {
             get {
                 object obj = ResourceManager.GetObject("marker_icon_blue", resourceCulture);
@@ -120,9 +123,49 @@ namespace KBS_SE3.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Medic {
+            get {
+                object obj = ResourceManager.GetObject("Medic", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap refresh_icon {
             get {
                 object obj = ResourceManager.GetObject("refresh_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap straight_icon {
+            get {
+                object obj = ResourceManager.GetObject("straight_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap turn_left_icon {
+            get {
+                object obj = ResourceManager.GetObject("turn_left_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap turn_right_icon {
+            get {
+                object obj = ResourceManager.GetObject("turn_right_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

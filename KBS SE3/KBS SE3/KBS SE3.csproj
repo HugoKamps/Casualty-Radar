@@ -33,6 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GMap.NET.Core, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
       <HintPath>..\packages\GMap.NET.WindowsForms.1.7.1\lib\net40\GMap.NET.Core.dll</HintPath>
       <Private>True</Private>
@@ -41,7 +49,20 @@
       <HintPath>..\packages\GMap.NET.WindowsForms.1.7.1\lib\net40\GMap.NET.WindowsForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.9\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Web, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Web.6.9.9\lib\net45\MySql.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Device" />
     <Reference Include="System.ServiceModel" />
@@ -62,6 +83,9 @@
     <Compile Include="Container.Designer.cs">
       <DependentUpon>Container.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\Algorithms\AStar\Node.cs" />
+    <Compile Include="Core\Algorithms\AStar\Pathfinder.cs" />
+    <Compile Include="Core\Algorithms\SearchParameters.cs" />
     <Compile Include="Core\Dialog\DialogOverlay.cs" />
     <Compile Include="Core\Dialog\DialogType.cs" />
     <Compile Include="Core\LocationManager.cs" />
@@ -71,13 +95,15 @@
     <Compile Include="Dialog.Designer.cs">
       <DependentUpon>Dialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utils\ConnectionUtil.cs" />
     <Compile Include="Models\Breadcrumb.cs" />
-    <Compile Include="Models\Graph\Member.cs" />
-    <Compile Include="Models\Graph\Node.cs" />
-    <Compile Include="Models\Graph\Relation.cs" />
-    <Compile Include="Models\Graph\Tag.cs" />
-    <Compile Include="Models\Graph\Way.cs" />
+    <Compile Include="Models\Graph\XmlClasses\Node.cs" />
+    <Compile Include="Models\Graph\XmlClasses\Tag.cs" />
+    <Compile Include="Models\Graph\XmlClasses\Way.cs" />
+    <Compile Include="Models\Graph\Graph.cs" />
+    <Compile Include="Utils\ConnectionUtil.cs" />
+    <Compile Include="Models\Graph\Edge.cs" />
+    <Compile Include="Models\Graph\Vertex.cs" />
+    <Compile Include="Models\Navigation\NavigationStep.cs" />
     <Compile Include="Models\PushMessage.cs" />
     <Compile Include="Core\IModule.cs" />
     <Compile Include="Core\ModuleManager.cs" />
@@ -118,6 +144,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\AlertUtil.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Utils\XMLUtil.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
     </EmbeddedResource>
@@ -166,6 +193,7 @@
   <ItemGroup>
     <Content Include="feed.xml" />
     <Content Include="Resources\app_icon.ico" />
+    <None Include="Resources\converted.osm" />
     <None Include="Resources\marker_icon_yellow.png" />
     <None Include="Resources\marker_icon_red.png" />
     <None Include="Resources\marker_icon_blue.png" />
@@ -176,13 +204,13 @@
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
     <Content Include="Resources\case-medic-icon-22.png" />
-    <Content Include="Resources\dialog_icon_error.png" />
-    <Content Include="Resources\dialog_icon_success.png" />
-    <Content Include="Resources\dialog_icon_warning.png" />
     <Content Include="Resources\Firefighter.png" />
+    <Content Include="Resources\load_feed.gif" />
     <Content Include="Resources\logo_final.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\Algorithms\Dijkstra\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

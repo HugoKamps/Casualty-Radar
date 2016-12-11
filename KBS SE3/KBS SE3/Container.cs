@@ -2,9 +2,9 @@
 using KBS_SE3.Core.Dialog;
 using KBS_SE3.Models;
 using KBS_SE3.Modules;
+using KBS_SE3.Utils;
 using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static KBS_SE3.Core.Dialog.DialogType;
@@ -26,8 +26,8 @@ namespace KBS_SE3 {
 
         private Container() {
             InitializeComponent();
-            this._modManager = ModuleManager.GetInstance();
-            this._dialog = new Dialog();
+            _modManager = ModuleManager.GetInstance();
+            _dialog = new Dialog();
             registerButtons();
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
         }
@@ -37,13 +37,15 @@ namespace KBS_SE3 {
             return _instance;
         }
 
-        public void DisplayDialog(DialogMessageType type, String title, String msg) {
+        public void DisplayDialog(DialogMessageType type, string title, string msg) {
             using(new DialogOverlay()) {
                 _dialog.StartPosition = FormStartPosition.CenterParent;
                 _dialog.Display(type, title, msg);
                 _dialog.ShowDialog();
             }
         }
+
+        public Label GetBreadcrumbStart() => breadCrumbStart;
         
         /*
         * Method that registers all buttons in the application menu
@@ -65,6 +67,7 @@ namespace KBS_SE3 {
         //This event is triggered when the minimize button is clicked. It minimizes the window
         private void minimizeBtn_Click(object sender, EventArgs e) {
             WindowState = FormWindowState.Minimized;
+            DisplayDialog(DialogMessageType.SUCCESS, "Goed", "Vind niet kunnen");
         }
 
         /* This event is triggered when the user's mouse hovers over the minimize or exit button. 
@@ -103,14 +106,11 @@ namespace KBS_SE3 {
             ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
         }
 
-        private void exitBtn_Click(object sender, EventArgs e) {
-            Application.Exit();
-        }
+        private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
 
         private void Container_Load(object sender, EventArgs e){
-            // Load the feed
-            FeedTicker feedTicker = new FeedTicker(30000, Feed.GetInstance());
-            _modManager.UpdateModule(_modManager.GetDefaultModule());
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            this.Shown += hm.HomeModule_Load;
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {

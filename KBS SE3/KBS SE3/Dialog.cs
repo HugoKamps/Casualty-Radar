@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static KBS_SE3.Core.Dialog.DialogType;
-using KBS_SE3.Core.Dialog;
 using System.Runtime.InteropServices;
 
 namespace KBS_SE3 {
@@ -30,15 +23,15 @@ namespace KBS_SE3 {
         * Initializes the dialog interface with the given properties.
         * This method is purely for initialization purposes and shouldn't be called randomly.
         */
-        public void Display(DialogMessageType type, String title, String content) {
-            dialogHeaderTitle.Text = DialogType.ParseHeaderMessage(type)+": ";
+        public void Display(DialogMessageType type, string title, string content) {
+            dialogHeaderTitle.Text = ParseHeaderMessage(type)+": ";
             dialogHeaderText.Text = title;
             dialogContentLabel.Text = content;
-            dialogIconPicturebox.Image = (Image)DialogType.GetDialogIcon(type);
+            dialogIconPicturebox.Image = (Image)GetDialogIcon(type);
         }
 
         private void dialogCloseBtn_Click(object sender, EventArgs e) {
-            this.Close();
+            Close();
         }
 
         private void dialogCloseBtn_MouseEnter(object sender, EventArgs e) {
