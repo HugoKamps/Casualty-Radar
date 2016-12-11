@@ -1,23 +1,14 @@
 ﻿using GMap.NET;
 using KBS_SE3.Core;
-using KBS_SE3.Models.Graph;
 using KBS_SE3.Modules;
-using KBS_SE3.Properties;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using KBS_SE3.Models.Graph.XmlClasses;
 
-namespace KBS_SE3.Utils
-{
-    class XMLUtil
-    {
+namespace KBS_SE3.Utils {
+    class XMLUtil {
+        /*
         static List<Way> ways = new List<Way>();
 
         public static void read()
@@ -61,6 +52,6 @@ namespace KBS_SE3.Utils
                 var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
                 //hm.GetLocationManager().DrawRoute(wayPoints);
             }
-        }
+            */
     }
 }

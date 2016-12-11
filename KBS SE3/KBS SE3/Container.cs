@@ -1,6 +1,7 @@
 ﻿using KBS_SE3.Core;
 using KBS_SE3.Core.Dialog;
 using KBS_SE3.Models;
+using KBS_SE3.Models.DataControl;
 using KBS_SE3.Modules;
 using KBS_SE3.Utils;
 using System;
@@ -67,7 +68,6 @@ namespace KBS_SE3 {
         //This event is triggered when the minimize button is clicked. It minimizes the window
         private void minimizeBtn_Click(object sender, EventArgs e) {
             WindowState = FormWindowState.Minimized;
-            DisplayDialog(DialogMessageType.SUCCESS, "Goed", "Vind niet kunnen");
         }
 
         /* This event is triggered when the user's mouse hovers over the minimize or exit button. 

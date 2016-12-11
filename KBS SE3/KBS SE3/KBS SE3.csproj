@@ -96,13 +96,12 @@
       <DependentUpon>Dialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Breadcrumb.cs" />
-    <Compile Include="Models\Graph\XmlClasses\Node.cs" />
-    <Compile Include="Models\Graph\XmlClasses\Tag.cs" />
-    <Compile Include="Models\Graph\XmlClasses\Way.cs" />
-    <Compile Include="Models\Graph\Graph.cs" />
+    <Compile Include="Models\DataControl\DataCollection.cs" />
+    <Compile Include="Models\DataControl\DataParser.cs" />
+    <Compile Include="Models\DataControl\Graph\Node.cs" />
+    <Compile Include="Models\DataControl\Graph\NodeReference.cs" />
+    <Compile Include="Models\DataControl\Graph\Way.cs" />
     <Compile Include="Utils\ConnectionUtil.cs" />
-    <Compile Include="Models\Graph\Edge.cs" />
-    <Compile Include="Models\Graph\Vertex.cs" />
     <Compile Include="Models\Navigation\NavigationStep.cs" />
     <Compile Include="Models\PushMessage.cs" />
     <Compile Include="Core\IModule.cs" />
