@@ -204,6 +204,9 @@
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
     <Content Include="Resources\case-medic-icon-22.png" />
+    <Content Include="Resources\dialog_icon_error.png" />
+    <Content Include="Resources\dialog_icon_success.png" />
+    <Content Include="Resources\dialog_icon_warning.png" />
     <Content Include="Resources\Firefighter.png" />
     <Content Include="Resources\load_feed.gif" />
     <Content Include="Resources\logo_final.png" />

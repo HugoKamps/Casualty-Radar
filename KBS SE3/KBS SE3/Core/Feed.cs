@@ -18,8 +18,9 @@ using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Properties;
+using KBS_SE3.Models;
 
-namespace KBS_SE3.Models {
+namespace KBS_SE3.Core {
     internal class Feed {
         private static Feed _instance;
         private SyndicationFeed _p2000;
