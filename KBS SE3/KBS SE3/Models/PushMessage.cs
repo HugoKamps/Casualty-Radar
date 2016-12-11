@@ -13,7 +13,7 @@ namespace KBS_SE3.Models {
         Police, Ambulance, FireDepartment
     }
 
-     class PushMessage {
+    class PushMessage {
         private NotifyIcon _icon;
         private List<Alert> _alert;
 
@@ -21,7 +21,7 @@ namespace KBS_SE3.Models {
         public PushMessage(List<Alert> alert) {
             _icon = new NotifyIcon();
             _alert = alert;
-           setPushMessage(_alert);
+            setPushMessage(_alert);
         }
 
         // Function for pushing message to user
