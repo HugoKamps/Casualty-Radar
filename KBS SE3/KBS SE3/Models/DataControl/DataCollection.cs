@@ -44,5 +44,6 @@ namespace KBS_SE3.Models.DataControl {
                 foreach (NodeReference reference in way.References)
                     reference.Node = nodeCollection[reference.ReferenceID];
         }
+        
     }
 }

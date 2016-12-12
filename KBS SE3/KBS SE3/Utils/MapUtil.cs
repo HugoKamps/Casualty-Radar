@@ -30,5 +30,7 @@ namespace KBS_SE3.Utils {
             double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
             return EARTH_RADIUS * c;
         }
+
+
     }
 }

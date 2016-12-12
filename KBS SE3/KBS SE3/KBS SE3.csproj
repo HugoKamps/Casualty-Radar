@@ -144,7 +144,6 @@
     <Compile Include="Utils\AlertUtil.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utils\MapUtil.cs" />
-    <Compile Include="Utils\XMLUtil.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
     </EmbeddedResource>
