@@ -16,6 +16,7 @@ namespace KBS_SE3 {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
+
         private Dialog _dialog;
         private static Container _instance;
         private ModuleManager _modManager;
