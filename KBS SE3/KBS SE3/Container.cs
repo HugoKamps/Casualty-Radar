@@ -111,6 +111,7 @@ namespace KBS_SE3 {
         private void Container_Load(object sender, EventArgs e){
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             this.Shown += hm.HomeModule_Load;
+            _modManager.UpdateModule(hm);
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
