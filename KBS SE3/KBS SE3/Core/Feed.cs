@@ -1,23 +1,16 @@
-﻿using KBS_SE3.Core;
-using KBS_SE3.Modules;
+﻿using KBS_SE3.Modules;
 using KBS_SE3.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel.Syndication;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using GMap.NET;
 using GMap.NET.WindowsForms;
-using GMap.NET.WindowsForms.Markers;
-using KBS_SE3.Properties;
 using KBS_SE3.Models;
 
 namespace KBS_SE3.Core {
@@ -30,7 +23,7 @@ namespace KBS_SE3.Core {
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
         private Panel _selectedPanel;
-        private List<Panel> _alertPanels = new List<Panel>();
+        private readonly List<Panel> _alertPanels = new List<Panel>();
 
         public static Feed GetInstance() {
             if (_instance == null) _instance = new Feed();
@@ -111,7 +104,7 @@ namespace KBS_SE3.Core {
                 newFeed.Items = newItems;
                 List<Alert> newAlerts = CreateAlertList(newFeed);
 
-                if (newAlerts.Count() > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized) {
+                if (newAlerts.Count > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized) {
                     // Send list with new alerts to PushMessage
                     new PushMessage(newAlerts);
                 }
@@ -129,7 +122,6 @@ namespace KBS_SE3.Core {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             var bwFeed = new BackgroundWorker();
             var bwMap = new BackgroundWorker();
-            LocationManager lm = null;
             int selectedFilter = hm.alertTypeComboBox.SelectedIndex;
             int y = 0;
 
@@ -152,16 +144,14 @@ namespace KBS_SE3.Core {
             hm.loadFeedLabel.Refresh();
             hm.IsRefreshing = true;
             hm.feedPanel.Controls.Clear();
-            
-            bwMap.DoWork += new DoWorkEventHandler(
-            delegate (object o, DoWorkEventArgs args) {
+
+            bwMap.DoWork += delegate {
                 hm.Invoke(new Action(() => {
                     hm.GetLocationManager();
                 }));
-            });
+            };
 
-            bwMap.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
-            delegate (object o, RunWorkerCompletedEventArgs args) {
+            bwMap.RunWorkerCompleted += delegate {
                 hm.GetAlertsMap(false);
                 // Remove load icon
                 hm.loadFeedPictureBox.Visible = false;
@@ -175,23 +165,21 @@ namespace KBS_SE3.Core {
                     MessageBox.Show(e.ToString());
                 }
                 hm.alertsTitleLabel.Text = "Meldingen (" + _filteredAlerts.Count.ToString() + ")";
-                
-            });
+
+            };
 
             // Create panels in background thread
-            bwFeed.DoWork += new DoWorkEventHandler(
-            delegate (object o, DoWorkEventArgs args) {
+            bwFeed.DoWork += delegate {
                 _alertPanels.Clear();
                 foreach (var a in _filteredAlerts) {
                     _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y, hm));
                     y += 105;
                 }
-            });
+            };
 
-            bwFeed.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
-            delegate (object o, RunWorkerCompletedEventArgs args) {
+            bwFeed.RunWorkerCompleted += delegate {
                 bwMap.RunWorkerAsync();
-            });
+            };
 
             bwFeed.RunWorkerAsync();
 
