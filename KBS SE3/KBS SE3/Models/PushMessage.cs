@@ -10,7 +10,7 @@ namespace KBS_SE3.Models {
         Police, Ambulance, FireDepartment
     }
 
-     class PushMessage {
+    class PushMessage {
         private NotifyIcon _icon;
 
         // Constructor for making a message + push message

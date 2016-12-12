@@ -73,7 +73,6 @@ namespace KBS_SE3.Core {
             _routeOverlay.Routes.Add(r);
         }
 
-
         public double GetCurrentLatitude() => _currentLatitude;
         public double GetCurrentLongitude() => _currentLongitude;
     }

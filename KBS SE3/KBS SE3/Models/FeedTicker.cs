@@ -2,6 +2,7 @@
 //using System.Threading;
 using System.Windows.Forms;
 using KBS_SE3.Properties;
+using KBS_SE3.Core;
 
 namespace KBS_SE3.Models {
     class FeedTicker {

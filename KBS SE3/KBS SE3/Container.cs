@@ -1,6 +1,7 @@
 ﻿using KBS_SE3.Core;
 using KBS_SE3.Core.Dialog;
 using KBS_SE3.Models;
+using KBS_SE3.Models.DataControl;
 using KBS_SE3.Modules;
 using KBS_SE3.Utils;
 using System;
@@ -30,7 +31,6 @@ namespace KBS_SE3 {
             _dialog = new Dialog();
             registerButtons();
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
-            _modManager.UpdateModule(breadCrumbStart, contentPanel, _modManager.GetDefaultModule());
         }
 
         public static Container GetInstance() {
@@ -68,7 +68,6 @@ namespace KBS_SE3 {
         //This event is triggered when the minimize button is clicked. It minimizes the window
         private void minimizeBtn_Click(object sender, EventArgs e) {
             WindowState = FormWindowState.Minimized;
-            DisplayDialog(DialogMessageType.SUCCESS, "Goed", "Vind niet kunnen");
         }
 
         /* This event is triggered when the user's mouse hovers over the minimize or exit button. 
@@ -104,7 +103,7 @@ namespace KBS_SE3 {
             settingsBtn.BackColor = Color.FromArgb(52, 57, 61);
             Button selectedButton = (Button) sender;
             selectedButton.BackColor = Color.FromArgb(236, 89, 71);
-            ModuleManager.GetInstance().UpdateModule(breadCrumbStart, contentPanel, selectedButton.Tag);
+            ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
         }
 
         private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
@@ -112,10 +111,11 @@ namespace KBS_SE3 {
         private void Container_Load(object sender, EventArgs e){
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             this.Shown += hm.HomeModule_Load;
+            _modManager.UpdateModule(hm);
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
-            ModuleManager.GetInstance().UpdateModule(breadCrumbStart, contentPanel, ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent);
+            ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent);
         }
     }
 }
