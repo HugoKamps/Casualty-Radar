@@ -130,7 +130,7 @@ namespace KBS_SE3.Modules {
 
             var navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             if (selectedAlert != null) navigationModule.SetAlertInfo(selectedAlert.Title, selectedAlert.Info, selectedAlert.Type, selectedAlert.PubDate.TimeOfDay.ToString(), _locationManager.GetLocationPoint(), new PointLatLng(selectedAlert.Lat, selectedAlert.Lng));
-            ModuleManager.GetInstance().UpdateModule(KBS_SE3.Container.GetInstance().breadCrumbStart, KBS_SE3.Container.GetInstance().contentPanel, navigationModule);
+            ModuleManager.GetInstance().UpdateModule(navigationModule);
         }
 
         private void navigationBtn_EnabledChanged(object sender, EventArgs e) {
