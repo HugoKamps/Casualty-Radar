@@ -11,6 +11,9 @@ namespace KBS_SE3.Models.DataControl {
     [XmlRoot("osm")]
     public class DataCollection {
 
+        [XmlIgnore]
+        private const int INTERSECTION_WAY_MINIMUM = 2; 
+
         /*
         * All 'Node' elements that are returned from the deserialization.
         * We require an in-memory list of nodes to link Node references that are linked to a way
@@ -27,9 +30,18 @@ namespace KBS_SE3.Models.DataControl {
         [XmlElement("w")]
         public List<Way> Ways { get; private set; }
 
+        /*
+        * Nodes that have connected ways are considered Intersections.
+        * Intersections are used to build maps and calculate routes.
+        * Without intersections we wouldn't know how the roads are connected.
+        */
+        [XmlIgnore]
+        public List<Node> Intersections { get; private set; }
+
         public DataCollection() {
             this.Nodes = new List<Node>();
             this.Ways = new List<Way>();
+            this.Intersections = new List<Node>();
         }
 
         /*
@@ -42,8 +54,13 @@ namespace KBS_SE3.Models.DataControl {
             var nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
             foreach (Way way in this.Ways)
                 foreach (NodeReference reference in way.References)
-                    reference.Node = nodeCollection[reference.ReferenceID];
+                    if (nodeCollection.ContainsKey(reference.ReferenceID)) {
+                        reference.Node = nodeCollection[reference.ReferenceID];
+                        reference.Node.ConnectedWays.Add(way);
+                        if (reference.Node.ConnectedWays.Count > INTERSECTION_WAY_MINIMUM)
+                            Intersections.Add(reference.Node);
+                    }
         }
-        
+
     }
 }

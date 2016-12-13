@@ -16,6 +16,7 @@ namespace KBS_SE3.Modules {
         private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
         private FeedTicker _feedTicker;
         private bool _isRefreshing = false;
+        /* Kan weg */public GMapOverlay RouteOverlay { get; set; }
 
         public HomeModule() {
             InitializeComponent();
@@ -47,7 +48,8 @@ namespace KBS_SE3.Modules {
                 GMaps.Instance.Mode = AccessMode.ServerOnly;
                 var markersOverlay = new GMapOverlay("markers");
                 map.Overlays.Add(markersOverlay);
-
+                /* kan weg */ this.RouteOverlay = new GMapOverlay("route");
+                /* kan weg */ map.Overlays.Add(RouteOverlay);
                 //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
                 if (hasLocationService) {
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.GetCurrentLatitude(), _locationManager.GetCurrentLongitude(), 0));

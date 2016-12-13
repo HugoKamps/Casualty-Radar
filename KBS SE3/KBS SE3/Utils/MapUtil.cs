@@ -1,6 +1,8 @@
-﻿using KBS_SE3.Models.DataControl.Graph;
+﻿using KBS_SE3.Models.DataControl;
+using KBS_SE3.Models.DataControl.Graph;
 using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,15 +24,40 @@ namespace KBS_SE3.Utils {
         * based on Longitude and Latitude.
         */
         public static double GetDistance(Node alpha, Node beta) {
-            double dLat = ToRad(beta.Lat - alpha.Lat);
-            double dLon = ToRad(beta.Lon - alpha.Lon);
+            return GetDistance(alpha.Lat, alpha.Lon, beta.Lat, beta.Lon);
+        }
+
+        /*
+        * Calculates the distance in KM between the given longitude and latitudes.
+        * This calculation uses the 'Haversine' algorithm to calculate the distances 
+        * based on Longitude and Latitude.
+        */
+        public static double GetDistance(double lat1, double lon1, double lat2, double lon2) {
+            double dLat = ToRad(lat2 - lat1);
+            double dLon = ToRad(lon2 - lon1);
             double a = Math.Pow(Math.Sin(dLat / 2), 2) +
-                       Math.Cos(ToRad(alpha.Lat)) * Math.Cos(ToRad(beta.Lat)) *
+                       Math.Cos(ToRad(lat1)) * Math.Cos(ToRad(lat2)) *
                        Math.Pow(Math.Sin(dLon / 2), 2);
             double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
             return EARTH_RADIUS * c;
         }
 
+        /*
+        * Returns the Node that is the most near to the given latitude and longitude.
+        * Nodes from the given collection will be compared to the longitude and latitude.
+        * Be aware that this method should only be used to compare latitudes and longitudes and not
+        * two nodes since the given node might be existent in the given collection aswell, this would return the
+        * same node you passed as parameter.
+        */
+        public static Node GetNearest(double lat, double lon, List<Node> targetCollection) => 
+            targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, lat, lon)).First();
 
+        /*
+        * Returns the node that is the most near to the given Node.
+        * This method will not return the given node (since that is technically the most near one) but a
+        * different node that is 'technically' the second most near.
+        */
+        public static Node GetNearest(Node origin, List<Node> targetCollection) =>
+            targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, origin.Lat, origin.Lon)).ElementAt(1);
     }
 }
