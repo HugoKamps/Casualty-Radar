@@ -59,7 +59,7 @@ namespace KBS_SE3.Utils
                     wayPoints.Add(n.LatLng);
                 }
                 var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-                hm.GetLocationManager().DrawRoute(wayPoints);
+                //hm.GetLocationManager().DrawRoute(wayPoints);
             }
         }
     }

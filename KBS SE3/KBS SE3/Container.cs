@@ -46,9 +46,7 @@ namespace KBS_SE3 {
             }
         }
 
-        public Label GetBreadcrumbStart() {
-            return breadCrumbStart;
-        }
+        public Label GetBreadcrumbStart() => breadCrumbStart;
         
         /*
         * Method that registers all buttons in the application menu
@@ -70,6 +68,7 @@ namespace KBS_SE3 {
         //This event is triggered when the minimize button is clicked. It minimizes the window
         private void minimizeBtn_Click(object sender, EventArgs e) {
             WindowState = FormWindowState.Minimized;
+            DisplayDialog(DialogMessageType.SUCCESS, "Goed", "Vind niet kunnen");
         }
 
         /* This event is triggered when the user's mouse hovers over the minimize or exit button. 
@@ -108,13 +107,11 @@ namespace KBS_SE3 {
             ModuleManager.GetInstance().UpdateModule(breadCrumbStart, contentPanel, selectedButton.Tag);
         }
 
-        private void exitBtn_Click(object sender, EventArgs e) {
-            Application.Exit();
-        }
+        private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
 
         private void Container_Load(object sender, EventArgs e){
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            this.Shown += hm.FormLoaded;
+            this.Shown += hm.HomeModule_Load;
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {

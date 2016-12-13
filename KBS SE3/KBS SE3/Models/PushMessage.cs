@@ -8,34 +8,27 @@ namespace KBS_SE3.Models {
 
      class PushMessage {
         private NotifyIcon _icon;
-        private List<Alert> _alert;
 
         // Constructor for making a message + push message
-        public PushMessage(List<Alert> alert) {
+        public PushMessage(List<Alert> alerts) {
             _icon = new NotifyIcon();
-            _alert = alert;
-           setPushMessage(_alert);
+           _setPushMessage(alerts);
         }
 
         // Function for pushing message to user
-        private void setPushMessage(List<Alert> alert) {
+        private void _setPushMessage(List<Alert> alerts) {
             string message = "";
-            if(alert.Count == 1) {
-                message = alert[0].ToString();
-            }else {
-                message = "Er zijn " + alert.Count + " nieuwe meldingen";
-            }
-            if (_alert.Count != 0 && Container.GetInstance().WindowState == FormWindowState.Minimized) {
-                _icon.Icon = SystemIcons.Exclamation;
-                _icon.Visible = true;
-                _icon.Icon = new Icon(@"..\..\Resources\app_icon.ico");
-                _icon.BalloonTipClosed += new EventHandler(BalloonTipClosed);
-                _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
-                _icon.ShowBalloonTip(5000,
-                    message,
-                     "Klik hier om de meldingen te bekijken",
-                    ToolTipIcon.None);
-            }
+            if (alerts.Count == 1)  message = alerts[0].ToString();
+            else  message = "Er zijn " + alerts.Count + " nieuwe meldingen";
+            _icon.Icon = SystemIcons.Exclamation;
+            _icon.Visible = true;
+            _icon.Icon = new Icon(@"..\..\Resources\app_icon.ico");
+            _icon.BalloonTipClosed += new EventHandler(BalloonTipClosed);
+            _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
+            _icon.ShowBalloonTip(5000,
+                message,
+                "Klik hier om de meldingen te bekijken",
+                ToolTipIcon.None);
         }
 
         private void BalloonTipClosed(object Sender, EventArgs e) {
