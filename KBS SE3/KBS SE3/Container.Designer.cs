@@ -240,6 +240,7 @@ namespace KBS_SE3 {
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Container";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Casualty Radar";
             this.Load += new System.EventHandler(this.Container_Load);
             this.topBar.ResumeLayout(false);
