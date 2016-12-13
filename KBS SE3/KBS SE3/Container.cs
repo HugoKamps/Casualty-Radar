@@ -1,10 +1,15 @@
-﻿using KBS_SE3.Core;
+﻿using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
+using KBS_SE3.Core;
 using KBS_SE3.Core.Dialog;
 using KBS_SE3.Models;
 using KBS_SE3.Models.DataControl;
+using KBS_SE3.Models.DataControl.Graph;
 using KBS_SE3.Modules;
 using KBS_SE3.Utils;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -16,6 +21,7 @@ namespace KBS_SE3 {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
+
         private Dialog _dialog;
         private static Container _instance;
         private ModuleManager _modManager;
@@ -39,7 +45,7 @@ namespace KBS_SE3 {
         }
 
         public void DisplayDialog(DialogMessageType type, string title, string msg) {
-            using(new DialogOverlay()) {
+            using (new DialogOverlay()) {
                 _dialog.StartPosition = FormStartPosition.CenterParent;
                 _dialog.Display(type, title, msg);
                 _dialog.ShowDialog();
@@ -47,7 +53,7 @@ namespace KBS_SE3 {
         }
 
         public Label GetBreadcrumbStart() => breadCrumbStart;
-        
+
         /*
         * Method that registers all buttons in the application menu
         * Each button is bound to a Module; which is an instance of IModule
@@ -64,7 +70,7 @@ namespace KBS_SE3 {
                 return cp;
             }
         }
-        
+
         //This event is triggered when the minimize button is clicked. It minimizes the window
         private void minimizeBtn_Click(object sender, EventArgs e) {
             WindowState = FormWindowState.Minimized;
@@ -73,7 +79,7 @@ namespace KBS_SE3 {
         /* This event is triggered when the user's mouse hovers over the minimize or exit button. 
         It changes the color to show which button is being hovered over. */
         private void topBarButtons_MouseEnter(object sender, EventArgs e) {
-            Label selected = (Label) sender;
+            Label selected = (Label)sender;
             selected.BackColor = Color.FromArgb(220, 82, 66);
         }
 
@@ -98,17 +104,17 @@ namespace KBS_SE3 {
             SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }
 
-        private void menuBtn_Click(object sender, EventArgs e){
+        private void menuBtn_Click(object sender, EventArgs e) {
             homeBtn.BackColor = Color.FromArgb(52, 57, 61);
             settingsBtn.BackColor = Color.FromArgb(52, 57, 61);
-            Button selectedButton = (Button) sender;
+            Button selectedButton = (Button)sender;
             selectedButton.BackColor = Color.FromArgb(236, 89, 71);
             ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
         }
 
         private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
 
-        private void Container_Load(object sender, EventArgs e){
+        private void Container_Load(object sender, EventArgs e) {
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             this.Shown += hm.HomeModule_Load;
             _modManager.UpdateModule(hm);
@@ -116,6 +122,22 @@ namespace KBS_SE3 {
 
         private void prevBtn_Click(object sender, EventArgs e) {
             ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent);
+        }
+
+        private void testBtn_Click(object sender, EventArgs e) {
+            DataParser parser = new DataParser(@"C:\Users\Eelco\Desktop\zwolle_small.xml");
+            var timeStamp = DateTime.Now.Ticks;
+            parser.Deserialize();
+            DataCollection collection = parser.GetCollection();
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            int i = 0;
+            foreach(Node n in collection.Intersections) {
+                if (i == 100) break;
+                GMapMarker m = new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.blue_dot);
+                hm.RouteOverlay.Markers.Add(m);
+                i++;
+            }
+            DisplayDialog(DialogMessageType.SUCCESS, "Parsing Finished", "Het duurde " + ((DateTime.Now.Ticks - timeStamp) / 10000) + " ms. Intersections: "+collection.Intersections.Count + ", Nodes: "+collection.Nodes.Count);
         }
     }
 }

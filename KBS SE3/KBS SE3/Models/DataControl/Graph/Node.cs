@@ -24,6 +24,14 @@ namespace KBS_SE3.Models.DataControl.Graph {
         [XmlAttribute("l", DataType = "double")]
         public double Lon { get; set; }
 
+        // Represents the list of ways that are directly connected to this node
+        [XmlIgnore]
+        public List<Way> ConnectedWays { get; private set; }
+
+        public Node() {
+            this.ConnectedWays = new List<Way>();
+        }
+
         // Returns the Geo location from the Node based on the Longitude and Latitude of the Node.
         public PointLatLng GetPoint() {
             return new PointLatLng(this.Lat, this.Lon); 
