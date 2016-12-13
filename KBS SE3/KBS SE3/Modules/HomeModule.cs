@@ -16,7 +16,7 @@ namespace KBS_SE3.Modules {
         private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
         private FeedTicker _feedTicker;
         private bool _isRefreshing = false;
-        public GMapOverlay RouteOverlay { get; set; }
+        /* Kan weg */public GMapOverlay RouteOverlay { get; set; }
 
         public HomeModule() {
             InitializeComponent();
