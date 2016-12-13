@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Device.Location;
 using System.ComponentModel;
 using System.Drawing;
@@ -16,7 +17,9 @@ namespace KBS_SE3.Modules {
         private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
         private FeedTicker _feedTicker;
         private bool _isRefreshing = false;
-        /* Kan weg */public GMapOverlay RouteOverlay { get; set; }
+        private Panel _selectedPanel;
+        private readonly List<Panel> _alertPanels = new List<Panel>();
+        public GMapOverlay RouteOverlay { get; set; }
 
         public HomeModule() {
             InitializeComponent();
@@ -48,8 +51,10 @@ namespace KBS_SE3.Modules {
                 GMaps.Instance.Mode = AccessMode.ServerOnly;
                 var markersOverlay = new GMapOverlay("markers");
                 map.Overlays.Add(markersOverlay);
-                /* kan weg */ this.RouteOverlay = new GMapOverlay("route");
-                /* kan weg */ map.Overlays.Add(RouteOverlay);
+                /* kan weg */
+                this.RouteOverlay = new GMapOverlay("route");
+                /* kan weg */
+                map.Overlays.Add(RouteOverlay);
                 //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
                 if (hasLocationService) {
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.GetCurrentLatitude(), _locationManager.GetCurrentLongitude(), 0));
@@ -121,12 +126,10 @@ namespace KBS_SE3.Modules {
         }
 
         private void navigationBtn_Click(object sender, EventArgs e) {
-            var selectedPanel = Feed.GetInstance().GetSelectedPanel;
-            var alertPanels = Feed.GetInstance().GetAlertPanels;
             Alert selectedAlert = null;
 
-            for (var i = 0; i < alertPanels.Count; i++) {
-                if (selectedPanel != alertPanels[i]) continue;
+            for (var i = 0; i < _alertPanels.Count; i++) {
+                if (_selectedPanel != _alertPanels[i]) continue;
                 selectedAlert = Feed.GetInstance().GetAlerts()[i];
                 break;
             }
@@ -163,6 +166,190 @@ namespace KBS_SE3.Modules {
             else map.SetPositionByKeywords(Settings.Default.userLocation);
         }
 
+        public void LoadComponents() {
+            BackgroundWorker bwFeed = new BackgroundWorker();
+            BackgroundWorker bwMap = new BackgroundWorker();
+
+            bwFeed.RunWorkerAsync();
+
+            bwMap.DoWork += delegate {
+                Invoke(new Action(() => GetLocationManager()));
+            };
+
+            bwMap.RunWorkerCompleted += delegate {
+                GetAlertsMap(false);
+                RemoveLoadIcon();
+                try {
+                    foreach (Panel p in GetAlertPanels)
+                        feedPanel.Controls.Add(p);
+                } catch (InvalidOperationException e) {
+                    MessageBox.Show(e.ToString());
+                }
+                alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count.ToString() + ")";
+            };
+
+            // Create panels in background thread
+            bwFeed.DoWork += delegate {
+                int y = 0;
+                GetAlertPanels.Clear();
+                foreach (var a in Feed.GetInstance().GetFilteredAlerts) {
+                    GetAlertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y));
+                    y += 105;
+                }
+            };
+
+            bwFeed.RunWorkerCompleted += delegate {
+                bwMap.RunWorkerAsync();
+            };
+        }
+
+        public void DisplayLoadIcon() {
+            loadFeedPictureBox.Visible = true;
+            loadFeedPictureBox.Refresh();
+            loadFeedLabel.Visible = true;
+            loadFeedLabel.Refresh();
+            IsRefreshing = true;
+            feedPanel.Controls.Clear();
+        }
+
+        public void RemoveLoadIcon() {
+            loadFeedPictureBox.Visible = false;
+            loadFeedLabel.Visible = false;
+            IsRefreshing = false;
+            feedPanel.AutoScroll = true;
+        }
+
+        public Panel GetSelectedPanel => _selectedPanel;
+        public List<Panel> GetAlertPanels => _alertPanels;
+        public int GetAlertType => alertTypeComboBox.SelectedIndex;
+
+        public Panel CreateAlertPanel(int type, string title, string info, string time, int y) {
+            //The panel which will be filled with all of the controls below
+            var newPanel = new Panel {
+                Location = new Point(0, y),
+                Size = new Size(320, 100),
+                BackColor = Color.FromArgb(236, 89, 71)
+            };
+
+            //The picture which indicates the type of alert (Firefighter or ambulance)
+            var newPictureBox = new PictureBox {
+                Location = new Point(220, 10),
+                Size = new Size(60, 60),
+                Image = type == 1 ? Properties.Resources.Medic : Properties.Resources.Firefighter,
+                SizeMode = PictureBoxSizeMode.StretchImage
+            };
+
+            //The label which will be filled with the information about the alert
+            var label = new Label {
+                ForeColor = Color.White,
+                Location = new Point(10, 5),
+                Font = new Font("Microsoft Sans Serif", 10),
+                Size = new Size(200, 90),
+                BackColor = Color.Transparent,
+                Text = title + "\n" + info
+            };
+
+            if (_selectedPanel != null) {
+                foreach (var control in _selectedPanel.Controls) {
+                    if (control is Label) {
+                        var selectedLabel = (Label)control;
+                        if (selectedLabel.Text == label.Text) {
+                            newPanel.BackColor = Color.FromArgb(245, 120, 105);
+                            _selectedPanel = newPanel;
+                        }
+                    }
+                }
+            }
+
+            //The label which will be filled with the time of the alert
+            var timeLabel = new Label {
+                ForeColor = Color.White,
+                Location = new Point(150, 65),
+                Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
+                Size = new Size(200, 30),
+                BackColor = Color.Transparent,
+                Text = time
+            };
+
+            //Events for each control in the panel;
+            newPictureBox.MouseEnter += feedPanelItem_MouseEnter;
+            newPictureBox.MouseLeave += feedPanelItem_MouseLeave;
+            newPictureBox.Click += feedPanelItem_Click;
+
+            label.MouseEnter += feedPanelItem_MouseEnter;
+            label.MouseLeave += feedPanelItem_MouseLeave;
+            label.Click += feedPanelItem_Click;
+            label.TextAlign = ContentAlignment.MiddleCenter;
+
+            timeLabel.MouseEnter += feedPanelItem_MouseEnter;
+            timeLabel.MouseLeave += feedPanelItem_MouseLeave;
+            timeLabel.Click += feedPanelItem_Click;
+            timeLabel.TextAlign = ContentAlignment.MiddleCenter;
+
+            newPanel.MouseEnter += feedPanelItem_MouseEnter;
+            newPanel.MouseLeave += feedPanelItem_MouseLeave;
+            newPanel.Click += feedPanelItem_Click;
+            newPanel.Cursor = Cursors.Hand;
+
+            //The panel is filled with all the controls initialized above
+            newPanel.Controls.Add(newPictureBox);
+            newPanel.Controls.Add(label);
+            newPanel.Controls.Add(timeLabel);
+
+            return newPanel;
+        }
+
+        private void feedPanelItem_Click(object sender, EventArgs e) {
+            var homeModule = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+
+            if (sender.GetType() == typeof(Panel)) {
+                var panel = (Panel)sender;
+                if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
+                if (_selectedPanel == panel) {
+                    _selectedPanel = null;
+                    homeModule.navigationBtn.Enabled = false;
+                    homeModule.navigationBtn.BackColor = Color.Gray;
+                } else {
+                    _selectedPanel = panel;
+                    _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
+                    homeModule.navigationBtn.Enabled = true;
+                }
+            } else {
+                var control = (Control)sender;
+                if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
+                if (_selectedPanel == control.Parent) {
+                    _selectedPanel = null;
+                    homeModule.navigationBtn.Enabled = false;
+                } else {
+                    _selectedPanel = (Panel)control.Parent;
+                    _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
+                    homeModule.navigationBtn.Enabled = true;
+                }
+            }
+
+            var marker = homeModule.map.Overlays[0].Markers[_alertPanels.FindIndex(panel => panel == _selectedPanel) + 1];
+            marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+        }
+
+        private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
+            if (sender.GetType() == typeof(Panel)) {
+                var panel = (Panel)sender;
+                if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
+            } else {
+                var control = (Control)sender;
+                if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(210, 73, 57);
+            }
+        }
+
+        private void feedPanelItem_MouseLeave(object sender, EventArgs e) {
+            if (sender.GetType() == typeof(Panel)) {
+                var panel = (Panel)sender;
+                if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
+            } else {
+                var control = (Control)sender;
+                if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(236, 86, 71);
+            }
+        }
+
     }
 }
-
