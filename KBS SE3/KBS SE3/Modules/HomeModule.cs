@@ -43,6 +43,7 @@ namespace KBS_SE3.Modules {
                 map.Overlays.Clear();
                 map.ShowCenter = false;
                 map.MapProvider = GoogleMapProvider.Instance;
+                map.DragButton = MouseButtons.Left;
                 GMaps.Instance.Mode = AccessMode.ServerOnly;
                 var markersOverlay = new GMapOverlay("markers");
                 map.Overlays.Add(markersOverlay);
