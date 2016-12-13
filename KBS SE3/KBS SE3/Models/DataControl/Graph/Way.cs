@@ -14,6 +14,10 @@ namespace KBS_SE3.Models.DataControl.Graph {
         [XmlAttribute("id", DataType = "long")]
         public long ID { get; set; }
 
+        // Represents the Name of the Way, may be null
+        [XmlAttribute("nm", DataType = "string")]
+        public string Name { get; set; }
+
         // Represents all of the Node references in the Way
         [XmlElement("nd")]
         public List<NodeReference> References { get; private set; }
