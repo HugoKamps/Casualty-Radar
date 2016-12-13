@@ -16,6 +16,7 @@ namespace KBS_SE3.Modules {
         private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
         private FeedTicker _feedTicker;
         private bool _isRefreshing = false;
+        public GMapOverlay RouteOverlay { get; set; }
 
         public HomeModule() {
             InitializeComponent();
@@ -46,7 +47,8 @@ namespace KBS_SE3.Modules {
                 GMaps.Instance.Mode = AccessMode.ServerOnly;
                 var markersOverlay = new GMapOverlay("markers");
                 map.Overlays.Add(markersOverlay);
-
+                /* kan weg */ this.RouteOverlay = new GMapOverlay("route");
+                /* kan weg */ map.Overlays.Add(RouteOverlay);
                 //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
                 if (hasLocationService) {
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.GetCurrentLatitude(), _locationManager.GetCurrentLongitude(), 0));
@@ -68,7 +70,7 @@ namespace KBS_SE3.Modules {
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
             _locationManager._currentLatitude = e.Position.Location.Latitude;
             _locationManager._currentLongitude = e.Position.Location.Longitude;
-            GetAlertsMap(true);
+            //GetAlertsMap(true);
         }
 
         //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
@@ -90,7 +92,7 @@ namespace KBS_SE3.Modules {
                     _hasLocationservice = false;
                     break;
             }
-            GetAlertsMap(_hasLocationservice);
+            //GetAlertsMap(_hasLocationservice);
         }
 
         public LocationManager GetLocationManager() {
@@ -99,6 +101,10 @@ namespace KBS_SE3.Modules {
                 LoadLocationManager();
             }
             return _locationManager;
+        }
+
+        public LocationManager LocationManager {
+            set { _locationManager = value; }
         }
 
         private void refreshFeedButton_Click(object sender, EventArgs e) {
@@ -126,7 +132,7 @@ namespace KBS_SE3.Modules {
 
             var navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             if (selectedAlert != null) navigationModule.SetAlertInfo(selectedAlert.Title, selectedAlert.Info, selectedAlert.Type, selectedAlert.PubDate.TimeOfDay.ToString(), _locationManager.GetLocationPoint(), new PointLatLng(selectedAlert.Lat, selectedAlert.Lng));
-            ModuleManager.GetInstance().UpdateModule(KBS_SE3.Container.GetInstance().breadCrumbStart, KBS_SE3.Container.GetInstance().contentPanel, navigationModule);
+            ModuleManager.GetInstance().UpdateModule(navigationModule);
         }
 
         private void navigationBtn_EnabledChanged(object sender, EventArgs e) {
@@ -143,9 +149,9 @@ namespace KBS_SE3.Modules {
             }
         }
 
-        private void LoadLocationManager()
-        {
+        private void LoadLocationManager() {
             _locationManager.SetCoordinatesByLocationSetting();
+            map.IgnoreMarkerOnMouseWheel = true;
             _hasLocationservice = false;
             var watcher = new GeoCoordinateWatcher();
             watcher.PositionChanged += watcher_PositionChanged;
