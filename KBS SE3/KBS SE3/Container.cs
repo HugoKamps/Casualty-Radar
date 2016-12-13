@@ -40,7 +40,9 @@ namespace KBS_SE3 {
         }
 
         public static Container GetInstance() {
+            
             if (_instance == null) _instance = new Container();
+            _instance.BringToFront();
             return _instance;
         }
 

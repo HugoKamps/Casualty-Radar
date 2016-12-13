@@ -1,5 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.ComponentModel;
+using System.Threading;
 using System.Windows.Forms;
+using Timer = System.Timers.Timer;
 
 namespace KBS_SE3 {
     public partial class SplashScreen : Form {
@@ -8,7 +11,7 @@ namespace KBS_SE3 {
         private delegate void CloseDelegate();
         private static SplashScreen _splashScreen;
 
-        private SplashScreen() {
+        public SplashScreen() {
             InitializeComponent();
         }
 
@@ -29,5 +32,19 @@ namespace KBS_SE3 {
         public static void CloseForm() => _splashScreen.Invoke(new CloseDelegate(CloseFormInternal));
 
         static private void CloseFormInternal() => _splashScreen.Close();
+
+        private void SplashScreen_Shown(object sender, System.EventArgs e) {
+            Container c = null;
+            BackgroundWorker bw = new BackgroundWorker();
+
+            bw.DoWork += delegate {
+                c = KBS_SE3.Container.GetInstance();
+            };
+
+            bw.RunWorkerCompleted += delegate {
+                c.Show();
+                this.Hide();
+            };
+        }
     }
 }
