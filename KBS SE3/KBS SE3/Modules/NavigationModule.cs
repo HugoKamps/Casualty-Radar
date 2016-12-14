@@ -9,6 +9,9 @@ using KBS_SE3.Models;
 using KBS_SE3.Models.Navigation;
 using KBS_SE3.Properties;
 using KBS_SE3.Utils;
+using KBS_SE3.Models.DataControl;
+using System;
+using System.Diagnostics;
 
 namespace KBS_SE3.Modules {
     partial class NavigationModule : UserControl, IModule
@@ -65,12 +68,13 @@ namespace KBS_SE3.Modules {
             markersOverlay.Markers.Add(_locationManager.CreateMarker(startLat, startLng, 0));
             markersOverlay.Markers.Add(_locationManager.CreateMarker(destLat, destLng, 2));
 
-            // Dummy data for drawing a route
-            var points = new List<PointLatLng>();
-            points.Add(new PointLatLng(52.1744700, 5.3933600));
-            points.Add(new PointLatLng(52.1746868, 5.3938107));
-            points.Add(new PointLatLng(52.1748315, 5.3942292));
-            _locationManager.DrawRoute(points, _routeOverlay);
+
+            // Reading data for adding test route
+
+            DataParser parser = new DataParser(@"C:\Users\maarten\Desktop\TESTTT.xml");
+            parser.Deserialize();
+            DataCollection collection = parser.GetCollection();
+            _locationManager.DrawRoute(collection, _routeOverlay);
         }
 
         public void CreateRouteStepPanel(NavigationStep step, Color color, int y) {

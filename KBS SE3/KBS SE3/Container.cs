@@ -125,7 +125,7 @@ namespace KBS_SE3 {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"C:\Users\Eelco\Desktop\zwolle_small.xml");
+            DataParser parser = new DataParser(@"C:\Users\maarten\Desktop\zwolle_small.xml");
             var timeStamp = DateTime.Now.Ticks;
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
