@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
 using System.ComponentModel;
+using System.Device.Location;
 using System.Drawing;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
 using KBS_SE3.Properties;
@@ -19,6 +20,8 @@ namespace KBS_SE3.Modules {
         private bool _isRefreshing = false;
         private Panel _selectedPanel;
         private readonly List<Panel> _alertPanels = new List<Panel>();
+        private GMarkerGoogle previousMarker;
+        private int previousMarkerIndex;
         public GMapOverlay RouteOverlay { get; set; }
 
         public HomeModule() {
@@ -50,8 +53,9 @@ namespace KBS_SE3.Modules {
                 GMaps.Instance.Mode = AccessMode.ServerOnly;
                 var markersOverlay = new GMapOverlay("markers");
                 map.Overlays.Add(markersOverlay);
+                map.OnMarkerClick += Marker_Click;
                 /* kan weg */
-                this.RouteOverlay = new GMapOverlay("route");
+                RouteOverlay = new GMapOverlay("route");
                 /* kan weg */
                 map.Overlays.Add(RouteOverlay);
                 //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
@@ -64,10 +68,20 @@ namespace KBS_SE3.Modules {
 
                 foreach (var alert in Feed.GetInstance().GetAlerts()) {
                     var type = alert.Type == 1 ? 1 : 2;
+                    if (previousMarker != null && previousMarker.Position.Lat == alert.Lat && previousMarker.Position.Lng == alert.Lng) type = 3;
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
                 }
             }
         }
+
+        private void Marker_Click(GMapMarker item, MouseEventArgs e) {
+            var markerIndex = (map.Overlays[0].Markers.IndexOf(item)) - 1;
+            if (markerIndex < 0) return;
+            var selectedPanel = _alertPanels[markerIndex];
+            feedPanelItem_Click(selectedPanel, EventArgs.Empty);
+            feedPanel.ScrollControlIntoView(selectedPanel);
+        }
+
 
         public static Image ResizeImage(Image imgToResize, Size size) => new Bitmap(imgToResize, size);
 
@@ -122,6 +136,8 @@ namespace KBS_SE3.Modules {
 
         private void alertTypeComboBox_SelectedIndexChanged(object sender, EventArgs e) {
             Feed.GetInstance().UpdateAlerts();
+            previousMarker = null;
+            previousMarkerIndex = 0;
         }
 
         private void navigationBtn_Click(object sender, EventArgs e) {
@@ -185,6 +201,7 @@ namespace KBS_SE3.Modules {
                     MessageBox.Show(e.ToString());
                 }
                 alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count.ToString() + ")";
+                KBS_SE3.Container.GetInstance().SplashScreen.Hide();
             };
 
             // Create panels in background thread
@@ -326,8 +343,15 @@ namespace KBS_SE3.Modules {
                 }
             }
 
-            var marker = homeModule.map.Overlays[0].Markers[_alertPanels.FindIndex(panel => panel == _selectedPanel) + 1];
-            marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+
+            if (previousMarker != null) map.Overlays[0].Markers[previousMarkerIndex] = previousMarker;
+            var index = _alertPanels.FindIndex(panel => panel == _selectedPanel) + 1;
+            previousMarkerIndex = index;
+            previousMarker = (GMarkerGoogle)homeModule.map.Overlays[0].Markers[index];
+            if (index != 0) {
+                map.Overlays[0].Markers[index] = _locationManager.CreateMarker(previousMarker.Position.Lat, previousMarker.Position.Lng, 3);
+            }
+
         }
 
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {

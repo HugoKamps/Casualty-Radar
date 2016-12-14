@@ -47,16 +47,11 @@ namespace KBS_SE3.Core {
             if (type == 0) imgLocation += "blue.png";
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
+            if (type == 3) imgLocation += "selected.png";
+            
             var image = (Image)new Bitmap(@imgLocation);
 
             var marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
-
-            marker.ToolTip = new GMapToolTip(marker) {
-                Fill = new SolidBrush(Color.White),
-                Font = new Font("Microsoft Sans Serif", 10),
-                Foreground = new SolidBrush(Color.FromArgb(210, 73, 57))
-            };
-
             return marker;
         }
 

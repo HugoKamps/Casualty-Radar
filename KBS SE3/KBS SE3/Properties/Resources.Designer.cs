@@ -113,6 +113,16 @@ namespace KBS_SE3.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap marker_icon_selected {
+            get {
+                object obj = ResourceManager.GetObject("marker_icon_selected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap marker_icon_yellow {
             get {
                 object obj = ResourceManager.GetObject("marker_icon_yellow", resourceCulture);
