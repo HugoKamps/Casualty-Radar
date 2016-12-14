@@ -18,7 +18,7 @@ namespace KBS_SE3.Modules {
         private FeedTicker _feedTicker;
         private bool _isRefreshing = false;
         private Panel _selectedPanel;
-        private readonly List<Panel> _alertPanels = new List<Panel>();
+        private List<Panel> _alertPanels = new List<Panel>();
         public GMapOverlay RouteOverlay { get; set; }
 
         public HomeModule() {
@@ -170,7 +170,20 @@ namespace KBS_SE3.Modules {
             BackgroundWorker bwFeed = new BackgroundWorker();
             BackgroundWorker bwMap = new BackgroundWorker();
 
-            bwFeed.RunWorkerAsync();
+            // Create panels in background thread
+            bwFeed.DoWork += delegate {
+                int y = 0;
+                _alertPanels.Clear();
+
+                foreach (var a in Feed.GetInstance().GetFilteredAlerts) {
+                    _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y));
+                    y += 105;
+                }
+            };
+
+            bwFeed.RunWorkerCompleted += delegate {
+                bwMap.RunWorkerAsync();
+            };
 
             bwMap.DoWork += delegate {
                 Invoke(new Action(() => GetLocationManager()));
@@ -180,7 +193,7 @@ namespace KBS_SE3.Modules {
                 GetAlertsMap(false);
                 RemoveLoadIcon();
                 try {
-                    foreach (Panel p in GetAlertPanels)
+                    foreach (Panel p in _alertPanels)
                         feedPanel.Controls.Add(p);
                 } catch (InvalidOperationException e) {
                     MessageBox.Show(e.ToString());
@@ -188,19 +201,7 @@ namespace KBS_SE3.Modules {
                 alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count.ToString() + ")";
             };
 
-            // Create panels in background thread
-            bwFeed.DoWork += delegate {
-                int y = 0;
-                GetAlertPanels.Clear();
-                foreach (var a in Feed.GetInstance().GetFilteredAlerts) {
-                    GetAlertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y));
-                    y += 105;
-                }
-            };
-
-            bwFeed.RunWorkerCompleted += delegate {
-                bwMap.RunWorkerAsync();
-            };
+            bwFeed.RunWorkerAsync();
         }
 
         public void DisplayLoadIcon() {
@@ -220,7 +221,6 @@ namespace KBS_SE3.Modules {
         }
 
         public Panel GetSelectedPanel => _selectedPanel;
-        public List<Panel> GetAlertPanels => _alertPanels;
         public int GetAlertType => alertTypeComboBox.SelectedIndex;
 
         public Panel CreateAlertPanel(int type, string title, string info, string time, int y) {
@@ -235,7 +235,7 @@ namespace KBS_SE3.Modules {
             var newPictureBox = new PictureBox {
                 Location = new Point(220, 10),
                 Size = new Size(60, 60),
-                Image = type == 1 ? Properties.Resources.Medic : Properties.Resources.Firefighter,
+                Image = type == 1 ? Resources.Medic : Resources.Firefighter,
                 SizeMode = PictureBoxSizeMode.StretchImage
             };
 
@@ -300,34 +300,33 @@ namespace KBS_SE3.Modules {
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
-            var homeModule = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             if (sender.GetType() == typeof(Panel)) {
                 var panel = (Panel)sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == panel) {
                     _selectedPanel = null;
-                    homeModule.navigationBtn.Enabled = false;
-                    homeModule.navigationBtn.BackColor = Color.Gray;
+                    navigationBtn.Enabled = false;
+                    navigationBtn.BackColor = Color.Gray;
                 } else {
                     _selectedPanel = panel;
                     _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
-                    homeModule.navigationBtn.Enabled = true;
+                    navigationBtn.Enabled = true;
                 }
             } else {
                 var control = (Control)sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == control.Parent) {
                     _selectedPanel = null;
-                    homeModule.navigationBtn.Enabled = false;
+                    navigationBtn.Enabled = false;
                 } else {
                     _selectedPanel = (Panel)control.Parent;
                     _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
-                    homeModule.navigationBtn.Enabled = true;
+                    navigationBtn.Enabled = true;
                 }
             }
 
-            var marker = homeModule.map.Overlays[0].Markers[_alertPanels.FindIndex(panel => panel == _selectedPanel) + 1];
+            var marker = map.Overlays[0].Markers[_alertPanels.FindIndex(panel => panel == _selectedPanel) + 1];
             marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
         }
 
