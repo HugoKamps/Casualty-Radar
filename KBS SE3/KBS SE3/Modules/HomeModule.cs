@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Device.Location;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -12,16 +11,17 @@ using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
 using KBS_SE3.Properties;
+// ReSharper disable All
 
 namespace KBS_SE3.Modules {
     partial class HomeModule : UserControl, IModule {
         private LocationManager _locationManager;
         private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
         private FeedTicker _feedTicker;
-        private bool _isRefreshing = false;
+        private bool _isRefreshing;
         private Panel _selectedPanel;
-        private GMarkerGoogle previousMarker;
-        private int previousMarkerIndex;
+        private GMarkerGoogle _previousMarker;
+        private int _previousMarkerIndex;
         private List<Panel> _alertPanels = new List<Panel>();
         public GMapOverlay RouteOverlay { get; set; }
 
@@ -69,7 +69,7 @@ namespace KBS_SE3.Modules {
 
                 foreach (var alert in Feed.GetInstance().GetAlerts()) {
                     var type = alert.Type == 1 ? 1 : 2;
-                    if (previousMarker != null && previousMarker.Position.Lat == alert.Lat && previousMarker.Position.Lng == alert.Lng) type = 3;
+                    if (_previousMarker != null && _previousMarker.Position.Lat == alert.Lat && _previousMarker.Position.Lng == alert.Lng) type = 3;
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
                 }
             }
@@ -137,8 +137,8 @@ namespace KBS_SE3.Modules {
 
         private void alertTypeComboBox_SelectedIndexChanged(object sender, EventArgs e) {
             Feed.GetInstance().UpdateAlerts();
-            previousMarker = null;
-            previousMarkerIndex = 0;
+            _previousMarker = null;
+            _previousMarkerIndex = 0;
         }
 
         private void navigationBtn_Click(object sender, EventArgs e) {
@@ -345,12 +345,12 @@ namespace KBS_SE3.Modules {
                 }
             }
 
-            if (previousMarker != null) map.Overlays[0].Markers[previousMarkerIndex] = previousMarker;
+            if (_previousMarker != null) map.Overlays[0].Markers[_previousMarkerIndex] = _previousMarker;
             var index = _alertPanels.FindIndex(panel => panel == _selectedPanel) + 1;
-            previousMarkerIndex = index;
-            previousMarker = (GMarkerGoogle)map.Overlays[0].Markers[index];
+            _previousMarkerIndex = index;
+            _previousMarker = (GMarkerGoogle)map.Overlays[0].Markers[index];
             if (index != 0) {
-                map.Overlays[0].Markers[index] = _locationManager.CreateMarker(previousMarker.Position.Lat, previousMarker.Position.Lng, 3);
+                map.Overlays[0].Markers[index] = _locationManager.CreateMarker(_previousMarker.Position.Lat, _previousMarker.Position.Lng, 3);
             }
         }
 
