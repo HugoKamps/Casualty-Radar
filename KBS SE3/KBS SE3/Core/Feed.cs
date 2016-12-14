@@ -31,8 +31,7 @@ namespace KBS_SE3.Core {
             try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
                 USE_FEED_URL = FEED_URL;
-            } catch (WebException we)
-            {
+            } catch (WebException we) {
                 Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.WARNING, "Geen idee", we.Message);
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
                 USE_FEED_URL = CACHED_FEED_URL;
