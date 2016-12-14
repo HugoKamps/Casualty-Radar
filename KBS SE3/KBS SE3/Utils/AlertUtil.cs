@@ -1,4 +1,6 @@
-﻿namespace KBS_SE3.Utils
+﻿using KBS_SE3.Models;
+
+namespace KBS_SE3.Utils
 {
     static class AlertUtil
     {
@@ -27,5 +29,19 @@
             { "WO", "2", "Brandweer", "Waterongeval" },
             { "DV", "2", "Brandweer", "Dienstverlening" }
         };
+
+        public static Alert SetAlertAttributes(Alert alert, string alertItemString)
+        {
+            for (var i = 0; i < AlertUtil.P2000.GetLength(0); i++) {
+                if (alertItemString.StartsWith(AlertUtil.P2000[i, 0])) {
+                    alert.Code = AlertUtil.P2000[i, 0];
+                    alert.Type = int.Parse(AlertUtil.P2000[i, 1]);
+                    alert.TypeString = AlertUtil.P2000[i, 2];
+                    alert.Info = AlertUtil.P2000[i, 3];
+                    return alert;
+                }
+            }
+            return null;
+        }
     }
 }
