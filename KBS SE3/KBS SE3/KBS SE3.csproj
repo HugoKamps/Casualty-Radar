@@ -199,7 +199,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="feed.xml" />
     <Content Include="Resources\app_icon.ico" />
     <Content Include="Resources\load_splash_screen.gif" />
     <Content Include="Resources\marker_icon_selected.png" />
