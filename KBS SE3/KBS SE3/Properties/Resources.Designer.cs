@@ -83,6 +83,16 @@ namespace KBS_SE3.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap load_splash_screen {
+            get {
+                object obj = ResourceManager.GetObject("load_splash_screen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap logo_final {
             get {
                 object obj = ResourceManager.GetObject("logo_final", resourceCulture);

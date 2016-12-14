@@ -40,7 +40,8 @@ namespace KBS_SE3.Core {
         }
 
 
-        public List<Alert> GetAlerts() => _filteredAlerts;
+        public List<Alert> GetAlerts() => _alerts;
+        public List<Alert> GetFilteredAlerts => _filteredAlerts;
 
         public List<Alert> CreateAlertList(SyndicationFeed items) {
             var tempAlerts = new List<Alert>();
@@ -96,7 +97,6 @@ namespace KBS_SE3.Core {
 
                 if (newAlerts.Count > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized)
                     new PushMessage(newAlerts);
-
                 UpdateAlerts();
             } catch (Exception e) {
                 MessageBox.Show(e.Message);
@@ -107,18 +107,15 @@ namespace KBS_SE3.Core {
         public void UpdateAlerts() {
             HomeModule hM = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             int selectedFilter = hM.GetAlertType;
-
             // Check which filter is selected and apply the filter
             if (selectedFilter == 1 || selectedFilter == 2) {
                 _filteredAlerts = new List<Alert>();
                 foreach (var a in _alerts)
                     if (a.Type == selectedFilter) _filteredAlerts.Add(a);
             } else _filteredAlerts = _alerts;
-
             hM.DisplayLoadIcon();
             hM.LoadComponents();
         }
 
-        public List<Alert> GetFilteredAlerts => _filteredAlerts;
     }
 }

@@ -16,6 +16,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using KBS_SE3.Utils;
 using System.Windows.Forms;
+using KBS_SE3.Models.DataControl;
+using KBS_SE3.Models.DataControl.Graph;
 
 namespace KBS_SE3.Core {
     internal class LocationManager {
@@ -57,18 +59,41 @@ namespace KBS_SE3.Core {
 
         public PointLatLng GetLocationPoint() => new PointLatLng(_currentLatitude, _currentLongitude);
 
-        public void DrawRoute(IList<PointLatLng> points, GMapOverlay _routeOverlay) {
-            //_routeOverlay.Routes.Clear();
-            GMapRoute r = new GMapRoute(points, "MyRoute") {
-                Stroke = {
-                    DashStyle = System.Drawing.Drawing2D.DashStyle.Solid,
-                    Color = Color.FromArgb(210, 73, 57)
-                }
-            };
-            _routeOverlay.Routes.Add(r);
-        }
+        // Draw streets on map
+        public void DrawRoute(DataCollection collection, GMapOverlay _routeOverlay) {
+            List<List<PointLatLng>> list = new List<List<PointLatLng>>();
 
-        public double GetCurrentLatitude() => _currentLatitude;
-        public double GetCurrentLongitude() => _currentLongitude;
+            int loop = 0;
+            foreach (Way w in collection.Ways) {
+                loop++;
+                if (loop == 20) break;
+                List<PointLatLng> points = new List<PointLatLng>();
+
+                for (int i = 0; i < w.References.Count - 1; i++) {
+                    try {
+                        points.Add(new PointLatLng(w.References[i].Node.Lat, w.References[i].Node.Lon));
+                    } catch { 
+                        throw new Exception();
+                    }
+                    list.Add(points);
+                }
+            }
+
+            foreach (List<PointLatLng> l in list) {
+                var points = new List<PointLatLng>();
+                for (int i = 0; i < l.Count; i++) {
+                    points.Add(l[i]);
+                }
+                _routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
+                    Stroke = {
+                    DashStyle = System.Drawing.Drawing2D.DashStyle.Solid,
+                    Color = Color.FromArgb(244, 191, 66) 
+
+                }});
+        }
     }
+
+    public double GetCurrentLatitude() => _currentLatitude;
+    public double GetCurrentLongitude() => _currentLongitude;
+}
 }

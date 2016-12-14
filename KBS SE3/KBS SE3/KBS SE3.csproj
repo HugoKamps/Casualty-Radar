@@ -201,6 +201,7 @@
   <ItemGroup>
     <Content Include="feed.xml" />
     <Content Include="Resources\app_icon.ico" />
+    <Content Include="Resources\load_splash_screen.gif" />
     <Content Include="Resources\marker_icon_selected.png" />
     <None Include="Resources\converted.osm" />
     <None Include="Resources\marker_icon_yellow.png" />
