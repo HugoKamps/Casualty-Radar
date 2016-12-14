@@ -261,7 +261,6 @@ namespace KBS_SE3.Modules {
             }
 
             //The label which will be filled with the time of the alert
-
             var timeLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(150, 65),
