@@ -35,6 +35,7 @@ namespace KBS_SE3.Modules {
             this.feedTickerEnabledLabel = new System.Windows.Forms.Label();
             this.feedTickerCheckBox = new System.Windows.Forms.CheckBox();
             this.feedTickerNumeric = new System.Windows.Forms.NumericUpDown();
+            this.feedNumericErrorLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.feedTickerNumeric)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,9 +71,9 @@ namespace KBS_SE3.Modules {
             // 
             // saveBtn
             // 
-            this.saveBtn.Enabled = false;
             this.saveBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(73)))), ((int)(((byte)(57)))));
             this.saveBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.saveBtn.Enabled = false;
             this.saveBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.saveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveBtn.ForeColor = System.Drawing.Color.White;
@@ -114,9 +115,9 @@ namespace KBS_SE3.Modules {
             this.feedTickerInfoLabel.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.feedTickerInfoLabel.Location = new System.Drawing.Point(150, 163);
             this.feedTickerInfoLabel.Name = "feedTickerInfoLabel";
-            this.feedTickerInfoLabel.Size = new System.Drawing.Size(85, 13);
+            this.feedTickerInfoLabel.Size = new System.Drawing.Size(133, 13);
             this.feedTickerInfoLabel.TabIndex = 7;
-            this.feedTickerInfoLabel.Text = "Tijd in seconden";
+            this.feedTickerInfoLabel.Text = "Tijd in seconden (30 - 300)";
             // 
             // feedTickerEnabledLabel
             // 
@@ -166,13 +167,26 @@ namespace KBS_SE3.Modules {
             0,
             0,
             0});
+            this.feedTickerNumeric.TextChanged += new System.EventHandler(this.feedTickerNumeric_TextChanged);
             this.feedTickerNumeric.ValueChanged += new System.EventHandler(this.feedTickerNumeric_ValueChanged);
+            // 
+            // feedNumericErrorLabel
+            // 
+            this.feedNumericErrorLabel.AutoSize = true;
+            this.feedNumericErrorLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(73)))), ((int)(((byte)(57)))));
+            this.feedNumericErrorLabel.Location = new System.Drawing.Point(245, 140);
+            this.feedNumericErrorLabel.Name = "feedNumericErrorLabel";
+            this.feedNumericErrorLabel.Size = new System.Drawing.Size(188, 13);
+            this.feedNumericErrorLabel.TabIndex = 11;
+            this.feedNumericErrorLabel.Text = "De waarde moet tussen 30 en 300 zijn";
+            this.feedNumericErrorLabel.Visible = false;
             // 
             // SettingsModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.feedNumericErrorLabel);
             this.Controls.Add(this.feedTickerCheckBox);
             this.Controls.Add(this.feedTickerEnabledLabel);
             this.Controls.Add(this.feedTickerInfoLabel);
@@ -203,5 +217,6 @@ namespace KBS_SE3.Modules {
         private System.Windows.Forms.Label feedTickerInfoLabel;
         private System.Windows.Forms.Label feedTickerEnabledLabel;
         private System.Windows.Forms.CheckBox feedTickerCheckBox;
+        private System.Windows.Forms.Label feedNumericErrorLabel;
     }
 }

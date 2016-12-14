@@ -349,6 +349,5 @@ namespace KBS_SE3.Modules {
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(236, 86, 71);
             }
         }
-
     }
 }

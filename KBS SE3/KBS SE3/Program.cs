@@ -19,8 +19,7 @@ namespace KBS_SE3 {
             //Container.GetInstance();
             //Thread.Sleep(3000);
             //SplashScreen.CloseForm();
-
-            Application.Run(new SplashScreen());
+            
 
             Application.Run(Container.GetInstance());
         }
