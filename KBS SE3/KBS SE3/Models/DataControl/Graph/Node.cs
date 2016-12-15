@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace KBS_SE3.Models.DataControl.Graph {
 
     [Serializable()]
-    public class Reference {
+    public class Node {
 
         // Represents the ID from the Node
         [XmlAttribute("id", DataType = "long")]
@@ -28,17 +28,17 @@ namespace KBS_SE3.Models.DataControl.Graph {
         [XmlIgnore]
         public List<Way> ConnectedWays { get; private set; }
 
-        public Reference() {
-            this.ConnectedWays = new List<Way>();
+        public Node() {
+            ConnectedWays = new List<Way>();
         }
 
         // Returns the Geo location from the Node based on the Longitude and Latitude of the Node.
         public PointLatLng GetPoint() {
-            return new PointLatLng(this.Lat, this.Lon); 
+            return new PointLatLng(this.Lat, this.Lon);
         }
 
         // Returns the distance between the current node and the given node
-        public double DistanceTo(Reference node) {
+        public double DistanceTo(Node node) {
             return MapUtil.GetDistance(this, node);
         }
 
