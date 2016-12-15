@@ -10,8 +10,8 @@ Casualty Radar kan niet geïnstalleerd worden.
 
 TEAM
 -----------
-Maarten Brandemann
-Richard de Bruine
-Eelco Eikelboom
-Hugo Kamps
+Maarten Brandemann, 
+Richard de Bruine, 
+Eelco Eikelboom, 
+Hugo Kamps, 
 Dennis Rump
