@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using GMap.NET;
 using KBS_SE3.Core.Algorithms.AStar;
+using KBS_SE3.Models.DataControl.Graph;
 using KBS_SE3.Utils;
 
 namespace KBS_SE3.Core.Algorithms {
     class Pathfinder {
-        private readonly StarNode _startNode;
-        private readonly StarNode _endNode;
+        private StarNode _startNode;
+        private StarNode _endNode;
 
-        public Pathfinder(StarNode startNode, StarNode endNode) {
-            _startNode = startNode;
+        public Pathfinder(Node startNode, Node endNode) {
+            _startNode = (StarNode)startNode;
             _startNode.State = NodeState.Open;
-            _endNode = endNode;
+            _endNode = (StarNode)endNode;
         }
 
 

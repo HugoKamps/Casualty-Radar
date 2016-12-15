@@ -11,6 +11,7 @@ using KBS_SE3.Properties;
 using KBS_SE3.Utils;
 using KBS_SE3.Models.DataControl;
 using KBS_SE3.Core.Algorithms;
+using KBS_SE3.Core.Algorithms.AStar;
 using KBS_SE3.Models.DataControl.Graph;
 
 namespace KBS_SE3.Modules {
@@ -54,12 +55,15 @@ namespace KBS_SE3.Modules {
             timeLabel.Text = time;
             GetRouteMap(start.Lat, start.Lng, dest.Lat, dest.Lng);
 
-            DataParser dataParser = new DataParser("");
+            DataParser dataParser = new DataParser("../../Resources/TESTTT.xml");
             dataParser.Deserialize();
             DataCollection collection = dataParser.GetCollection();
             var targetCollection = collection.Intersections;
             startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
+            
             endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
+            _pathfinder = new Pathfinder(startNode, endNode);
+            _pathfinder.FindPath();
         }
 
         public void GetRouteMap(double startLat, double startLng, double destLat, double destLng) {
@@ -80,10 +84,11 @@ namespace KBS_SE3.Modules {
 
             // Reading data for adding test route
 
-            DataParser parser = new DataParser(@"C:\Users\maarten\Desktop\TESTTT.xml");
+            DataParser parser = new DataParser(@"../../Resources/TESTTT.xml");
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
-            _locationManager.DrawRoute(collection, _routeOverlay);
+            //_locationManager.DrawRoute(collection, _routeOverlay);
+            _locationManager.DrawTestRoute(collection, _routeOverlay);
         }
 
         public void CreateRouteStepPanel(NavigationStep step, Color color, int y) {

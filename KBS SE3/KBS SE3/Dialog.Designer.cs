@@ -33,6 +33,7 @@ namespace KBS_SE3 {
             this.dialogIconPicturebox = new System.Windows.Forms.PictureBox();
             this.dialogContentLabel = new System.Windows.Forms.Label();
             this.dialogContentPanel = new System.Windows.Forms.Panel();
+            this.confirmBtn = new System.Windows.Forms.Button();
             this.dialogHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dialogIconPicturebox)).BeginInit();
             this.dialogContentPanel.SuspendLayout();
@@ -123,11 +124,30 @@ namespace KBS_SE3 {
             this.dialogContentPanel.Size = new System.Drawing.Size(355, 121);
             this.dialogContentPanel.TabIndex = 3;
             // 
+            // confirmBtn
+            // 
+            this.confirmBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(73)))), ((int)(((byte)(57)))));
+            this.confirmBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.confirmBtn.FlatAppearance.BorderSize = 0;
+            this.confirmBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.confirmBtn.Font = new System.Drawing.Font("Lucida Sans", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.confirmBtn.ForeColor = System.Drawing.Color.White;
+            this.confirmBtn.Location = new System.Drawing.Point(348, 136);
+            this.confirmBtn.Name = "confirmBtn";
+            this.confirmBtn.Size = new System.Drawing.Size(89, 26);
+            this.confirmBtn.TabIndex = 3;
+            this.confirmBtn.Text = "Ok";
+            this.confirmBtn.UseVisualStyleBackColor = false;
+            this.confirmBtn.Click += new System.EventHandler(this.dialogCloseBtn_Click);
+            this.confirmBtn.MouseEnter += new System.EventHandler(this.dialogCloseBtn_MouseEnter);
+            this.confirmBtn.MouseLeave += new System.EventHandler(this.dialogCloseBtn_MouseLeave);
+            // 
             // Dialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(448, 172);
+            this.Controls.Add(this.confirmBtn);
             this.Controls.Add(this.dialogContentPanel);
             this.Controls.Add(this.dialogIconPicturebox);
             this.Controls.Add(this.dialogHeader);
@@ -154,5 +174,6 @@ namespace KBS_SE3 {
         private PictureBox dialogIconPicturebox;
         private Label dialogContentLabel;
         private Panel dialogContentPanel;
+        private Button confirmBtn;
     }
 }

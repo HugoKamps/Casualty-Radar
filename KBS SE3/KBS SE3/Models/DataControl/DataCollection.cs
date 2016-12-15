@@ -12,7 +12,7 @@ namespace KBS_SE3.Models.DataControl {
     public class DataCollection {
 
         [XmlIgnore]
-        private const int INTERSECTION_WAY_MINIMUM = 2; 
+        public static readonly int INTERSECTION_WAY_MINIMUM = 2; 
 
         /*
         * All 'Node' elements that are returned from the deserialization.

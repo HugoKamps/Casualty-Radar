@@ -50,7 +50,7 @@ namespace KBS_SE3.Utils {
         * two nodes since the given node might be existent in the given collection aswell, this would return the
         * same node you passed as parameter.
         */
-        public static Node GetNearest(double lat, double lon, List<Node> targetCollection) =>
+        public static Node GetNearest(double lat, double lon, List<Node> targetCollection) => 
             targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, lat, lon)).First();
 
         /*

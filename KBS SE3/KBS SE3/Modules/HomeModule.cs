@@ -61,10 +61,10 @@ namespace KBS_SE3.Modules {
                 map.Overlays.Add(RouteOverlay);
                 //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
                 if (hasLocationService) {
-                    markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.GetCurrentLatitude(), _locationManager.GetCurrentLongitude(), 0));
+                    markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude, 0));
                 } else {
                     _locationManager.SetCoordinatesByLocationSetting();
-                    markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.GetCurrentLatitude(), _locationManager.GetCurrentLongitude(), 0));
+                    markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude, 0));
                 }
 
                 foreach (var alert in Feed.GetInstance().GetAlerts()) {
