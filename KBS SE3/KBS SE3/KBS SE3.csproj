@@ -199,7 +199,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="feed.xml" />
     <Content Include="Resources\app_icon.ico" />
     <Content Include="Resources\TESTTT.xml" />
     <None Include="Resources\converted.osm" />

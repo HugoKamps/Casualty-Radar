@@ -18,7 +18,6 @@ using static KBS_SE3.Core.Dialog.DialogType;
 
 namespace KBS_SE3 {
     partial class Container : Form {
-        
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
