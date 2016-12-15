@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Device.Location;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using GMap.NET;
-using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using KBS_SE3.Models;
-using KBS_SE3.Properties;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using KBS_SE3.Utils;
-using System.Windows.Forms;
 using KBS_SE3.Models.DataControl;
 using KBS_SE3.Models.DataControl.Graph;
+using KBS_SE3.Properties;
 
 namespace KBS_SE3.Core {
     internal class LocationManager {
-        public double _currentLatitude { get; set; }  //The user's current latitude
-        public double _currentLongitude { get; set; }  //The user's current longitude
+        public double CurrentLatitude { get; set; }  //The user's current latitude
+        public double CurrentLongitude { get; set; }  //The user's current longitude
 
         //Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
         public void SetCoordinatesByLocationSetting() {
@@ -38,8 +32,8 @@ namespace KBS_SE3.Core {
                 var locationElement = result.Element("geometry").Element("location");
                 var lat = Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", string.Empty);
                 var lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
-                _currentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
-                _currentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
+                CurrentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
+                CurrentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
             }
         }
 
@@ -57,10 +51,10 @@ namespace KBS_SE3.Core {
             return marker;
         }
 
-        public PointLatLng GetLocationPoint() => new PointLatLng(_currentLatitude, _currentLongitude);
+        public PointLatLng GetLocationPoint() => new PointLatLng(CurrentLatitude, CurrentLongitude);
 
         // Draw streets on map
-        public void DrawRoute(DataCollection collection, GMapOverlay _routeOverlay) {
+        public void DrawRoute(DataCollection collection, GMapOverlay routeOverlay) {
             List<List<PointLatLng>> list = new List<List<PointLatLng>>();
 
             int loop = 0;
@@ -84,16 +78,16 @@ namespace KBS_SE3.Core {
                 for (int i = 0; i < l.Count; i++) {
                     points.Add(l[i]);
                 }
-                _routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
+                routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
                     Stroke = {
-                    DashStyle = System.Drawing.Drawing2D.DashStyle.Solid,
+                    DashStyle = DashStyle.Solid,
                     Color = Color.FromArgb(244, 191, 66) 
 
                 }});
         }
     }
 
-    public double GetCurrentLatitude() => _currentLatitude;
-    public double GetCurrentLongitude() => _currentLongitude;
+    public double GetCurrentLatitude() => CurrentLatitude;
+    public double GetCurrentLongitude() => CurrentLongitude;
 }
 }

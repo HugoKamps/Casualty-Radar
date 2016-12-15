@@ -10,14 +10,17 @@ using KBS_SE3.Models.Navigation;
 using KBS_SE3.Properties;
 using KBS_SE3.Utils;
 using KBS_SE3.Models.DataControl;
-using System;
-using System.Diagnostics;
+using KBS_SE3.Core.Algorithms;
+using KBS_SE3.Models.DataControl.Graph;
 
 namespace KBS_SE3.Modules {
     partial class NavigationModule : UserControl, IModule
     {
         private readonly LocationManager _locationManager;
         private GMapOverlay _routeOverlay;
+        private Pathfinder _pathfinder;
+        private Node startNode;
+        private Node endNode;
 
         public NavigationModule() {
             InitializeComponent();
@@ -39,7 +42,6 @@ namespace KBS_SE3.Modules {
                 y += 50;
                 color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
             }
-
         }
 
         public Breadcrumb GetBreadcrumb() {
@@ -51,6 +53,13 @@ namespace KBS_SE3.Modules {
             alertTypePicturebox.Image = type == 1 ? Resources.Medic : Resources.Firefighter;
             timeLabel.Text = time;
             GetRouteMap(start.Lat, start.Lng, dest.Lat, dest.Lng);
+
+            DataParser dataParser = new DataParser("");
+            dataParser.Deserialize();
+            DataCollection collection = dataParser.GetCollection();
+            var targetCollection = collection.Intersections;
+            startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
+            endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
         }
 
         public void GetRouteMap(double startLat, double startLng, double destLat, double destLng) {

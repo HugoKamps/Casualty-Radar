@@ -11,7 +11,6 @@ using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
 using KBS_SE3.Properties;
-// ReSharper disable All
 
 namespace KBS_SE3.Modules {
     partial class HomeModule : UserControl, IModule {
@@ -89,8 +88,8 @@ namespace KBS_SE3.Modules {
 
         //Keeps track of the user's current location. Everytime the location changes the map is renewed and the coordinates are updated
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
-            _locationManager._currentLatitude = e.Position.Location.Latitude;
-            _locationManager._currentLongitude = e.Position.Location.Longitude;
+            _locationManager.CurrentLatitude = e.Position.Location.Latitude;
+            _locationManager.CurrentLongitude = e.Position.Location.Longitude;
             //GetAlertsMap(true);
         }
 
@@ -179,7 +178,7 @@ namespace KBS_SE3.Modules {
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
             if (_hasLocationservice)
-                map.Position = new PointLatLng(_locationManager._currentLatitude, _locationManager._currentLongitude);
+                map.Position = new PointLatLng(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude);
             else map.SetPositionByKeywords(Settings.Default.userLocation);
         }
 
@@ -350,9 +349,7 @@ namespace KBS_SE3.Modules {
             var index = _alertPanels.FindIndex(panel => panel == _selectedPanel) + 1;
             _previousMarkerIndex = index;
             _previousMarker = (GMarkerGoogle)map.Overlays[0].Markers[index];
-            if (index != 0) {
-                map.Overlays[0].Markers[index] = _locationManager.CreateMarker(_previousMarker.Position.Lat, _previousMarker.Position.Lng, 3);
-            }
+            if (index != 0) map.Overlays[0].Markers[index] = _locationManager.CreateMarker(_previousMarker.Position.Lat, _previousMarker.Position.Lng, 3);
         }
 
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {

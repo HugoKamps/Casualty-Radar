@@ -29,7 +29,7 @@ namespace KBS_SE3.Models.DataControl.Graph {
         public List<Way> ConnectedWays { get; private set; }
 
         public Node() {
-            this.ConnectedWays = new List<Way>();
+            ConnectedWays = new List<Way>();
         }
 
         // Returns the Geo location from the Node based on the Longitude and Latitude of the Node.
