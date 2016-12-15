@@ -102,17 +102,12 @@ namespace KBS_SE3.Core {
                 ways.Add(w);
             }
 
-            for (int i = 0; i < ways.Count; i++) {
-                for (int j = 0; j < ways[i].References.Count; j++) {
-                    if (ways[i].References[j].Node.ConnectedWays.Count >= 2) {
-                        for (int x = 0; x <= ways[i].References[j].Node.ConnectedWays.Count; x++) {
-                            foreach (Way way in ways[i].References[j].Node.ConnectedWays) {
+            for (int i = 0; i < ways.Count; i++)
+                for (int j = 0; j < ways[i].References.Count; j++)
+                    if (ways[i].References[j].Node.ConnectedWays.Count >= 2)
+                        for (int x = 0; x <= ways[i].References[j].Node.ConnectedWays.Count; x++)
+                            foreach (Way way in ways[i].References[j].Node.ConnectedWays)
                                 if(!ways.Contains(way)) ways.Add(way);
-                            }
-                        }
-                    }
-                }
-            }
 
             foreach (Way w in ways) {
                 List<PointLatLng> points = new List<PointLatLng>();
