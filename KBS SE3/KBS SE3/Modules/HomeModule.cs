@@ -69,7 +69,7 @@ namespace KBS_SE3.Modules {
 
                 foreach (Alert alert in Feed.GetInstance().GetAlerts()) {
                     int type = alert.Type == 1 ? 1 : 2;
-                    if (_previousMarker != null && _previousMarker.Position.Lat == alert.Lat && _previousMarker.Position.Lng == alert.Lng) type = 3;
+                    if (_previousMarker != null && _previousMarker.Position.Lat.Equals(alert.Lat) && _previousMarker.Position.Lng.Equals(alert.Lng)) type = 3;
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
                 }
             }

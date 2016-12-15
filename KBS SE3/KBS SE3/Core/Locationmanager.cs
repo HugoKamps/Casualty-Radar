@@ -49,7 +49,7 @@ namespace KBS_SE3.Core {
             if (type == 2) imgLocation += "red.png";
             if (type == 3) imgLocation += "selected.png";
 
-            Image image = (Image)new Bitmap(@imgLocation);
+            Image image = new Bitmap(@imgLocation);
 
             GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
             return marker;

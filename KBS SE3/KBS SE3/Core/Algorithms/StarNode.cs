@@ -1,8 +1,7 @@
-﻿using System;
-using KBS_SE3.Models.DataControl.Graph;
+﻿using KBS_SE3.Models.DataControl.Graph;
 using KBS_SE3.Utils;
 
-namespace KBS_SE3.Core.Algorithms.AStar {
+namespace KBS_SE3.Core.Algorithms {
     public enum NodeState {
         Untested,
         Open,

@@ -11,7 +11,6 @@ using KBS_SE3.Properties;
 using KBS_SE3.Utils;
 using KBS_SE3.Models.DataControl;
 using KBS_SE3.Core.Algorithms;
-using KBS_SE3.Core.Algorithms.AStar;
 using KBS_SE3.Models.DataControl.Graph;
 
 namespace KBS_SE3.Modules {
@@ -20,8 +19,8 @@ namespace KBS_SE3.Modules {
         private readonly LocationManager _locationManager;
         private GMapOverlay _routeOverlay;
         private Pathfinder _pathfinder;
-        private Node startNode;
-        private Node endNode;
+        private Node _startNode;
+        private Node _endNode;
 
         public NavigationModule() {
             InitializeComponent();
@@ -59,10 +58,10 @@ namespace KBS_SE3.Modules {
             dataParser.Deserialize();
             DataCollection collection = dataParser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
-            startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
+            _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             
-            endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
-            _pathfinder = new Pathfinder(startNode, endNode);
+            _endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
+            _pathfinder = new Pathfinder(_startNode, _endNode);
             _pathfinder.FindPath();
         }
 

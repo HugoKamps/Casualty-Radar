@@ -1,12 +1,8 @@
-﻿using KBS_SE3.Models.DataControl;
-using KBS_SE3.Models.DataControl.Graph;
+﻿using KBS_SE3.Models.DataControl.Graph;
 using System;
 using System.Collections.Generic;
-using System.Device.Location;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KBS_SE3.Core.Algorithms.AStar;
+using KBS_SE3.Core.Algorithms;
 
 namespace KBS_SE3.Utils {
     static class MapUtil {
