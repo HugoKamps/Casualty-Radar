@@ -25,6 +25,6 @@ namespace KBS_SE3.Models.DataControl.Graph {
         * Because the Node doesn't exist in the XML we have to add the XMLIgnore attribute so the deserialization won't throw an error
         */
         [XmlIgnore]
-        public Node Node { get; set; }
+        public Reference Node { get; set; }
     }
 }

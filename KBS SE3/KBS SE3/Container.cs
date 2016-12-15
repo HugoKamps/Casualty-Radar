@@ -154,7 +154,7 @@ namespace KBS_SE3 {
             DataCollection collection = parser.GetCollection();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             int i = 0;
-            foreach (Node n in collection.Intersections) {
+            foreach(Reference n in collection.Intersections) {
                 if (i == 100) break;
                 GMapMarker m = new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.blue_dot);
                 hm.RouteOverlay.Markers.Add(m);

@@ -23,7 +23,7 @@ namespace KBS_SE3.Utils {
         * This calculation uses the 'Haversine' algorithm to calculate the distances 
         * based on Longitude and Latitude.
         */
-        public static double GetDistance(Node alpha, Node beta) {
+        public static double GetDistance(Reference alpha, Reference beta) {
             return GetDistance(alpha.Lat, alpha.Lon, beta.Lat, beta.Lon);
         }
 
@@ -49,7 +49,7 @@ namespace KBS_SE3.Utils {
         * two nodes since the given node might be existent in the given collection aswell, this would return the
         * same node you passed as parameter.
         */
-        public static Node GetNearest(double lat, double lon, List<Node> targetCollection) => 
+        public static Reference GetNearest(double lat, double lon, List<Reference> targetCollection) => 
             targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, lat, lon)).First();
 
         /*
@@ -57,7 +57,7 @@ namespace KBS_SE3.Utils {
         * This method will not return the given node (since that is technically the most near one) but a
         * different node that is 'technically' the second most near.
         */
-        public static Node GetNearest(Node origin, List<Node> targetCollection) =>
+        public static Reference GetNearest(Reference origin, List<Reference> targetCollection) =>
             targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, origin.Lat, origin.Lon)).ElementAt(1);
     }
 }

@@ -23,6 +23,8 @@ namespace KBS_SE3.Core {
     internal class LocationManager {
         public double _currentLatitude { get; set; }  //The user's current latitude
         public double _currentLongitude { get; set; }  //The user's current longitude
+        public List<Way> ways = new List<Way>();
+
 
         //Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
         public void SetCoordinatesByLocationSetting() {
@@ -72,7 +74,7 @@ namespace KBS_SE3.Core {
                 for (int i = 0; i < w.References.Count - 1; i++) {
                     try {
                         points.Add(new PointLatLng(w.References[i].Node.Lat, w.References[i].Node.Lon));
-                    } catch { 
+                    } catch {
                         throw new Exception();
                     }
                     list.Add(points);
@@ -87,13 +89,53 @@ namespace KBS_SE3.Core {
                 _routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
                     Stroke = {
                     DashStyle = System.Drawing.Drawing2D.DashStyle.Solid,
-                    Color = Color.FromArgb(244, 191, 66) 
-
-                }});
+                    Color = Color.FromArgb(244, 191, 66)
+                }
+                });
+            }
         }
-    }
 
-    public double GetCurrentLatitude() => _currentLatitude;
-    public double GetCurrentLongitude() => _currentLongitude;
-}
+        public void drawTestRoute(DataCollection collection, GMapOverlay _routeOverlay) {
+            Reference begin = MapUtil.GetNearest(_currentLatitude, _currentLongitude, collection.Nodes);
+
+            foreach (Way w in begin.ConnectedWays) {
+                ways.Add(w);
+            }
+
+            for (int i = 0; i < ways.Count; i++)
+                for (int j = 0; j < ways[i].References.Count; j++)
+                    if (ways[i].References[j].Node.ConnectedWays.Count >= 2)
+                        for (int x = 0; x <= ways[i].References[j].Node.ConnectedWays.Count; x++)
+                            foreach (Way way in ways[i].References[j].Node.ConnectedWays)
+                                if(!ways.Contains(way)) ways.Add(way);
+
+            foreach (Way w in ways) {
+                List<PointLatLng> points = new List<PointLatLng>();
+
+                for (int i = 0; i < w.References.Count; i++) {
+                    try {
+                        points.Add(new PointLatLng(w.References[i].Node.Lat, w.References[i].Node.Lon));
+                    } catch {
+                        throw new Exception();
+                    }
+                }
+
+                foreach (PointLatLng p in points) {
+                    var l = new List<PointLatLng>();
+                    for (int i = 0; i < l.Count; i++) {
+                        points.Add(l[i]);
+                    }
+                    _routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
+                        Stroke = {
+                    DashStyle = System.Drawing.Drawing2D.DashStyle.Solid,
+                    Color = Color.SeaGreen
+                }
+                    });
+                }
+            }
+        }
+
+        public double GetCurrentLatitude() => _currentLatitude;
+        public double GetCurrentLongitude() => _currentLongitude;
+    }
 }

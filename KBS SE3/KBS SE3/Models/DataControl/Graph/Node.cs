@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace KBS_SE3.Models.DataControl.Graph {
 
     [Serializable()]
-    public class Node {
+    public class Reference {
 
         // Represents the ID from the Node
         [XmlAttribute("id", DataType = "long")]
@@ -28,7 +28,7 @@ namespace KBS_SE3.Models.DataControl.Graph {
         [XmlIgnore]
         public List<Way> ConnectedWays { get; private set; }
 
-        public Node() {
+        public Reference() {
             this.ConnectedWays = new List<Way>();
         }
 
@@ -38,8 +38,12 @@ namespace KBS_SE3.Models.DataControl.Graph {
         }
 
         // Returns the distance between the current node and the given node
-        public double DistanceTo(Node node) {
+        public double DistanceTo(Reference node) {
             return MapUtil.GetDistance(this, node);
+        }
+
+        public bool IsIntersection() {
+            return this.ConnectedWays.Count > DataCollection.INTERSECTION_WAY_MINIMUM;
         }
 
 

@@ -27,7 +27,9 @@ namespace KBS_SE3 {
             dialogHeaderTitle.Text = ParseHeaderMessage(type)+": ";
             dialogHeaderText.Text = title;
             dialogContentLabel.Text = content;
-            dialogIconPicturebox.Image = (Image)GetDialogIcon(type);
+            Bitmap img = GetDialogIcon(type);
+            img.MakeTransparent(Color.White);
+            dialogIconPicturebox.Image = img;
         }
 
         private void dialogCloseBtn_Click(object sender, EventArgs e) {
@@ -35,12 +37,12 @@ namespace KBS_SE3 {
         }
 
         private void dialogCloseBtn_MouseEnter(object sender, EventArgs e) {
-            Label selected = (Label)sender;
+            Control selected = (Control)sender;
             selected.BackColor = Color.FromArgb(220, 82, 66);
         }
 
         private void dialogCloseBtn_MouseLeave(object sender, EventArgs e) {
-            Label selected = (Label)sender;
+            Control selected = (Control)sender;
             selected.BackColor = Color.FromArgb(210, 73, 57);
         }
 
