@@ -10,6 +10,7 @@ using KBS_SE3.Modules;
 using KBS_SE3.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -18,7 +19,6 @@ using static KBS_SE3.Core.Dialog.DialogType;
 
 namespace KBS_SE3 {
     partial class Container : Form {
-        
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
@@ -35,12 +35,23 @@ namespace KBS_SE3 {
         private static extern bool ReleaseCapture();
 
         private Container() {
-            SplashScreen = new SplashScreenModule();
             InitializeComponent();
+
+            Thread t = new Thread(new ThreadStart(SplashThread));
+            t.IsBackground = true;
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+
             _modManager = ModuleManager.GetInstance();
             _dialog = new Dialog();
             registerButtons();
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
+        }
+
+        private void SplashThread()
+        {
+            SplashScreen = new SplashScreenModule();
+            DisplaySplashScreen();
         }
 
         public static Container GetInstance() {
@@ -125,10 +136,11 @@ namespace KBS_SE3 {
         private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
 
         private void Container_Load(object sender, EventArgs e) {
-            DisplaySplashScreen();
+            BackgroundWorker bW = new BackgroundWorker();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             this.Shown += hm.HomeModule_Load;
             _modManager.UpdateModule(hm);
+            
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {

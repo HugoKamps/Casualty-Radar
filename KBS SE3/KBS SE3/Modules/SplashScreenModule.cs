@@ -16,15 +16,15 @@ namespace KBS_SE3.Modules {
 
         //Override for the Show method which sets a timestamp when the splashscreen is being displayed
         public new void Show() {
-            StartTime = DateTime.Now.Ticks;
+            //StartTime = DateTime.Now.Ticks;
             base.Show();
         }
 
         //Override for the Hide method which sets a timestamp when the splashscreen is being hidden
         public new void Hide() {
-            EndTime = DateTime.Now.Ticks;
-            var difference = (EndTime - StartTime) / 10000;
-            if (difference < 1000) Thread.Sleep(1000 - int.Parse(difference.ToString()));
+            //EndTime = DateTime.Now.Ticks;
+            //var difference = (EndTime - StartTime) / 10000;
+            //if (difference < 1000) Thread.Sleep(1000 - int.Parse(difference.ToString()));
             base.Hide();
         }
     }

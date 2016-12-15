@@ -199,15 +199,22 @@ namespace KBS_SE3.Modules {
             };
 
             bwFeed.RunWorkerCompleted += delegate {
-                bwMap.RunWorkerAsync();
                 KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen kaart";
+                bwMap.RunWorkerAsync();
             };
 
             bwMap.DoWork += delegate {
-                Invoke(new Action(() => GetLocationManager()));
+                Invoke(new Action(() => {
+                    GetLocationManager();
+                    KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Geladen";
+                }));
+                //Invoke(new Action(() => GetLocationManager()));
+                //KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Geladen";
             };
 
             bwMap.RunWorkerCompleted += delegate {
+                KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Invoke(new Action(() => KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen meldingen"));
+                
                 GetAlertsMap(false);
                 RemoveLoadIcon();
                 try {
@@ -220,8 +227,8 @@ namespace KBS_SE3.Modules {
                 KBS_SE3.Container.GetInstance().SplashScreen.Hide();
             };
 
+            
             bwFeed.RunWorkerAsync();
-            KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen meldingen";
         }
 
         public void DisplayLoadIcon() {
