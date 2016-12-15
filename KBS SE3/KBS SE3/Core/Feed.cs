@@ -2,15 +2,14 @@
 using KBS_SE3.Utils;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.ServiceModel.Syndication;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using GMap.NET.WindowsForms;
+using KBS_SE3.Core.Dialog;
 using KBS_SE3.Models;
 
 namespace KBS_SE3.Core {
@@ -19,7 +18,7 @@ namespace KBS_SE3.Core {
         private SyndicationFeed _p2000;
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
         private readonly string CACHED_FEED_URL = "http://web.archive.org/web/http://feeds.livep2000.nl/";
-        private readonly string LOCAL_FEED_URL = @"../../feed.xml";
+        private string USE_FEED_URL;
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
 
@@ -31,16 +30,20 @@ namespace KBS_SE3.Core {
         private Feed() {
             try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
-                _alerts = CreateAlertList(_p2000);
-                /* Initial update - Only updates after the P2000 is read.*/
-                UpdateFeed();
-            } catch (Exception e) {
-                MessageBox.Show(e.Message);
+                USE_FEED_URL = FEED_URL;
+            } catch (WebException we) {
+                Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.WARNING, "Geen idee", we.Message);
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
+                USE_FEED_URL = CACHED_FEED_URL;
             }
+            _alerts = CreateAlertList(_p2000);
+            /* Initial update - Only updates after the P2000 is read.*/
+            UpdateFeed();
         }
 
 
-        public List<Alert> GetAlerts() => _filteredAlerts;
+        public List<Alert> GetAlerts() => _alerts;
+        public List<Alert> GetFilteredAlerts => _filteredAlerts;
 
         public List<Alert> CreateAlertList(SyndicationFeed items) {
             var tempAlerts = new List<Alert>();
@@ -78,7 +81,7 @@ namespace KBS_SE3.Core {
             try {
                 // Get the first item from the old feed
                 SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault();
-                _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(USE_FEED_URL));
                 _alerts = CreateAlertList(_p2000);
 
                 /* 
@@ -96,7 +99,6 @@ namespace KBS_SE3.Core {
 
                 if (newAlerts.Count > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized)
                     new PushMessage(newAlerts);
-
                 UpdateAlerts();
             } catch (Exception e) {
                 MessageBox.Show(e.Message);
@@ -107,18 +109,15 @@ namespace KBS_SE3.Core {
         public void UpdateAlerts() {
             HomeModule hM = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             int selectedFilter = hM.GetAlertType;
-
             // Check which filter is selected and apply the filter
             if (selectedFilter == 1 || selectedFilter == 2) {
                 _filteredAlerts = new List<Alert>();
                 foreach (var a in _alerts)
                     if (a.Type == selectedFilter) _filteredAlerts.Add(a);
             } else _filteredAlerts = _alerts;
-
             hM.DisplayLoadIcon();
             hM.LoadComponents();
         }
 
-        public List<Alert> GetFilteredAlerts => _filteredAlerts;
     }
 }

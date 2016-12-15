@@ -6,11 +6,7 @@ using System.Windows.Forms;
 
 namespace KBS_SE3.Models {
 
-    public enum hulpdiensten {
-        Police, Ambulance, FireDepartment
-    }
-
-    class PushMessage {
+     class PushMessage {
         private NotifyIcon _icon;
 
         // Constructor for making a message + push message

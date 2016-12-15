@@ -12,12 +12,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using static KBS_SE3.Core.Dialog.DialogType;
 
 namespace KBS_SE3 {
     partial class Container : Form {
-
+        
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
@@ -26,12 +27,15 @@ namespace KBS_SE3 {
         private static Container _instance;
         private ModuleManager _modManager;
 
+        public SplashScreenModule SplashScreen { get; private set; }
+
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
         [DllImport("user32.dll")]
         private static extern bool ReleaseCapture();
 
         private Container() {
+            SplashScreen = new SplashScreenModule();
             InitializeComponent();
             _modManager = ModuleManager.GetInstance();
             _dialog = new Dialog();
@@ -42,6 +46,12 @@ namespace KBS_SE3 {
         public static Container GetInstance() {
             if (_instance == null) _instance = new Container();
             return _instance;
+        }
+
+        public void DisplaySplashScreen() {
+            Controls.Add(SplashScreen);
+            SplashScreen.Show();
+            SplashScreen.BringToFront();
         }
 
         public void DisplayDialog(DialogMessageType type, string title, string msg) {
@@ -115,6 +125,7 @@ namespace KBS_SE3 {
         private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
 
         private void Container_Load(object sender, EventArgs e) {
+            DisplaySplashScreen();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             this.Shown += hm.HomeModule_Load;
             _modManager.UpdateModule(hm);
@@ -125,19 +136,19 @@ namespace KBS_SE3 {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"C:\Users\Eelco\Desktop\zwolle_small.xml");
+            DataParser parser = new DataParser(@"C:\Users\maarten\Desktop\zwolle_small.xml");
             var timeStamp = DateTime.Now.Ticks;
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             int i = 0;
-            foreach(Node n in collection.Intersections) {
+            foreach (Node n in collection.Intersections) {
                 if (i == 100) break;
                 GMapMarker m = new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.blue_dot);
                 hm.RouteOverlay.Markers.Add(m);
                 i++;
             }
-            DisplayDialog(DialogMessageType.SUCCESS, "Parsing Finished", "Het duurde " + ((DateTime.Now.Ticks - timeStamp) / 10000) + " ms. Intersections: "+collection.Intersections.Count + ", Nodes: "+collection.Nodes.Count);
+            DisplayDialog(DialogMessageType.SUCCESS, "Parsing Finished", "Het duurde " + ((DateTime.Now.Ticks - timeStamp) / 10000) + " ms. Intersections: " + collection.Intersections.Count + ", Nodes: " + collection.Nodes.Count);
         }
     }
 }
