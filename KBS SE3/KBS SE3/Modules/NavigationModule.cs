@@ -75,7 +75,7 @@ namespace KBS_SE3.Modules {
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             //_locationManager.DrawRoute(collection, _routeOverlay);
-            _locationManager.drawTestRoute(collection, _routeOverlay);
+            //_locationManager.drawTestRoute(collection, _routeOverlay);
         }
 
         public void CreateRouteStepPanel(NavigationStep step, Color color, int y) {
