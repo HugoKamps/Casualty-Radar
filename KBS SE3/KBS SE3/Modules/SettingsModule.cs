@@ -19,11 +19,11 @@ namespace KBS_SE3.Modules {
 
         //If the user changed the value of the textbox the Setting is changed
         private void saveBtn_Click(object sender, EventArgs e) {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             if (locationTextBox.Text != "") {
                 Settings.Default.userLocation = locationTextBox.Text;
-                var feedTickerNumericValue = Convert.ToInt32(feedTickerNumeric.Value);
-                var feedTickerEnabled = feedTickerCheckBox.Checked;
+                int feedTickerNumericValue = Convert.ToInt32(feedTickerNumeric.Value);
+                bool feedTickerEnabled = feedTickerCheckBox.Checked;
                 // Check if the timer tick value is changed and update to settings
                 if (feedTickerNumericValue != Settings.Default.feedTickerTime) {
                     Settings.Default.feedTickerTime = feedTickerNumericValue;
@@ -31,15 +31,14 @@ namespace KBS_SE3.Modules {
                     hm.FeedTicker.ChangeTickTime(feedTickerNumericValue);
                 }
                 // Check if the checkbox value is changed and update to settings
-                if (feedTickerEnabled != Settings.Default.feedTickerEnabled)
-                {
+                if (feedTickerEnabled != Settings.Default.feedTickerEnabled) {
                     Settings.Default.feedTickerEnabled = feedTickerEnabled;
                     // Apply changes
                     hm.FeedTicker.TimerStateChanged(feedTickerEnabled);
                 }
                 this.saveBtn.Enabled = false;
                 Settings.Default.Save();
-            }else {
+            } else {
                 warningLabel.Show();
             }
         }
@@ -49,14 +48,28 @@ namespace KBS_SE3.Modules {
             this.saveBtn.Enabled = true;
         }
 
-        private void locationTextBox_TextChanged(object sender, EventArgs e)
-        {
+        private void locationTextBox_TextChanged(object sender, EventArgs e) {
             if (locationTextBox.Text != Settings.Default.userLocation) this.saveBtn.Enabled = true;
         }
 
-        private void feedTickerNumeric_ValueChanged(object sender, EventArgs e)
-        {
-            this.saveBtn.Enabled = true;
+        private void feedTickerNumeric_ValueChanged(object sender, EventArgs e) {
+            saveBtn.Enabled = true;
+        }
+
+        private void feedTickerNumeric_TextChanged(object sender, EventArgs e) {
+            // Try to parse the text from feedTickerNumeric and check if the value is in range, enable the save button if true
+            int n;
+            if (Int32.TryParse(feedTickerNumeric.Text, out n)) {
+                int value = Int32.Parse(feedTickerNumeric.Text);
+                if (value < 30 || value > 300) {
+                    feedNumericErrorLabel.Visible = true;
+                    saveBtn.Enabled = false;
+                } else {
+                    feedNumericErrorLabel.Visible = false;
+                    saveBtn.Enabled = true;
+                    feedTickerNumeric.Value = value;
+                }
+            } else feedNumericErrorLabel.Visible = true;
         }
     }
 }

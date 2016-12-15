@@ -29,17 +29,21 @@ namespace KBS_SE3.Models.DataControl.Graph {
         public List<Way> ConnectedWays { get; private set; }
 
         public Node() {
-            this.ConnectedWays = new List<Way>();
+            ConnectedWays = new List<Way>();
         }
 
         // Returns the Geo location from the Node based on the Longitude and Latitude of the Node.
         public PointLatLng GetPoint() {
-            return new PointLatLng(this.Lat, this.Lon); 
+            return new PointLatLng(this.Lat, this.Lon);
         }
 
         // Returns the distance between the current node and the given node
         public double DistanceTo(Node node) {
             return MapUtil.GetDistance(this, node);
+        }
+
+        public bool IsIntersection() {
+            return this.ConnectedWays.Count > DataCollection.INTERSECTION_WAY_MINIMUM;
         }
 
 

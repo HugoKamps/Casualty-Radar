@@ -25,7 +25,7 @@ namespace KBS_SE3.Models.DataControl {
         */
         public void Deserialize() {
             XmlSerializer serializer = new XmlSerializer(typeof(DataCollection));
-            using(var stream = new FileStream(_filePath, FileMode.Open)) {
+            using(FileStream stream = new FileStream(_filePath, FileMode.Open)) {
                 this._collection = (DataCollection)serializer.Deserialize(stream);
                 this._collection.Index();
             }

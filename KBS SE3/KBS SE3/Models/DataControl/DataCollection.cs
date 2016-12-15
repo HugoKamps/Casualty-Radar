@@ -12,7 +12,7 @@ namespace KBS_SE3.Models.DataControl {
     public class DataCollection {
 
         [XmlIgnore]
-        private const int INTERSECTION_WAY_MINIMUM = 2; 
+        public static readonly int INTERSECTION_WAY_MINIMUM = 2; 
 
         /*
         * All 'Node' elements that are returned from the deserialization.
@@ -51,7 +51,7 @@ namespace KBS_SE3.Models.DataControl {
         * This method prevents identical instances of the Node object.
         */
         public void Index() {
-            var nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
+            Dictionary<long, Node> nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
             foreach (Way way in this.Ways)
                 foreach (NodeReference reference in way.References)
                     if (nodeCollection.ContainsKey(reference.ReferenceID)) {

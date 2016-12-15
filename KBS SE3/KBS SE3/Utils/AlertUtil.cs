@@ -32,7 +32,7 @@ namespace KBS_SE3.Utils
 
         public static Alert SetAlertAttributes(Alert alert, string alertItemString)
         {
-            for (var i = 0; i < AlertUtil.P2000.GetLength(0); i++) {
+            for (int i = 0; i < AlertUtil.P2000.GetLength(0); i++) {
                 if (alertItemString.StartsWith(AlertUtil.P2000[i, 0])) {
                     alert.Code = AlertUtil.P2000[i, 0];
                     alert.Type = int.Parse(AlertUtil.P2000[i, 1]);

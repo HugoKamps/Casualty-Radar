@@ -6,6 +6,7 @@ using System.Device.Location;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KBS_SE3.Core.Algorithms.AStar;
 
 namespace KBS_SE3.Utils {
     static class MapUtil {
@@ -59,5 +60,10 @@ namespace KBS_SE3.Utils {
         */
         public static Node GetNearest(Node origin, List<Node> targetCollection) =>
             targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, origin.Lat, origin.Lon)).ElementAt(1);
+
+        public static List<StarNode> GetAdjacentNodes() {
+            //TODO
+            return new List<StarNode>();
+        }
     }
 }
