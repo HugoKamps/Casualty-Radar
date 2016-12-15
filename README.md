@@ -1,21 +1,17 @@
-# KBS-SE3
-Wijs uw vrienden onder vier ogen terecht, maar prijs ze (kraak ze af*) in het openbaar.
--- auteur onbekend
+# Casualty Radar
 
-Tranen zijn het smeltende ijs van de ziel.
--- H. Hesse
+INTRODUCTIE
+-----------
+Casualty Radar is een applicatie waarin je de snelst mogelijke route kan berekenen naar een incident dat zich in uw omgeving bevindt. Deze incidenten worden bepaald d.m.v. een P2000 feed, hierin staan alle ambulance, brandweer en eventuele politie meldingen van Nederland. Dit project is ontwikkeld door studenten van Hogeschool Windesheim in Zwolle en is in opdracht van Windesheim gerealiseerd.
 
-Wat wij toeval noemen, is het toevluchtsoord der onwetendheid.
--- Spinoza
+INSTALLATIE
+-----------
+Casualty Radar kan niet geïnstalleerd worden.
 
-In alles zit een barst, zo valt het licht naar binnen.
--- Leonard Cohen
-
-Ik laat al mijn verwachtingen los want zij zijn mijn enige begrenzing.
--- auteur onbekend
-	
-Al het verkeerde doen ontstaat door het verkeerde denken, als je je gedachten transformeert naar goed denken, kun je dan nog fout doen?
--- Boeddha
-	
-Wees altijd een beetje vriendelijker dan nodig.
--- J. Barrie
+TEAM
+-----------
+Maarten Brandemann
+Richard de Bruine
+Eelco Eikelboom
+Hugo Kamps
+Dennis Rump
