@@ -204,17 +204,10 @@ namespace KBS_SE3.Modules {
             };
 
             bwMap.DoWork += delegate {
-                Invoke(new Action(() => {
-                    GetLocationManager();
-                    KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Geladen";
-                }));
-                //Invoke(new Action(() => GetLocationManager()));
-                //KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Geladen";
+                GetLocationManager();
             };
 
             bwMap.RunWorkerCompleted += delegate {
-                KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Invoke(new Action(() => KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen meldingen"));
-                
                 GetAlertsMap(false);
                 RemoveLoadIcon();
                 try {
@@ -227,7 +220,7 @@ namespace KBS_SE3.Modules {
                 KBS_SE3.Container.GetInstance().SplashScreen.Hide();
             };
 
-            
+            KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen meldingen";
             bwFeed.RunWorkerAsync();
         }
 
