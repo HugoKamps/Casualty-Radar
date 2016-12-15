@@ -1,19 +1,14 @@
-﻿using GMap.NET;
+﻿using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Core;
 using KBS_SE3.Core.Dialog;
-using KBS_SE3.Models;
 using KBS_SE3.Models.DataControl;
 using KBS_SE3.Models.DataControl.Graph;
 using KBS_SE3.Modules;
-using KBS_SE3.Utils;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows.Forms;
 using static KBS_SE3.Core.Dialog.DialogType;
 
 namespace KBS_SE3 {
@@ -38,7 +33,7 @@ namespace KBS_SE3 {
             InitializeComponent();
             _modManager = ModuleManager.GetInstance();
             _dialog = new Dialog();
-            registerButtons();
+            RegisterButtons();
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
         }
 
@@ -67,7 +62,7 @@ namespace KBS_SE3 {
         * Method that registers all buttons in the application menu
         * Each button is bound to a Module; which is an instance of IModule
         */
-        private void registerButtons() {
+        private void RegisterButtons() {
             homeBtn.Tag = _modManager.ParseInstance(typeof(HomeModule));
             settingsBtn.Tag = _modManager.ParseInstance(typeof(SettingsModule));
         }
@@ -126,7 +121,7 @@ namespace KBS_SE3 {
         private void Container_Load(object sender, EventArgs e) {
             DisplaySplashScreen();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            this.Shown += hm.HomeModule_Load;
+            Shown += hm.HomeModule_Load;
             _modManager.UpdateModule(hm);
         }
 
@@ -136,12 +131,12 @@ namespace KBS_SE3 {
 
         private void testBtn_Click(object sender, EventArgs e) {
             DataParser parser = new DataParser(@"C:\Users\maarten\Desktop\zwolle_small.xml");
-            var timeStamp = DateTime.Now.Ticks;
+            long timeStamp = DateTime.Now.Ticks;
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             int i = 0;
-            foreach(Reference n in collection.Intersections) {
+            foreach(Node n in collection.Intersections) {
                 if (i == 100) break;
                 GMapMarker m = new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.blue_dot);
                 hm.RouteOverlay.Markers.Add(m);

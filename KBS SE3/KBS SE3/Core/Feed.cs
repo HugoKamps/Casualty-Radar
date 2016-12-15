@@ -46,8 +46,8 @@ namespace KBS_SE3.Core {
         public List<Alert> GetFilteredAlerts => _filteredAlerts;
 
         public List<Alert> CreateAlertList(SyndicationFeed items) {
-            var tempAlerts = new List<Alert>();
-            foreach (var item in items.Items.OrderBy(x => x.PublishDate)) {
+            List<Alert> tempAlerts = new List<Alert>();
+            foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate)) {
                 Alert newAlert = createAlert(item);
 
                 if (newAlert != null)
@@ -90,7 +90,7 @@ namespace KBS_SE3.Core {
                 add it to the list of new items.
                 Else, end the loop. 
                 */
-                foreach (var item in _p2000.Items)
+                foreach (SyndicationItem item in _p2000.Items)
                     if (item.Title.Text != first.Title.Text) newItems.Add(item);
                     else break;
 
@@ -112,7 +112,7 @@ namespace KBS_SE3.Core {
             // Check which filter is selected and apply the filter
             if (selectedFilter == 1 || selectedFilter == 2) {
                 _filteredAlerts = new List<Alert>();
-                foreach (var a in _alerts)
+                foreach (Alert a in _alerts)
                     if (a.Type == selectedFilter) _filteredAlerts.Add(a);
             } else _filteredAlerts = _alerts;
             hM.DisplayLoadIcon();

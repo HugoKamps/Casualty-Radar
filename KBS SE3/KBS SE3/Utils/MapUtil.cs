@@ -6,6 +6,7 @@ using System.Device.Location;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KBS_SE3.Core.Algorithms.AStar;
 
 namespace KBS_SE3.Utils {
     static class MapUtil {
@@ -23,7 +24,7 @@ namespace KBS_SE3.Utils {
         * This calculation uses the 'Haversine' algorithm to calculate the distances 
         * based on Longitude and Latitude.
         */
-        public static double GetDistance(Reference alpha, Reference beta) {
+        public static double GetDistance(Node alpha, Node beta) {
             return GetDistance(alpha.Lat, alpha.Lon, beta.Lat, beta.Lon);
         }
 
@@ -49,7 +50,7 @@ namespace KBS_SE3.Utils {
         * two nodes since the given node might be existent in the given collection aswell, this would return the
         * same node you passed as parameter.
         */
-        public static Reference GetNearest(double lat, double lon, List<Reference> targetCollection) => 
+        public static Node GetNearest(double lat, double lon, List<Node> targetCollection) => 
             targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, lat, lon)).First();
 
         /*
@@ -57,7 +58,12 @@ namespace KBS_SE3.Utils {
         * This method will not return the given node (since that is technically the most near one) but a
         * different node that is 'technically' the second most near.
         */
-        public static Reference GetNearest(Reference origin, List<Reference> targetCollection) =>
+        public static Node GetNearest(Node origin, List<Node> targetCollection) =>
             targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, origin.Lat, origin.Lon)).ElementAt(1);
+
+        public static List<StarNode> GetAdjacentNodes() {
+            //TODO
+            return new List<StarNode>();
+        }
     }
 }
