@@ -119,7 +119,6 @@ namespace KBS_SE3.Core {
                     foreach (PointLatLng t in l) {
                         points.Add(t);
                     }
-
                     _routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
                         Stroke =
                         {
