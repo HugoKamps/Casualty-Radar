@@ -131,7 +131,7 @@ namespace KBS_SE3 {
 
         private void testBtn_Click(object sender, EventArgs e) {
             DataParser parser = new DataParser(@"C:\Users\maarten\Desktop\zwolle_small.xml");
-            var timeStamp = DateTime.Now.Ticks;
+            long timeStamp = DateTime.Now.Ticks;
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));

@@ -51,7 +51,7 @@ namespace KBS_SE3.Models.DataControl {
         * This method prevents identical instances of the Node object.
         */
         public void Index() {
-            var nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
+            Dictionary<long, Node> nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
             foreach (Way way in this.Ways)
                 foreach (NodeReference reference in way.References)
                     if (nodeCollection.ContainsKey(reference.ReferenceID)) {

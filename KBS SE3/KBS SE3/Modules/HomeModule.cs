@@ -52,7 +52,7 @@ namespace KBS_SE3.Modules {
                 map.MapProvider = GoogleMapProvider.Instance;
                 map.DragButton = MouseButtons.Left;
                 GMaps.Instance.Mode = AccessMode.ServerOnly;
-                var markersOverlay = new GMapOverlay("markers");
+                GMapOverlay markersOverlay = new GMapOverlay("markers");
                 map.Overlays.Add(markersOverlay);
                 map.OnMarkerClick += Marker_Click;
                 /* kan weg */
@@ -67,8 +67,8 @@ namespace KBS_SE3.Modules {
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude, 0));
                 }
 
-                foreach (var alert in Feed.GetInstance().GetAlerts()) {
-                    var type = alert.Type == 1 ? 1 : 2;
+                foreach (Alert alert in Feed.GetInstance().GetAlerts()) {
+                    int type = alert.Type == 1 ? 1 : 2;
                     if (_previousMarker != null && _previousMarker.Position.Lat == alert.Lat && _previousMarker.Position.Lng == alert.Lng) type = 3;
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
                 }
@@ -76,9 +76,9 @@ namespace KBS_SE3.Modules {
         }
 
         private void Marker_Click(GMapMarker item, MouseEventArgs e) {
-            var markerIndex = (map.Overlays[0].Markers.IndexOf(item)) - 1;
+            int markerIndex = (map.Overlays[0].Markers.IndexOf(item)) - 1;
             if (markerIndex < 0) return;
-            var selectedPanel = _alertPanels[markerIndex];
+            Panel selectedPanel = _alertPanels[markerIndex];
             feedPanelItem_Click(selectedPanel, EventArgs.Empty);
             feedPanel.ScrollControlIntoView(selectedPanel);
         }
@@ -144,19 +144,19 @@ namespace KBS_SE3.Modules {
         private void navigationBtn_Click(object sender, EventArgs e) {
             Alert selectedAlert = null;
 
-            for (var i = 0; i < _alertPanels.Count; i++) {
+            for (int i = 0; i < _alertPanels.Count; i++) {
                 if (_selectedPanel != _alertPanels[i]) continue;
                 selectedAlert = Feed.GetInstance().GetAlerts()[i];
                 break;
             }
 
-            var navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            NavigationModule navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             if (selectedAlert != null) navigationModule.SetAlertInfo(selectedAlert.Title, selectedAlert.Info, selectedAlert.Type, selectedAlert.PubDate.TimeOfDay.ToString(), _locationManager.GetLocationPoint(), new PointLatLng(selectedAlert.Lat, selectedAlert.Lng));
             ModuleManager.GetInstance().UpdateModule(navigationModule);
         }
 
         private void navigationBtn_EnabledChanged(object sender, EventArgs e) {
-            var button = (Button)sender;
+            Button button = (Button)sender;
             button.ForeColor = Color.White;
             button.BackColor = button.Enabled ? Color.FromArgb(210, 73, 57) : Color.Gray;
         }
@@ -173,7 +173,7 @@ namespace KBS_SE3.Modules {
             _locationManager.SetCoordinatesByLocationSetting();
             map.IgnoreMarkerOnMouseWheel = true;
             _hasLocationservice = false;
-            var watcher = new GeoCoordinateWatcher();
+            GeoCoordinateWatcher watcher = new GeoCoordinateWatcher();
             watcher.PositionChanged += watcher_PositionChanged;
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
@@ -191,7 +191,7 @@ namespace KBS_SE3.Modules {
                 int y = 0;
                 _alertPanels.Clear();
 
-                foreach (var a in Feed.GetInstance().GetFilteredAlerts) {
+                foreach (Alert a in Feed.GetInstance().GetFilteredAlerts) {
                     _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y));
                     y += 105;
                 }
@@ -244,14 +244,14 @@ namespace KBS_SE3.Modules {
 
         public Panel CreateAlertPanel(int type, string title, string info, string time, int y) {
             //The panel which will be filled with all of the controls below
-            var newPanel = new Panel {
+            Panel newPanel = new Panel {
                 Location = new Point(0, y),
                 Size = new Size(320, 100),
                 BackColor = Color.FromArgb(236, 89, 71)
             };
 
             //The picture which indicates the type of alert (Firefighter or ambulance)
-            var newPictureBox = new PictureBox {
+            PictureBox newPictureBox = new PictureBox {
                 Location = new Point(220, 10),
                 Size = new Size(60, 60),
                 Image = type == 1 ? Resources.Medic : Resources.Firefighter,
@@ -259,7 +259,7 @@ namespace KBS_SE3.Modules {
             };
 
             //The label which will be filled with the information about the alert
-            var label = new Label {
+            Label label = new Label {
                 ForeColor = Color.White,
                 Location = new Point(10, 5),
                 Font = new Font("Microsoft Sans Serif", 10),
@@ -269,9 +269,9 @@ namespace KBS_SE3.Modules {
             };
 
             if (_selectedPanel != null) {
-                foreach (var control in _selectedPanel.Controls) {
+                foreach (object control in _selectedPanel.Controls) {
                     if (control is Label) {
-                        var selectedLabel = (Label)control;
+                        Label selectedLabel = (Label)control;
                         if (selectedLabel.Text == label.Text) {
                             newPanel.BackColor = Color.FromArgb(245, 120, 105);
                             _selectedPanel = newPanel;
@@ -281,7 +281,7 @@ namespace KBS_SE3.Modules {
             }
 
             //The label which will be filled with the time of the alert
-            var timeLabel = new Label {
+            Label timeLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(150, 65),
                 Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
@@ -321,7 +321,7 @@ namespace KBS_SE3.Modules {
         private void feedPanelItem_Click(object sender, EventArgs e) {
 
             if (sender.GetType() == typeof(Panel)) {
-                var panel = (Panel)sender;
+                Panel panel = (Panel)sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == panel) {
                     _selectedPanel = null;
@@ -333,7 +333,7 @@ namespace KBS_SE3.Modules {
                     navigationBtn.Enabled = true;
                 }
             } else {
-                var control = (Control)sender;
+                Control control = (Control)sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == control.Parent) {
                     _selectedPanel = null;
@@ -346,7 +346,7 @@ namespace KBS_SE3.Modules {
             }
 
             if (_previousMarker != null) map.Overlays[0].Markers[_previousMarkerIndex] = _previousMarker;
-            var index = _alertPanels.FindIndex(panel => panel == _selectedPanel) + 1;
+            int index = _alertPanels.FindIndex(panel => panel == _selectedPanel) + 1;
             _previousMarkerIndex = index;
             _previousMarker = (GMarkerGoogle)map.Overlays[0].Markers[index];
             if (index != 0) map.Overlays[0].Markers[index] = _locationManager.CreateMarker(_previousMarker.Position.Lat, _previousMarker.Position.Lng, 3);
@@ -354,20 +354,20 @@ namespace KBS_SE3.Modules {
 
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
-                var panel = (Panel)sender;
+                Panel panel = (Panel)sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
             } else {
-                var control = (Control)sender;
+                Control control = (Control)sender;
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(210, 73, 57);
             }
         }
 
         private void feedPanelItem_MouseLeave(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
-                var panel = (Panel)sender;
+                Panel panel = (Panel)sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
             } else {
-                var control = (Control)sender;
+                Control control = (Control)sender;
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(236, 86, 71);
             }
         }

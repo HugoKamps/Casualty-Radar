@@ -19,11 +19,11 @@ namespace KBS_SE3.Modules {
 
         //If the user changed the value of the textbox the Setting is changed
         private void saveBtn_Click(object sender, EventArgs e) {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             if (locationTextBox.Text != "") {
                 Settings.Default.userLocation = locationTextBox.Text;
-                var feedTickerNumericValue = Convert.ToInt32(feedTickerNumeric.Value);
-                var feedTickerEnabled = feedTickerCheckBox.Checked;
+                int feedTickerNumericValue = Convert.ToInt32(feedTickerNumeric.Value);
+                bool feedTickerEnabled = feedTickerCheckBox.Checked;
                 // Check if the timer tick value is changed and update to settings
                 if (feedTickerNumericValue != Settings.Default.feedTickerTime) {
                     Settings.Default.feedTickerTime = feedTickerNumericValue;

@@ -20,12 +20,12 @@ namespace KBS_SE3.Core.Algorithms {
         // Returns a List of Points representing the path. If no path was found, the returned list is empty
         public List<PointLatLng> FindPath() {
             // The start node is the first entry in the 'open' list
-            var path = new List<PointLatLng>();
-            var success = Search(_startNode);
+            List<PointLatLng> path = new List<PointLatLng>();
+            bool success = Search(_startNode);
             if (!success) return path;
 
             // If a path was found, follow the parents from the end node to build a list of locations
-            var node = _endNode;
+            StarNode node = _endNode;
             while (node.Parent != null) {
                 path.Add(node.GetPoint());
                 node = node.Parent;
@@ -40,11 +40,11 @@ namespace KBS_SE3.Core.Algorithms {
         private bool Search(StarNode currentNode) {
             // Set the current node to Closed since it cannot be traversed more than once
             currentNode.State = NodeState.Closed;
-            var nextNodes = GetAdjacentNodes(currentNode);
+            List<StarNode> nextNodes = GetAdjacentNodes(currentNode);
 
             // Sort by F-value so that the shortest possible routes are considered first
             nextNodes.Sort((node1, node2) => node1.F.CompareTo(node2.F));
-            foreach (var nextNode in nextNodes) {
+            foreach (StarNode nextNode in nextNodes) {
                 // Check whether the end node has been reached
                 if (nextNode.GetPoint() == _endNode.GetPoint()) {
                     return true;
@@ -59,17 +59,17 @@ namespace KBS_SE3.Core.Algorithms {
         }
 
         private List<StarNode> GetAdjacentNodes(StarNode fromNode) {
-            var nodes = new List<StarNode>();
-            var adjacentNodes = MapUtil.GetAdjacentNodes();
+            List<StarNode> nodes = new List<StarNode>();
+            List<StarNode> adjacentNodes = MapUtil.GetAdjacentNodes();
 
-            foreach (var node in adjacentNodes) {
+            foreach (StarNode node in adjacentNodes) {
                 // Ignore already-closed nodes
                 switch (node.State) {
                     case NodeState.Closed:
                         continue;
                     case NodeState.Open:
-                        var traversalCost = MapUtil.GetDistance(node, node.Parent);
-                        var gTemp = fromNode.G + traversalCost;
+                        double traversalCost = MapUtil.GetDistance(node, node.Parent);
+                        double gTemp = fromNode.G + traversalCost;
                         if (gTemp < node.G) {
                             node.Parent = fromNode;
                             nodes.Add(node);

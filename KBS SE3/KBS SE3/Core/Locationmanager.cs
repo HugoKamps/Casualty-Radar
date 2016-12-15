@@ -23,19 +23,19 @@ namespace KBS_SE3.Core {
 
         //Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
         public void SetCoordinatesByLocationSetting() {
-            var location = Settings.Default.userLocation + ", The Netherlands";
-            var requestUri =
+            string location = Settings.Default.userLocation + ", The Netherlands";
+            string requestUri =
                 $"http://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(location)}&sensor=false";
 
-            var request = WebRequest.Create(requestUri);
-            var response = request.GetResponse();
-            var xdoc = XDocument.Load(response.GetResponseStream());
+            WebRequest request = WebRequest.Create(requestUri);
+            WebResponse response = request.GetResponse();
+            XDocument xdoc = XDocument.Load(response.GetResponseStream());
 
-            var result = xdoc.Element("GeocodeResponse").Element("result");
+            XElement result = xdoc.Element("GeocodeResponse").Element("result");
             if (result != null) {
-                var locationElement = result.Element("geometry").Element("location");
-                var lat = Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", string.Empty);
-                var lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
+                XElement locationElement = result.Element("geometry").Element("location");
+                string lat = Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", string.Empty);
+                string lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
                 CurrentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
                 CurrentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
             }
@@ -43,15 +43,15 @@ namespace KBS_SE3.Core {
 
         //Returns a marker that will be placed on a given location. The color and type are variable
         public GMarkerGoogle CreateMarker(double lat, double lng, int type) {
-            var imgLocation = "../../Resources../marker_icon_";
+            string imgLocation = "../../Resources../marker_icon_";
             if (type == 0) imgLocation += "blue.png";
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
             if (type == 3) imgLocation += "selected.png";
 
-            var image = (Image)new Bitmap(@imgLocation);
+            Image image = (Image)new Bitmap(@imgLocation);
 
-            var marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
+            GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
             return marker;
         }
 
@@ -78,7 +78,7 @@ namespace KBS_SE3.Core {
             }
 
             foreach (List<PointLatLng> l in list) {
-                var points = l.ToList();
+                List<PointLatLng> points = l.ToList();
                 routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
                     Stroke =
                     {
@@ -114,7 +114,7 @@ namespace KBS_SE3.Core {
                 }
 
                 foreach (PointLatLng p in points) {
-                    var l = new List<PointLatLng>();
+                    List<PointLatLng> l = new List<PointLatLng>();
 
                     foreach (PointLatLng t in l) {
                         points.Add(t);
