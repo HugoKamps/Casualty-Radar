@@ -101,11 +101,11 @@
     <Compile Include="Models\DataControl\Graph\Node.cs" />
     <Compile Include="Models\DataControl\Graph\NodeReference.cs" />
     <Compile Include="Models\DataControl\Graph\Way.cs" />
-    <Compile Include="SplashScreen.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Modules\SplashScreenModule.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SplashScreen.Designer.cs">
-      <DependentUpon>SplashScreen.cs</DependentUpon>
+    <Compile Include="Modules\SplashScreenModule.Designer.cs">
+      <DependentUpon>SplashScreenModule.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\ConnectionUtil.cs" />
     <Compile Include="Models\Navigation\NavigationStep.cs" />
@@ -171,6 +171,9 @@
     <EmbeddedResource Include="Modules\SettingsModule.resx">
       <DependentUpon>SettingsModule.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Modules\SplashScreenModule.resx">
+      <DependentUpon>SplashScreenModule.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -181,9 +184,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SplashScreen.resx">
-      <DependentUpon>SplashScreen.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
