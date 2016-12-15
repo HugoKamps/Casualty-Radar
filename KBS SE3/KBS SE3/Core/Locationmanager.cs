@@ -121,10 +121,6 @@ namespace KBS_SE3.Core {
                 }
 
                 foreach (PointLatLng p in points) {
-                    var l = new List<PointLatLng>();
-                    for (int i = 0; i < l.Count; i++) {
-                        points.Add(l[i]);
-                    }
                     _routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
                         Stroke = {
                     DashStyle = System.Drawing.Drawing2D.DashStyle.Solid,
