@@ -12,7 +12,7 @@ namespace KBS_SE3.Models.DataControl {
     public class DataCollection {
 
         [XmlIgnore]
-        private const int INTERSECTION_WAY_MINIMUM = 2; 
+        public static readonly int INTERSECTION_WAY_MINIMUM = 2; 
 
         /*
         * All 'Node' elements that are returned from the deserialization.
@@ -20,7 +20,7 @@ namespace KBS_SE3.Models.DataControl {
         * to a Node instance from our software.
         */
         [XmlElement("n")]
-        public List<Node> Nodes { get; private set; }
+        public List<Reference> Nodes { get; private set; }
 
         /*
         * All 'Way' elements that are returned from the deserialization.
@@ -36,12 +36,12 @@ namespace KBS_SE3.Models.DataControl {
         * Without intersections we wouldn't know how the roads are connected.
         */
         [XmlIgnore]
-        public List<Node> Intersections { get; private set; }
+        public List<Reference> Intersections { get; private set; }
 
         public DataCollection() {
-            this.Nodes = new List<Node>();
+            this.Nodes = new List<Reference>();
             this.Ways = new List<Way>();
-            this.Intersections = new List<Node>();
+            this.Intersections = new List<Reference>();
         }
 
         /*

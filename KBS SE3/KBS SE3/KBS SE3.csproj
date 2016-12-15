@@ -201,6 +201,7 @@
   <ItemGroup>
     <Content Include="feed.xml" />
     <Content Include="Resources\app_icon.ico" />
+    <Content Include="Resources\TESTTT.xml" />
     <None Include="Resources\converted.osm" />
     <None Include="Resources\marker_icon_yellow.png" />
     <None Include="Resources\marker_icon_red.png" />
