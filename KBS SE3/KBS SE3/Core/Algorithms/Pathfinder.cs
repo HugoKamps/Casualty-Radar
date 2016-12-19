@@ -59,9 +59,23 @@ namespace KBS_SE3.Core.Algorithms {
 
         private List<StarNode> GetAdjacentNodes(StarNode fromNode) {
             List<StarNode> nodes = new List<StarNode>();
-            List<StarNode> adjacentNodes = MapUtil.GetAdjacentNodes();
+            //List<StarNode> adjacentNodes = MapUtil.GetAdjacentNodes();
 
-            foreach (StarNode node in adjacentNodes) {
+            List<StarNode> adjacentNodes = new List<StarNode>()
+            {
+                new StarNode(_endNode),
+                new StarNode(_endNode),
+                new StarNode(_endNode),
+                new StarNode(_endNode),
+                new StarNode(_endNode),
+                new StarNode(_endNode),
+                new StarNode(_endNode),
+                new StarNode(_endNode)
+            };
+
+            foreach (StarNode adjacentNode in adjacentNodes)
+            {
+                var node = adjacentNode;
                 // Ignore already-closed nodes
                 switch (node.State) {
                     case NodeState.Closed:

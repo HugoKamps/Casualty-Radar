@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using GMap.NET;
@@ -62,7 +63,8 @@ namespace KBS_SE3.Modules {
             
             _endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
             _pathfinder = new Pathfinder(_startNode, _endNode);
-            _pathfinder.FindPath();
+            List<PointLatLng> path = _pathfinder.FindPath();
+            foreach(PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
         }
 
         public void GetRouteMap(double startLat, double startLng, double destLat, double destLng) {

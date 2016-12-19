@@ -11,9 +11,9 @@ namespace KBS_SE3.Core.Algorithms {
     public class StarNode : Node {
         private StarNode _parentNode;
 
-        public double G { get; set; }
-        public double H { get; set; }
-        public double F => G + H;
+        public double G { get; set; } // The value which indicates the distance from the current node to an adjacent node
+        public double H { get; set; } // The value which indicates the distance from the current node to the destination node
+        public double F => G + H; // This value that determines the current node's usefulness for the route
         public NodeState State { get; set; }
 
         public StarNode Parent {
