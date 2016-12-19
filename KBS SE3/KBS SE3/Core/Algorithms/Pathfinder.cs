@@ -60,7 +60,8 @@ namespace KBS_SE3.Core.Algorithms {
 
         private List<StarNode> GetAdjacentNodes(StarNode fromNode) {
             List<StarNode> nodes = new List<StarNode>();
-            List<StarNode> adjacentNodes = MapUtil.GetAdjacentNodes();
+            //List<StarNode> adjacentNodes = MapUtil.GetAdjacentNodes();
+            List<StarNode> adjacentNodes = new List<StarNode>(); // remove
 
             foreach (StarNode node in adjacentNodes) {
                 // Ignore already-closed nodes

@@ -61,9 +61,24 @@ namespace KBS_SE3.Utils {
         public static Node GetNearest(Node origin, List<Node> targetCollection) =>
             targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, origin.Lat, origin.Lon)).ElementAt(1);
 
-        public static List<StarNode> GetAdjacentNodes() {
-            //TODO
-            return new List<StarNode>();
+        /*
+        * Returns all nodes that are adjacent to the given origin Node.
+        * This method will return both intersections and straight-line nodes.
+        * Adjacent nodes are nodes that are located next to the given node as long as they're
+        * part of the same way.
+        */
+        public static List<Node> GetAdjacentNodes(Node origin) {
+            List<Node> rtn = new List<Node>();
+            foreach (Way w in origin.ConnectedWays) {
+                List<Node> references = w.References.Select(x => x.Node).OrderBy(x => x.ID).ToList();
+                int idx = references.IndexOf(origin);
+                if(idx > 0) rtn.Add(references[idx-1]);
+                if(references.Count > idx+1) rtn.Add(references[idx+1]);
+            }
+            return rtn;
         }
+
+
+
     }
 }
