@@ -16,7 +16,6 @@ namespace KBS_SE3.Modules {
 
         //Override for the Show method which sets a timestamp when the splashscreen is being displayed
         public new void Show() {
-            //StartTime = DateTime.Now.Ticks;
             base.Show();
         }
 
