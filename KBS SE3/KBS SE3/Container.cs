@@ -12,6 +12,8 @@ using KBS_SE3.Modules;
 using static KBS_SE3.Core.Dialog.DialogType;
 using System.Threading;
 using System.ComponentModel;
+using System.Collections.Generic;
+using KBS_SE3.Utils;
 
 namespace KBS_SE3 {
     public partial class Container : Form {
@@ -50,10 +52,7 @@ namespace KBS_SE3 {
             DisplaySplashScreen();
         }
 
-        public static Container GetInstance() {
-            if (_instance == null) _instance = new Container();
-            return _instance;
-        }
+        public static Container GetInstance() => _instance ?? (_instance = new Container());
 
         public void DisplaySplashScreen() {
             Controls.Add(SplashScreen);
@@ -144,19 +143,25 @@ namespace KBS_SE3 {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"C:\Users\maarten\Desktop\zwolle_small.xml");
-            long timeStamp = DateTime.Now.Ticks;
+            DataParser parser = new DataParser(@"../../Resources/TESTTT.xml");
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            int i = 0;
-            foreach(Node n in collection.Intersections) {
-                if (i == 100) break;
-                GMapMarker m = new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.blue_dot);
+            TestDraw(hm, collection.Nodes[116]);
+            TestDraw(hm, collection.Nodes[123]);
+            TestDraw(hm, collection.Nodes[43]);
+            DisplayDialog(DialogMessageType.SUCCESS, "Test Dialog", "Success");
+        }
+
+        /*
+        * TEST METHOD 
+        */
+        private void TestDraw(HomeModule hm, Node n) {
+            hm.RouteOverlay.Markers.Add(new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.red_big_stop));
+            foreach (Node adjacent in MapUtil.GetAdjacentNodes(n)) {
+                GMapMarker m = new GMarkerGoogle(adjacent.GetPoint(), GMarkerGoogleType.blue_dot);
                 hm.RouteOverlay.Markers.Add(m);
-                i++;
             }
-            DisplayDialog(DialogMessageType.SUCCESS, "Parsing Finished", "Het duurde " + ((DateTime.Now.Ticks - timeStamp) / 10000) + " ms. Intersections: " + collection.Intersections.Count + ", Nodes: " + collection.Nodes.Count);
         }
     }
 }
