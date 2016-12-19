@@ -22,9 +22,9 @@ namespace KBS_SE3.Modules {
 
         //Override for the Hide method which sets a timestamp when the splashscreen is being hidden
         public new void Hide() {
-            //EndTime = DateTime.Now.Ticks;
-            //long difference = (EndTime - StartTime) / 10000;
-            //if (difference < 1000) Thread.Sleep(1000 - int.Parse(difference.ToString()));
+            EndTime = DateTime.Now.Ticks;
+            long difference = (EndTime - StartTime) / 10000;
+            if (difference < 1000) Thread.Sleep(1000 - int.Parse(difference.ToString()));
             base.Hide();
         }
     }

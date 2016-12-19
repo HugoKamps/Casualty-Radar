@@ -6,7 +6,7 @@ using KBS_SE3.Modules;
 using KBS_SE3.Properties;
 
 namespace KBS_SE3.Core {
-    class ModuleManager {
+    public class ModuleManager {
 
         private static ModuleManager _instance;
         private IModule _defaultModule, _currentModule;

@@ -13,7 +13,7 @@ using KBS_SE3.Models;
 using KBS_SE3.Properties;
 
 namespace KBS_SE3.Modules {
-    partial class HomeModule : UserControl, IModule {
+    public partial class HomeModule : UserControl, IModule {
         private LocationManager _locationManager;
         private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
         private FeedTicker _feedTicker;
@@ -45,7 +45,7 @@ namespace KBS_SE3.Modules {
         Function that displays a map in the HomeModule. First it checks if the user has a working internet connection. 
         It creates a marker on the user's current location and on all the incidents coming from the Feed.
         */
-        public void GetAlertsMap(bool hasLocationService) {
+        public void InitAlertsMap(bool hasLocationService) {
             if (ConnectionUtil.HasInternetConnection()) {
                 map.Overlays.Clear();
                 map.ShowCenter = false;
@@ -90,7 +90,7 @@ namespace KBS_SE3.Modules {
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
             _locationManager.CurrentLatitude = e.Position.Location.Latitude;
             _locationManager.CurrentLongitude = e.Position.Location.Longitude;
-            //GetAlertsMap(true);
+            //InitAlertsMap(true);
         }
 
         //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
@@ -112,7 +112,7 @@ namespace KBS_SE3.Modules {
                     _hasLocationservice = false;
                     break;
             }
-            //GetAlertsMap(_hasLocationservice);
+            //InitAlertsMap(_hasLocationservice);
         }
 
         public LocationManager GetLocationManager() {
@@ -207,7 +207,7 @@ namespace KBS_SE3.Modules {
             };
 
             bwMap.RunWorkerCompleted += delegate {
-                GetAlertsMap(false);
+                InitAlertsMap(false);
                 RemoveLoadIcon();
                 try {
                     foreach (Panel p in _alertPanels)
