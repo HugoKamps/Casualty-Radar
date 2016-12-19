@@ -62,7 +62,7 @@
             this.CurrentlyLoadingLabel.Name = "CurrentlyLoadingLabel";
             this.CurrentlyLoadingLabel.Size = new System.Drawing.Size(246, 38);
             this.CurrentlyLoadingLabel.TabIndex = 6;
-            this.CurrentlyLoadingLabel.Text = "currentlyLoadingLabel";
+            this.CurrentlyLoadingLabel.Text = "Laden..";
             this.CurrentlyLoadingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SplashScreenModule

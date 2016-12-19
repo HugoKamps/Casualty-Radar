@@ -16,7 +16,7 @@ using KBS_SE3.Properties;
 using KBS_SE3.Utils;
 
 namespace KBS_SE3.Core {
-    internal class LocationManager {
+    public class LocationManager {
         public double CurrentLatitude { get; set; } //The user's current latitude
         public double CurrentLongitude { get; set; } //The user's current longitude
         public List<Way> Ways = new List<Way>();

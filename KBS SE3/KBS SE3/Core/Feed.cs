@@ -13,7 +13,7 @@ using KBS_SE3.Core.Dialog;
 using KBS_SE3.Models;
 
 namespace KBS_SE3.Core {
-    internal class Feed {
+    public class Feed {
         private static Feed _instance;
         private SyndicationFeed _p2000;
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
