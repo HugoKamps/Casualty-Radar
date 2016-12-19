@@ -6,12 +6,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KBS_SE3_Unit_Tests {
     [TestClass]
-    public class HomeModuleTest
-    {
-        private IModule mod;
+    public class HomeModuleTest {
         [TestMethod]
         public void InstanceTest() {
-            mod = ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            IModule mod = ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if hm is an instance of HomeModule
             Assert.IsInstanceOfType(mod, typeof(HomeModule));
@@ -34,8 +32,7 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void GetLocationManager()
-        {
+        public void GetLocationManager() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if GetLocationManager() returns an instance of LocationManager

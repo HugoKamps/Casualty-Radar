@@ -5,19 +5,16 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KBS_SE3_Unit_Tests {
     [TestClass]
-    public class ContainerTest
-    {
+    public class ContainerTest {
         [TestMethod]
-        public void InstanceTest()
-        {
+        public void InstanceTest() {
             Container ct = Container.GetInstance();
 
             Assert.IsInstanceOfType(ct, typeof(Container));
         }
 
         [TestMethod]
-        public void SplashScreenTest()
-        {
+        public void SplashScreenTest() {
             Container ct = Container.GetInstance();
             var sC = ct.SplashScreen;
 
