@@ -62,7 +62,7 @@ namespace KBS_SE3.Modules {
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             _startNode = targetCollection[10];
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
-            _endNode = targetCollection[100];
+            _endNode = targetCollection[40];
             _pathfinder = new Pathfinder(_startNode, _endNode);
             List<PointLatLng> path = _pathfinder.FindPath();
             foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
@@ -94,7 +94,7 @@ namespace KBS_SE3.Modules {
 
             // Reading data for adding test route
 
-            DataParser parser = new DataParser(@"../../Resources/TESTTT.xml");
+            DataParser parser = new DataParser(@"C:\Users\richa_000\Desktop\hattem.xml");
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             //_locationManager.DrawRoute(collection, _routeOverlay);
