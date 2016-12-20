@@ -79,7 +79,7 @@ namespace KBS_SE3.Core {
             _newAlerts = new List<Alert>();
             // Load the feed
 
-            //try {
+            try {
             _p2000 = SyndicationFeed.Load(XmlReader.Create(USE_FEED_URL));
             _alerts = CreateAlertList(_p2000);
 
@@ -97,9 +97,9 @@ namespace KBS_SE3.Core {
             if (_newAlerts.Count > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized)
                 new PushMessage(_newAlerts);
             UpdateAlerts();
-            //} catch (Exception e) {
-            //    MessageBox.Show(e.Message);
-            //}
+            } catch (Exception e) {
+               MessageBox.Show(e.Message);
+            }
         }
 
         // Update the displayed alerts with the new feed

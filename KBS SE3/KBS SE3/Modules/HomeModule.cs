@@ -222,7 +222,6 @@ namespace KBS_SE3.Modules {
                         feedPanel.Controls.Add(_alertPanels[i]);
                     }
 
-
                     //foreach (Panel p in _alertPanels)
                     //    feedPanel.Controls.Add(p);
                 } catch (InvalidOperationException e) {
@@ -254,7 +253,6 @@ namespace KBS_SE3.Modules {
 
         public Panel GetSelectedPanel => _selectedPanel;
         public int GetAlertType => alertTypeComboBox.SelectedIndex;
-
 
         public Panel CreateAlertPanel(int type, string title, string info, string time, int y) {
             //The panel which will be filled with all of the controls below
