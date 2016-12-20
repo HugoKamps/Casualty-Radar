@@ -43,7 +43,7 @@ namespace KBS_SE3.Models.DataControl {
             this.Nodes = new List<Node>();
             this.Ways = new List<Way>();
             this.Intersections = new List<Node>();
-            this.WayControl = new WayTypeControl();
+            this.WayControl = new WayTypeControl(this);
         }
 
         /*
