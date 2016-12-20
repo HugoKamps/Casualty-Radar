@@ -46,7 +46,6 @@ namespace KBS_SE3.Modules {
             ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).BeginInit();
             this.rightPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadFeedPictureBox)).BeginInit();
-            this.feedPanel.SuspendLayout();
             this.legendaPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.redMarkerPicturebox)).BeginInit();
@@ -263,6 +262,7 @@ namespace KBS_SE3.Modules {
             // navigationBtn
             // 
             this.navigationBtn.BackColor = System.Drawing.Color.Gray;
+            this.navigationBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.navigationBtn.Enabled = false;
             this.navigationBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.navigationBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
@@ -290,9 +290,8 @@ namespace KBS_SE3.Modules {
             this.refreshPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).EndInit();
             this.rightPanel.ResumeLayout(false);
+            this.rightPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadFeedPictureBox)).EndInit();
-            this.feedPanel.ResumeLayout(false);
-            this.feedPanel.PerformLayout();
             this.legendaPanel.ResumeLayout(false);
             this.legendaPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).EndInit();
