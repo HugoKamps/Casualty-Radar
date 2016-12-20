@@ -13,6 +13,7 @@ using static KBS_SE3.Core.Dialog.DialogType;
 using System.Threading;
 using System.ComponentModel;
 using System.Collections.Generic;
+using KBS_SE3.Models.DataControl.Graph.Ways;
 using KBS_SE3.Utils;
 
 namespace KBS_SE3 {
@@ -151,6 +152,7 @@ namespace KBS_SE3 {
             TestDraw(hm, collection.Nodes[123]);
             TestDraw(hm, collection.Nodes[43]);
             DisplayDialog(DialogMessageType.SUCCESS, "Test Dialog", "Success");
+            new WayTypeControl();
         }
 
         /*

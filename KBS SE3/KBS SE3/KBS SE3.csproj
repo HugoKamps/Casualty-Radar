@@ -99,7 +99,10 @@
     <Compile Include="Models\DataControl\DataParser.cs" />
     <Compile Include="Models\DataControl\Graph\Node.cs" />
     <Compile Include="Models\DataControl\Graph\NodeReference.cs" />
-    <Compile Include="Models\DataControl\Graph\Way.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\Way.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypeBase.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypeControl.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\PrimaryWay.cs" />
     <Compile Include="Modules\SplashScreenModule.cs">
       <SubType>UserControl</SubType>
     </Compile>

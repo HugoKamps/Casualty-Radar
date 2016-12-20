@@ -46,7 +46,7 @@ namespace KBS_SE3_Unit_Tests {
 
             hm.LocationManager = newLM;
 
-            // Test if SetLocationManager() sets the locationmanager
+            //Test if SetLocationManager() sets the locationmanager
             Assert.AreEqual(hm.GetLocationManager(), newLM);
         }
 
