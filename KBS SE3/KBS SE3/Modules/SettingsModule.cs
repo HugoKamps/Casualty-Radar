@@ -36,7 +36,7 @@ namespace KBS_SE3.Modules {
                     // Apply changes
                     hm.FeedTicker.TimerStateChanged(feedTickerEnabled);
                 }
-                this.saveBtn.Enabled = false;
+                saveBtn.Enabled = false;
                 Settings.Default.Save();
             } else {
                 warningLabel.Show();
@@ -44,12 +44,12 @@ namespace KBS_SE3.Modules {
         }
 
         private void feedTickerCheckBox_CheckedChanged(object sender, EventArgs e) {
-            this.feedTickerNumeric.Enabled = this.feedTickerCheckBox.Checked;
-            this.saveBtn.Enabled = true;
+            feedTickerNumeric.Enabled = feedTickerCheckBox.Checked;
+            saveBtn.Enabled = true;
         }
 
         private void locationTextBox_TextChanged(object sender, EventArgs e) {
-            if (locationTextBox.Text != Settings.Default.userLocation) this.saveBtn.Enabled = true;
+            if (locationTextBox.Text != Settings.Default.userLocation) saveBtn.Enabled = true;
         }
 
         private void feedTickerNumeric_ValueChanged(object sender, EventArgs e) {
