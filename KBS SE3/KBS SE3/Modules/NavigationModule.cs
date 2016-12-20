@@ -59,14 +59,13 @@ namespace KBS_SE3.Modules {
             dataParser.Deserialize();
             DataCollection collection = dataParser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
-            //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
-            _startNode = targetCollection[33];
-            //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
-            _endNode = targetCollection[12];
+            _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
+            //_startNode = targetCollection[1200];
+            _endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
+            //_endNode = targetCollection[600];
             _pathfinder = new Pathfinder(_startNode, _endNode);
             List<PointLatLng> path = _pathfinder.FindPath();
             foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
-            
             _routeOverlay.Routes.Add(new GMapRoute(path, "MyRoute") {
                 Stroke =
                 {
@@ -76,6 +75,7 @@ namespace KBS_SE3.Modules {
             });
 
         }
+
 
         public void GetRouteMap(double startLat, double startLng, double destLat, double destLng) {
             map.Overlays.Clear();
