@@ -10,15 +10,17 @@ using KBS_SE3.Models.DataControl;
 using KBS_SE3.Models.DataControl.Graph;
 using KBS_SE3.Modules;
 using static KBS_SE3.Core.Dialog.DialogType;
+using System.Threading;
+using System.ComponentModel;
 using System.Collections.Generic;
 using KBS_SE3.Utils;
 
 namespace KBS_SE3 {
-    partial class Container : Form {
+    public partial class Container : Form {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
-
+        
         private Dialog _dialog;
         private static Container _instance;
         private ModuleManager _modManager;
@@ -31,12 +33,23 @@ namespace KBS_SE3 {
         private static extern bool ReleaseCapture();
 
         private Container() {
-            SplashScreen = new SplashScreenModule();
             InitializeComponent();
+
+            Thread t = new Thread(new ThreadStart(SplashThread));
+            t.IsBackground = true;
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+
             _modManager = ModuleManager.GetInstance();
             _dialog = new Dialog();
             RegisterButtons();
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
+        }
+
+        private void SplashThread()
+        {
+            SplashScreen = new SplashScreenModule();
+            DisplaySplashScreen();
         }
 
         public static Container GetInstance() => _instance ?? (_instance = new Container());
@@ -118,10 +131,11 @@ namespace KBS_SE3 {
         private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
 
         private void Container_Load(object sender, EventArgs e) {
-            DisplaySplashScreen();
+            BackgroundWorker bW = new BackgroundWorker();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             Shown += hm.HomeModule_Load;
             _modManager.UpdateModule(hm);
+            
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
