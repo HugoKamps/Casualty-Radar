@@ -144,8 +144,10 @@ namespace KBS_SE3 {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            
-            DisplayDialog(DialogMessageType.ERROR, "XML Error", "Je moet eem een nieuwe XML Parsen.");
+            DataParser parser = new DataParser(@"C:\Users\richa_000\Desktop\hattem.xml");
+            parser.Deserialize();
+            DataCollection col = parser.GetCollection();
+            //DisplayDialog(DialogMessageType.ERROR, "XML Error", "Je moet eem een nieuwe XML Parsen.");
         }
 
         /*
