@@ -216,7 +216,7 @@ namespace KBS_SE3.Modules {
                         {
                             if (alert == Feed.GetInstance().GetFilteredAlerts[i])
                             {
-                                _alertPanels[i].Controls[3].Visible = true;
+                                _alertPanels[i].Controls[3].Show();
                             }
                         }
                         feedPanel.Controls.Add(_alertPanels[i]);
@@ -287,7 +287,7 @@ namespace KBS_SE3.Modules {
             Label newLabel = new Label
             {
                 ForeColor = Color.White,
-                Location = new Point(280, 5),
+                Location = new Point(280, 0),
                 Size = new Size(40, 20),
                 Font = new Font("Microsoft Sans Serif", 9),
                 BackColor = Color.Transparent,
@@ -311,7 +311,7 @@ namespace KBS_SE3.Modules {
             //The label which will be filled with the time of the alert
             Label timeLabel = new Label {
                 ForeColor = Color.White,
-                Location = new Point(145, 45),
+                Location = new Point(145, 50),
                 Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold),
                 Size = new Size(200, 30),
                 BackColor = Color.Transparent,
