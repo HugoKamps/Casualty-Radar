@@ -144,15 +144,8 @@ namespace KBS_SE3 {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            //DataParser parser = new DataParser(@"../../Resources/TESTTT.xml");
-            DataParser parser = new DataParser(@"C:\Users\Eelco\Desktop\hattem.xml");
-            parser.Deserialize();
-            DataCollection collection = parser.GetCollection();
-            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            TestDraw(hm, collection.Nodes[116]);
-            TestDraw(hm, collection.Nodes[123]);
-            TestDraw(hm, collection.Nodes[43]);
-            DisplayDialog(DialogMessageType.SUCCESS, "Test Dialog", "Success");
+            
+            DisplayDialog(DialogMessageType.ERROR, "XML Error", "Je moet eem een nieuwe XML Parsen.");
         }
 
         /*
