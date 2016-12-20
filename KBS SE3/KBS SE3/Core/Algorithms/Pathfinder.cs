@@ -10,10 +10,9 @@ namespace KBS_SE3.Core.Algorithms {
 
         public Pathfinder(Node startNode, Node endNode) {
             _endNode = endNode;
-            _endNode.SetStarData(_endNode);
+            _endNode.StarData = new StarData(_endNode, _endNode);
             _startNode = startNode;
-            _startNode.SetStarData(_endNode);
-            _startNode.StarData.State = NodeState.Open;;
+            _startNode.StarData = new StarData(_startNode, _endNode) {State = NodeState.Open};
         }
 
         // Attempts to find a path from the start location to the end location based on the supplied SearchParameters
@@ -64,7 +63,7 @@ namespace KBS_SE3.Core.Algorithms {
 
             foreach (var adjacentNode in adjacentNodes) {
                 var node = adjacentNode;
-                node.SetStarData(_endNode);
+                node.StarData = new StarData(node, _endNode);
                 // Ignore already-closed nodes
                 switch (node.StarData.State) {
                     case NodeState.Closed:
