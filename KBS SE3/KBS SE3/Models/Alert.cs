@@ -2,7 +2,7 @@
 
 namespace KBS_SE3.Models
 {
-    class Alert {
+    public class Alert {
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTimeOffset PubDate { get; set; }

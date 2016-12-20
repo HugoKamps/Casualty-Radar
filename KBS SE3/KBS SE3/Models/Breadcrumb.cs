@@ -1,7 +1,7 @@
 ﻿using KBS_SE3.Core;
 
 namespace KBS_SE3.Models {
-    class Breadcrumb {
+    public class Breadcrumb {
 
         public IModule Content { get; set; }
         public IModule Parent { get; set; }

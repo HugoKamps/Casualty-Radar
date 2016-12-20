@@ -1,9 +1,6 @@
 ﻿using KBS_SE3.Models.DataControl.Graph;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace KBS_SE3.Models.DataControl {
@@ -20,7 +17,7 @@ namespace KBS_SE3.Models.DataControl {
         * to a Node instance from our software.
         */
         [XmlElement("n")]
-        public List<Reference> Nodes { get; private set; }
+        public List<Node> Nodes { get; private set; }
 
         /*
         * All 'Way' elements that are returned from the deserialization.
@@ -36,12 +33,12 @@ namespace KBS_SE3.Models.DataControl {
         * Without intersections we wouldn't know how the roads are connected.
         */
         [XmlIgnore]
-        public List<Reference> Intersections { get; private set; }
+        public List<Node> Intersections { get; }
 
         public DataCollection() {
-            this.Nodes = new List<Reference>();
+            this.Nodes = new List<Node>();
             this.Ways = new List<Way>();
-            this.Intersections = new List<Reference>();
+            this.Intersections = new List<Node>();
         }
 
         /*
@@ -51,7 +48,7 @@ namespace KBS_SE3.Models.DataControl {
         * This method prevents identical instances of the Node object.
         */
         public void Index() {
-            var nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
+            Dictionary<long, Node> nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
             foreach (Way way in this.Ways)
                 foreach (NodeReference reference in way.References)
                     if (nodeCollection.ContainsKey(reference.ReferenceID)) {

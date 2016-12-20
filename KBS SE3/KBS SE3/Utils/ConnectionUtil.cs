@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 
 namespace KBS_SE3 {
     static class ConnectionUtil {
@@ -6,8 +7,8 @@ namespace KBS_SE3 {
         //Function that returns true if the user has a working internet connection
         public static bool HasInternetConnection() {
             try {
-                using (var client = new WebClient()) {
-                    using (var stream = client.OpenRead("http://www.google.com")) {
+                using (WebClient client = new WebClient()) {
+                    using (Stream stream = client.OpenRead("http://www.google.com")) {
                         return true;
                     }
                 }

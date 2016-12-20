@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace KBS_SE3.Models.DataControl.Graph {
@@ -25,6 +21,6 @@ namespace KBS_SE3.Models.DataControl.Graph {
         * Because the Node doesn't exist in the XML we have to add the XMLIgnore attribute so the deserialization won't throw an error
         */
         [XmlIgnore]
-        public Reference Node { get; set; }
+        public Node Node { get; set; }
     }
 }

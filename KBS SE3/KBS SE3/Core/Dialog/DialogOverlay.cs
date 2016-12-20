@@ -14,10 +14,10 @@ namespace KBS_SE3.Core.Dialog {
         */
         public DialogOverlay() {
             _forms = new List<Form>();
-            var cnt = Application.OpenForms.Count;
+            int cnt = Application.OpenForms.Count;
             for (int ix = 0; ix < cnt; ++ix) {
-                var form = Application.OpenForms[ix];
-                var overlay = new Form {
+                Form form = Application.OpenForms[ix];
+                Form overlay = new Form {
                     Location = form.Location,
                     Size = form.Size,
                     FormBorderStyle = FormBorderStyle.None,
@@ -33,7 +33,7 @@ namespace KBS_SE3.Core.Dialog {
         }
 
         public void Dispose() {
-            foreach (var form in _forms) form.Close();
+            foreach (Form form in _forms) form.Close();
         }
     }
 }

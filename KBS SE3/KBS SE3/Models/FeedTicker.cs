@@ -5,7 +5,7 @@ using KBS_SE3.Properties;
 using KBS_SE3.Core;
 
 namespace KBS_SE3.Models {
-    class FeedTicker {
+    public class FeedTicker {
         private int _tickTime;
         private static Feed _feed;
         private Timer _stateTimer = new Timer();

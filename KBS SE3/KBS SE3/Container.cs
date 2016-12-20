@@ -1,27 +1,26 @@
-﻿using GMap.NET;
+﻿using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Core;
 using KBS_SE3.Core.Dialog;
-using KBS_SE3.Models;
 using KBS_SE3.Models.DataControl;
 using KBS_SE3.Models.DataControl.Graph;
 using KBS_SE3.Modules;
-using KBS_SE3.Utils;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows.Forms;
 using static KBS_SE3.Core.Dialog.DialogType;
+using System.Threading;
+using System.ComponentModel;
+using System.Collections.Generic;
+using KBS_SE3.Utils;
 
 namespace KBS_SE3 {
-    partial class Container : Form {
+    public partial class Container : Form {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
-
+        
         private Dialog _dialog;
         private static Container _instance;
         private ModuleManager _modManager;
@@ -34,18 +33,26 @@ namespace KBS_SE3 {
         private static extern bool ReleaseCapture();
 
         private Container() {
-            SplashScreen = new SplashScreenModule();
             InitializeComponent();
+
+            Thread t = new Thread(new ThreadStart(SplashThread));
+            t.IsBackground = true;
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+
             _modManager = ModuleManager.GetInstance();
             _dialog = new Dialog();
-            registerButtons();
+            RegisterButtons();
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
         }
 
-        public static Container GetInstance() {
-            if (_instance == null) _instance = new Container();
-            return _instance;
+        private void SplashThread()
+        {
+            SplashScreen = new SplashScreenModule();
+            DisplaySplashScreen();
         }
+
+        public static Container GetInstance() => _instance ?? (_instance = new Container());
 
         public void DisplaySplashScreen() {
             Controls.Add(SplashScreen);
@@ -67,7 +74,7 @@ namespace KBS_SE3 {
         * Method that registers all buttons in the application menu
         * Each button is bound to a Module; which is an instance of IModule
         */
-        private void registerButtons() {
+        private void RegisterButtons() {
             homeBtn.Tag = _modManager.ParseInstance(typeof(HomeModule));
             settingsBtn.Tag = _modManager.ParseInstance(typeof(SettingsModule));
         }
@@ -124,10 +131,11 @@ namespace KBS_SE3 {
         private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
 
         private void Container_Load(object sender, EventArgs e) {
-            DisplaySplashScreen();
+            BackgroundWorker bW = new BackgroundWorker();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            this.Shown += hm.HomeModule_Load;
+            Shown += hm.HomeModule_Load;
             _modManager.UpdateModule(hm);
+            
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
@@ -135,22 +143,25 @@ namespace KBS_SE3 {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            //DataParser parser = new DataParser(@"C:\Users\maarten\Desktop\zwolle_small.xml");
-            //var timeStamp = DateTime.Now.Ticks;
-            //parser.Deserialize();
-            //DataCollection collection = parser.GetCollection();
-            //HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            //int i = 0;
-            //foreach(Reference n in collection.Intersections) {
-            //    if (i == 100) break;
-            //    GMapMarker m = new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.blue_dot);
-            //    hm.RouteOverlay.Markers.Add(m);
-            //    i++;
-            //}
-            //DisplayDialog(DialogMessageType.SUCCESS, "Parsing Finished", "Het duurde " + ((DateTime.Now.Ticks - timeStamp) / 10000) + " ms. Intersections: " + collection.Intersections.Count + ", Nodes: " + collection.Nodes.Count);
+            DataParser parser = new DataParser(@"../../Resources/TESTTT.xml");
+            parser.Deserialize();
+            DataCollection collection = parser.GetCollection();
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            TestDraw(hm, collection.Nodes[116]);
+            TestDraw(hm, collection.Nodes[123]);
+            TestDraw(hm, collection.Nodes[43]);
+            DisplayDialog(DialogMessageType.SUCCESS, "Test Dialog", "Success");
+        }
 
-            ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().ParseInstance(typeof(GetStartedModule)));
-
+        /*
+        * TEST METHOD 
+        */
+        private void TestDraw(HomeModule hm, Node n) {
+            hm.RouteOverlay.Markers.Add(new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.red_big_stop));
+            foreach (Node adjacent in MapUtil.GetAdjacentNodes(n)) {
+                GMapMarker m = new GMarkerGoogle(adjacent.GetPoint(), GMarkerGoogleType.blue_dot);
+                hm.RouteOverlay.Markers.Add(m);
+            }
         }
     }
 }
