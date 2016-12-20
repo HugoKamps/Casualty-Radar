@@ -65,7 +65,7 @@ namespace KBS_SE3.Core {
                 string lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
                 double parsedLat = double.Parse(lat, CultureInfo.InvariantCulture);
                 double parsedLng = double.Parse(lng, CultureInfo.InvariantCulture);
-                Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, parsedLat, parsedLng);
+                Alert newAlert = new Alert(item.Title.Text.Replace("~", " "), item.Summary.Text, item.PublishDate, parsedLat, parsedLng);
 
                 return AlertUtil.SetAlertAttributes(newAlert, alertItemString);
             }
