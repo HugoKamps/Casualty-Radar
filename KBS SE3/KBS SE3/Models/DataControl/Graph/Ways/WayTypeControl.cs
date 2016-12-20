@@ -34,7 +34,10 @@ namespace KBS_SE3.Models.DataControl.Graph.Ways {
         * This method is used to link ways to the proper WayTypeBase using a dictionary.
         * Dictionaries are much faster than a list in this case because we don't require a loop.
         */
-        public WayTypeBase GeTypeBase(string key) => _typeMap[key];
+        public WayTypeBase GeTypeBase(string key) {
+            WayTypeBase rtn = null;
+            return _typeMap.TryGetValue(key, out rtn) ? rtn : null;
+        } 
 
         // TODO
         public List<Way> GetByZoomLevel() {
