@@ -7,10 +7,13 @@ namespace KBS_SE3.Models.DataControl.Graph.Ways {
     public class WayTypeControl {
 
         private readonly Dictionary<string, WayTypeBase> _typeMap;
+        private readonly DataCollection _collection;
+
         private const string NAMESPACE_PATH = @"KBS_SE3.Models.DataControl.Graph.Ways.WayTypes";
 
-        public WayTypeControl() {
+        public WayTypeControl(DataCollection collection) {
             this._typeMap = new Dictionary<string, WayTypeBase>();
+            this._collection = collection;
             Init();
         }
 
@@ -40,11 +43,12 @@ namespace KBS_SE3.Models.DataControl.Graph.Ways {
             return _typeMap.TryGetValue(key, out rtn) ? rtn : null;
         } 
 
-        // TODO
-        public List<Way> GetByZoomLevel() {
-            return null;
-        }
-
-        
+        /*
+        * Returns a collection of ways based on the given Zoomlevel.
+        * This method returns a (lazy-loaded) IEnumerable filled with all ways that are at the same zoom level 
+        * as the given zoomlevel.
+        * This method uses the entire way collection inside t
+        */
+        public IEnumerable<Way> GetByZoomLevel(WayZoomLevel level) => _collection.Ways.Select(x => x).Where(x => x.WayType.ZoomLevel == level);
     }
 }

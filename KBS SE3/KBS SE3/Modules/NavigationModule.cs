@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -64,8 +66,9 @@ namespace KBS_SE3.Modules {
             _endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
             //_endNode = targetCollection[12];
             _pathfinder = new Pathfinder(_startNode, _endNode);
-            //List<PointLatLng> path = _pathfinder.FindPath();
-            //foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
+            List<PointLatLng> path = _pathfinder.FindPath().Result;
+            
+            foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
 
             /*_routeOverlay.Routes.Add(new GMapRoute(path, "route") {
                 Stroke =

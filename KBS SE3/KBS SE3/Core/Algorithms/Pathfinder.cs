@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using GMap.NET;
 using KBS_SE3.Models.DataControl.Graph;
 using KBS_SE3.Utils;
@@ -17,23 +18,28 @@ namespace KBS_SE3.Core.Algorithms {
 
         // Attempts to find a path from the start location to the end location based on the supplied SearchParameters
         // Returns a List of Points representing the path. If no path was found, the returned list is empty
-        public List<PointLatLng> FindPath() {
-            // The start node is the first entry in the 'open' list
-            List<PointLatLng> path = new List<PointLatLng>();
-            bool success = Search(_startNode);
-            if (!success) return path;
+        public async Task<List<PointLatLng>> FindPath()
+        {
+            return await Task.Run(() =>
+            {
+                // The start node is the first entry in the 'open' list
+                List<PointLatLng> path = new List<PointLatLng>();
+                bool success = Search(_startNode);
+                if (!success) return path;
 
-            // If a path was found, follow the parents from the end node to build a list of locations
-            Node node = _endNode;
-            while (node.StarData.Parent != null) {
-                path.Add(node.GetPoint());
-                node = node.StarData.Parent;
-            }
+                // If a path was found, follow the parents from the end node to build a list of locations
+                Node node = _endNode;
+                while (node.StarData.Parent != null)
+                {
+                    path.Add(node.GetPoint());
+                    node = node.StarData.Parent;
+                }
 
-            // Reverse the list so it's in the correct order when returned
-            path.Reverse();
+                // Reverse the list so it's in the correct order when returned
+                path.Reverse();
 
-            return path;
+                return path;
+            });
         }
 
         private bool Search(Node currentNode) {
