@@ -7,6 +7,7 @@ namespace KBS_SE3.Models.DataControl.Graph.Ways {
     public class WayTypeControl {
 
         private readonly Dictionary<string, WayTypeBase> _typeMap;
+        private const string NAMESPACE_PATH = @"KBS_SE3.Models.DataControl.Graph.Ways.WayTypes";
 
         public WayTypeControl() {
             this._typeMap = new Dictionary<string, WayTypeBase>();
@@ -22,7 +23,7 @@ namespace KBS_SE3.Models.DataControl.Graph.Ways {
         private void Init() {
             var wayTypes = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(a => a.IsClass && a.Namespace != null && 
-                a.Namespace.Contains(@"KBS_SE3.Models.DataControl.Graph.Ways.WayTypes")).ToList();
+                a.Namespace.Contains(NAMESPACE_PATH)).ToList();
             foreach (Type t in wayTypes) {
                 WayTypeBase type = (WayTypeBase)Activator.CreateInstance(t);
                 _typeMap[type.Key] = type;
