@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace KBS_SE3.Models {
@@ -17,26 +16,26 @@ namespace KBS_SE3.Models {
 
         // Function for pushing message to user
         private void _setPushMessage(List<Alert> alerts) {
-            string message = "";
+            string message;
             if (alerts.Count == 1) message = alerts[0].ToString();
             else message = "Er zijn " + alerts.Count + " nieuwe meldingen";
             _icon.Icon = SystemIcons.Exclamation;
             _icon.Visible = true;
             _icon.Icon = new Icon(@"..\..\Resources\app_icon.ico");
-            _icon.BalloonTipClosed += new EventHandler(BalloonTipClosed);
-            _icon.BalloonTipClicked += new EventHandler(notifyIcon_BalloonTipClicked);
+            _icon.BalloonTipClosed += BalloonTipClosed;
+            _icon.BalloonTipClicked += notifyIcon_BalloonTipClicked;
             _icon.ShowBalloonTip(5000,
                 message,
                 "Klik hier om de meldingen te bekijken",
                 ToolTipIcon.None);
         }
 
-        private void BalloonTipClosed(object Sender, EventArgs e) {
+        private void BalloonTipClosed(object sender, EventArgs e) {
             _icon.Dispose();
         }
 
         // Function for opening form after double clicking pushMessage
-        private void notifyIcon_BalloonTipClicked(object Sender, EventArgs e) {
+        private void notifyIcon_BalloonTipClicked(object sender, EventArgs e) {
             // Show the form when the user double clicks on the notify icon.
 
             // Set the WindowState to normal if the form is minimized.

@@ -1,9 +1,6 @@
 ﻿using KBS_SE3.Models.DataControl.Graph;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace KBS_SE3.Models.DataControl {
@@ -36,7 +33,7 @@ namespace KBS_SE3.Models.DataControl {
         * Without intersections we wouldn't know how the roads are connected.
         */
         [XmlIgnore]
-        public List<Node> Intersections { get; private set; }
+        public List<Node> Intersections { get; }
 
         public DataCollection() {
             this.Nodes = new List<Node>();
