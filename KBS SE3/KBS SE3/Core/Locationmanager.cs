@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
@@ -52,6 +53,13 @@ namespace KBS_SE3.Core {
             Image image = new Bitmap(@imgLocation);
 
             GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
+            var distance = MapUtil.GetDistance(lat, lng, CurrentLatitude, CurrentLongitude);
+            marker.ToolTip = new GMapToolTip(marker);
+            marker.ToolTip.Font = new Font(FontFamily.GenericMonospace, 10);
+            marker.ToolTip.TextPadding = new Size(10, 10);
+            marker.ToolTipText = Math.Round(distance, 0) + "km";
+            marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+
             return marker;
         }
 
