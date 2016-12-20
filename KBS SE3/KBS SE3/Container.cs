@@ -13,6 +13,7 @@ using static KBS_SE3.Core.Dialog.DialogType;
 using System.Threading;
 using System.ComponentModel;
 using System.Collections.Generic;
+using KBS_SE3.Models.DataControl.Graph.Ways;
 using KBS_SE3.Utils;
 
 namespace KBS_SE3 {
@@ -143,14 +144,8 @@ namespace KBS_SE3 {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"../../Resources/TESTTT.xml");
-            parser.Deserialize();
-            DataCollection collection = parser.GetCollection();
-            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            TestDraw(hm, collection.Nodes[116]);
-            TestDraw(hm, collection.Nodes[123]);
-            TestDraw(hm, collection.Nodes[43]);
-            DisplayDialog(DialogMessageType.SUCCESS, "Test Dialog", "Success");
+            
+            DisplayDialog(DialogMessageType.ERROR, "XML Error", "Je moet eem een nieuwe XML Parsen.");
         }
 
         /*

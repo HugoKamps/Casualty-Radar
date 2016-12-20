@@ -6,7 +6,7 @@ namespace KBS_SE3.Models.DataControl {
 
     public class DataParser {
 
-        private string _filePath;
+        private readonly string _filePath;
         private DataCollection _collection;
 
         public DataParser(string path) {
