@@ -69,7 +69,7 @@ namespace KBS_SE3.Modules {
 
                 foreach (Alert alert in Feed.GetInstance().GetAlerts()) {
                     int type = alert.Type == 1 ? 1 : 2;
-                    if (_previousMarker != null && _previousMarker.Position.Lat == alert.Lat && _previousMarker.Position.Lng == alert.Lng) type = 3;
+                    if (_previousMarker != null && _previousMarker.Position.Lat.Equals(alert.Lat) && _previousMarker.Position.Lng.Equals(alert.Lng)) type = 3;
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
                 }
             }
@@ -193,7 +193,7 @@ namespace KBS_SE3.Modules {
 
                 foreach (Alert a in Feed.GetInstance().GetFilteredAlerts) {
                     _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y));
-                    y += 105;
+                    y += 81;
                 }
             };
 
@@ -246,14 +246,15 @@ namespace KBS_SE3.Modules {
             //The panel which will be filled with all of the controls below
             Panel newPanel = new Panel {
                 Location = new Point(0, y),
-                Size = new Size(320, 100),
-                BackColor = Color.FromArgb(236, 89, 71)
+                Size = new Size(320, 80),
+                BackColor = Color.FromArgb(236, 89, 71),
+                Cursor = Cursors.Hand
             };
 
             //The picture which indicates the type of alert (Firefighter or ambulance)
             PictureBox newPictureBox = new PictureBox {
-                Location = new Point(220, 10),
-                Size = new Size(60, 60),
+                Location = new Point(230, 5),
+                Size = new Size(40, 40),
                 Image = type == 1 ? Resources.Medic : Resources.Firefighter,
                 SizeMode = PictureBoxSizeMode.StretchImage
             };
@@ -261,10 +262,11 @@ namespace KBS_SE3.Modules {
             //The label which will be filled with the information about the alert
             Label label = new Label {
                 ForeColor = Color.White,
-                Location = new Point(10, 5),
-                Font = new Font("Microsoft Sans Serif", 10),
-                Size = new Size(200, 90),
+                Location = new Point(0, 0),
+                Font = new Font("Microsoft Sans Serif", 9),
+                Size = new Size(200, 80),
                 BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleCenter,
                 Text = title + "\n" + info
             };
 
@@ -283,10 +285,11 @@ namespace KBS_SE3.Modules {
             //The label which will be filled with the time of the alert
             Label timeLabel = new Label {
                 ForeColor = Color.White,
-                Location = new Point(150, 65),
-                Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
+                Location = new Point(150, 45),
+                Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold),
                 Size = new Size(200, 30),
                 BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleCenter,
                 Text = time
             };
 
@@ -298,17 +301,14 @@ namespace KBS_SE3.Modules {
             label.MouseEnter += feedPanelItem_MouseEnter;
             label.MouseLeave += feedPanelItem_MouseLeave;
             label.Click += feedPanelItem_Click;
-            label.TextAlign = ContentAlignment.MiddleCenter;
 
             timeLabel.MouseEnter += feedPanelItem_MouseEnter;
             timeLabel.MouseLeave += feedPanelItem_MouseLeave;
             timeLabel.Click += feedPanelItem_Click;
-            timeLabel.TextAlign = ContentAlignment.MiddleCenter;
 
             newPanel.MouseEnter += feedPanelItem_MouseEnter;
             newPanel.MouseLeave += feedPanelItem_MouseLeave;
             newPanel.Click += feedPanelItem_Click;
-            newPanel.Cursor = Cursors.Hand;
 
             //The panel is filled with all the controls initialized above
             newPanel.Controls.Add(newPictureBox);
