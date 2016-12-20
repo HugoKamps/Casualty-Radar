@@ -84,7 +84,7 @@
       <DependentUpon>Container.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\Algorithms\Pathfinder.cs" />
-    <Compile Include="Core\Algorithms\StarNode.cs" />
+    <Compile Include="Core\Algorithms\StarData.cs" />
     <Compile Include="Core\Dialog\DialogOverlay.cs" />
     <Compile Include="Core\Dialog\DialogType.cs" />
     <Compile Include="Core\LocationManager.cs" />

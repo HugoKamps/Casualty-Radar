@@ -8,25 +8,26 @@ namespace KBS_SE3.Core.Algorithms {
         Closed
     }
 
-    public class StarNode : Node {
-        private StarNode _parentNode;
-
+    public class StarData {
+        private Node _parentNode;
+        private Node _origin;
         public double G { get; set; } // The value which indicates the distance from the current node to an adjacent node
         public double H { get; set; } // The value which indicates the distance from the current node to the destination node
         public double F => G + H; // This value that determines the current node's usefulness for the route
         public NodeState State { get; set; }
 
-        public StarNode Parent {
+        public Node Parent {
             get { return _parentNode; }
             set {
                 _parentNode = value;
-                G = _parentNode.G + MapUtil.GetDistance(this, _parentNode);
+                G = _parentNode.StarData.G + MapUtil.GetDistance(_origin, _parentNode);
             }
         }
 
-        public StarNode(Node dest) {
+        public StarData(Node origin, Node dest) {
+            _origin = origin;
             State = NodeState.Untested;
-            H = MapUtil.GetDistance(this, dest);
+            H = MapUtil.GetDistance(_origin, dest);
             G = 0;
         }
     }

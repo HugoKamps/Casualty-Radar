@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -15,8 +16,7 @@ using KBS_SE3.Core.Algorithms;
 using KBS_SE3.Models.DataControl.Graph;
 
 namespace KBS_SE3.Modules {
-    partial class NavigationModule : UserControl, IModule
-    {
+    partial class NavigationModule : UserControl, IModule {
         private readonly LocationManager _locationManager;
         private GMapOverlay _routeOverlay;
         private Pathfinder _pathfinder;
@@ -59,12 +59,22 @@ namespace KBS_SE3.Modules {
             dataParser.Deserialize();
             DataCollection collection = dataParser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
-            _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
-            
-            _endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
+            //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
+            _startNode = targetCollection[33];
+            //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
+            _endNode = targetCollection[12];
             _pathfinder = new Pathfinder(_startNode, _endNode);
             List<PointLatLng> path = _pathfinder.FindPath();
-            foreach(PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
+            foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
+            
+            _routeOverlay.Routes.Add(new GMapRoute(path, "MyRoute") {
+                Stroke =
+                {
+                        DashStyle = DashStyle.Solid,
+                        Color = Color.FromArgb(244, 191, 66)
+                    }
+            });
+
         }
 
         public void GetRouteMap(double startLat, double startLng, double destLat, double destLng) {
