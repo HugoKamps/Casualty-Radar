@@ -203,7 +203,7 @@ namespace KBS_SE3.Modules {
             };
 
             bwMap.DoWork += delegate {
-                GetLocationManager();
+                Invoke(new Action(() => GetLocationManager()));
             };
 
             bwMap.RunWorkerCompleted += delegate {
