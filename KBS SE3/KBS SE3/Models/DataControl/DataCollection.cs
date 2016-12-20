@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using KBS_SE3.Models.DataControl.Graph.Ways;
 
 namespace KBS_SE3.Models.DataControl {
 
@@ -9,7 +10,10 @@ namespace KBS_SE3.Models.DataControl {
     public class DataCollection {
 
         [XmlIgnore]
-        public static readonly int INTERSECTION_WAY_MINIMUM = 2; 
+        public static readonly int INTERSECTION_WAY_MINIMUM = 2;
+
+        [XmlIgnore]
+        public WayTypeControl WayControl { get; }
 
         /*
         * All 'Node' elements that are returned from the deserialization.
@@ -39,6 +43,7 @@ namespace KBS_SE3.Models.DataControl {
             this.Nodes = new List<Node>();
             this.Ways = new List<Way>();
             this.Intersections = new List<Node>();
+            this.WayControl = new WayTypeControl();
         }
 
         /*
@@ -49,7 +54,8 @@ namespace KBS_SE3.Models.DataControl {
         */
         public void Index() {
             Dictionary<long, Node> nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
-            foreach (Way way in this.Ways)
+            foreach (Way way in this.Ways) {
+                way.WayType = WayControl.GeTypeBase(way.TypeDescription);
                 foreach (NodeReference reference in way.References)
                     if (nodeCollection.ContainsKey(reference.ReferenceID)) {
                         reference.Node = nodeCollection[reference.ReferenceID];
@@ -57,6 +63,7 @@ namespace KBS_SE3.Models.DataControl {
                         if (reference.Node.ConnectedWays.Count > INTERSECTION_WAY_MINIMUM)
                             Intersections.Add(reference.Node);
                     }
+            }
         }
 
     }

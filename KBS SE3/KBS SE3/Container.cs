@@ -144,7 +144,8 @@ namespace KBS_SE3 {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"../../Resources/TESTTT.xml");
+            //DataParser parser = new DataParser(@"../../Resources/TESTTT.xml");
+            DataParser parser = new DataParser(@"C:\Users\Eelco\Desktop\hattem.xml");
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
@@ -152,7 +153,6 @@ namespace KBS_SE3 {
             TestDraw(hm, collection.Nodes[123]);
             TestDraw(hm, collection.Nodes[43]);
             DisplayDialog(DialogMessageType.SUCCESS, "Test Dialog", "Success");
-            new WayTypeControl();
         }
 
         /*
