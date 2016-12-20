@@ -55,14 +55,14 @@ namespace KBS_SE3.Modules {
             timeLabel.Text = time;
             GetRouteMap(start.Lat, start.Lng, dest.Lat, dest.Lng);
 
-            DataParser dataParser = new DataParser("../../Resources/TESTTT.xml");
-            dataParser.Deserialize();
-            DataCollection collection = dataParser.GetCollection();
+            DataParser parser = new DataParser(@"C:\Users\richa_000\Desktop\hattem.xml");
+            parser.Deserialize();
+            DataCollection collection = parser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
-            _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
-            //_startNode = targetCollection[1200];
-            _endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
-            //_endNode = targetCollection[600];
+            //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
+            _startNode = targetCollection[10];
+            //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
+            _endNode = targetCollection[100];
             _pathfinder = new Pathfinder(_startNode, _endNode);
             List<PointLatLng> path = _pathfinder.FindPath();
             foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
@@ -75,7 +75,6 @@ namespace KBS_SE3.Modules {
             });
 
         }
-
 
         public void GetRouteMap(double startLat, double startLng, double destLat, double destLng) {
             map.Overlays.Clear();
