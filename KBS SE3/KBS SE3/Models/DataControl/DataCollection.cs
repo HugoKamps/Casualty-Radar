@@ -55,7 +55,7 @@ namespace KBS_SE3.Models.DataControl {
         public void Index() {
             Dictionary<long, Node> nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
             foreach (Way way in this.Ways) {
-                way.WayType = WayControl.GeTypeBase(way.TypeDescription);
+                way.WayType = WayControl.GetTypeBase(way.TypeDescription);
                 foreach (NodeReference reference in way.References)
                     if (nodeCollection.ContainsKey(reference.ReferenceID)) {
                         reference.Node = nodeCollection[reference.ReferenceID];
