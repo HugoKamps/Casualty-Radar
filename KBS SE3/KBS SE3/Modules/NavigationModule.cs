@@ -57,35 +57,29 @@ namespace KBS_SE3.Modules {
             timeLabel.Text = time;
             GetRouteMap(start.Lat, start.Lng, dest.Lat, dest.Lng);
 
-            DataParser dataParser = new DataParser("../../Resources/TESTTT.xml");
-            dataParser.Deserialize();
-            DataCollection collection = dataParser.GetCollection();
+            DataParser parser = new DataParser(@"../../Resources/hattem.xml");
+            parser.Deserialize();
+            DataCollection collection = parser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
-            _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
-            //_startNode = targetCollection[33];
-            _endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
-            //_endNode = targetCollection[12];
+            //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
+            _startNode = targetCollection[100];
+            map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
+            //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
+            _endNode = targetCollection[40];
+            map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 1));
+
             _pathfinder = new Pathfinder(_startNode, _endNode);
-            List<PointLatLng> path = _pathfinder.FindPath().Result;
-            
+            List<PointLatLng> path = _pathfinder.FindPath(); //.Result voor Async poging
+
             foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
 
-            /*_routeOverlay.Routes.Add(new GMapRoute(path, "route") {
+            _routeOverlay.Routes.Add(new GMapRoute(path, "route") {
                 Stroke =
                 {
                         DashStyle = DashStyle.Solid,
-                        Color = Color.FromArgb(255, 0, 255)
-                    }
-            });*/
-
-            _routeOverlay.Routes.Add(new GMapRoute(new List<PointLatLng>() { _startNode.GetPoint(), _endNode.GetPoint() }, "starttoend") {
-                Stroke =
-                {
-                        DashStyle = DashStyle.Solid,
-                        Color = Color.FromArgb(255, 0, 255)
+                        Color = Color.FromArgb(0, 0, 0)
                     }
             });
-
         }
 
         public void GetRouteMap(double startLat, double startLng, double destLat, double destLng) {
@@ -105,10 +99,6 @@ namespace KBS_SE3.Modules {
 
 
             // Reading data for adding test route
-
-            DataParser parser = new DataParser(@"../../Resources/TESTTT.xml");
-            parser.Deserialize();
-            DataCollection collection = parser.GetCollection();
             //_locationManager.DrawRoute(collection, _routeOverlay);
             //_locationManager.DrawTestRoute(collection, _routeOverlay);
         }

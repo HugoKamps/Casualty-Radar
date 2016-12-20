@@ -21,6 +21,7 @@ namespace KBS_SE3.Core {
         private string USE_FEED_URL;
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
+        private List<Alert> _newAlerts;
 
         public static Feed GetInstance() {
             if (_instance == null) _instance = new Feed();
@@ -44,6 +45,7 @@ namespace KBS_SE3.Core {
 
         public List<Alert> GetAlerts() => _alerts;
         public List<Alert> GetFilteredAlerts => _filteredAlerts;
+        public List<Alert> GetNewAlerts => _newAlerts;
 
         public List<Alert> CreateAlertList(SyndicationFeed items) {
             List<Alert> tempAlerts = new List<Alert>();
@@ -65,7 +67,7 @@ namespace KBS_SE3.Core {
                 string lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
                 double parsedLat = double.Parse(lat, CultureInfo.InvariantCulture);
                 double parsedLng = double.Parse(lng, CultureInfo.InvariantCulture);
-                Alert newAlert = new Alert(item.Title.Text, item.Summary.Text, item.PublishDate, parsedLat, parsedLng);
+                Alert newAlert = new Alert(item.Title.Text.Replace("~", " "), item.Summary.Text, item.PublishDate, parsedLat, parsedLng);
 
                 return AlertUtil.SetAlertAttributes(newAlert, alertItemString);
             }
@@ -73,35 +75,30 @@ namespace KBS_SE3.Core {
         }
 
         public void UpdateFeed() {
-            SyndicationFeed oldP2000 = _p2000;
-            List<SyndicationItem> newItems = new List<SyndicationItem>();
-            SyndicationFeed newFeed = new SyndicationFeed();
-
+            List<Alert> oldAlerts = _alerts;
+            _newAlerts = new List<Alert>();
             // Load the feed
+
             try {
-                // Get the first item from the old feed
-                SyndicationItem first = oldP2000.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault();
-                _p2000 = SyndicationFeed.Load(XmlReader.Create(USE_FEED_URL));
-                _alerts = CreateAlertList(_p2000);
+            _p2000 = SyndicationFeed.Load(XmlReader.Create(USE_FEED_URL));
+            _alerts = CreateAlertList(_p2000);
 
-                /* 
-                Loop through the new feed
-                If the first item from the old feed is not identical to the first item of the new feed,
-                add it to the list of new items.
-                Else, end the loop. 
-                */
-                foreach (SyndicationItem item in _p2000.Items)
-                    if (item.Title.Text != first.Title.Text) newItems.Add(item);
-                    else break;
+            /* 
+            Loop through the new feed
+            If the first item from the old feed is not identical to the first item of the new feed,
+            add it to the list of new items.
+            Else, end the loop. 
+            */
+            foreach (Alert item in _alerts)
+                if (item.Title != oldAlerts[0].Title) {
+                    _newAlerts.Add(item);
+                } else break;
 
-                newFeed.Items = newItems;
-                List<Alert> newAlerts = CreateAlertList(newFeed);
-
-                if (newAlerts.Count > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized)
-                    new PushMessage(newAlerts);
-                UpdateAlerts();
+            if (_newAlerts.Count > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized)
+                new PushMessage(_newAlerts);
+            UpdateAlerts();
             } catch (Exception e) {
-                MessageBox.Show(e.Message);
+               MessageBox.Show(e.Message);
             }
         }
 
