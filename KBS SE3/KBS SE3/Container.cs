@@ -135,19 +135,22 @@ namespace KBS_SE3 {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"C:\Users\maarten\Desktop\zwolle_small.xml");
-            var timeStamp = DateTime.Now.Ticks;
-            parser.Deserialize();
-            DataCollection collection = parser.GetCollection();
-            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            int i = 0;
-            foreach(Reference n in collection.Intersections) {
-                if (i == 100) break;
-                GMapMarker m = new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.blue_dot);
-                hm.RouteOverlay.Markers.Add(m);
-                i++;
-            }
-            DisplayDialog(DialogMessageType.SUCCESS, "Parsing Finished", "Het duurde " + ((DateTime.Now.Ticks - timeStamp) / 10000) + " ms. Intersections: " + collection.Intersections.Count + ", Nodes: " + collection.Nodes.Count);
+            //DataParser parser = new DataParser(@"C:\Users\maarten\Desktop\zwolle_small.xml");
+            //var timeStamp = DateTime.Now.Ticks;
+            //parser.Deserialize();
+            //DataCollection collection = parser.GetCollection();
+            //HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            //int i = 0;
+            //foreach(Reference n in collection.Intersections) {
+            //    if (i == 100) break;
+            //    GMapMarker m = new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.blue_dot);
+            //    hm.RouteOverlay.Markers.Add(m);
+            //    i++;
+            //}
+            //DisplayDialog(DialogMessageType.SUCCESS, "Parsing Finished", "Het duurde " + ((DateTime.Now.Ticks - timeStamp) / 10000) + " ms. Intersections: " + collection.Intersections.Count + ", Nodes: " + collection.Nodes.Count);
+
+            ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().ParseInstance(typeof(GetStartedModule)));
+
         }
     }
 }
