@@ -210,8 +210,21 @@ namespace KBS_SE3.Modules {
                 InitAlertsMap(false);
                 RemoveLoadIcon();
                 try {
-                    foreach (Panel p in _alertPanels)
-                        feedPanel.Controls.Add(p);
+                    for (int i = 0; i < _alertPanels.Count; i++)
+                    {
+                        foreach (Alert alert in Feed.GetInstance().GetNewAlerts)
+                        {
+                            if (alert == Feed.GetInstance().GetFilteredAlerts[i])
+                            {
+                                _alertPanels[i].Controls[3].Visible = true;
+                            }
+                        }
+                        feedPanel.Controls.Add(_alertPanels[i]);
+                    }
+
+
+                    //foreach (Panel p in _alertPanels)
+                    //    feedPanel.Controls.Add(p);
                 } catch (InvalidOperationException e) {
                     MessageBox.Show(e.ToString());
                 }
@@ -242,6 +255,7 @@ namespace KBS_SE3.Modules {
         public Panel GetSelectedPanel => _selectedPanel;
         public int GetAlertType => alertTypeComboBox.SelectedIndex;
 
+
         public Panel CreateAlertPanel(int type, string title, string info, string time, int y) {
             //The panel which will be filled with all of the controls below
             Panel newPanel = new Panel {
@@ -253,7 +267,7 @@ namespace KBS_SE3.Modules {
 
             //The picture which indicates the type of alert (Firefighter or ambulance)
             PictureBox newPictureBox = new PictureBox {
-                Location = new Point(230, 5),
+                Location = new Point(225, 5),
                 Size = new Size(40, 40),
                 Image = type == 1 ? Resources.Medic : Resources.Firefighter,
                 SizeMode = PictureBoxSizeMode.StretchImage
@@ -268,6 +282,18 @@ namespace KBS_SE3.Modules {
                 BackColor = Color.Transparent,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Text = title + "\n" + info
+            };
+
+            Label newLabel = new Label
+            {
+                ForeColor = Color.White,
+                Location = new Point(280, 5),
+                Size = new Size(40, 20),
+                Font = new Font("Microsoft Sans Serif", 9),
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = "New",
+                Visible = false
             };
 
             if (_selectedPanel != null) {
@@ -285,7 +311,7 @@ namespace KBS_SE3.Modules {
             //The label which will be filled with the time of the alert
             Label timeLabel = new Label {
                 ForeColor = Color.White,
-                Location = new Point(150, 45),
+                Location = new Point(145, 45),
                 Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold),
                 Size = new Size(200, 30),
                 BackColor = Color.Transparent,
@@ -314,6 +340,7 @@ namespace KBS_SE3.Modules {
             newPanel.Controls.Add(newPictureBox);
             newPanel.Controls.Add(label);
             newPanel.Controls.Add(timeLabel);
+            newPanel.Controls.Add(newLabel);
 
             return newPanel;
         }
