@@ -27,7 +27,6 @@ namespace XMLRewriter.Core {
             e.Graphics.DrawRectangle(new Pen(Color.FromArgb(194, 194, 194)), 7, 7, ClientSize.Width - 8, ClientSize.Height - 8);
         }
 
-
         /// <summary>
         /// Sets the header text from the panel
         /// </summary>
