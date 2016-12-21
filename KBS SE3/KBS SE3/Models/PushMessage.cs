@@ -13,14 +13,14 @@ namespace Casualty_Radar.Models {
 
         public PushMessage(List<Alert> alerts) {
             _icon = new NotifyIcon();
-            _setPushMessage(alerts);
+            SetPushMessage(alerts);
         }
 
         /// <summary>
         /// Function that creates a balloontip notification containing the amount of new alerts
         /// </summary>
         /// <param name="alerts"></param>
-        private void _setPushMessage(List<Alert> alerts) {
+        private void SetPushMessage(List<Alert> alerts) {
             string message;
             if (alerts.Count == 1) message = alerts[0].ToString();
             else message = "Er zijn " + alerts.Count + " nieuwe meldingen";

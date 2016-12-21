@@ -22,6 +22,7 @@ namespace Casualty_Radar.Modules {
     /// Module that contains a map displaying the starting and ending point for the route and the route between them. Also contains a panel in which the information about the alert is being shown.
     /// </summary>
     partial class NavigationModule : UserControl, IModule {
+
         private readonly LocationManager _locationManager;
         private GMapOverlay _routeOverlay;
         private Pathfinder _pathfinder;

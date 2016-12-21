@@ -41,7 +41,7 @@ namespace XMLRewriter {
             reader.DataLog = convertDataLog;
             reader.StatusBar = convertStatusBar;
             convertBtn.Enabled = false;
-            reader.convert();
+            reader.Convert();
         }
     }
 }
