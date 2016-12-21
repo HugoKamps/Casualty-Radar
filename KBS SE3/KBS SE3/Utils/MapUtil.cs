@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Casualty_Radar.Core.Algorithms;
 
 namespace Casualty_Radar.Utils {
     static class MapUtil {

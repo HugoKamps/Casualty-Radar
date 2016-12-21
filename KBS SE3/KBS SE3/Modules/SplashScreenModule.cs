@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace Casualty_Radar.Modules {
     public partial class SplashScreenModule : UserControl {

@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using GMap.NET;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Utils;
 
