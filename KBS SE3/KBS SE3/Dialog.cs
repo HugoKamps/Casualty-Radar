@@ -19,10 +19,13 @@ namespace Casualty_Radar {
             InitializeComponent();
         }
 
-        /*
-        * Initializes the dialog interface with the given properties.
-        * This method is purely for initialization purposes and shouldn't be called randomly.
-        */
+        /// <summary>
+        /// Initializes the dialog interface with the given properties.
+        /// This method is purely for initialization purposes and shouldn't be called randomly.
+        /// </summary>
+        /// <param name="type">The type of the dialog</param>
+        /// <param name="title">The title of the dialog</param>
+        /// <param name="content">The message content of the dialog</param>
         public void Display(DialogMessageType type, string title, string content) {
             dialogHeaderTitle.Text = ParseHeaderMessage(type)+": ";
             dialogHeaderText.Text = title;
