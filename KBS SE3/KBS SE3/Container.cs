@@ -4,19 +4,19 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using KBS_SE3.Core;
-using KBS_SE3.Core.Dialog;
-using KBS_SE3.Models.DataControl;
-using KBS_SE3.Models.DataControl.Graph;
-using KBS_SE3.Modules;
-using static KBS_SE3.Core.Dialog.DialogType;
+using Casualty_Radar.Core;
+using Casualty_Radar.Core.Dialog;
+using Casualty_Radar.Models.DataControl;
+using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Modules;
+using static Casualty_Radar.Core.Dialog.DialogType;
 using System.Threading;
 using System.ComponentModel;
 using System.Collections.Generic;
-using KBS_SE3.Models.DataControl.Graph.Ways;
-using KBS_SE3.Utils;
+using Casualty_Radar.Models.DataControl.Graph.Ways;
+using Casualty_Radar.Utils;
 
-namespace KBS_SE3 {
+namespace Casualty_Radar {
     public partial class Container : Form {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
