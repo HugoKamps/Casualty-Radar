@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
-using KBS_SE3.Core;
-using KBS_SE3.Models;
-using KBS_SE3.Properties;
+using Casualty_Radar.Core;
+using Casualty_Radar.Models;
+using Casualty_Radar.Properties;
 
-namespace KBS_SE3.Modules {
+namespace Casualty_Radar.Modules {
     partial class SettingsModule : UserControl, IModule {
         public SettingsModule() {
             InitializeComponent();

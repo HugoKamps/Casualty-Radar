@@ -10,12 +10,13 @@ using System.Xml.Linq;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using KBS_SE3.Models.DataControl;
-using KBS_SE3.Models.DataControl.Graph;
-using KBS_SE3.Properties;
-using KBS_SE3.Utils;
+using Casualty_Radar.Models.DataControl;
+using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Properties;
+using Casualty_Radar.Utils;
 
-namespace KBS_SE3.Core {
+
+namespace Casualty_Radar.Core {
     /// <summary>
     /// Class that contains functionality which can be used on a GMAP.net control
     /// </summary>

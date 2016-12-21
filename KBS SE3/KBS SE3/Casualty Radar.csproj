@@ -7,8 +7,8 @@
     <ProjectGuid>{AD72EEEF-ACA3-408D-9EC4-6F0D02EF2BA9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KBS_SE3</RootNamespace>
-    <AssemblyName>KBS SE3</AssemblyName>
+    <RootNamespace>Casualty_Radar</RootNamespace>
+    <AssemblyName>Casualty Radar</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -203,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
+    <Content Include="Resources\hattem.xml" />
     <Content Include="Resources\TESTTT.xml" />
     <None Include="Resources\converted.osm" />
     <None Include="Resources\marker_icon_yellow.png" />

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using KBS_SE3.Modules;
-using KBS_SE3.Properties;
+using Casualty_Radar.Modules;
+using Casualty_Radar.Properties;
 
-namespace KBS_SE3.Core {
+namespace Casualty_Radar.Core {
     public class ModuleManager {
 
         private static ModuleManager _instance;

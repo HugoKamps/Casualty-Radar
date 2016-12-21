@@ -1,21 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
-using KBS_SE3.Core;
-using KBS_SE3.Models;
-using KBS_SE3.Models.Navigation;
-using KBS_SE3.Properties;
-using KBS_SE3.Utils;
-using KBS_SE3.Models.DataControl;
-using KBS_SE3.Core.Algorithms;
-using KBS_SE3.Models.DataControl.Graph;
+using Casualty_Radar.Core;
+using Casualty_Radar.Models;
+using Casualty_Radar.Models.Navigation;
+using Casualty_Radar.Properties;
+using Casualty_Radar.Utils;
+using Casualty_Radar.Models.DataControl;
+using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Models.DataControl.Graph;
 
-namespace KBS_SE3.Modules {
+namespace Casualty_Radar.Modules {
     partial class NavigationModule : UserControl, IModule {
         private readonly LocationManager _locationManager;
         private GMapOverlay _routeOverlay;
@@ -55,18 +57,25 @@ namespace KBS_SE3.Modules {
             timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
             GetRouteMap(start.Lng, alert.Lat, alert.Lng, start.Lat);
 
-            DataParser parser = new DataParser(@"C:\Users\richa_000\Desktop\hattem.xml");
+            DataParser parser = new DataParser(@"../../Resources/hattem.xml");
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
+            
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
-            _startNode = targetCollection[10];
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
+
+            _startNode = targetCollection[100];
+            map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
             _endNode = targetCollection[40];
+            map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 1));
+
             _pathfinder = new Pathfinder(_startNode, _endNode);
-            List<PointLatLng> path = _pathfinder.FindPath();
+            List<PointLatLng> path = _pathfinder.FindPath(); //.Result voor Async poging
+
             foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
             _locationManager.DrawRoute(path, _routeOverlay);
+
 
         }
 
@@ -87,10 +96,6 @@ namespace KBS_SE3.Modules {
 
 
             // Reading data for adding test route
-
-            DataParser parser = new DataParser(@"C:\Users\richa_000\Desktop\hattem.xml");
-            parser.Deserialize();
-            DataCollection collection = parser.GetCollection();
             //_locationManager.DrawRoute(collection, _routeOverlay);
             //_locationManager.DrawTestRoute(collection, _routeOverlay);
         }

@@ -1,6 +1,6 @@
-﻿using KBS_SE3.Models;
+﻿using Casualty_Radar.Models;
 
-namespace KBS_SE3.Utils
+namespace Casualty_Radar.Utils
 {
     static class AlertUtil
     {

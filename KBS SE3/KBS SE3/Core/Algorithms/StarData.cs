@@ -1,11 +1,12 @@
-﻿using KBS_SE3.Models.DataControl.Graph;
-using KBS_SE3.Utils;
+﻿using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Utils;
 
-namespace KBS_SE3.Core.Algorithms {
+
+namespace Casualty_Radar.Core.Algorithms {
     /// <summary>
-    /// Untested nodes are nodes which are new to the algorithm
-    /// Open nodes are nodes which are being tested or have been tested and not been used
-    /// Closed nodes are the nodes that have been chosen for the path
+    /// Untested nodes are nodes which are new to the algorithm.
+    /// Open nodes are nodes which are being tested or have been tested and not been used.
+    /// Closed nodes are the nodes that have been chosen for the path.
     /// </summary>
     public enum NodeState {
         Untested,

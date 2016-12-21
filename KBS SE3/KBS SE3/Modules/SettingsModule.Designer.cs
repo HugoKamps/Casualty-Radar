@@ -1,6 +1,6 @@
-﻿using KBS_SE3.Properties;
+﻿using Casualty_Radar.Properties;
 
-namespace KBS_SE3.Modules {
+namespace Casualty_Radar.Modules {
     partial class SettingsModule {
         /// <summary> 
         /// Required designer variable.

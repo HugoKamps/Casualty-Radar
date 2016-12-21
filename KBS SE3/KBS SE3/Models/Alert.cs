@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KBS_SE3.Models
+namespace Casualty_Radar.Models
 {
     public class Alert {
         public string Title { get; set; }

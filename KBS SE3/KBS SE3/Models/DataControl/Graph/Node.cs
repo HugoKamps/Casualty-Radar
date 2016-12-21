@@ -1,11 +1,11 @@
 ﻿using GMap.NET;
-using KBS_SE3.Utils;
+using Casualty_Radar.Utils;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using KBS_SE3.Core.Algorithms;
+using Casualty_Radar.Core.Algorithms;
 
-namespace KBS_SE3.Models.DataControl.Graph {
+namespace Casualty_Radar.Models.DataControl.Graph {
 
     [Serializable()]
     public class Node {
@@ -35,8 +35,6 @@ namespace KBS_SE3.Models.DataControl.Graph {
 
         // Returns the Geo location from the Node based on the Longitude and Latitude of the Node.
         public PointLatLng GetPoint() => new PointLatLng(this.Lat, this.Lon);
-
-        public void SetStarData(Node dest) => StarData = new StarData(this, dest);
 
         // Returns the distance between the current node and the given node
         public double DistanceTo(Node node) => MapUtil.GetDistance(this, node);

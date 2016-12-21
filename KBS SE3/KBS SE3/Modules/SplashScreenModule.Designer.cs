@@ -1,4 +1,4 @@
-﻿namespace KBS_SE3.Modules {
+﻿namespace Casualty_Radar.Modules {
     partial class SplashScreenModule {
         /// <summary> 
         /// Required designer variable.
@@ -32,7 +32,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::KBS_SE3.Properties.Resources.load_splash_screen;
+            this.pictureBox1.Image = global::Casualty_Radar.Properties.Resources.load_splash_screen;
             this.pictureBox1.Location = new System.Drawing.Point(526, 372);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(50, 50);
@@ -44,7 +44,7 @@
             // 
             this.logo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
             this.logo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logo.Image = global::KBS_SE3.Properties.Resources.logo_final;
+            this.logo.Image = global::Casualty_Radar.Properties.Resources.logo_final;
             this.logo.Location = new System.Drawing.Point(0, 0);
             this.logo.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.logo.Name = "logo";

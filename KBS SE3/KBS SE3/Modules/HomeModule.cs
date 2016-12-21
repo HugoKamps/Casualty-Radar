@@ -8,11 +8,11 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using KBS_SE3.Core;
-using KBS_SE3.Models;
-using KBS_SE3.Properties;
+using Casualty_Radar.Core;
+using Casualty_Radar.Models;
+using Casualty_Radar.Properties;
 
-namespace KBS_SE3.Modules {
+namespace Casualty_Radar.Modules {
     public partial class HomeModule : UserControl, IModule {
         private LocationManager _locationManager;
         private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
@@ -202,7 +202,7 @@ namespace KBS_SE3.Modules {
             };
 
             bwFeed.RunWorkerCompleted += delegate {
-                KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen kaart";
+                Casualty_Radar.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen kaart";
                 bwMap.RunWorkerAsync();
             };
 
@@ -232,10 +232,10 @@ namespace KBS_SE3.Modules {
                     MessageBox.Show(e.ToString());
                 }
                 alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count + ")";
-                KBS_SE3.Container.GetInstance().SplashScreen.Hide();
+                Casualty_Radar.Container.GetInstance().SplashScreen.Hide();
             };
 
-            KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen meldingen";
+            Casualty_Radar.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen meldingen";
             bwFeed.RunWorkerAsync();
         }
 
