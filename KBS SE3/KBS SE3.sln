@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KBS SE3", "KBS SE3\KBS SE3.csproj", "{AD72EEEF-ACA3-408D-9EC4-6F0D02EF2BA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KBS SE3 Unit Tests", "KBS SE3 Unit Tests\KBS SE3 Unit Tests.csproj", "{01C26B6D-A5B2-4916-9EE1-EFAF38DEB7DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLRewriter", "KBS SE3 XMLRewriter\XMLRewriter.csproj", "{DDD51B85-7F37-4A54-976D-25E71717C407}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{01C26B6D-A5B2-4916-9EE1-EFAF38DEB7DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01C26B6D-A5B2-4916-9EE1-EFAF38DEB7DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01C26B6D-A5B2-4916-9EE1-EFAF38DEB7DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDD51B85-7F37-4A54-976D-25E71717C407}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDD51B85-7F37-4A54-976D-25E71717C407}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDD51B85-7F37-4A54-976D-25E71717C407}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDD51B85-7F37-4A54-976D-25E71717C407}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
