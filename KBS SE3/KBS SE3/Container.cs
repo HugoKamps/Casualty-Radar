@@ -121,11 +121,15 @@ namespace KBS_SE3 {
         }
 
         private void menuBtn_Click(object sender, EventArgs e) {
+            IModule module = ModuleManager.GetInstance().GetCurrentModule();
+
             homeBtn.BackColor = Color.FromArgb(52, 57, 61);
             settingsBtn.BackColor = Color.FromArgb(52, 57, 61);
-            Button selectedButton = (Button)sender;
-            selectedButton.BackColor = Color.FromArgb(236, 89, 71);
-            ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
+            if(module.GetType() != typeof(GetStartedModule)) {
+                Button selectedButton = (Button)sender;
+                selectedButton.BackColor = Color.FromArgb(236, 89, 71);
+                ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
+            }
         }
 
         private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
@@ -157,11 +161,13 @@ namespace KBS_SE3 {
         * TEST METHOD 
         */
         private void TestDraw(HomeModule hm, Node n) {
-            hm.RouteOverlay.Markers.Add(new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.red_big_stop));
-            foreach (Node adjacent in MapUtil.GetAdjacentNodes(n)) {
-                GMapMarker m = new GMarkerGoogle(adjacent.GetPoint(), GMarkerGoogleType.blue_dot);
-                hm.RouteOverlay.Markers.Add(m);
-            }
+            //hm.RouteOverlay.Markers.Add(new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.red_big_stop));
+            //foreach (Node adjacent in MapUtil.GetAdjacentNodes(n)) {
+            //    GMapMarker m = new GMarkerGoogle(adjacent.GetPoint(), GMarkerGoogleType.blue_dot);
+            //    hm.RouteOverlay.Markers.Add(m);
+            //}
+            ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().ParseInstance(typeof(GetStartedModule)));
+
         }
     }
 }
