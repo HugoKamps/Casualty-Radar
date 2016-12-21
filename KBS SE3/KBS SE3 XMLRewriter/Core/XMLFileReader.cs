@@ -25,33 +25,39 @@ namespace XMLRewriter.Core {
             this._fileName = fileName;
         }
 
-        public void convert() {
+        /// <summary>
+        /// Starts the conversion process.
+        /// This method is essentially the core method.
+        /// After conversion the new XML content is saved to the destination folder.
+        /// A progressbar is used to represent the status of the processing.
+        /// </summary>
+        public void Convert() {
             if (String.IsNullOrEmpty(_fileName) || String.IsNullOrWhiteSpace(_fileName)) {
                 MessageBox.Show("Please supply a name for your XML File.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
             } else {
                 this._writer = new XMLFileWriter(_destination, _fileName);
-                log("Reading started");
+                Log("Reading started");
                 var elements = ParsedElements();
                 var size = elements.Count();
-                log("Found " + size + " elements to convert");
+                Log("Found " + size + " elements to convert");
                 StatusBar.Maximum = size;
-                log("Writing data to new XML file");
+                Log("Writing data to new XML file");
                 foreach (var element in elements) {
-                    _writer.append(convertElement(element));
+                    _writer.Append(ConvertElement(element));
                     StatusBar.Value++;
                 }
-                log("Started Saving");
-                _writer.save();
-                log("Saved succesfully");
+                Log("Started Saving");
+                _writer.Save();
+                Log("Saved succesfully");
                 MessageBox.Show("Converting finished, you can locate the converted file at: " + _path + @"\" + _fileName + ".xml", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             }
         }
 
-
-        /*
-        * Loops through the XML File and parses all the Way elements and the Node elements.
-        * This method uses lazy-loading for optimalization purposes.
-        */
+        /// <summary>
+        /// Loops through the XML File and parses all the Way elements and the Node elements.
+        /// This method uses lazy-loading for optimalization purposes.
+        /// </summary>
+        /// <returns>An IEnumerable with all Node and Way elements</returns>
         private IEnumerable<XElement> ParsedElements() {
             using (XmlReader reader = XmlReader.Create(_path)) {
                 reader.MoveToContent();
@@ -66,17 +72,22 @@ namespace XMLRewriter.Core {
             }
         }
 
-        // Logs the given message to the DataLog usercontrol
-        private void log(String msg) {
+        /// <summary>
+        /// Logs the given message to the DataLog usercontrol
+        /// </summary>
+        /// <param name="msg">message that will be logged</param>
+        private void Log(String msg) {
             DataLog.AppendText(msg + "\n");
         }
 
-        /*
-        * Converts the given element to a newly, rewritten, XElement.
-        * Both Nodes and Ways can be returned from this method.
-        * All tags and attributes are shortened to 1/2 char words.
-        */
-        private XElement convertElement(XElement origin) {
+        /// <summary>
+        /// Converts the given element to a newly, rewritten, XElement.
+        /// Both Nodes and Ways can be returned from this method.
+        /// All tags and attributes are shortened to 1/2 char words.
+        /// </summary>
+        /// <param name="origin">The original XElement in the existent XML file</param>
+        /// <returns>A newly, shortened, XElement that is used for the new XML file</returns>
+        private XElement ConvertElement(XElement origin) {
             switch (origin.Name.ToString()) {
                 case "node":
                     string lon = origin.Attribute("lon").Value;
@@ -115,6 +126,13 @@ namespace XMLRewriter.Core {
             }
         }
 
+        /// <summary>
+        /// Returns the new XML key based on the original string.
+        /// These keys are used to parse zoomlevels from the ways.
+        /// Each key consists of a few letters that are present in the origin string.
+        /// </summary>
+        /// <param name="origin">The original string value</param>
+        /// <returns>A shortened string (key) based on the origin value</returns>
         public static String ParseWayValue(string origin) {
             switch (origin) {
                 case "residential": return "res";

@@ -5,13 +5,16 @@ using GMap.NET;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Utils;
 
+
 namespace Casualty_Radar.Core.Algorithms {
+    /// <summary>
+    /// A class which contains all methods needed for calculating a path with the A-Star algorithm
+    /// </summary>
     class Pathfinder {
-        private Node _startNode;
-        private Node _endNode;
-        private List<Node> _closedNodes;
-        private List<Node> _openNodes;
-        private Node _closedNode;
+        private Node _startNode; // The beginning point for the route
+        private Node _endNode; // The destination for the route
+        private List<Node> _closedNodes; // A list with all closed nodes, for the application to compare
+        private List<Node> _openNodes; // A list with all open nodes, for the application to compare
 
         public Pathfinder(Node startNode, Node endNode) {
             _closedNodes = new List<Node>();
@@ -22,12 +25,11 @@ namespace Casualty_Radar.Core.Algorithms {
             _startNode.StarData = new StarData(_startNode, _endNode) { State = NodeState.Open };
         }
 
-        // Attempts to find a path from the start location to the end location based on the supplied SearchParameters
-        // Returns a List of Points representing the path. If no path was found, the returned list is empty
-        public  List<PointLatLng> FindPath() {
-        //public async Task<List<PointLatLng>> FindPath() {
-
-            //return await Task.Run(() => {
+        /// <summary>
+        /// Attempts to find a path from the start location to the end location
+        /// </summary>
+        /// <returns>Returns a List of Points representing the path. If no path was found, the returned list is empty</returns>
+        public List<PointLatLng> FindPath() {
             // The start node is the first entry in the 'open' list
             List<PointLatLng> path = new List<PointLatLng>();
                 bool success = Search(_startNode);
@@ -44,14 +46,18 @@ namespace Casualty_Radar.Core.Algorithms {
                 path.Reverse();
 
                 return path;
-            //});
         }
 
+        /// <summary>
+        /// Recursive function that starts with the starting node and keeps repeating until a route was successfully found.
+        /// For each node it checks all adjacent nodes and their usefulness for the route
+        /// </summary>
+        /// <param name="currentNode">The node where the path currently is</param>
+        /// <returns></returns>
         private bool Search(Node currentNode) {
             // Set the current node to Closed since it cannot be traversed more than once
             currentNode.StarData.State = NodeState.Closed;
             _closedNodes.Add(currentNode);
-            _closedNode = currentNode;
             List<Node> nextNodes = GetAdjacentStarNodes(currentNode);
             // Sort by F-value so that the shortest possible routes are considered first
             nextNodes.Sort((node1, node2) => node1.StarData.F.CompareTo(node2.StarData.F));
@@ -68,6 +74,11 @@ namespace Casualty_Radar.Core.Algorithms {
             return false;
         }
 
+        /// <summary>
+        /// Searches through all adjacent nodes of a given node and checks their efficiency 
+        /// </summary>
+        /// <param name="fromNode">The node to get and check all the adjacent nodes for</param>
+        /// <returns></returns>
         private List<Node> GetAdjacentStarNodes(Node fromNode) {
             List<Node> nodes = new List<Node>();
             List<Node> adjacentNodes = MapUtil.GetAdjacentNodes(fromNode);
