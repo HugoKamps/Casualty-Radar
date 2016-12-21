@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -22,7 +23,6 @@ namespace Casualty_Radar.Modules {
     /// Module that contains a map displaying the starting and ending point for the route and the route between them. Also contains a panel in which the information about the alert is being shown.
     /// </summary>
     partial class NavigationModule : UserControl, IModule {
-
         private readonly LocationManager _locationManager;
         private GMapOverlay _routeOverlay;
         private Pathfinder _pathfinder;
@@ -32,27 +32,11 @@ namespace Casualty_Radar.Modules {
         public NavigationModule() {
             InitializeComponent();
             _locationManager = new LocationManager();
-            int y = 0;
-            Color color = Color.Gainsboro;
-
-            List<NavigationStep> navSteps = new List<NavigationStep> {
-                new NavigationStep("Sla rechtsaf", "100m", RouteStepType.Right),
-                new NavigationStep("Sla linksaf", "500m", RouteStepType.Left),
-                new NavigationStep("Ga rechtdoor", "1.2km", RouteStepType.Straight),
-                new NavigationStep("Sla linksaf", "5km", RouteStepType.Left),
-                new NavigationStep("Ga links op de rotonde", "2km", RouteStepType.Left),
-                new NavigationStep("Rijd een kind aan", "500m", RouteStepType.Straight)
-            };
-
-            foreach (NavigationStep t in navSteps) {
-                CreateRouteStepPanel(t, color, y);
-                y += 50;
-                color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
-            }
         }
 
         public Breadcrumb GetBreadcrumb() {
-            return new Breadcrumb(this, "Navigation", null, ModuleManager.GetInstance().ParseInstance(typeof(HomeModule)));
+            return new Breadcrumb(this, "Navigation", null,
+                ModuleManager.GetInstance().ParseInstance(typeof(HomeModule)));
         }
 
         /// <summary>
@@ -64,27 +48,49 @@ namespace Casualty_Radar.Modules {
             infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
             alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
             timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
-            InitRouteMap(start.Lng, alert.Lat, alert.Lng, start.Lat);
-            
+            InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
+
             //Instantiates a data parser which creates a collection with all nodes and ways of a specific zone
             DataParser parser = new DataParser(@"../../Resources/hattem.xml");
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
-            
+
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
 
-            _startNode = targetCollection[80];
+            _startNode = targetCollection[130];
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
             _endNode = targetCollection[40];
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 1));
 
             _pathfinder = new Pathfinder(_startNode, _endNode);
-            List<PointLatLng> path = _pathfinder.FindPath();
+            List<Node> path = _pathfinder.FindPath();
+            List<PointLatLng> points = new List<PointLatLng>();
 
-            foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
-            _locationManager.DrawRoute(path, _routeOverlay);
+            int y = 0;
+            Color color = Color.Gainsboro;
+            for (var index = 0; index < path.Count; index++) {
+                Node node = path[index];
+
+                foreach(Way way in node.ConnectedWays) Debug.WriteLine(way.TypeDescription);
+                points.Add(node.GetPoint());
+
+                if (index + 1 != path.Count) {
+                    map.Overlays[0].Markers.Add(_locationManager.CreateMarker(node.Lat, node.Lon, 0));
+                    Node nextNode = path[index + 1];
+                    RouteStepType type = RouteStepType.Straight;
+                    string distance = NavigationStep.GetFormattedDistance(Math.Round(MapUtil.GetDistance(node, nextNode), 2));
+                    string instruction = "Ga over " + distance + " naar " +  type;
+                    NavigationStep step = new NavigationStep(instruction, distance, type);
+                    CreateRouteStepPanel(step, color, y);
+                }
+                else CreateRouteStepPanel(new NavigationStep(), color, y);
+
+                color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
+                y += 51;
+            }
+            _locationManager.DrawRoute(points, _routeOverlay);
         }
 
         /// <summary>
@@ -130,6 +136,9 @@ namespace Casualty_Radar.Modules {
                 case RouteStepType.Right:
                     icon = Resources.turn_right_icon;
                     break;
+                case RouteStepType.DestinationReached:
+                    icon = Resources.destination_icon;
+                    break;
                 default:
                     icon = Resources.straight_icon;
                     break;
@@ -142,14 +151,17 @@ namespace Casualty_Radar.Modules {
                 BackColor = color
             };
 
-            Label distanceLabel = new Label {
-                Location = new Point(10, 0),
-                Size = new Size(50, 50),
-                TextAlign = ContentAlignment.MiddleCenter,
-                ForeColor = Color.DarkSlateGray,
-                Font = new Font("Microsoft Sans Serif", 9, FontStyle.Bold),
-                Text = step.Distance
-            };
+            if (step.Distance != null) {
+                Label distanceLabel = new Label {
+                    Location = new Point(10, 0),
+                    Size = new Size(50, 50),
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    ForeColor = Color.DarkSlateGray,
+                    Font = new Font("Microsoft Sans Serif", 9, FontStyle.Bold),
+                    Text = step.Distance
+                };
+                newPanel.Controls.Add(distanceLabel);
+            }
 
             Label instructionLabel = new Label {
                 Location = new Point(60, 0),
@@ -167,9 +179,8 @@ namespace Casualty_Radar.Modules {
                 SizeMode = PictureBoxSizeMode.StretchImage
             };
 
-            newPanel.Controls.Add(distanceLabel);
-            newPanel.Controls.Add(instructionLabel);
             newPanel.Controls.Add(instructionIcon);
+            newPanel.Controls.Add(instructionLabel);
 
             routeInfoPanel.AutoScroll = true;
             routeInfoPanel.HorizontalScroll.Enabled = false;
