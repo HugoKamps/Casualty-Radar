@@ -24,8 +24,7 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void Feed_UpdateAlerts()
-        {
+        public void Feed_UpdateAlerts() {
             var feed = Feed.GetInstance();
 
             // Get alerts after initialization
