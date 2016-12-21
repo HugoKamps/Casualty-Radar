@@ -15,6 +15,10 @@ INSTALLATIE
 -----------
 Casualty Radar kan niet geïnstalleerd worden.
 
+GEBRUIKERSHANDLEIDING
+-----------
+Casualty Radar is een drama voor gebruikers zonder computer ervaring
+
 TEAM
 -----------
 Dit project is in opdracht van Windesheim gerealiseerd door: 
