@@ -20,8 +20,10 @@ namespace KBS_SE3.Modules {
             return new Breadcrumb(this, "Navigation", null, ModuleManager.GetInstance().ParseInstance(typeof(HomeModule)));
         }
 
-         public void SetInfoPanel(Panel panel) {
-             alertInfoPanel = panel;
+         public void SetAlertInfo(string title, string info, int type, string time) {
+             infoTitleLabel.Text = title + "\n" + info;
+             alertTypePicturebox.Image = type == 1 ? Properties.Resources.Medic : Properties.Resources.Firefighter;
+             timeLabel.Text = time;
          }
     }
 }

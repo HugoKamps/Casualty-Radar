@@ -32,6 +32,7 @@ namespace KBS_SE3 {
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Container));
             this.topBar = new System.Windows.Forms.Panel();
+            this.logoTopBar = new System.Windows.Forms.PictureBox();
             this.minimizeBtn = new System.Windows.Forms.Label();
             this.closeBtn = new System.Windows.Forms.Label();
             this.subBar = new System.Windows.Forms.Panel();
@@ -43,11 +44,10 @@ namespace KBS_SE3 {
             this.settingsBtn = new System.Windows.Forms.Button();
             this.homeBtn = new System.Windows.Forms.Button();
             this.menuLabel = new System.Windows.Forms.Label();
-            this.logoTopBar = new System.Windows.Forms.PictureBox();
             this.topBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).BeginInit();
             this.subBar.SuspendLayout();
             this.menuPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).BeginInit();
             this.SuspendLayout();
             // 
             // topBar
@@ -62,6 +62,16 @@ namespace KBS_SE3 {
             this.topBar.Size = new System.Drawing.Size(1095, 67);
             this.topBar.TabIndex = 0;
             this.topBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.topBar_MouseDown);
+            // 
+            // logoTopBar
+            // 
+            this.logoTopBar.Image = global::KBS_SE3.Properties.Resources.logo_final;
+            this.logoTopBar.Location = new System.Drawing.Point(10, 11);
+            this.logoTopBar.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.logoTopBar.Name = "logoTopBar";
+            this.logoTopBar.Size = new System.Drawing.Size(287, 50);
+            this.logoTopBar.TabIndex = 2;
+            this.logoTopBar.TabStop = false;
             // 
             // minimizeBtn
             // 
@@ -214,16 +224,6 @@ namespace KBS_SE3 {
             this.menuLabel.Text = "Menu";
             this.menuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // logoTopBar
-            // 
-            this.logoTopBar.Image = global::KBS_SE3.Properties.Resources.logo_final;
-            this.logoTopBar.Location = new System.Drawing.Point(10, 11);
-            this.logoTopBar.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-            this.logoTopBar.Name = "logoTopBar";
-            this.logoTopBar.Size = new System.Drawing.Size(287, 50);
-            this.logoTopBar.TabIndex = 2;
-            this.logoTopBar.TabStop = false;
-            // 
             // Container
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -243,10 +243,10 @@ namespace KBS_SE3 {
             this.Text = "Casualty Radar";
             this.Load += new System.EventHandler(this.Container_Load);
             this.topBar.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).EndInit();
             this.subBar.ResumeLayout(false);
             this.subBar.PerformLayout();
             this.menuPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.logoTopBar)).EndInit();
             this.ResumeLayout(false);
 
         }
