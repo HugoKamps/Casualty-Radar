@@ -42,12 +42,12 @@ namespace KBS_SE3_Unit_Tests {
         [TestMethod]
         public void HomeModule_SetLocationManager() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            var newLM = new LocationManager();
+            var newLm = new LocationManager();
 
-            hm.LocationManager = newLM;
+            hm.LocationManager = newLm;
 
             //Test if SetLocationManager() sets the locationmanager
-            Assert.AreEqual(hm.GetLocationManager(), newLM);
+            Assert.AreEqual(hm.GetLocationManager(), newLm);
         }
 
         [TestMethod]
