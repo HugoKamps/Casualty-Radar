@@ -51,14 +51,6 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void HomeModule_GetSelectedPanel() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-
-            // Test if GetSelectedPanel() returns null as none is selected
-            Assert.AreEqual(hm.GetSelectedPanel, null);
-        }
-
-        [TestMethod]
         public void HomeModule_GetAlertType() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
