@@ -9,7 +9,7 @@ PROJECTEN
 Deze solution bevat 3 projecten:
 - Casualty Radar
 - KBS SE3 Unit Tests
-- XML Rewrites
+- XML Rewriter
 
 INSTALLATIE
 -----------
