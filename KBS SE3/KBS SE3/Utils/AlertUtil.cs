@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KBS_SE3.Models;
 
 namespace KBS_SE3.Utils
 {
@@ -33,5 +29,19 @@ namespace KBS_SE3.Utils
             { "WO", "2", "Brandweer", "Waterongeval" },
             { "DV", "2", "Brandweer", "Dienstverlening" }
         };
+
+        public static Alert SetAlertAttributes(Alert alert, string alertItemString)
+        {
+            for (int i = 0; i < P2000.GetLength(0); i++) {
+                if (alertItemString.StartsWith(P2000[i, 0])) {
+                    alert.Code = P2000[i, 0];
+                    alert.Type = int.Parse(P2000[i, 1]);
+                    alert.TypeString = P2000[i, 2];
+                    alert.Info = P2000[i, 3];
+                    return alert;
+                }
+            }
+            return null;
+        }
     }
 }

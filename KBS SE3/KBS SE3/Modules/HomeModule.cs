@@ -1,80 +1,400 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Device.Location;
 using System.Drawing;
 using System.Windows.Forms;
 using GMap.NET;
+using GMap.NET.MapProviders;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 using KBS_SE3.Core;
 using KBS_SE3.Models;
-using System.Drawing;
+using KBS_SE3.Properties;
 
 namespace KBS_SE3.Modules {
-    partial class HomeModule : UserControl, IModule
-    {
-        private readonly LocationManager _locationManager;
+    public partial class HomeModule : UserControl, IModule {
+        private LocationManager _locationManager;
+        private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
+        private FeedTicker _feedTicker;
+        private bool _isRefreshing;
+        private Panel _selectedPanel;
+        private GMarkerGoogle _previousMarker;
+        private int _previousMarkerIndex;
+        private List<Panel> _alertPanels = new List<Panel>();
+        public GMapOverlay RouteOverlay { get; set; }
+
         public HomeModule() {
             InitializeComponent();
-            _locationManager = new LocationManager(map);
+        }
+
+        public bool IsRefreshing {
+            get { return _isRefreshing; }
+            set { _isRefreshing = value; }
+        }
+
+        public FeedTicker FeedTicker {
+            get { return _feedTicker; }
         }
 
         public Breadcrumb GetBreadcrumb() {
             return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
         }
 
+        /* 
+        Function that displays a map in the HomeModule. First it checks if the user has a working internet connection. 
+        It creates a marker on the user's current location and on all the incidents coming from the Feed.
+        */
+        public void InitAlertsMap(bool hasLocationService) {
+            if (ConnectionUtil.HasInternetConnection()) {
+                map.Overlays.Clear();
+                map.ShowCenter = false;
+                map.MapProvider = GoogleMapProvider.Instance;
+                map.DragButton = MouseButtons.Left;
+                GMaps.Instance.Mode = AccessMode.ServerOnly;
+                GMapOverlay markersOverlay = new GMapOverlay("markers");
+                map.Overlays.Add(markersOverlay);
+                map.OnMarkerClick += Marker_Click;
+                /* kan weg */
+                RouteOverlay = new GMapOverlay("route");
+                /* kan weg */
+                map.Overlays.Add(RouteOverlay);
+                //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
+                if (hasLocationService) {
+                    markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude, 0));
+                } else {
+                    _locationManager.SetCoordinatesByLocationSetting();
+                    markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude, 0));
+                }
+
+                foreach (Alert alert in Feed.GetInstance().GetAlerts()) {
+                    int type = alert.Type == 1 ? 1 : 2;
+                    if (_previousMarker != null && _previousMarker.Position.Lat.Equals(alert.Lat) && _previousMarker.Position.Lng.Equals(alert.Lng)) type = 3;
+                    markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
+                }
+            }
+        }
+
+        private void Marker_Click(GMapMarker item, MouseEventArgs e) {
+            int markerIndex = (map.Overlays[0].Markers.IndexOf(item)) - 1;
+            if (markerIndex < 0) return;
+            Panel selectedPanel = _alertPanels[markerIndex];
+            feedPanelItem_Click(selectedPanel, EventArgs.Empty);
+            feedPanel.ScrollControlIntoView(selectedPanel);
+        }
+
+
+        public static Image ResizeImage(Image imgToResize, Size size) => new Bitmap(imgToResize, size);
+
+        //Keeps track of the user's current location. Everytime the location changes the map is renewed and the coordinates are updated
+        private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
+            _locationManager.CurrentLatitude = e.Position.Location.Latitude;
+            _locationManager.CurrentLongitude = e.Position.Location.Longitude;
+            //InitAlertsMap(true);
+        }
+
+        //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
+        private void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
+            switch (e.Status) {
+                case GeoPositionStatus.Initializing:
+                    _hasLocationservice = true;
+                    break;
+
+                case GeoPositionStatus.Ready:
+                    _hasLocationservice = true;
+                    break;
+
+                case GeoPositionStatus.NoData:
+                    _hasLocationservice = false;
+                    break;
+
+                case GeoPositionStatus.Disabled:
+                    _hasLocationservice = false;
+                    break;
+            }
+            //InitAlertsMap(_hasLocationservice);
+        }
+
+        public LocationManager GetLocationManager() {
+            if (_locationManager == null) {
+                _locationManager = new LocationManager();
+                LoadLocationManager();
+            }
+            return _locationManager;
+        }
+
+        public LocationManager LocationManager {
+            set { _locationManager = value; }
+        }
+
         private void refreshFeedButton_Click(object sender, EventArgs e) {
-            Feed.GetInstance().UpdateFeed();
-            _locationManager.GetMap(false);
+            if (!_isRefreshing) {
+                _feedTicker.StopTimerIfEnabled();
+                Feed.GetInstance().UpdateFeed();
+                _feedTicker.StartTimerIfEnabled();
+            }
         }
 
         private void alertTypeComboBox_SelectedIndexChanged(object sender, EventArgs e) {
             Feed.GetInstance().UpdateAlerts();
-            _locationManager.GetMap(false);
+            _previousMarker = null;
+            _previousMarkerIndex = 0;
         }
 
         private void navigationBtn_Click(object sender, EventArgs e) {
-            var selectedPanel = Feed.GetInstance().GetSelectedPanel;
-            var alertPanels = Feed.GetInstance().GetAlertPanels;
             Alert selectedAlert = null;
 
-            for (var i = 0; i < alertPanels.Count; i++) {
-                if (selectedPanel != alertPanels[i]) continue;
+            for (int i = 0; i < _alertPanels.Count; i++) {
+                if (_selectedPanel != _alertPanels[i]) continue;
                 selectedAlert = Feed.GetInstance().GetAlerts()[i];
                 break;
             }
 
-            var navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
-            if (selectedAlert != null) navigationModule.SetAlertInfo(selectedAlert.Title, selectedAlert.Info, selectedAlert.Type, selectedAlert.PubDate.TimeOfDay.ToString());
-            ModuleManager.GetInstance().UpdateModule(KBS_SE3.Container.GetInstance().breadCrumbStart, KBS_SE3.Container.GetInstance().contentPanel, navigationModule);
+            NavigationModule navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            if (selectedAlert != null) navigationModule.SetAlertInfo(selectedAlert.Title, selectedAlert.Info, selectedAlert.Type, selectedAlert.PubDate.TimeOfDay.ToString(), _locationManager.GetLocationPoint(), new PointLatLng(selectedAlert.Lat, selectedAlert.Lng));
+            ModuleManager.GetInstance().UpdateModule(navigationModule);
         }
 
-        private void navigationBtn_EnabledChanged(object sender, EventArgs e)
-        {
-            var button = (Button) sender;
+        private void navigationBtn_EnabledChanged(object sender, EventArgs e) {
+            Button button = (Button)sender;
             button.ForeColor = Color.White;
             button.BackColor = button.Enabled ? Color.FromArgb(210, 73, 57) : Color.Gray;
         }
 
-        private void refreshFeedButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            refreshFeedButton.Image = resizeImage(refreshFeedButton.Image, new Size(23, 23));
-            refreshFeedButton.Left = refreshFeedButton.Left + 2;
-            refreshFeedButton.Top = refreshFeedButton.Top + 2;
-            refreshFeedButton.Width = 23;
-            refreshFeedButton.Height = 23;
-            
+        public void HomeModule_Load(object sender, EventArgs e) {
+            if (_locationManager == null) {
+                // Load the feed & instantiate the location manager
+                int tickTime = Settings.Default.feedTickerTime * 1000;
+                _feedTicker = new FeedTicker(tickTime, Feed.GetInstance());
+            }
         }
 
-        private void refreshFeedButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            refreshFeedButton.Image = KBS_SE3.Properties.Resources.refresh_icon;
-            refreshFeedButton.Width = 25;
-            refreshFeedButton.Height = 25;
-            refreshFeedButton.Left = refreshFeedButton.Left - 2;
-            refreshFeedButton.Top = refreshFeedButton.Top - 2;
+        private void LoadLocationManager() {
+            _locationManager.SetCoordinatesByLocationSetting();
+            map.IgnoreMarkerOnMouseWheel = true;
+            _hasLocationservice = false;
+            GeoCoordinateWatcher watcher = new GeoCoordinateWatcher();
+            watcher.PositionChanged += watcher_PositionChanged;
+            watcher.StatusChanged += watcher_StatusChanged;
+            watcher.Start();
+            if (_hasLocationservice)
+                map.Position = new PointLatLng(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude);
+            else map.SetPositionByKeywords(Settings.Default.userLocation);
         }
 
-        public static Image resizeImage(Image imgToResize, Size size)
-        {
-            return (Image)(new Bitmap(imgToResize, size));
+        public void LoadComponents() {
+            BackgroundWorker bwFeed = new BackgroundWorker();
+            BackgroundWorker bwMap = new BackgroundWorker();
+
+            // Create panels in background thread
+            bwFeed.DoWork += delegate {
+                int y = 0;
+                _alertPanels.Clear();
+
+                foreach (Alert a in Feed.GetInstance().GetFilteredAlerts) {
+                    _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y));
+                    y += 81;
+                }
+            };
+
+            bwFeed.RunWorkerCompleted += delegate {
+                KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen kaart";
+                bwMap.RunWorkerAsync();
+            };
+
+            bwMap.DoWork += delegate {
+                Invoke(new Action(() => GetLocationManager()));
+            };
+
+            bwMap.RunWorkerCompleted += delegate {
+                InitAlertsMap(false);
+                RemoveLoadIcon();
+                try {
+                    for (int i = 0; i < _alertPanels.Count; i++)
+                    {
+                        foreach (Alert alert in Feed.GetInstance().GetNewAlerts)
+                        {
+                            if (alert == Feed.GetInstance().GetFilteredAlerts[i])
+                            {
+                                _alertPanels[i].Controls[3].Show();
+                            }
+                        }
+                        feedPanel.Controls.Add(_alertPanels[i]);
+                    }
+
+                    //foreach (Panel p in _alertPanels)
+                    //    feedPanel.Controls.Add(p);
+                } catch (InvalidOperationException e) {
+                    MessageBox.Show(e.ToString());
+                }
+                alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count + ")";
+                KBS_SE3.Container.GetInstance().SplashScreen.Hide();
+            };
+
+            KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen meldingen";
+            bwFeed.RunWorkerAsync();
+        }
+
+        public void DisplayLoadIcon() {
+            loadFeedPictureBox.Visible = true;
+            loadFeedPictureBox.Refresh();
+            loadFeedLabel.Visible = true;
+            loadFeedLabel.Refresh();
+            IsRefreshing = true;
+            feedPanel.Controls.Clear();
+        }
+
+        public void RemoveLoadIcon() {
+            loadFeedPictureBox.Visible = false;
+            loadFeedLabel.Visible = false;
+            IsRefreshing = false;
+            feedPanel.AutoScroll = true;
+        }
+
+        public Panel GetSelectedPanel => _selectedPanel;
+        public int GetAlertType => alertTypeComboBox.SelectedIndex;
+
+        public Panel CreateAlertPanel(int type, string title, string info, string time, int y) {
+            //The panel which will be filled with all of the controls below
+            Panel newPanel = new Panel {
+                Location = new Point(0, y),
+                Size = new Size(320, 80),
+                BackColor = Color.FromArgb(236, 89, 71),
+                Cursor = Cursors.Hand
+            };
+
+            //The picture which indicates the type of alert (Firefighter or ambulance)
+            PictureBox newPictureBox = new PictureBox {
+                Location = new Point(225, 5),
+                Size = new Size(40, 40),
+                Image = type == 1 ? Resources.Medic : Resources.Firefighter,
+                SizeMode = PictureBoxSizeMode.StretchImage
+            };
+
+            //The label which will be filled with the information about the alert
+            Label label = new Label {
+                ForeColor = Color.White,
+                Location = new Point(0, 0),
+                Font = new Font("Microsoft Sans Serif", 9),
+                Size = new Size(200, 80),
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = title + "\n" + info
+            };
+
+            Label newLabel = new Label
+            {
+                ForeColor = Color.White,
+                Location = new Point(280, 0),
+                Size = new Size(40, 20),
+                Font = new Font("Microsoft Sans Serif", 9),
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = "New",
+                Visible = false
+            };
+
+            if (_selectedPanel != null) {
+                foreach (object control in _selectedPanel.Controls) {
+                    if (control is Label) {
+                        Label selectedLabel = (Label)control;
+                        if (selectedLabel.Text == label.Text) {
+                            newPanel.BackColor = Color.FromArgb(245, 120, 105);
+                            _selectedPanel = newPanel;
+                        }
+                    }
+                }
+            }
+
+            //The label which will be filled with the time of the alert
+            Label timeLabel = new Label {
+                ForeColor = Color.White,
+                Location = new Point(145, 50),
+                Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold),
+                Size = new Size(200, 30),
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = time
+            };
+
+            //Events for each control in the panel;
+            newPictureBox.MouseEnter += feedPanelItem_MouseEnter;
+            newPictureBox.MouseLeave += feedPanelItem_MouseLeave;
+            newPictureBox.Click += feedPanelItem_Click;
+
+            label.MouseEnter += feedPanelItem_MouseEnter;
+            label.MouseLeave += feedPanelItem_MouseLeave;
+            label.Click += feedPanelItem_Click;
+
+            timeLabel.MouseEnter += feedPanelItem_MouseEnter;
+            timeLabel.MouseLeave += feedPanelItem_MouseLeave;
+            timeLabel.Click += feedPanelItem_Click;
+
+            newPanel.MouseEnter += feedPanelItem_MouseEnter;
+            newPanel.MouseLeave += feedPanelItem_MouseLeave;
+            newPanel.Click += feedPanelItem_Click;
+
+            //The panel is filled with all the controls initialized above
+            newPanel.Controls.Add(newPictureBox);
+            newPanel.Controls.Add(label);
+            newPanel.Controls.Add(timeLabel);
+            newPanel.Controls.Add(newLabel);
+
+            return newPanel;
+        }
+
+        private void feedPanelItem_Click(object sender, EventArgs e) {
+
+            if (sender.GetType() == typeof(Panel)) {
+                Panel panel = (Panel)sender;
+                if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
+                if (_selectedPanel == panel) {
+                    _selectedPanel = null;
+                    navigationBtn.Enabled = false;
+                    navigationBtn.BackColor = Color.Gray;
+                } else {
+                    _selectedPanel = panel;
+                    _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
+                    navigationBtn.Enabled = true;
+                }
+            } else {
+                Control control = (Control)sender;
+                if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
+                if (_selectedPanel == control.Parent) {
+                    _selectedPanel = null;
+                    navigationBtn.Enabled = false;
+                } else {
+                    _selectedPanel = (Panel)control.Parent;
+                    _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
+                    navigationBtn.Enabled = true;
+                }
+            }
+
+            if (_previousMarker != null) map.Overlays[0].Markers[_previousMarkerIndex] = _previousMarker;
+            int index = _alertPanels.FindIndex(panel => panel == _selectedPanel) + 1;
+            _previousMarkerIndex = index;
+            _previousMarker = (GMarkerGoogle)map.Overlays[0].Markers[index];
+            if (index != 0) map.Overlays[0].Markers[index] = _locationManager.CreateMarker(_previousMarker.Position.Lat, _previousMarker.Position.Lng, 3);
+        }
+
+        private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
+            if (sender.GetType() == typeof(Panel)) {
+                Panel panel = (Panel)sender;
+                if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
+            } else {
+                Control control = (Control)sender;
+                if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(210, 73, 57);
+            }
+        }
+
+        private void feedPanelItem_MouseLeave(object sender, EventArgs e) {
+            if (sender.GetType() == typeof(Panel)) {
+                Panel panel = (Panel)sender;
+                if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
+            } else {
+                Control control = (Control)sender;
+                if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(236, 86, 71);
+            }
         }
     }
 }
-

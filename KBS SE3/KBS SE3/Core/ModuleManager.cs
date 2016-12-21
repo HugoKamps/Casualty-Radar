@@ -4,11 +4,9 @@ using System.Linq;
 using System.Windows.Forms;
 using KBS_SE3.Modules;
 using KBS_SE3.Properties;
-using KBS_SE3.Utils;
-using static System.String;
 
 namespace KBS_SE3.Core {
-    class ModuleManager {
+    public class ModuleManager {
 
         private static ModuleManager _instance;
         private IModule _defaultModule, _currentModule;
@@ -18,9 +16,9 @@ namespace KBS_SE3.Core {
             _registeredModules = new List<IModule>();
             registerModules();
             if (ConnectionUtil.HasInternetConnection()) {
-                this._defaultModule = ParseInstance(Settings.Default.userLocation == "" ? typeof(GetStartedModule) : typeof(HomeModule));
+                _defaultModule = ParseInstance(Settings.Default.userLocation == "" ? typeof(GetStartedModule) : typeof(HomeModule));
             } else {
-                this._defaultModule = ParseInstance(typeof(NoConnectionModule));
+                _defaultModule = ParseInstance(typeof(NoConnectionModule));
             }
         }
 
@@ -63,7 +61,9 @@ namespace KBS_SE3.Core {
         *
         * An header label inside the main container (if existent) will be renamed to the module name.
         */
-        public void UpdateModule(Label headerLabel, Panel contentPanel, Object module) {
+        public void UpdateModule(Object module) {
+            Label headerLabel = Container.GetInstance().breadCrumbStart;
+            Panel contentPanel = Container.GetInstance().contentPanel;
             if(module != null) {
                 IModule reInitialized = ParseInstance(module.GetType());
                 _currentModule = reInitialized;
@@ -100,7 +100,7 @@ namespace KBS_SE3.Core {
         */
         private void updateBreadcrumb(Label origin, IModule content) {
             IModule current = getTopLevel(content);
-            String crumbText = current.GetBreadcrumb().Name;
+            string crumbText = current.GetBreadcrumb().Name;
             while (current.GetType() != content.GetType()) {
                 current = current.GetBreadcrumb().Child;
                 crumbText += " > " + current.GetBreadcrumb().Name;

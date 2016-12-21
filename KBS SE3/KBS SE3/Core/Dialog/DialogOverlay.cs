@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace KBS_SE3.Core.Dialog {
@@ -16,11 +13,11 @@ namespace KBS_SE3.Core.Dialog {
         * form called after the overlay.
         */
         public DialogOverlay() {
-            this._forms = new List<Form>();
-            var cnt = Application.OpenForms.Count;
+            _forms = new List<Form>();
+            int cnt = Application.OpenForms.Count;
             for (int ix = 0; ix < cnt; ++ix) {
-                var form = Application.OpenForms[ix];
-                var overlay = new Form {
+                Form form = Application.OpenForms[ix];
+                Form overlay = new Form {
                     Location = form.Location,
                     Size = form.Size,
                     FormBorderStyle = FormBorderStyle.None,
@@ -36,7 +33,7 @@ namespace KBS_SE3.Core.Dialog {
         }
 
         public void Dispose() {
-            foreach (var form in _forms) form.Close();
+            foreach (Form form in _forms) form.Close();
         }
     }
 }

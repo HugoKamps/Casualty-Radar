@@ -1,122 +1,143 @@
 ﻿using System;
-using System.Device.Location;
+using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using GMap.NET;
-using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using KBS_SE3.Models;
+using KBS_SE3.Models.DataControl;
+using KBS_SE3.Models.DataControl.Graph;
 using KBS_SE3.Properties;
+using KBS_SE3.Utils;
 
 namespace KBS_SE3.Core {
-    internal class LocationManager {
-        private readonly GMapControl _map;  //Control which the map will be placed on
-        private double _currentLatitude;    //The user's current latitude
-        private double _currentLongitude;   //The user's current longitude
-        private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
-
-        //Initializes the GPS watcher and it's events and initializes the Map control of the HomeModule which the map will be placed on
-        public LocationManager(GMapControl map) {
-            _hasLocationservice = false;
-            SetCoordinatesByLocationSetting();
-            _map = map;
-            var watcher = new GeoCoordinateWatcher();
-            watcher.PositionChanged += watcher_PositionChanged;
-            watcher.StatusChanged += watcher_StatusChanged;
-            watcher.Start();
-            if (_hasLocationservice) _map.Position = new PointLatLng(_currentLatitude, _currentLongitude);
-            else _map.SetPositionByKeywords(Settings.Default.userLocation);
-        }
-
-        /* 
-        Function that displays a map in the HomeModule. First it checks if the user has a working internet connection. 
-        It creates a marker on the user's current location and on all the incidents coming from the Feed.
-        */
-        public void GetMap(bool hasLocationService) {
-            if (ConnectionUtil.HasInternetConnection()) {
-                _map.Overlays.Clear();
-                _map.ShowCenter = false;
-                _map.MapProvider = GoogleMapProvider.Instance;
-                GMaps.Instance.Mode = AccessMode.ServerOnly;
-                var markersOverlay = new GMapOverlay("markers");
-                _map.Overlays.Add(markersOverlay);
-
-                //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
-                if (hasLocationService) {
-                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
-                } else {
-                    SetCoordinatesByLocationSetting();
-                    markersOverlay.Markers.Add(CreateMarker(_currentLatitude, _currentLongitude, 0));
-                }
-
-                foreach (var alert in Feed.GetInstance().GetAlerts()) {
-                    var type = alert.Type == 1 ? 1 : 2;
-                    markersOverlay.Markers.Add(CreateMarker(alert.Lat, alert.Lng, type));
-                }
-            }
-        }
+    public class LocationManager {
+        public double CurrentLatitude { get; set; } //The user's current latitude
+        public double CurrentLongitude { get; set; } //The user's current longitude
+        public List<Way> Ways = new List<Way>();
 
         //Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
         public void SetCoordinatesByLocationSetting() {
-            var location = Settings.Default.userLocation + ", The Netherlands";
-            var requestUri = $"http://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(location)}&sensor=false";
+            string location = Settings.Default.userLocation + ", The Netherlands";
+            string requestUri =
+                $"http://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(location)}&sensor=false";
 
-            var request = WebRequest.Create(requestUri);
-            var response = request.GetResponse();
-            var xdoc = XDocument.Load(response.GetResponseStream());
+            WebRequest request = WebRequest.Create(requestUri);
+            WebResponse response = request.GetResponse();
+            XDocument xdoc = XDocument.Load(response.GetResponseStream());
 
-            var result = xdoc.Element("GeocodeResponse").Element("result");
-            if (result != null)
-            {
-                var locationElement = result.Element("geometry").Element("location");
-                var lat = Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", string.Empty);
-                var lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
-                _currentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
-                _currentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
+            XElement result = xdoc.Element("GeocodeResponse").Element("result");
+            if (result != null) {
+                XElement locationElement = result.Element("geometry").Element("location");
+                string lat = Regex.Replace(locationElement.Element("lat").ToString(), "<.*?>", string.Empty);
+                string lng = Regex.Replace(locationElement.Element("lng").ToString(), "<.*?>", string.Empty);
+                CurrentLatitude = double.Parse(lat.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
+                CurrentLongitude = double.Parse(lng.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
             }
         }
 
         //Returns a marker that will be placed on a given location. The color and type are variable
         public GMarkerGoogle CreateMarker(double lat, double lng, int type) {
-            var imgLocation = "../../Resources../marker_icon_";
+            string imgLocation = "../../Resources../marker_icon_";
             if (type == 0) imgLocation += "blue.png";
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
-            var image = (Image)new Bitmap(@imgLocation);
-            return new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
+            if (type == 3) imgLocation += "selected.png";
+
+            Image image = new Bitmap(@imgLocation);
+
+            GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
+            var distance = MapUtil.GetDistance(lat, lng, CurrentLatitude, CurrentLongitude);
+            marker.ToolTip = new GMapToolTip(marker);
+            marker.ToolTip.Fill = new SolidBrush(Color.White);
+            marker.ToolTip.Foreground = new SolidBrush(Color.FromArgb(210, 73, 57));
+            marker.ToolTip.Font = new Font(FontFamily.GenericMonospace, 10);
+            marker.ToolTip.TextPadding = new Size(10, 10);
+            marker.ToolTipText = Math.Round(distance, 0) + "km";
+            marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+
+            return marker;
         }
 
-        //Keeps track of the user's current location. Everytime the location changes the map is renewed and the coordinates are updated
-        private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
-            _currentLatitude = e.Position.Location.Latitude;
-            _currentLongitude = e.Position.Location.Longitude;
-            GetMap(true);
-        }
+        public PointLatLng GetLocationPoint() => new PointLatLng(CurrentLatitude, CurrentLongitude);
 
-        //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
-        private void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
-            switch (e.Status) {
-                case GeoPositionStatus.Initializing:
-                    _hasLocationservice = true;
-                    break;
+        // Draw streets on map
+        public void DrawRoute(DataCollection collection, GMapOverlay routeOverlay) {
+            List<List<PointLatLng>> list = new List<List<PointLatLng>>();
 
-                case GeoPositionStatus.Ready:
-                    _hasLocationservice = true;
-                    break;
+            int loop = 0;
+            foreach (Way w in collection.Ways) {
+                loop++;
+                if (loop == 20) break;
+                List<PointLatLng> points = new List<PointLatLng>();
 
-                case GeoPositionStatus.NoData:
-                    _hasLocationservice = false;
-                    break;
-
-                case GeoPositionStatus.Disabled:
-                    _hasLocationservice = false;
-                    break;
+                for (int i = 0; i < w.References.Count - 1; i++) {
+                    try {
+                        points.Add(new PointLatLng(w.References[i].Node.Lat, w.References[i].Node.Lon));
+                    } catch {
+                        throw new Exception();
+                    }
+                    list.Add(points);
+                }
             }
-            GetMap(_hasLocationservice);
+
+            foreach (List<PointLatLng> l in list) {
+                List<PointLatLng> points = l.ToList();
+                routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
+                    Stroke =
+                    {
+                        DashStyle = DashStyle.Solid,
+                        Color = Color.FromArgb(244, 191, 66)
+                    }
+                });
+            }
+        }
+
+        public void DrawTestRoute(DataCollection collection, GMapOverlay _routeOverlay) {
+            Node begin = MapUtil.GetNearest(CurrentLatitude, CurrentLongitude, collection.Nodes);
+
+            foreach (Way w in begin.ConnectedWays) {
+                Ways.Add(w);
+            }
+
+            for (int i = 0; i < Ways.Count; i++)
+                foreach (NodeReference t in Ways[i].References)
+                    if (t.Node.ConnectedWays.Count >= 2)
+                        for (int x = 0; x <= t.Node.ConnectedWays.Count; x++)
+                            foreach (Way way in t.Node.ConnectedWays)
+                                if (!Ways.Contains(way)) Ways.Add(way);
+
+            foreach (Way w in Ways) {
+                List<PointLatLng> points = new List<PointLatLng>();
+                foreach (NodeReference t in w.References) {
+                    try {
+                        points.Add(new PointLatLng(t.Node.Lat, t.Node.Lon));
+                    } catch {
+                        throw new Exception();
+                    }
+                }
+
+                foreach (PointLatLng p in points) {
+                    List<PointLatLng> l = new List<PointLatLng>();
+
+                    foreach (PointLatLng t in l) {
+                        points.Add(t);
+                    }
+                    _routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
+                        Stroke =
+                        {
+                            DashStyle = DashStyle.Solid,
+                            Color = Color.SeaGreen
+                        }
+                    });
+                }
+            }
         }
     }
 }
