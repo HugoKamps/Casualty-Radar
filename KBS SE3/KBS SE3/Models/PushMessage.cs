@@ -11,11 +11,11 @@ namespace KBS_SE3.Models {
         // Constructor for making a message + push message
         public PushMessage(List<Alert> alerts) {
             _icon = new NotifyIcon();
-            _setPushMessage(alerts);
+            SetPushMessage(alerts);
         }
 
         // Function for pushing message to user
-        private void _setPushMessage(List<Alert> alerts) {
+        private void SetPushMessage(List<Alert> alerts) {
             string message;
             if (alerts.Count == 1) message = alerts[0].ToString();
             else message = "Er zijn " + alerts.Count + " nieuwe meldingen";
