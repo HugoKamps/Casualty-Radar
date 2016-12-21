@@ -53,7 +53,6 @@ namespace Casualty_Radar.Utils {
             return EARTH_RADIUS * c;
         }
 
-
         /// <summary>
         /// Returns the Node that is the most near to the given latitude and longitude.
         /// Nodes from the given collection will be compared to the longitude and latitude.
