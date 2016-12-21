@@ -19,11 +19,18 @@ namespace XMLRewriter.Core {
             this._doc = new XDocument(new XDeclaration("1.0", "utf - 16", "true"), _root);
         }
 
-        public void append(XElement element) {
+        /// <summary>
+        /// Appends the given XElement to the root element
+        /// </summary>
+        /// <param name="element">The new XElement</param>
+        public void Append(XElement element) {
             _root.Add(element);
         }
 
-        public void save() {
+        /// <summary>
+        /// Saves the new XDocument to the destination folder with the new file name
+        /// </summary>
+        public void Save() {
             _doc.Save(_destination + "/"+_fileName+".xml");
         }
     }
