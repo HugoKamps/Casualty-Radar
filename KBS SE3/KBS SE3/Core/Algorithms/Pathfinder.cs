@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Diagnostics;
 using GMap.NET;
 using KBS_SE3.Models.DataControl.Graph;
@@ -16,31 +17,34 @@ namespace KBS_SE3.Core.Algorithms {
             _closedNodes = new List<Node>();
             _openNodes = new List<Node>();
             _endNode = endNode;
-            _endNode.SetStarData(_endNode);
+            _endNode.StarData = new StarData(_endNode, _endNode);
             _startNode = startNode;
-            _startNode.SetStarData(_endNode);
-            _startNode.StarData.State = NodeState.Open;
+            _startNode.StarData = new StarData(_startNode, _endNode) { State = NodeState.Open };
         }
 
         // Attempts to find a path from the start location to the end location based on the supplied SearchParameters
         // Returns a List of Points representing the path. If no path was found, the returned list is empty
-        public List<PointLatLng> FindPath() {
+        public  List<PointLatLng> FindPath() {
+        //public async Task<List<PointLatLng>> FindPath() {
+
+            //return await Task.Run(() => {
             // The start node is the first entry in the 'open' list
             List<PointLatLng> path = new List<PointLatLng>();
-            bool success = Search(_startNode);
-            if (!success) return path;
+                bool success = Search(_startNode);
+                if (!success) return path;
 
-            // If a path was found, follow the parents from the end node to build a list of locations
-            Node node = _endNode;
-            while (node.StarData.Parent != null) {
-                path.Add(node.GetPoint());
-                node = node.StarData.Parent;
-            }
+                // If a path was found, follow the parents from the end node to build a list of locations
+                Node node = _endNode;
+                while (node.StarData.Parent != null) {
+                    path.Add(node.GetPoint());
+                    node = node.StarData.Parent;
+                }
 
-            // Reverse the list so it's in the correct order when returned
-            path.Reverse();
+                // Reverse the list so it's in the correct order when returned
+                path.Reverse();
 
-            return path;
+                return path;
+            //});
         }
 
         private bool Search(Node currentNode) {
@@ -68,10 +72,8 @@ namespace KBS_SE3.Core.Algorithms {
             List<Node> nodes = new List<Node>();
             List<Node> adjacentNodes = MapUtil.GetAdjacentNodes(fromNode);
 
-            foreach (var node in adjacentNodes)
-            {
-                if (_openNodes.Find(n => n.ID == node.ID) == null) node.SetStarData(_endNode);
-                else node.StarData = _openNodes.Find(n => n.ID == node.ID).StarData;
+            foreach (var node in adjacentNodes) {
+                node.StarData = _openNodes.Find(n => n.ID == node.ID) == null ? new StarData(node, _endNode) : _openNodes.Find(n => n.ID == node.ID).StarData;
 
                 foreach (Node n in _closedNodes) if (n.ID == node.ID) node.StarData.State = NodeState.Closed;
                 foreach (Node n in _openNodes) if (n.ID == node.ID) node.StarData.State = NodeState.Open;
