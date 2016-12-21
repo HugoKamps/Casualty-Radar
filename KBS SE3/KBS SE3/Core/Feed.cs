@@ -32,8 +32,8 @@ namespace Casualty_Radar.Core {
             try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
                 USE_FEED_URL = FEED_URL;
-            } catch (WebException we) {
-                Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.WARNING, "Geen idee", we.Message);
+            } catch (WebException) {
+                Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.WARNING, "Website is niet bereikbaar", "Een gecachede versie van deze website wordt ingeladen");
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
                 USE_FEED_URL = CACHED_FEED_URL;
             }
@@ -80,25 +80,25 @@ namespace Casualty_Radar.Core {
             // Load the feed
 
             try {
-            _p2000 = SyndicationFeed.Load(XmlReader.Create(USE_FEED_URL));
-            _alerts = CreateAlertList(_p2000);
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(USE_FEED_URL));
+                _alerts = CreateAlertList(_p2000);
 
-            /* 
-            Loop through the new feed
-            If the first item from the old feed is not identical to the first item of the new feed,
-            add it to the list of new items.
-            Else, end the loop. 
-            */
-            foreach (Alert item in _alerts)
-                if (item.Title != oldAlerts[0].Title) {
-                    _newAlerts.Add(item);
-                } else break;
+                /* 
+                Loop through the new feed
+                If the first item from the old feed is not identical to the first item of the new feed,
+                add it to the list of new items.
+                Else, end the loop. 
+                */
+                foreach (Alert item in _alerts)
+                    if (item.Title != oldAlerts[0].Title) {
+                        _newAlerts.Add(item);
+                    } else break;
 
-            if (_newAlerts.Count > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized)
-                new PushMessage(_newAlerts);
-            UpdateAlerts();
+                if (_newAlerts.Count > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized)
+                    new PushMessage(_newAlerts);
+                UpdateAlerts();
             } catch (Exception e) {
-               MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message);
             }
         }
 
