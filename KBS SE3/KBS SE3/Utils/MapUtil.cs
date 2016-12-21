@@ -12,7 +12,6 @@ namespace Casualty_Radar.Utils {
         /// </summary>
         private const double EARTH_RADIUS = 6371;
 
-
         /// <summary>
         /// Converts the given angle to a radian
         /// </summary>
