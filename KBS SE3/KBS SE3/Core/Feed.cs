@@ -60,7 +60,7 @@ namespace Casualty_Radar.Core {
         /// First we check if there are 2 attributes in the item, the lat and the long, we need those to accurately mark the location
         /// We assign local variables to the items out of the RSS feed
         /// Return filtered alert attributes
-        /// If there is not a lat and long we return null
+        /// If there is no lat and long in the item we return null
         /// </summary>
         /// <param name="item">Item in syndicationfeed</param>
         /// <returns>Filtered alert attributes</returns>
