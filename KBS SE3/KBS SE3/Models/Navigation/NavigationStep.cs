@@ -1,4 +1,4 @@
-﻿namespace KBS_SE3.Models.Navigation {
+﻿namespace Casualty_Radar.Models.Navigation {
     public enum RouteStepType {
         Left,
         Right,

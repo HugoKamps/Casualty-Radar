@@ -1,11 +1,11 @@
 
-﻿using KBS_SE3.Core;
-using KBS_SE3.Modules;
+﻿using Casualty_Radar.Core;
+using Casualty_Radar.Modules;
 using System;
 using System.Windows.Forms;
 ﻿using System.Drawing;
 
-namespace KBS_SE3 {
+namespace Casualty_Radar {
     partial class Container {
         /// <summary>
         /// Required designer variable.
@@ -66,7 +66,7 @@ namespace KBS_SE3 {
             // 
             // logoTopBar
             // 
-            this.logoTopBar.Image = global::KBS_SE3.Properties.Resources.logo_final;
+            this.logoTopBar.Image = global::Casualty_Radar.Properties.Resources.logo_final;
             this.logoTopBar.Location = new System.Drawing.Point(10, 11);
             this.logoTopBar.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.logoTopBar.Name = "logoTopBar";

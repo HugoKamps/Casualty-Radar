@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using static KBS_SE3.Core.Dialog.DialogType;
+using static Casualty_Radar.Core.Dialog.DialogType;
 using System.Runtime.InteropServices;
 
-namespace KBS_SE3 {
+namespace Casualty_Radar {
      public partial class Dialog : Form {
 
         private const int WM_NCLBUTTONDOWN = 0xA1;

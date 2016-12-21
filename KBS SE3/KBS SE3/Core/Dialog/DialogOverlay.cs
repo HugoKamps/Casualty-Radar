@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace KBS_SE3.Core.Dialog {
+namespace Casualty_Radar.Core.Dialog {
     class DialogOverlay : IDisposable {
 
         private List<Form> _forms;

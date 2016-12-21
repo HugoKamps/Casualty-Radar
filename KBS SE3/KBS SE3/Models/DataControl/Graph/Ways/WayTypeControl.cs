@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace KBS_SE3.Models.DataControl.Graph.Ways {
+namespace Casualty_Radar.Models.DataControl.Graph.Ways {
     public class WayTypeControl {
 
         private readonly Dictionary<string, WayTypeBase> _typeMap;
         private readonly DataCollection _collection;
 
-        private const string NAMESPACE_PATH = @"KBS_SE3.Models.DataControl.Graph.Ways.WayTypes";
+        private const string NAMESPACE_PATH = @"Casualty_Radar.Models.DataControl.Graph.Ways.WayTypes";
 
         public WayTypeControl(DataCollection collection) {
             this._typeMap = new Dictionary<string, WayTypeBase>();
