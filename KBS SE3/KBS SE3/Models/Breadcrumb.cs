@@ -9,7 +9,7 @@ namespace Casualty_Radar.Models {
         public string Name { get; set; }
 
         /// <summary>
-        /// 
+        ///  Creates a new instance of breadcrumb
         /// </summary>
         /// <param name="content">The IModule that represents the content of the breadcrumb</param>
         /// <param name="name">The name of breadcrumb</param>
@@ -29,7 +29,7 @@ namespace Casualty_Radar.Models {
         }
 
         /// <summary>
-        /// 
+        /// Creates a new instance of breadcrumb with a given child module and a given parent module
         /// </summary>
         /// <param name="content">The IModule that represents the content of the breadcrumb</param>
         /// <param name="name">The name of breadcrumb</param>

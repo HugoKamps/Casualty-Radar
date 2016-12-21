@@ -50,7 +50,6 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
             return _typeMap.TryGetValue(key, out rtn) ? rtn : null;
         }
 
-
         /// <summary>
         /// Returns a collection of ways based on the given Zoomlevel.
         /// This method returns a(lazy-loaded) IEnumerable filled with all ways that are at the same zoom level 
