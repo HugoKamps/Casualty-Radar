@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace KBS_SE3.Models.DataControl.Graph.Ways {
-
-
+namespace Casualty_Radar.Models.DataControl.Graph.Ways {
+    
     /// <summary>
     /// A WayTypeControl consist of calculations and logic that are used for zoomlevels and waytypes.
     /// The WayTypeControl can only be accessed using the DataCollection.
@@ -15,7 +14,7 @@ namespace KBS_SE3.Models.DataControl.Graph.Ways {
         private readonly Dictionary<string, WayTypeBase> _typeMap;
         private readonly DataCollection _collection;
 
-        private const string NAMESPACE_PATH = @"KBS_SE3.Models.DataControl.Graph.Ways.WayTypes";
+        private const string NAMESPACE_PATH = @"Casualty_Radar.Models.DataControl.Graph.Ways.WayTypes";
 
         public WayTypeControl(DataCollection collection) {
             this._typeMap = new Dictionary<string, WayTypeBase>();
@@ -31,7 +30,7 @@ namespace KBS_SE3.Models.DataControl.Graph.Ways {
         /// </summary>
         private void Init() {
             var wayTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(a => a.IsClass && a.Namespace != null && 
+                .Where(a => a.IsClass && a.Namespace != null &&
                 a.Namespace.Contains(NAMESPACE_PATH)).ToList();
             foreach (Type t in wayTypes) {
                 WayTypeBase type = (WayTypeBase)Activator.CreateInstance(t);

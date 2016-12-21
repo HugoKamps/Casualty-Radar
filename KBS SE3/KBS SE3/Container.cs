@@ -4,19 +4,19 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using KBS_SE3.Core;
-using KBS_SE3.Core.Dialog;
-using KBS_SE3.Models.DataControl;
-using KBS_SE3.Models.DataControl.Graph;
-using KBS_SE3.Modules;
-using static KBS_SE3.Core.Dialog.DialogType;
+using Casualty_Radar.Core;
+using Casualty_Radar.Core.Dialog;
+using Casualty_Radar.Models.DataControl;
+using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Modules;
+using static Casualty_Radar.Core.Dialog.DialogType;
 using System.Threading;
 using System.ComponentModel;
 using System.Collections.Generic;
-using KBS_SE3.Models.DataControl.Graph.Ways;
-using KBS_SE3.Utils;
+using Casualty_Radar.Models.DataControl.Graph.Ways;
+using Casualty_Radar.Utils;
 
-namespace KBS_SE3 {
+namespace Casualty_Radar {
     public partial class Container : Form {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
@@ -129,11 +129,15 @@ namespace KBS_SE3 {
         }
 
         private void menuBtn_Click(object sender, EventArgs e) {
+            IModule module = ModuleManager.GetInstance().GetCurrentModule();
+
             homeBtn.BackColor = Color.FromArgb(52, 57, 61);
             settingsBtn.BackColor = Color.FromArgb(52, 57, 61);
-            Button selectedButton = (Button)sender;
-            selectedButton.BackColor = Color.FromArgb(236, 89, 71);
-            ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
+            if(module.GetType() != typeof(GetStartedModule)) {
+                Button selectedButton = (Button)sender;
+                selectedButton.BackColor = Color.FromArgb(236, 89, 71);
+                ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
+            }
         }
 
         private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
@@ -161,11 +165,13 @@ namespace KBS_SE3 {
         * TEST METHOD 
         */
         private void TestDraw(HomeModule hm, Node n) {
-            hm.RouteOverlay.Markers.Add(new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.red_big_stop));
-            foreach (Node adjacent in MapUtil.GetAdjacentNodes(n)) {
-                GMapMarker m = new GMarkerGoogle(adjacent.GetPoint(), GMarkerGoogleType.blue_dot);
-                hm.RouteOverlay.Markers.Add(m);
-            }
+            //hm.RouteOverlay.Markers.Add(new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.red_big_stop));
+            //foreach (Node adjacent in MapUtil.GetAdjacentNodes(n)) {
+            //    GMapMarker m = new GMarkerGoogle(adjacent.GetPoint(), GMarkerGoogleType.blue_dot);
+            //    hm.RouteOverlay.Markers.Add(m);
+            //}
+            ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().ParseInstance(typeof(GetStartedModule)));
+
         }
     }
 }

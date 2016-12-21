@@ -1,4 +1,4 @@
-﻿namespace KBS_SE3.Modules {
+﻿namespace Casualty_Radar.Modules {
     partial class GetStartedModule {
         /// <summary> 
         /// Required designer variable.

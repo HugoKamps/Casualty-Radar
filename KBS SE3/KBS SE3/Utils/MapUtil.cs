@@ -1,10 +1,10 @@
-﻿using KBS_SE3.Models.DataControl.Graph;
+﻿using Casualty_Radar.Models.DataControl.Graph;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KBS_SE3.Core.Algorithms;
+using Casualty_Radar.Core.Algorithms;
 
-namespace KBS_SE3.Utils {
+namespace Casualty_Radar.Utils {
     static class MapUtil {
 
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace KBS_SE3.Models.DataControl.Graph {
+namespace Casualty_Radar.Models.DataControl.Graph {
 
     /// <summary>
     /// A NodeReference instance is linked to a Node instance.

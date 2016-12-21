@@ -1,4 +1,4 @@
-﻿namespace KBS_SE3.Modules {
+﻿namespace Casualty_Radar.Modules {
     partial class NoConnectionModule {
         /// <summary> 
         /// Required designer variable.
@@ -42,7 +42,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::KBS_SE3.Properties.Resources.wifi_icon;
+            this.pictureBox1.Image = global::Casualty_Radar.Properties.Resources.wifi_icon;
             this.pictureBox1.Location = new System.Drawing.Point(344, 53);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(261, 232);

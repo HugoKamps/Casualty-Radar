@@ -1,13 +1,13 @@
-﻿using KBS_SE3.Models;
+﻿using Casualty_Radar.Models;
 
-namespace KBS_SE3.Utils {
+
+namespace Casualty_Radar.Utils {
+    
+    /// <summary>
+    /// A static collection containing alert information.
+    /// This collection is used to fetch readable information based on unreadable alert details.
+    /// </summary>
     static class AlertUtil {
-
-
-        /// <summary>
-        /// A static collection containing alert information.
-        /// This collection is used to fetch readable information based on unreadable alert details.
-        /// </summary>
         public static string[,] P2000 = new string[,] {
             { "A1", "1", "Ambulance", "Hoogste Prioriteit" },
             { "A2", "1", "Ambulance", "Normale Prioriteit" },

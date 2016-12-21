@@ -8,16 +8,16 @@ using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
-using KBS_SE3.Core;
-using KBS_SE3.Models;
-using KBS_SE3.Models.Navigation;
-using KBS_SE3.Properties;
-using KBS_SE3.Utils;
-using KBS_SE3.Models.DataControl;
-using KBS_SE3.Core.Algorithms;
-using KBS_SE3.Models.DataControl.Graph;
+using Casualty_Radar.Core;
+using Casualty_Radar.Models;
+using Casualty_Radar.Models.Navigation;
+using Casualty_Radar.Properties;
+using Casualty_Radar.Utils;
+using Casualty_Radar.Models.DataControl;
+using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Models.DataControl.Graph;
 
-namespace KBS_SE3.Modules {
+namespace Casualty_Radar.Modules {
     partial class NavigationModule : UserControl, IModule {
 
         private readonly LocationManager _locationManager;

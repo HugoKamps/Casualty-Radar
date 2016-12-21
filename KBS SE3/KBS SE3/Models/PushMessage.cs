@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace KBS_SE3.Models {
+namespace Casualty_Radar.Models {
 
      class PushMessage {
         private NotifyIcon _icon;

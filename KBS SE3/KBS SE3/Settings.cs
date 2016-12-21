@@ -1,4 +1,4 @@
-﻿namespace KBS_SE3.Properties {
+﻿namespace Casualty_Radar.Properties {
     
     
     // This class allows you to handle specific events on the settings class:

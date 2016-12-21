@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace KBS_SE3 {
+namespace Casualty_Radar {
     partial class Dialog {
         /// <summary>
         /// Required designer variable.

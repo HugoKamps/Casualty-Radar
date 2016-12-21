@@ -1,6 +1,6 @@
-﻿using KBS_SE3.Core;
+﻿using Casualty_Radar.Core;
 
-namespace KBS_SE3.Models {
+namespace Casualty_Radar.Models {
     public class Breadcrumb {
 
         public IModule Content { get; set; }

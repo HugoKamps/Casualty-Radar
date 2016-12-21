@@ -56,11 +56,12 @@
     <Compile Include="ContainerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HomeModuleTest.cs" />
+    <Compile Include="FeedTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KBS SE3\KBS SE3.csproj">
+    <ProjectReference Include="..\KBS SE3\Casualty Radar.csproj">
       <Project>{ad72eeef-aca3-408d-9ec4-6f0d02ef2ba9}</Project>
-      <Name>KBS SE3</Name>
+      <Name>Casualty Radar</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

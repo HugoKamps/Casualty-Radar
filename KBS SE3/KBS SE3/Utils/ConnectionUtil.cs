@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Net;
 
-namespace KBS_SE3 {
+namespace Casualty_Radar {
     static class ConnectionUtil {
 
         /// <summary>

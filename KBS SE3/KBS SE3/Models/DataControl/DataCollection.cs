@@ -1,10 +1,10 @@
-﻿using KBS_SE3.Models.DataControl.Graph;
+﻿using Casualty_Radar.Models.DataControl.Graph;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using KBS_SE3.Models.DataControl.Graph.Ways;
+using Casualty_Radar.Models.DataControl.Graph.Ways;
 
-namespace KBS_SE3.Models.DataControl {
+namespace Casualty_Radar.Models.DataControl {
 
     /// <summary>
     /// The DataCollection consists of the result of the DataParser class.

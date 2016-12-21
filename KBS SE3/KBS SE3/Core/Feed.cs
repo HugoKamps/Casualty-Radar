@@ -1,5 +1,5 @@
-﻿using KBS_SE3.Modules;
-using KBS_SE3.Utils;
+﻿using Casualty_Radar.Modules;
+using Casualty_Radar.Utils;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,10 +9,10 @@ using System.ServiceModel.Syndication;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using KBS_SE3.Core.Dialog;
-using KBS_SE3.Models;
+using Casualty_Radar.Core.Dialog;
+using Casualty_Radar.Models;
 
-namespace KBS_SE3.Core {
+namespace Casualty_Radar.Core {
     public class Feed {
         private static Feed _instance;
         private SyndicationFeed _p2000;
@@ -43,14 +43,14 @@ namespace KBS_SE3.Core {
         }
 
 
-        public List<Alert> GetAlerts() => _alerts;
+        public List<Alert> GetAlerts => _alerts;
         public List<Alert> GetFilteredAlerts => _filteredAlerts;
         public List<Alert> GetNewAlerts => _newAlerts;
 
         public List<Alert> CreateAlertList(SyndicationFeed items) {
             List<Alert> tempAlerts = new List<Alert>();
             foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate)) {
-                Alert newAlert = createAlert(item);
+                Alert newAlert = CreateAlert(item);
 
                 if (newAlert != null)
                     tempAlerts.Add(newAlert);
@@ -59,7 +59,7 @@ namespace KBS_SE3.Core {
             return tempAlerts;
         }
 
-        private Alert createAlert(SyndicationItem item) {
+        private Alert CreateAlert(SyndicationItem item) {
             // Check if the item has 2 attributes which are Lat & Long
             if (item.ElementExtensions.Count == 2) {
                 string alertItemString = item.Title.Text.Replace("(Directe Inzet: ", "").ToUpper();

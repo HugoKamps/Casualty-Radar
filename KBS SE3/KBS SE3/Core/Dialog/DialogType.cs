@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace KBS_SE3.Core.Dialog {
+namespace Casualty_Radar.Core.Dialog {
     public static class DialogType {
 
         /// <summary>

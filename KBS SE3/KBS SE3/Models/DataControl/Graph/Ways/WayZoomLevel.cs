@@ -1,4 +1,4 @@
-﻿namespace KBS_SE3.Models.DataControl.Graph.Ways {
+﻿namespace Casualty_Radar.Models.DataControl.Graph.Ways {
 
     /// <summary>
     /// The zoomlevel represents the current layerlevel that the user is in.

@@ -8,11 +8,11 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using KBS_SE3.Core;
-using KBS_SE3.Models;
-using KBS_SE3.Properties;
+using Casualty_Radar.Core;
+using Casualty_Radar.Models;
+using Casualty_Radar.Properties;
 
-namespace KBS_SE3.Modules {
+namespace Casualty_Radar.Modules {
     public partial class HomeModule : UserControl, IModule {
         private LocationManager _locationManager;
         private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
@@ -69,7 +69,7 @@ namespace KBS_SE3.Modules {
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude, 0));
                 }
 
-                foreach (Alert alert in Feed.GetInstance().GetAlerts()) {
+                foreach (Alert alert in Feed.GetInstance().GetAlerts) {
                     int type = alert.Type == 1 ? 1 : 2;
                     if (_previousMarker != null && _previousMarker.Position.Lat.Equals(alert.Lat) && _previousMarker.Position.Lng.Equals(alert.Lng)) type = 3;
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
@@ -148,7 +148,7 @@ namespace KBS_SE3.Modules {
 
             for (int i = 0; i < _alertPanels.Count; i++) {
                 if (_selectedPanel != _alertPanels[i]) continue;
-                selectedAlert = Feed.GetInstance().GetAlerts()[i];
+                selectedAlert = Feed.GetInstance().GetAlerts[i];
                 break;
             }
 
@@ -200,7 +200,7 @@ namespace KBS_SE3.Modules {
             };
 
             bwFeed.RunWorkerCompleted += delegate {
-                KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen kaart";
+                Casualty_Radar.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen kaart";
                 bwMap.RunWorkerAsync();
             };
 
@@ -230,10 +230,10 @@ namespace KBS_SE3.Modules {
                     MessageBox.Show(e.ToString());
                 }
                 alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count + ")";
-                KBS_SE3.Container.GetInstance().SplashScreen.Hide();
+                Casualty_Radar.Container.GetInstance().SplashScreen.Hide();
             };
 
-            KBS_SE3.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen meldingen";
+            Casualty_Radar.Container.GetInstance().SplashScreen.CurrentlyLoadingLabel.Text = "Ophalen meldingen";
             bwFeed.RunWorkerAsync();
         }
 

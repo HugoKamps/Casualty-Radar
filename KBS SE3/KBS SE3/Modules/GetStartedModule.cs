@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-using KBS_SE3.Core;
-using KBS_SE3.Models;
+using Casualty_Radar.Core;
+using Casualty_Radar.Models;
 
-namespace KBS_SE3.Modules {
+namespace Casualty_Radar.Modules {
      partial class GetStartedModule : UserControl, IModule {
         public GetStartedModule() {
             InitializeComponent();
