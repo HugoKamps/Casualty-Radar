@@ -13,9 +13,12 @@ using Casualty_Radar.Models;
 using Casualty_Radar.Properties;
 
 namespace Casualty_Radar.Modules {
+    /// <summary>
+    /// The landing page of the application. Contains a map with all alerts and the user's current location. Also contains a panel with all alerts in the Netherlands
+    /// </summary>
     public partial class HomeModule : UserControl, IModule {
         private LocationManager _locationManager;
-        private bool _hasLocationservice;    //Indicates if the user has GPS enabled or not
+        private bool _hasLocationservice; //Indicates if the user has GPS enabled or not
         private FeedTicker _feedTicker;
         private bool _isRefreshing;
         private Panel _selectedPanel;
@@ -46,39 +49,43 @@ namespace Casualty_Radar.Modules {
         /// Function that displays a map in the HomeModule. First it checks if the user has a working internet connection. 
         /// It creates a marker on the user's current location and on all the incidents coming from the Feed.
         /// </summary>
-        /// <param name="hasLocationService"></param>
+        /// <param name="hasLocationService">Indicates if the user's location setting should be used or the location service</param>
         public void InitAlertsMap(bool hasLocationService) {
-            if (ConnectionUtil.HasInternetConnection()) {
-                map.Overlays.Clear();
-                map.ShowCenter = false;
-                map.MapProvider = GoogleMapProvider.Instance;
-                map.DragButton = MouseButtons.Left;
-                GMaps.Instance.Mode = AccessMode.ServerOnly;
-                GMapOverlay markersOverlay = new GMapOverlay("markers");
-                map.Overlays.Add(markersOverlay);
-                map.OnMarkerClick += Marker_Click;
-                /* kan weg */
-                RouteOverlay = new GMapOverlay("route");
-                /* kan weg */
-                map.Overlays.Add(RouteOverlay);
-                //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
-                if (hasLocationService) {
-                    markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude, 0));
-                } else {
-                    _locationManager.SetCoordinatesByLocationSetting();
-                    markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude, 0));
-                }
+            if (!ConnectionUtil.HasInternetConnection()) return;
 
-                foreach (Alert alert in Feed.GetInstance().GetAlerts) {
-                    int type = alert.Type == 1 ? 1 : 2;
-                    if (_previousMarker != null && _previousMarker.Position.Lat.Equals(alert.Lat) && _previousMarker.Position.Lng.Equals(alert.Lng)) type = 3;
-                    markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
-                }
+            map.Overlays.Clear();
+            map.ShowCenter = false;
+            map.MapProvider = GoogleMapProvider.Instance;
+            map.DragButton = MouseButtons.Left;
+            GMaps.Instance.Mode = AccessMode.ServerOnly;
+            GMapOverlay markersOverlay = new GMapOverlay("markers");
+            map.Overlays.Add(markersOverlay);
+            map.OnMarkerClick += Marker_Click;
+
+            RouteOverlay = new GMapOverlay("route");
+            map.Overlays.Add(RouteOverlay);
+
+            //If the user has location services enabled it uses the lat and lng that the GPS returns. If not it uses the user's standard location
+            if (hasLocationService) {
+                markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude,
+                    _locationManager.CurrentLongitude, 0));
+            }
+            else {
+                _locationManager.SetCoordinatesByLocationSetting();
+                markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude,
+                    _locationManager.CurrentLongitude, 0));
+            }
+
+            foreach (Alert alert in Feed.GetInstance().GetAlerts) {
+                int type = alert.Type == 1 ? 1 : 2;
+                if (_previousMarker != null && _previousMarker.Position.Lat.Equals(alert.Lat) &&
+                    _previousMarker.Position.Lng.Equals(alert.Lng)) type = 3;
+                markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
             }
         }
 
         private void Marker_Click(GMapMarker item, MouseEventArgs e) {
-            int markerIndex = (map.Overlays[0].Markers.IndexOf(item)) - 1;
+            int markerIndex = map.Overlays[0].Markers.IndexOf(item) - 1;
             if (markerIndex < 0) return;
             Panel selectedPanel = _alertPanels[markerIndex];
             feedPanelItem_Click(selectedPanel, EventArgs.Empty);
@@ -86,13 +93,21 @@ namespace Casualty_Radar.Modules {
         }
 
 
+        /// <summary>
+        /// Resizes a given image to a given size
+        /// </summary>
+        /// <param name="imgToResize">The image to resize</param>
+        /// <param name="size">The new image size</param>
+        /// <returns></returns>
         public static Image ResizeImage(Image imgToResize, Size size) => new Bitmap(imgToResize, size);
 
-        //Keeps track of the user's current location. Everytime the location changes the map is renewed and the coordinates are updated
+        /// <summary>
+        /// Keeps track of the user's current location. Everytime the location changes the map is renewed and the coordinates are updated
+        /// </summary>
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
             _locationManager.CurrentLatitude = e.Position.Location.Latitude;
             _locationManager.CurrentLongitude = e.Position.Location.Longitude;
-            //InitAlertsMap(true);
+            // InitAlertsMap(true);
         }
 
         //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
@@ -114,14 +129,13 @@ namespace Casualty_Radar.Modules {
                     _hasLocationservice = false;
                     break;
             }
-            //InitAlertsMap(_hasLocationservice);
+            InitAlertsMap(_hasLocationservice);
         }
 
         public LocationManager GetLocationManager() {
-            if (_locationManager == null) {
-                _locationManager = new LocationManager();
-                LoadLocationManager();
-            }
+            if (_locationManager != null) return _locationManager;
+            _locationManager = new LocationManager();
+            LoadLocationManager();
             return _locationManager;
         }
 
@@ -152,13 +166,20 @@ namespace Casualty_Radar.Modules {
                 break;
             }
 
-            NavigationModule navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
-            if (selectedAlert != null) navigationModule.SetAlertInfo(selectedAlert.Title, selectedAlert.Info, selectedAlert.Type, selectedAlert.PubDate.TimeOfDay.ToString(), _locationManager.GetLocationPoint(), new PointLatLng(selectedAlert.Lat, selectedAlert.Lng));
+            NavigationModule navigationModule =
+                (NavigationModule) ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            if (selectedAlert != null) {
+                Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
+                    selectedAlert.Lat, selectedAlert.Lng);
+                alert.Type = selectedAlert.Type;
+                navigationModule.Init(alert,
+                    new PointLatLng(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude));
+            }
             ModuleManager.GetInstance().UpdateModule(navigationModule);
         }
 
         private void navigationBtn_EnabledChanged(object sender, EventArgs e) {
-            Button button = (Button)sender;
+            Button button = (Button) sender;
             button.ForeColor = Color.White;
             button.BackColor = button.Enabled ? Color.FromArgb(210, 73, 57) : Color.Gray;
         }
@@ -171,6 +192,9 @@ namespace Casualty_Radar.Modules {
             }
         }
 
+        /// <summary>
+        /// Initializes the watcher and sets the user's location
+        /// </summary>
         private void LoadLocationManager() {
             _locationManager.SetCoordinatesByLocationSetting();
             map.IgnoreMarkerOnMouseWheel = true;
@@ -183,7 +207,10 @@ namespace Casualty_Radar.Modules {
                 map.Position = new PointLatLng(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude);
             else map.SetPositionByKeywords(Settings.Default.userLocation);
         }
-
+        
+        /// <summary>
+        /// Initializes backgroundworkers for readying the feed and map
+        /// </summary>
         public void LoadComponents() {
             BackgroundWorker bwFeed = new BackgroundWorker();
             BackgroundWorker bwMap = new BackgroundWorker();
@@ -204,20 +231,15 @@ namespace Casualty_Radar.Modules {
                 bwMap.RunWorkerAsync();
             };
 
-            bwMap.DoWork += delegate {
-                Invoke(new Action(() => GetLocationManager()));
-            };
+            bwMap.DoWork += delegate { Invoke(new Action(() => GetLocationManager())); };
 
             bwMap.RunWorkerCompleted += delegate {
                 InitAlertsMap(false);
                 RemoveLoadIcon();
                 try {
-                    for (int i = 0; i < _alertPanels.Count; i++)
-                    {
-                        foreach (Alert alert in Feed.GetInstance().GetNewAlerts)
-                        {
-                            if (alert == Feed.GetInstance().GetFilteredAlerts[i])
-                            {
+                    for (int i = 0; i < _alertPanels.Count; i++) {
+                        foreach (Alert alert in Feed.GetInstance().GetNewAlerts) {
+                            if (alert == Feed.GetInstance().GetFilteredAlerts[i]) {
                                 _alertPanels[i].Controls[3].Show();
                             }
                         }
@@ -226,7 +248,8 @@ namespace Casualty_Radar.Modules {
 
                     //foreach (Panel p in _alertPanels)
                     //    feedPanel.Controls.Add(p);
-                } catch (InvalidOperationException e) {
+                }
+                catch (InvalidOperationException e) {
                     MessageBox.Show(e.ToString());
                 }
                 alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count + ")";
@@ -256,6 +279,15 @@ namespace Casualty_Radar.Modules {
         public Panel GetSelectedPanel => _selectedPanel;
         public int GetAlertType => alertTypeComboBox.SelectedIndex;
 
+        /// <summary>
+        /// Function for creating a panel in het feed
+        /// </summary>
+        /// <param name="type">The alert type (firefighter or ambulance)</param>
+        /// <param name="title">The title of the alert</param>
+        /// <param name="info">Information about the alert</param>
+        /// <param name="time">The time of the alert</param>
+        /// <param name="y">The height of the panel</param>
+        /// <returns>Returns the panel with all of it's content</returns>
         public Panel CreateAlertPanel(int type, string title, string info, string time, int y) {
             //The panel which will be filled with all of the controls below
             Panel newPanel = new Panel {
@@ -284,8 +316,7 @@ namespace Casualty_Radar.Modules {
                 Text = title + "\n" + info
             };
 
-            Label newLabel = new Label
-            {
+            Label newLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(280, 0),
                 Size = new Size(40, 20),
@@ -299,7 +330,7 @@ namespace Casualty_Radar.Modules {
             if (_selectedPanel != null) {
                 foreach (object control in _selectedPanel.Controls) {
                     if (control is Label) {
-                        Label selectedLabel = (Label)control;
+                        Label selectedLabel = (Label) control;
                         if (selectedLabel.Text == label.Text) {
                             newPanel.BackColor = Color.FromArgb(245, 120, 105);
                             _selectedPanel = newPanel;
@@ -346,27 +377,29 @@ namespace Casualty_Radar.Modules {
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
-
             if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel)sender;
+                Panel panel = (Panel) sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == panel) {
                     _selectedPanel = null;
                     navigationBtn.Enabled = false;
                     navigationBtn.BackColor = Color.Gray;
-                } else {
+                }
+                else {
                     _selectedPanel = panel;
                     _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
                     navigationBtn.Enabled = true;
                 }
-            } else {
-                Control control = (Control)sender;
+            }
+            else {
+                Control control = (Control) sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == control.Parent) {
                     _selectedPanel = null;
                     navigationBtn.Enabled = false;
-                } else {
-                    _selectedPanel = (Panel)control.Parent;
+                }
+                else {
+                    _selectedPanel = (Panel) control.Parent;
                     _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
                     navigationBtn.Enabled = true;
                 }
@@ -375,26 +408,30 @@ namespace Casualty_Radar.Modules {
             if (_previousMarker != null) map.Overlays[0].Markers[_previousMarkerIndex] = _previousMarker;
             int index = _alertPanels.FindIndex(panel => panel == _selectedPanel) + 1;
             _previousMarkerIndex = index;
-            _previousMarker = (GMarkerGoogle)map.Overlays[0].Markers[index];
-            if (index != 0) map.Overlays[0].Markers[index] = _locationManager.CreateMarker(_previousMarker.Position.Lat, _previousMarker.Position.Lng, 3);
+            _previousMarker = (GMarkerGoogle) map.Overlays[0].Markers[index];
+            if (index != 0)
+                map.Overlays[0].Markers[index] = _locationManager.CreateMarker(_previousMarker.Position.Lat,
+                    _previousMarker.Position.Lng, 3);
         }
 
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel)sender;
+                Panel panel = (Panel) sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
-            } else {
-                Control control = (Control)sender;
+            }
+            else {
+                Control control = (Control) sender;
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(210, 73, 57);
             }
         }
 
         private void feedPanelItem_MouseLeave(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel)sender;
+                Panel panel = (Panel) sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
-            } else {
-                Control control = (Control)sender;
+            }
+            else {
+                Control control = (Control) sender;
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(236, 86, 71);
             }
         }
