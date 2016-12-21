@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Windows.Forms;
 
-namespace KBS_SE3.Modules {
+namespace Casualty_Radar.Modules {
     public partial class SplashScreenModule : UserControl {
         public long StartTime { get; private set; }
         public long EndTime { get; private set; }

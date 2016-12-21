@@ -1,5 +1,5 @@
-﻿using KBS_SE3.Modules;
-using KBS_SE3.Utils;
+﻿using Casualty_Radar.Modules;
+using Casualty_Radar.Utils;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,10 +9,10 @@ using System.ServiceModel.Syndication;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using KBS_SE3.Core.Dialog;
-using KBS_SE3.Models;
+using Casualty_Radar.Core.Dialog;
+using Casualty_Radar.Models;
 
-namespace KBS_SE3.Core {
+namespace Casualty_Radar.Core {
     public class Feed {
         private static Feed _instance;
         private SyndicationFeed _p2000;

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using KBS_SE3.Models.DataControl.Graph.Ways;
+using Casualty_Radar.Models.DataControl.Graph.Ways;
 
-namespace KBS_SE3.Models.DataControl.Graph {
+namespace Casualty_Radar.Models.DataControl.Graph {
 
     [Serializable()]
     public class Way {

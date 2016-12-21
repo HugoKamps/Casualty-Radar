@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace KBS_SE3.Models.DataControl {
+namespace Casualty_Radar.Models.DataControl {
 
     public class DataParser {
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace KBS_SE3.Models.DataControl.Graph {
+namespace Casualty_Radar.Models.DataControl.Graph {
 
     [Serializable()]
     public class NodeReference {

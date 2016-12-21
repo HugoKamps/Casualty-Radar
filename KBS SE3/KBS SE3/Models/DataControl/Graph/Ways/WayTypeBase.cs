@@ -1,4 +1,4 @@
-﻿namespace KBS_SE3.Models.DataControl.Graph.Ways {
+﻿namespace Casualty_Radar.Models.DataControl.Graph.Ways {
 
     public abstract class WayTypeBase {
 

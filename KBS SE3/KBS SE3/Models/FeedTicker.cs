@@ -1,10 +1,10 @@
 ﻿using System;
 //using System.Threading;
 using System.Windows.Forms;
-using KBS_SE3.Properties;
-using KBS_SE3.Core;
+using Casualty_Radar.Properties;
+using Casualty_Radar.Core;
 
-namespace KBS_SE3.Models {
+namespace Casualty_Radar.Models {
     public class FeedTicker {
         private int _tickTime;
         private static Feed _feed;

@@ -1,7 +1,7 @@
-﻿using KBS_SE3.Models.DataControl.Graph;
-using KBS_SE3.Utils;
+﻿using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Utils;
 
-namespace KBS_SE3.Core.Algorithms {
+namespace Casualty_Radar.Core.Algorithms {
     public enum NodeState {
         Untested,
         Open,
