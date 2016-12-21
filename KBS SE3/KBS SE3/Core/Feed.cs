@@ -23,11 +23,25 @@ namespace Casualty_Radar.Core {
         private List<Alert> _filteredAlerts;
         private List<Alert> _newAlerts;
 
+        /// <summary>
+        /// Returns a single-ton instance from the Feed class
+        /// </summary>
+        /// <returns>Feed instance</returns>
         public static Feed GetInstance() {
             if (_instance == null) _instance = new Feed();
             return _instance;
         }
 
+        public List<Alert> GetAlerts => _alerts;
+        public List<Alert> GetFilteredAlerts => _filteredAlerts;
+        public List<Alert> GetNewAlerts => _newAlerts;
+
+        /// <summary>
+        /// Loads the feed by using SyndicationFeed and converts it into xml
+        /// If the website is down we catch it with a WebException
+        /// After we caught it with a WebException: display a dialog box with a warning and load in the cached version of the website
+        /// Initial update - Only updates after the P2000 is read
+        /// </summary>
         private Feed() {
             try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
@@ -38,29 +52,19 @@ namespace Casualty_Radar.Core {
                 USE_FEED_URL = CACHED_FEED_URL;
             }
             _alerts = CreateAlertList(_p2000);
-            /* Initial update - Only updates after the P2000 is read.*/
             UpdateFeed();
         }
 
-
-        public List<Alert> GetAlerts => _alerts;
-        public List<Alert> GetFilteredAlerts => _filteredAlerts;
-        public List<Alert> GetNewAlerts => _newAlerts;
-
-        public List<Alert> CreateAlertList(SyndicationFeed items) {
-            List<Alert> tempAlerts = new List<Alert>();
-            foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate)) {
-                Alert newAlert = CreateAlert(item);
-
-                if (newAlert != null)
-                    tempAlerts.Add(newAlert);
-            }
-            tempAlerts.Reverse();
-            return tempAlerts;
-        }
-
+        /// <summary>
+        /// Method that creates an alert out of the RSS feed
+        /// First we check if there are 2 attributes in the item, the lat and the long, we need those to accurately mark the location
+        /// We assign local variables to the items out of the RSS feed
+        /// Return filtered alert attributes
+        /// If there is not a lat and long we return null
+        /// </summary>
+        /// <param name="item">Item in syndicationfeed</param>
+        /// <returns>Filtered alert attributes</returns>
         private Alert CreateAlert(SyndicationItem item) {
-            // Check if the item has 2 attributes which are Lat & Long
             if (item.ElementExtensions.Count == 2) {
                 string alertItemString = item.Title.Text.Replace("(Directe Inzet: ", "").ToUpper();
                 string lat = item.ElementExtensions.Reverse().Skip(1).Take(1).First().GetObject<XElement>().Value;
@@ -74,21 +78,56 @@ namespace Casualty_Radar.Core {
             return null;
         }
 
+        /// <summary>
+        /// Creates an alertlist we put all created alerts into one list
+        /// In the foreach we sort the items by date, then if the alert is not empty we add it to the list
+        /// We reverse the list so we see the newest items on top
+        /// </summary>
+        /// <param name="items">Item in syndicationfeed</param>
+        /// <returns>The ordered by date alert list</returns>
+        public List<Alert> CreateAlertList(SyndicationFeed items) {
+            List<Alert> tempAlerts = new List<Alert>();
+            foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate)) {
+                Alert newAlert = CreateAlert(item);
+
+                if (newAlert != null)
+                    tempAlerts.Add(newAlert);
+            }
+            tempAlerts.Reverse();
+            return tempAlerts;
+        }
+
+        /// <summary>
+        /// Method to update and refresh the alerts
+        /// We call the HomeModule to access some of it's functions 
+        /// Check which filter is selected, 1 is for ambulance 2 is for firefighter and return the selected filter
+        /// </summary>
+        public void UpdateAlerts() {
+            HomeModule hM = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            int selectedFilter = hM.GetAlertType;
+            if (selectedFilter == 1 || selectedFilter == 2) {
+                _filteredAlerts = new List<Alert>();
+                foreach (Alert a in _alerts)
+                    if (a.Type == selectedFilter) _filteredAlerts.Add(a);
+            } else _filteredAlerts = _alerts;
+            hM.DisplayLoadIcon();
+            hM.LoadComponents();
+        }
+
+        /// <summary>
+        /// Function to refresh the feed if there are new items
+        /// Loop through the new feed
+        /// If the first item from the old feed is not identical to the first item of the new feed, add it to the list of new items
+        /// Else, end the loop. 
+        /// </summary>
         public void UpdateFeed() {
             List<Alert> oldAlerts = _alerts;
             _newAlerts = new List<Alert>();
-            // Load the feed
 
             try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(USE_FEED_URL));
                 _alerts = CreateAlertList(_p2000);
 
-                /* 
-                Loop through the new feed
-                If the first item from the old feed is not identical to the first item of the new feed,
-                add it to the list of new items.
-                Else, end the loop. 
-                */
                 foreach (Alert item in _alerts)
                     if (item.Title != oldAlerts[0].Title) {
                         _newAlerts.Add(item);
@@ -101,20 +140,5 @@ namespace Casualty_Radar.Core {
                 MessageBox.Show(e.Message);
             }
         }
-
-        // Update the displayed alerts with the new feed
-        public void UpdateAlerts() {
-            HomeModule hM = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            int selectedFilter = hM.GetAlertType;
-            // Check which filter is selected and apply the filter
-            if (selectedFilter == 1 || selectedFilter == 2) {
-                _filteredAlerts = new List<Alert>();
-                foreach (Alert a in _alerts)
-                    if (a.Type == selectedFilter) _filteredAlerts.Add(a);
-            } else _filteredAlerts = _alerts;
-            hM.DisplayLoadIcon();
-            hM.LoadComponents();
-        }
-
     }
 }
