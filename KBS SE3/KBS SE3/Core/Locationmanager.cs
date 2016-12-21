@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
@@ -25,7 +23,9 @@ namespace Casualty_Radar.Core {
         public double CurrentLongitude { get; set; } //The user's current longitude
         public List<Way> Ways = new List<Way>();
 
-        //Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
+        /// <summary>
+        /// Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
+        /// </summary>
         public void SetCoordinatesByLocationSetting() {
             string location = Settings.Default.userLocation + ", The Netherlands";
             string requestUri =
@@ -45,7 +45,19 @@ namespace Casualty_Radar.Core {
             }
         }
 
-        //Returns a marker that will be placed on a given location. The color and type are variable
+        /// <summary>
+        /// Instantiates a marker that will be placed on a given location. The color can vary based on the type.
+        /// Every marker gets a tooltip which contains the distance from the user's current location to the marker's location
+        /// </summary>
+        /// <param name="lat">The latitude of the marker's location</param>
+        /// <param name="lng">The longitude of the marker's location</param>
+        /// <param name="type">The type which indicates what kind of marker it is. 
+        /// <para>0 = Current location</para> 
+        /// <para>1 = Ambulance</para>
+        /// <para>2 = Firefighter</para>
+        /// <para>3 = Selected marker</para>
+        /// </param>
+        /// <returns>The created marker</returns>
         public GMarkerGoogle CreateMarker(double lat, double lng, int type) {
             string imgLocation = "../../Resources../marker_icon_";
             if (type == 0) imgLocation += "blue.png";
@@ -68,9 +80,17 @@ namespace Casualty_Radar.Core {
             return marker;
         }
 
+        /// <summary>
+        /// Creates a PointLatLng variable based on the user's current latitude and longitude
+        /// </summary>
+        /// <returns>The created PointLatLng variable</returns>
         public PointLatLng GetLocationPoint() => new PointLatLng(CurrentLatitude, CurrentLongitude);
-
-        // Draw streets on map
+        
+        /// <summary>
+        /// Function which draws a path on a GMap overlay based on a given list of PointLatLng variables
+        /// </summary>
+        /// <param name="points">The list with points for the path</param>
+        /// <param name="routeOverlay">The overlay which must be drawn on</param>
         public void DrawRoute(List<PointLatLng> points, GMapOverlay routeOverlay) {
             routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
                 Stroke = {
