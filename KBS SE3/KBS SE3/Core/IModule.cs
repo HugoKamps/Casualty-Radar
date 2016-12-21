@@ -3,9 +3,10 @@
 namespace KBS_SE3.Core {
      public interface IModule {
 
-        /*
-        * Returns the name of the Module
-        */
+        /// <summary>
+        /// Returns the breadcrumb from the module
+        /// </summary>
+        /// <returns>An instance of the breadcrumb class</returns>
         Breadcrumb GetBreadcrumb();
     }
 }
