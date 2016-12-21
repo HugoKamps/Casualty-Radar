@@ -19,6 +19,7 @@ using KBS_SE3.Models.DataControl.Graph;
 
 namespace KBS_SE3.Modules {
     partial class NavigationModule : UserControl, IModule {
+
         private readonly LocationManager _locationManager;
         private GMapOverlay _routeOverlay;
         private Pathfinder _pathfinder;

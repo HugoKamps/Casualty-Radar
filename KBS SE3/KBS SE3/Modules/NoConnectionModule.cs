@@ -8,8 +8,7 @@ namespace KBS_SE3.Modules {
             InitializeComponent();
         }
 
-        public Breadcrumb GetBreadcrumb()
-        {
+        public Breadcrumb GetBreadcrumb() {
             return new Breadcrumb(this, "Geen verbinding!");
         }
     }

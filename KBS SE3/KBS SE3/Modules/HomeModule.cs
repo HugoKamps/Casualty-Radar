@@ -41,10 +41,12 @@ namespace KBS_SE3.Modules {
             return new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
         }
 
-        /* 
-        Function that displays a map in the HomeModule. First it checks if the user has a working internet connection. 
-        It creates a marker on the user's current location and on all the incidents coming from the Feed.
-        */
+
+        /// <summary>
+        /// Function that displays a map in the HomeModule. First it checks if the user has a working internet connection. 
+        /// It creates a marker on the user's current location and on all the incidents coming from the Feed.
+        /// </summary>
+        /// <param name="hasLocationService"></param>
         public void InitAlertsMap(bool hasLocationService) {
             if (ConnectionUtil.HasInternetConnection()) {
                 map.Overlays.Clear();

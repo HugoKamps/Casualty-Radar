@@ -6,36 +6,46 @@ using KBS_SE3.Models.DataControl.Graph.Ways;
 
 namespace KBS_SE3.Models.DataControl {
 
+    /// <summary>
+    /// The DataCollection consists of the result of the DataParser class.
+    /// This class is the main link between the object data and the object logic
+    /// </summary>
     [XmlRoot("osm")]
     public class DataCollection {
 
         [XmlIgnore]
         public static readonly int INTERSECTION_WAY_MINIMUM = 2;
 
+        /// <summary>
+        /// The WayControl is used to apply logic and calculations to the ways.
+        /// This field is also used to determine zoomlevels on waytypes
+        /// </summary>
         [XmlIgnore]
         public WayTypeControl WayControl { get; }
 
-        /*
-        * All 'Node' elements that are returned from the deserialization.
-        * We require an in-memory list of nodes to link Node references that are linked to a way
-        * to a Node instance from our software.
-        */
+        /// <summary>
+        /// All 'Node' elements that are returned from the deserialization.
+        /// We require an in-memory list of nodes to link Node references that are linked to a way
+        /// to a Node instance from our software.
+        /// </summary>
         [XmlElement("n")]
         public List<Node> Nodes { get; private set; }
 
-        /*
-        * All 'Way' elements that are returned from the deserialization.
-        * We require an in-memory list of ways for applying our own algorithms 
-        * and draw a graph.
-        */
+
+        /// <summary>
+        /// All 'Way' elements that are returned from the deserialization.
+        /// We require an in-memory list of ways for applying our own algorithms 
+        /// and draw a graph.
+        /// </summary>
         [XmlElement("w")]
         public List<Way> Ways { get; private set; }
 
-        /*
-        * Nodes that have connected ways are considered Intersections.
-        * Intersections are used to build maps and calculate routes.
-        * Without intersections we wouldn't know how the roads are connected.
-        */
+
+        /// <summary>
+        /// Nodes that have connected ways are considered Intersections.
+        /// Intersections are used to build maps and calculate routes.
+        /// Without intersections we wouldn't know how the roads are connected.
+        /// </summary>
         [XmlIgnore]
         public List<Node> Intersections { get; }
 
@@ -46,12 +56,12 @@ namespace KBS_SE3.Models.DataControl {
             this.WayControl = new WayTypeControl(this);
         }
 
-        /*
-        * Indexes all Nodes using a Dictionary.
-        * Dictionaries are faster than plain looping which means the loading is faster.
-        * After deserialization each NodeReference is connected to the correct Node instance.
-        * This method prevents identical instances of the Node object.
-        */
+        /// <summary>
+        /// Indexes all Nodes using a Dictionary.
+        /// Dictionaries are faster than plain looping which means the loading is faster.
+        /// After deserialization each NodeReference is connected to the correct Node instance.
+        /// This method prevents identical instances of the Node object.
+        /// </summary>
         public void Index() {
             Dictionary<long, Node> nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
             foreach (Way way in this.Ways) {

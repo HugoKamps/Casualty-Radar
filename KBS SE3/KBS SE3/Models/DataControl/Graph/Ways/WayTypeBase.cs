@@ -11,7 +11,6 @@
         protected WayTypeBase(string key, string name) {
             this.Key = key;
             this.Name = name;
-            
         }
 
         protected WayTypeBase(string key, string name, WayZoomLevel level) : this(key, name) {

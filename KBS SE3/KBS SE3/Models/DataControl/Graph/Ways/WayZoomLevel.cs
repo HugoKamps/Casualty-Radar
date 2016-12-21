@@ -1,20 +1,26 @@
 ﻿namespace KBS_SE3.Models.DataControl.Graph.Ways {
 
-    /*
-    * The zoomlevel represents the current layerlevel that the user is in.
-    * The lower the zoomlevel the more details you get, the higher the zoomlevel the 
-    * less details you get.
-    * The zoomlevel is used to efficiently draw roads and nodes.
-    */
+    /// <summary>
+    /// The zoomlevel represents the current layerlevel that the user is in.
+    /// The lower the zoomlevel the more details you get, the higher the zoomlevel the
+    /// less details you get.
+    /// The zoomlevel is used to efficiently draw roads and nodes.
+    /// </summary>
     public enum WayZoomLevel {
-        
-        // Zoomlevel of an entire country
+
+        /// <summary>
+        /// Zoomlevel of an entire country
+        /// </summary>
         National = 5,
 
-        // Zoomlevel of a certain section or city
+        /// <summary>
+        /// Zoomlevel of a certain section or city
+        /// </summary>
         Regional = 4,
 
-        // Zoomlevel of a few roads
+        /// <summary>
+        ///  Zoomlevel of a few roads
+        /// </summary>
         Local = 3
 
     }

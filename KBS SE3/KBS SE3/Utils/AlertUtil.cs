@@ -1,10 +1,14 @@
 ﻿using KBS_SE3.Models;
 
-namespace KBS_SE3.Utils
-{
-    static class AlertUtil
-    {
-        public static string[,] P2000 = new string[,] { 
+namespace KBS_SE3.Utils {
+    static class AlertUtil {
+
+
+        /// <summary>
+        /// A static collection containing alert information.
+        /// This collection is used to fetch readable information based on unreadable alert details.
+        /// </summary>
+        public static string[,] P2000 = new string[,] {
             { "A1", "1", "Ambulance", "Hoogste Prioriteit" },
             { "A2", "1", "Ambulance", "Normale Prioriteit" },
             { "B", "1", "Ambulance", "Besteld vervoer" },
@@ -30,8 +34,13 @@ namespace KBS_SE3.Utils
             { "DV", "2", "Brandweer", "Dienstverlening" }
         };
 
-        public static Alert SetAlertAttributes(Alert alert, string alertItemString)
-        {
+        /// <summary>
+        /// Appends extra attributes and properties to a created alert.
+        /// </summary>
+        /// <param name="alert">The original alert instance</param>
+        /// <param name="alertItemString">The original, slightly modified, data string called from the Feed class</param>
+        /// <returns>A detailed alert containing details and priority levels</returns>
+        public static Alert SetAlertAttributes(Alert alert, string alertItemString) {
             for (int i = 0; i < P2000.GetLength(0); i++) {
                 if (alertItemString.StartsWith(P2000[i, 0])) {
                     alert.Code = P2000[i, 0];

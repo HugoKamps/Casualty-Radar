@@ -21,7 +21,7 @@ namespace KBS_SE3 {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
-        
+
         private Dialog _dialog;
         private static Container _instance;
         private ModuleManager _modManager;
@@ -47,12 +47,15 @@ namespace KBS_SE3 {
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
         }
 
-        private void SplashThread()
-        {
+        private void SplashThread() {
             SplashScreen = new SplashScreenModule();
             DisplaySplashScreen();
         }
 
+        /// <summary>
+        /// Returns a single-ton instance from the Container class
+        /// </summary>
+        /// <returns>Container instance</returns>
         public static Container GetInstance() => _instance ?? (_instance = new Container());
 
         public void DisplaySplashScreen() {
@@ -61,6 +64,12 @@ namespace KBS_SE3 {
             SplashScreen.BringToFront();
         }
 
+        /// <summary>
+        /// Shows a dialog with the given properties
+        /// </summary>
+        /// <param name="type">The type of the dialog</param>
+        /// <param name="title">The string title of the dialog</param>
+        /// <param name="msg">The message content of the dialog</param>
         public void DisplayDialog(DialogMessageType type, string title, string msg) {
             using (new DialogOverlay()) {
                 _dialog.StartPosition = FormStartPosition.CenterParent;
@@ -69,12 +78,10 @@ namespace KBS_SE3 {
             }
         }
 
-        public Label GetBreadcrumbStart() => breadCrumbStart;
-
-        /*
-        * Method that registers all buttons in the application menu
-        * Each button is bound to a Module; which is an instance of IModule
-        */
+        /// <summary>
+        /// Method that registers all buttons in the application menu
+        /// Each button is bound to a Module; which is an instance of IModule
+        /// </summary>
         private void RegisterButtons() {
             homeBtn.Tag = _modManager.ParseInstance(typeof(HomeModule));
             settingsBtn.Tag = _modManager.ParseInstance(typeof(SettingsModule));
@@ -136,7 +143,7 @@ namespace KBS_SE3 {
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             Shown += hm.HomeModule_Load;
             _modManager.UpdateModule(hm);
-            
+
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {

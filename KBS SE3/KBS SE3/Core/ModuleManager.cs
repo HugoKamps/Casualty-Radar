@@ -62,7 +62,6 @@ namespace KBS_SE3.Core {
         /// First the instance gets reinitialized incase the object-data changed using the microsoft Activator class.
         /// After that the contentpanel(in the container form) will be cleared resulting in an empty panel.Finally the given newly initialized module will
         /// be added to the panel.
-        /// 
         /// An header label inside the main container (if existent) will be renamed to the module name.
         /// </summary>
         /// <param name="module">The instance from the new (requested) module</param>
