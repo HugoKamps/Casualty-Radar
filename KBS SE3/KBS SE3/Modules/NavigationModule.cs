@@ -66,7 +66,7 @@ namespace Casualty_Radar.Modules {
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
 
-            _startNode = targetCollection[100];
+            _startNode = targetCollection[80];
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
             _endNode = targetCollection[40];
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 1));
