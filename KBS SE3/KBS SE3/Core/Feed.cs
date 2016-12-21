@@ -33,6 +33,7 @@ namespace Casualty_Radar.Core {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
                 USE_FEED_URL = FEED_URL;
             } catch (WebException) {
+                Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.WARNING, "Website is niet bereikbaar", "Een gecachede versie van deze website wordt ingeladen");
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
                 USE_FEED_URL = CACHED_FEED_URL;
             }
