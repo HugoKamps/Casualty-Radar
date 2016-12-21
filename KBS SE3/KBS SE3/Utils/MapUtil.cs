@@ -7,7 +7,6 @@ using Casualty_Radar.Core.Algorithms;
 namespace Casualty_Radar.Utils {
     static class MapUtil {
 
-
         /// <summary>
         /// Radius of the earth in KM
         /// </summary>
