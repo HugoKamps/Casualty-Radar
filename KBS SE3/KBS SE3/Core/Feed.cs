@@ -100,7 +100,7 @@ namespace Casualty_Radar.Core {
         /// <summary>
         /// Method to update and refresh the alerts
         /// We call the HomeModule to access some of it's functions 
-        /// Check which filter is selected, 1 is for ambulance 2 is for firefighter and return the selected filter
+        /// Check which filter is selected, 1 is for ambulance 2 is for firefighter and adds the selected filter
         /// </summary>
         public void UpdateAlerts() {
             HomeModule hM = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
