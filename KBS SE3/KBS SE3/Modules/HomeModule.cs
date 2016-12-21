@@ -151,7 +151,11 @@ namespace KBS_SE3.Modules {
             }
 
             NavigationModule navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
-            if (selectedAlert != null) navigationModule.SetAlertInfo(selectedAlert.Title, selectedAlert.Info, selectedAlert.Type, selectedAlert.PubDate.TimeOfDay.ToString(), _locationManager.GetLocationPoint(), new PointLatLng(selectedAlert.Lat, selectedAlert.Lng));
+            if (selectedAlert != null) {
+                Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate, selectedAlert.Lat, selectedAlert.Lng);
+                alert.Type = selectedAlert.Type;
+                navigationModule.SetAlertInfo(alert, new PointLatLng(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude));
+            }
             ModuleManager.GetInstance().UpdateModule(navigationModule);
         }
 

@@ -49,11 +49,11 @@ namespace KBS_SE3.Modules {
             return new Breadcrumb(this, "Navigation", null, ModuleManager.GetInstance().ParseInstance(typeof(HomeModule)));
         }
 
-        public void SetAlertInfo(string title, string info, int type, string time, PointLatLng start, PointLatLng dest) {
-            infoTitleLabel.Text = title + "\n" + info;
-            alertTypePicturebox.Image = type == 1 ? Resources.Medic : Resources.Firefighter;
-            timeLabel.Text = time;
-            GetRouteMap(start.Lat, start.Lng, dest.Lat, dest.Lng);
+        public void SetAlertInfo(Alert alert, PointLatLng start) {
+            infoTitleLabel.Text = $"{alert.Title}\n{alert.Info}";
+            alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
+            timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
+            GetRouteMap(start.Lng, alert.Lat, alert.Lng, start.Lat);
 
             DataParser parser = new DataParser(@"C:\Users\richa_000\Desktop\hattem.xml");
             parser.Deserialize();
@@ -66,13 +66,7 @@ namespace KBS_SE3.Modules {
             _pathfinder = new Pathfinder(_startNode, _endNode);
             List<PointLatLng> path = _pathfinder.FindPath();
             foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
-            _routeOverlay.Routes.Add(new GMapRoute(path, "MyRoute") {
-                Stroke =
-                {
-                        DashStyle = DashStyle.Solid,
-                        Color = Color.FromArgb(244, 191, 66)
-                    }
-            });
+            _locationManager.DrawRoute(path, _routeOverlay);
 
         }
 
