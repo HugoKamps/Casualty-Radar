@@ -18,6 +18,9 @@ using Casualty_Radar.Core.Algorithms;
 using Casualty_Radar.Models.DataControl.Graph;
 
 namespace Casualty_Radar.Modules {
+    /// <summary>
+    /// Module that contains a map displaying the starting and ending point for the route and the route between them. Also contains a panel in which the information about the alert is being shown.
+    /// </summary>
     partial class NavigationModule : UserControl, IModule {
 
         private readonly LocationManager _locationManager;
@@ -52,12 +55,18 @@ namespace Casualty_Radar.Modules {
             return new Breadcrumb(this, "Navigation", null, ModuleManager.GetInstance().ParseInstance(typeof(HomeModule)));
         }
 
-        public void SetAlertInfo(string title, string info, int type, string time, PointLatLng start, PointLatLng dest) {
-            infoTitleLabel.Text = title + "\n" + info;
-            alertTypePicturebox.Image = type == 1 ? Resources.Medic : Resources.Firefighter;
-            timeLabel.Text = time;
-            GetRouteMap(start.Lat, start.Lng, dest.Lat, dest.Lng);
-
+        /// <summary>
+        /// Readies the module for when the user has clicked the navigation button in HomeModule. Fills the alert information panel and calculates and draws the fastest route
+        /// </summary>
+        /// <param name="alert">Alert which contains all the information about the chosen alert</param>
+        /// <param name="start">Point with the user's current latitude and longitude</param>
+        public void Init(Alert alert, PointLatLng start) {
+            infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
+            alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
+            timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
+            InitRouteMap(start.Lng, alert.Lat, alert.Lng, start.Lat);
+            
+            //Instantiates a data parser which creates a collection with all nodes and ways of a specific zone
             DataParser parser = new DataParser(@"../../Resources/hattem.xml");
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
@@ -72,24 +81,25 @@ namespace Casualty_Radar.Modules {
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 1));
 
             _pathfinder = new Pathfinder(_startNode, _endNode);
-            List<PointLatLng> path = _pathfinder.FindPath(); //.Result voor Async poging
+            List<PointLatLng> path = _pathfinder.FindPath();
 
             foreach (PointLatLng point in path) Debug.WriteLine("Lat: " + point.Lat + "    Lng: " + point.Lng);
-
-            _routeOverlay.Routes.Add(new GMapRoute(path, "route") {
-                Stroke =
-                {
-                        DashStyle = DashStyle.Solid,
-                        Color = Color.FromArgb(0, 0, 0)
-                    }
-            });
+            _locationManager.DrawRoute(path, _routeOverlay);
         }
 
-        public void GetRouteMap(double startLat, double startLng, double destLat, double destLng) {
+        /// <summary>
+        /// Initializes the GMapControl in the module. Creates markers on the current location and the chosen alert's location
+        /// </summary>
+        /// <param name="startLat">User's current latitude</param>
+        /// <param name="startLng">User's current longitude</param>
+        /// <param name="destLat">The alert's latitude</param>
+        /// <param name="destLng">The alert's longitude</param>
+        public void InitRouteMap(double startLat, double startLng, double destLat, double destLng) {
             map.Overlays.Clear();
             map.ShowCenter = false;
             map.MapProvider = GoogleMapProvider.Instance;
             map.IgnoreMarkerOnMouseWheel = true;
+            map.DragButton = MouseButtons.Left;
             GMaps.Instance.Mode = AccessMode.ServerOnly;
             map.Position = new PointLatLng((startLat + destLat) / 2, (startLng + destLng) / 2);
             GMapOverlay markersOverlay = new GMapOverlay("markers");
@@ -99,13 +109,14 @@ namespace Casualty_Radar.Modules {
 
             markersOverlay.Markers.Add(_locationManager.CreateMarker(startLat, startLng, 0));
             markersOverlay.Markers.Add(_locationManager.CreateMarker(destLat, destLng, 2));
-
-
-            // Reading data for adding test route
-            //_locationManager.DrawRoute(collection, _routeOverlay);
-            //_locationManager.DrawTestRoute(collection, _routeOverlay);
         }
 
+        /// <summary>
+        /// Creates a routestep based on a given NavigationStep
+        /// </summary>
+        /// <param name="step">The NavigationStep with all the information</param>
+        /// <param name="color">Background color for the panel</param>
+        /// <param name="y">Height of the panel</param>
         public void CreateRouteStepPanel(NavigationStep step, Color color, int y) {
             Image icon;
 

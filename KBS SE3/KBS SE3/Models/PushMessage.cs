@@ -5,16 +5,21 @@ using System.Windows.Forms;
 
 namespace Casualty_Radar.Models {
 
+     /// <summary>
+     /// Class which instantiates a PushMessage for when the user has the application in the background and new alerts come in.
+     /// </summary>
      class PushMessage {
         private NotifyIcon _icon;
 
-        // Constructor for making a message + push message
         public PushMessage(List<Alert> alerts) {
             _icon = new NotifyIcon();
             SetPushMessage(alerts);
         }
 
-        // Function for pushing message to user
+        /// <summary>
+        /// Function that creates a balloontip notification containing the amount of new alerts
+        /// </summary>
+        /// <param name="alerts"></param>
         private void SetPushMessage(List<Alert> alerts) {
             string message;
             if (alerts.Count == 1) message = alerts[0].ToString();
@@ -34,7 +39,9 @@ namespace Casualty_Radar.Models {
             _icon.Dispose();
         }
 
-        // Function for opening form after double clicking pushMessage
+        /// <summary>
+        /// Event which brings the application to the front when the user clicks the balloontip
+        /// </summary>
         private void notifyIcon_BalloonTipClicked(object sender, EventArgs e) {
             // Show the form when the user double clicks on the notify icon.
 
