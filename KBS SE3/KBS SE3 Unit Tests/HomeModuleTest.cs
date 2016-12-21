@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
-using KBS_SE3.Core;
-using KBS_SE3.Modules;
+using Casualty_Radar.Core;
+using Casualty_Radar.Modules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KBS_SE3_Unit_Tests {
     [TestClass]
     public class HomeModuleTest {
         [TestMethod]
-        public void InstanceTest() {
+        public void HomeModule_InstanceTest() {
             IModule mod = ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if hm is an instance of HomeModule
@@ -16,7 +16,7 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void IsRefreshing() {
+        public void HomeModule_IsRefreshing() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             bool expected = false;
@@ -32,7 +32,7 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void GetLocationManager() {
+        public void HomeModule_GetLocationManager() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if GetLocationManager() returns an instance of LocationManager
@@ -40,7 +40,7 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void SetLocationManager() {
+        public void HomeModule_SetLocationManager() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             var newLM = new LocationManager();
 
@@ -51,7 +51,7 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void GetSelectedPanel() {
+        public void HomeModule_GetSelectedPanel() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if GetSelectedPanel() returns null as none is selected
@@ -59,7 +59,7 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void GetAlertType() {
+        public void HomeModule_GetAlertType() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if GetAlertType() returns an integer
@@ -67,7 +67,7 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void CreateAlert() {
+        public void HomeModule_CreateAlert() {
             var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             var panel = hm.CreateAlertPanel(0, "", "", "", 0);
 

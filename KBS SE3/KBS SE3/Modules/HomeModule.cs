@@ -67,7 +67,7 @@ namespace Casualty_Radar.Modules {
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude, 0));
                 }
 
-                foreach (Alert alert in Feed.GetInstance().GetAlerts()) {
+                foreach (Alert alert in Feed.GetInstance().GetAlerts) {
                     int type = alert.Type == 1 ? 1 : 2;
                     if (_previousMarker != null && _previousMarker.Position.Lat.Equals(alert.Lat) && _previousMarker.Position.Lng.Equals(alert.Lng)) type = 3;
                     markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
@@ -146,7 +146,7 @@ namespace Casualty_Radar.Modules {
 
             for (int i = 0; i < _alertPanels.Count; i++) {
                 if (_selectedPanel != _alertPanels[i]) continue;
-                selectedAlert = Feed.GetInstance().GetAlerts()[i];
+                selectedAlert = Feed.GetInstance().GetAlerts[i];
                 break;
             }
 
