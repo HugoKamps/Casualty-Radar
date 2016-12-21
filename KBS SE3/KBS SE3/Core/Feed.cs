@@ -18,7 +18,7 @@ namespace Casualty_Radar.Core {
         private SyndicationFeed _p2000;
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
         private readonly string CACHED_FEED_URL = "http://web.archive.org/web/http://feeds.livep2000.nl/";
-        private string USE_FEED_URL;
+        private readonly string USE_FEED_URL;
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
         private List<Alert> _newAlerts;
@@ -32,8 +32,11 @@ namespace Casualty_Radar.Core {
             try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
                 USE_FEED_URL = FEED_URL;
-            } catch (WebException) {
-                Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.WARNING, "Website is niet bereikbaar", "Een gecachede versie van deze website wordt ingeladen");
+            }
+            catch (WebException) {
+                Container.GetInstance()
+                    .DisplayDialog(DialogType.DialogMessageType.WARNING, "Website is niet bereikbaar",
+                        "Een gecachede versie van deze website wordt ingeladen");
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
                 USE_FEED_URL = CACHED_FEED_URL;
             }
@@ -41,7 +44,6 @@ namespace Casualty_Radar.Core {
             /* Initial update - Only updates after the P2000 is read.*/
             UpdateFeed();
         }
-
 
         public List<Alert> GetAlerts => _alerts;
         public List<Alert> GetFilteredAlerts => _filteredAlerts;
@@ -51,9 +53,7 @@ namespace Casualty_Radar.Core {
             List<Alert> tempAlerts = new List<Alert>();
             foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate)) {
                 Alert newAlert = CreateAlert(item);
-
-                if (newAlert != null)
-                    tempAlerts.Add(newAlert);
+                if (newAlert != null) tempAlerts.Add(newAlert);
             }
             tempAlerts.Reverse();
             return tempAlerts;
@@ -67,7 +67,8 @@ namespace Casualty_Radar.Core {
                 string lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
                 double parsedLat = double.Parse(lat, CultureInfo.InvariantCulture);
                 double parsedLng = double.Parse(lng, CultureInfo.InvariantCulture);
-                Alert newAlert = new Alert(item.Title.Text.Replace("~", " "), item.Summary.Text, item.PublishDate, parsedLat, parsedLng);
+                Alert newAlert = new Alert(item.Title.Text.Replace("~", " "), item.Summary.Text, item.PublishDate,
+                    parsedLat, parsedLng);
 
                 return AlertUtil.SetAlertAttributes(newAlert, alertItemString);
             }
@@ -77,8 +78,8 @@ namespace Casualty_Radar.Core {
         public void UpdateFeed() {
             List<Alert> oldAlerts = _alerts;
             _newAlerts = new List<Alert>();
-            // Load the feed
 
+            // Load the feed
             try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(USE_FEED_URL));
                 _alerts = CreateAlertList(_p2000);
@@ -90,31 +91,31 @@ namespace Casualty_Radar.Core {
                 Else, end the loop. 
                 */
                 foreach (Alert item in _alerts)
-                    if (item.Title != oldAlerts[0].Title) {
-                        _newAlerts.Add(item);
-                    } else break;
+                    if (item.Title != oldAlerts[0].Title) _newAlerts.Add(item);
+                    else break;
 
                 if (_newAlerts.Count > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized)
                     new PushMessage(_newAlerts);
                 UpdateAlerts();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 MessageBox.Show(e.Message);
             }
         }
 
         // Update the displayed alerts with the new feed
         public void UpdateAlerts() {
-            HomeModule hM = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            HomeModule hM = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             int selectedFilter = hM.GetAlertType;
             // Check which filter is selected and apply the filter
             if (selectedFilter == 1 || selectedFilter == 2) {
                 _filteredAlerts = new List<Alert>();
                 foreach (Alert a in _alerts)
                     if (a.Type == selectedFilter) _filteredAlerts.Add(a);
-            } else _filteredAlerts = _alerts;
+            }
+            else _filteredAlerts = _alerts;
             hM.DisplayLoadIcon();
             hM.LoadComponents();
         }
-
     }
 }

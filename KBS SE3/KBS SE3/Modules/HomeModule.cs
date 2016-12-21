@@ -9,6 +9,7 @@ using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using Casualty_Radar.Core;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
 using Casualty_Radar.Properties;
 
@@ -107,7 +108,7 @@ namespace Casualty_Radar.Modules {
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
             _locationManager.CurrentLatitude = e.Position.Location.Latitude;
             _locationManager.CurrentLongitude = e.Position.Location.Longitude;
-            // InitAlertsMap(true);
+            InitAlertsMap(true);
         }
 
         //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
@@ -116,15 +117,12 @@ namespace Casualty_Radar.Modules {
                 case GeoPositionStatus.Initializing:
                     _hasLocationservice = true;
                     break;
-
                 case GeoPositionStatus.Ready:
                     _hasLocationservice = true;
                     break;
-
                 case GeoPositionStatus.NoData:
                     _hasLocationservice = false;
                     break;
-
                 case GeoPositionStatus.Disabled:
                     _hasLocationservice = false;
                     break;
@@ -207,7 +205,7 @@ namespace Casualty_Radar.Modules {
                 map.Position = new PointLatLng(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude);
             else map.SetPositionByKeywords(Settings.Default.userLocation);
         }
-        
+
         /// <summary>
         /// Initializes backgroundworkers for readying the feed and map
         /// </summary>
@@ -238,19 +236,15 @@ namespace Casualty_Radar.Modules {
                 RemoveLoadIcon();
                 try {
                     for (int i = 0; i < _alertPanels.Count; i++) {
-                        foreach (Alert alert in Feed.GetInstance().GetNewAlerts) {
-                            if (alert == Feed.GetInstance().GetFilteredAlerts[i]) {
+                        foreach (Alert alert in Feed.GetInstance().GetNewAlerts)
+                            if (alert == Feed.GetInstance().GetFilteredAlerts[i])
                                 _alertPanels[i].Controls[3].Show();
-                            }
-                        }
                         feedPanel.Controls.Add(_alertPanels[i]);
                     }
-
-                    //foreach (Panel p in _alertPanels)
-                    //    feedPanel.Controls.Add(p);
                 }
                 catch (InvalidOperationException e) {
-                    MessageBox.Show(e.ToString());
+                    Casualty_Radar.Container.GetInstance()
+                        .DisplayDialog(DialogType.DialogMessageType.ERROR, "Invalid Operation", e.ToString());
                 }
                 alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count + ")";
                 Casualty_Radar.Container.GetInstance().SplashScreen.Hide();
