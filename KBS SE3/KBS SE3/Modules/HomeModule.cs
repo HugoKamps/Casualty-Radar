@@ -12,7 +12,6 @@ using Casualty_Radar.Core;
 using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
 using Casualty_Radar.Properties;
-using Casualty_Radar.Utils;
 
 namespace Casualty_Radar.Modules {
     /// <summary>
@@ -81,7 +80,6 @@ namespace Casualty_Radar.Modules {
                 int type = alert.Type == 1 ? 1 : 2;
                 if (_previousMarker != null && _previousMarker.Position.Lat.Equals(alert.Lat) &&
                     _previousMarker.Position.Lng.Equals(alert.Lng)) type = 3;
-                double distance = Math.Round(MapUtil.GetDistance(alert.Lat, alert.Lng, GetLocationManager().CurrentLatitude, GetLocationManager().CurrentLongitude), 0);
                 markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
             }
         }
@@ -165,8 +163,8 @@ namespace Casualty_Radar.Modules {
                 break;
             }
 
-            NavigationModule navigationModule =
-                (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            NavigationModule navigationModule =(NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+
             if (selectedAlert != null) {
                 Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
                     selectedAlert.Lat, selectedAlert.Lng);
@@ -236,18 +234,19 @@ namespace Casualty_Radar.Modules {
                 InitAlertsMap(false);
                 RemoveLoadIcon();
                 try {
-                    if (_alertPanels.Count == Feed.GetInstance().GetFilteredAlerts.Count) {
-                        for (int i = 0; i < _alertPanels.Count; i++) {
-                            foreach (Alert alert in Feed.GetInstance().GetNewAlerts)
-                                if (alert == Feed.GetInstance().GetFilteredAlerts[i])
-                                    _alertPanels[i].Controls[3].Show();
-                            feedPanel.Controls.Add(_alertPanels[i]);
+                    for (int i = 0; i < _alertPanels.Count; i++) {
+                        foreach (Alert alert in Feed.GetInstance().GetNewAlerts) {
+                            if (alert == Feed.GetInstance().GetAlerts[i] || alert == Feed.GetInstance().GetFilteredAlerts[i]) {
+                                _alertPanels[i].Controls[3].Show();
+                            }
                         }
-                    } else Casualty_Radar.Container.GetInstance()
-                        .DisplayDialog(DialogType.DialogMessageType.ERROR, "Fout opgetreden", "Kan alert panels niet tekenen.");
+                        feedPanel.Controls.Add(_alertPanels[i]);
+                    }
+
+                    //foreach (Panel p in _alertPanels)
+                    //    feedPanel.Controls.Add(p);
                 } catch (InvalidOperationException e) {
-                    Casualty_Radar.Container.GetInstance()
-                        .DisplayDialog(DialogType.DialogMessageType.ERROR, "Invalid Operation", e.ToString());
+                    MessageBox.Show(e.ToString());
                 }
                 alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count + ")";
                 Casualty_Radar.Container.GetInstance().SplashScreen.Hide();
@@ -283,12 +282,12 @@ namespace Casualty_Radar.Modules {
         /// <param name="title">The title of the alert</param>
         /// <param name="info">Information about the alert</param>
         /// <param name="time">The time of the alert</param>
-        /// <param name="y">The height of the panel</param>
+        /// <param name="height">The height of the panel</param>
         /// <returns>Returns the panel with all of it's content</returns>
-        public Panel CreateAlertPanel(int type, string title, string info, string time, int y) {
+        public Panel CreateAlertPanel(int type, string title, string info, string time, int height) {
             //The panel which will be filled with all of the controls below
             Panel newPanel = new Panel {
-                Location = new Point(0, y),
+                Location = new Point(0, height),
                 Size = new Size(320, 80),
                 BackColor = Color.FromArgb(236, 89, 71),
                 Cursor = Cursors.Hand
@@ -303,7 +302,7 @@ namespace Casualty_Radar.Modules {
             };
 
             //The label which will be filled with the information about the alert
-            Label label = new Label {
+            Label informationLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(0, 0),
                 Font = new Font("Microsoft Sans Serif", 9),
@@ -313,7 +312,7 @@ namespace Casualty_Radar.Modules {
                 Text = title + "\n" + info
             };
 
-            Label newLabel = new Label {
+            Label newStampLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(280, 0),
                 Size = new Size(40, 20),
@@ -328,7 +327,9 @@ namespace Casualty_Radar.Modules {
                 foreach (object control in _selectedPanel.Controls) {
                     if (control is Label) {
                         Label selectedLabel = (Label)control;
-                        if (selectedLabel.Text == label.Text) {
+
+                        if (selectedLabel.Text == informationLabel.Text) {
+
                             newPanel.BackColor = Color.FromArgb(245, 120, 105);
                             _selectedPanel = newPanel;
                         }
@@ -340,7 +341,7 @@ namespace Casualty_Radar.Modules {
             Label timeLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(145, 50),
-                Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold),
+                Font = new Font("Microsoft Sans Serif", 8, FontStyle.Regular),
                 Size = new Size(200, 30),
                 BackColor = Color.Transparent,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -352,9 +353,9 @@ namespace Casualty_Radar.Modules {
             newPictureBox.MouseLeave += feedPanelItem_MouseLeave;
             newPictureBox.Click += feedPanelItem_Click;
 
-            label.MouseEnter += feedPanelItem_MouseEnter;
-            label.MouseLeave += feedPanelItem_MouseLeave;
-            label.Click += feedPanelItem_Click;
+            informationLabel.MouseEnter += feedPanelItem_MouseEnter;
+            informationLabel.MouseLeave += feedPanelItem_MouseLeave;
+            informationLabel.Click += feedPanelItem_Click;
 
             timeLabel.MouseEnter += feedPanelItem_MouseEnter;
             timeLabel.MouseLeave += feedPanelItem_MouseLeave;
@@ -366,9 +367,9 @@ namespace Casualty_Radar.Modules {
 
             //The panel is filled with all the controls initialized above
             newPanel.Controls.Add(newPictureBox);
-            newPanel.Controls.Add(label);
+            newPanel.Controls.Add(informationLabel);
             newPanel.Controls.Add(timeLabel);
-            newPanel.Controls.Add(newLabel);
+            newPanel.Controls.Add(newStampLabel);
 
             return newPanel;
         }
