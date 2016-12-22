@@ -59,7 +59,6 @@ namespace Casualty_Radar.Modules {
 
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
-            Casualty_Radar.Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.SUCCESS, "Aantal nodes", targetCollection.Count.ToString());
             _startNode = targetCollection[131];
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
             _endNode = targetCollection[124];
@@ -69,31 +68,84 @@ namespace Casualty_Radar.Modules {
             List<Node> path = _pathfinder.FindPath();
             List<PointLatLng> points = new List<PointLatLng>();
             double totalDistance = 0;
+            double prevAngle = -1;
             int y = 0;
             Color color = Color.Gainsboro;
             for (int index = 0; index < path.Count; index++) {
                 Node node = path[index];
-
                 points.Add(node.GetPoint());
 
-                if (index + 1 != path.Count) {
-                    //map.Overlays[0].Markers.Add(_locationManager.CreateMarker(node.Lat, node.Lon, 0, node.ID.ToString()));
+                if (index + 1 != path.Count && index + 2 != path.Count) {
+                    map.Overlays[0].Markers.Add(_locationManager.CreateMarker(node.Lat, node.Lon, 0));
                     Node nextNode = path[index + 1];
-                    Debug.WriteLine(MapUtil.GetWay(node, nextNode).Name);
-                    RouteStepType type = RouteStepType.Straight;
-                    string distance = NavigationStep.GetFormattedDistance(Math.Round(MapUtil.GetDistance(node, nextNode), 2));
+                    Node nextNextNode = path[index + 2];
+                    double angle = AngleFromCoordinate(nextNode.Lat, nextNode.Lon, nextNextNode.Lat, nextNextNode.Lon);
+                    var type = prevAngle >= 0 ? CalcRouteStepType(CalcBearing(prevAngle, angle)) : RouteStepType.Straight;
+                    string distance =
+                        NavigationStep.GetFormattedDistance(Math.Round(MapUtil.GetDistance(node, nextNode), 2));
+                    NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
                     totalDistance += MapUtil.GetDistance(node, nextNode);
-                    string instruction = "Ga over " + distance + " naar " + type;
-                    NavigationStep step = new NavigationStep(instruction, distance, type);
-                    CreateRouteStepPanel(step, color, y);
-                } else CreateRouteStepPanel(new NavigationStep(), color, y);
+                    prevAngle = angle;
 
-                color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
-                y += 51;
+                    if (index + 3 == path.Count) CreateRouteStepPanel(new NavigationStep(distance, RouteStepType.DestinationReached,
+                        MapUtil.GetWay(nextNode, nextNextNode)), color, y);
+                    else CreateRouteStepPanel(step, color, y);
+
+                    color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
+                    y += 51;
+                } else break;
             }
             _locationManager.DrawRoute(points, _routeOverlay);
             totalDistance = Math.Round(totalDistance, 2);
             routeInfoLabel.Text += " (" + totalDistance + "km)";
+        }
+
+        private double AngleFromCoordinate(double lat1, double long1, double lat2,
+        double long2) {
+            double dLon = (long2 - long1);
+
+            double y = Math.Sin(dLon) * Math.Cos(lat2);
+            double x = Math.Cos(lat1) * Math.Sin(lat2) - Math.Sin(lat1)
+                    * Math.Cos(lat2) * Math.Cos(dLon);
+
+            double brng = Math.Atan2(y, x);
+
+            brng = brng * (180 / Math.PI);
+            brng = (brng + 360) % 360;
+            brng = 360 - brng;
+
+            return brng;
+        }
+
+        private double CalcBearing(double angle1, double angle2) {
+            double bearing = angle2 - angle1;
+
+            if (bearing < 0)
+                bearing = 360 + bearing;
+
+            return bearing;
+        }
+
+        private RouteStepType CalcRouteStepType(double bearing) {
+            RouteStepType type;
+
+            if (bearing == 0 || bearing == 360 || bearing > 0 && bearing < 25 || bearing < 360 && bearing > 335) // rechtdoor
+                type = RouteStepType.Straight;
+            else if (bearing >= 25 && bearing < 45)
+                type = RouteStepType.CurveRight;
+            else if (bearing > 45 && bearing <= 90)
+                type = RouteStepType.Right;
+            else if (bearing > 90 && bearing <= 180)
+                type = RouteStepType.SharpRight;
+            else if (bearing <= 335 && bearing > 315)
+                type = RouteStepType.CurveLeft;
+            else if (bearing < 315 && bearing >= 270)
+                type = RouteStepType.Left;
+            else if (bearing < 270 && bearing >= 180)
+                type = RouteStepType.SharpLeft;
+            else type = RouteStepType.Straight;
+
+            return type;
         }
 
         /// <summary>
@@ -133,10 +185,22 @@ namespace Casualty_Radar.Modules {
                 case RouteStepType.Straight:
                     icon = Resources.straight_icon;
                     break;
+                case RouteStepType.CurveLeft:
+                    icon = Resources.turn_left_icon;
+                    break;
                 case RouteStepType.Left:
                     icon = Resources.turn_left_icon;
                     break;
+                case RouteStepType.SharpLeft:
+                    icon = Resources.turn_left_icon;
+                    break;
+                case RouteStepType.CurveRight:
+                    icon = Resources.turn_right_icon;
+                    break;
                 case RouteStepType.Right:
+                    icon = Resources.turn_right_icon;
+                    break;
+                case RouteStepType.SharpRight:
                     icon = Resources.turn_right_icon;
                     break;
                 case RouteStepType.DestinationReached:
@@ -168,7 +232,7 @@ namespace Casualty_Radar.Modules {
 
             Label instructionLabel = new Label {
                 Location = new Point(60, 0),
-                Size = new Size(130, 50),
+                Size = new Size(210, 50),
                 TextAlign = ContentAlignment.MiddleLeft,
                 ForeColor = Color.DarkSlateGray,
                 Font = new Font("Microsoft Sans Serif", 9),
