@@ -67,13 +67,26 @@ namespace Casualty_Radar.Core {
 
             Image image = new Bitmap(@imgLocation);
 
+            return new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
+        }
+
+        public GMarkerGoogle CreateMarkerWithTooltip(double lat, double lng, int type, string tooltipText) {
+            string imgLocation = "../../Resources../marker_icon_";
+            if (type == 0) imgLocation += "blue.png";
+            if (type == 1) imgLocation += "yellow.png";
+            if (type == 2) imgLocation += "red.png";
+            if (type == 3) imgLocation += "selected.png";
+
+            Image image = new Bitmap(@imgLocation);
+
             GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
             double distance = MapUtil.GetDistance(lat, lng, CurrentLatitude, CurrentLongitude);
-            marker.ToolTip = new GMapToolTip(marker);
-            marker.ToolTip.Fill = new SolidBrush(Color.White);
-            marker.ToolTip.Foreground = new SolidBrush(Color.FromArgb(210, 73, 57));
-            marker.ToolTip.Font = new Font(FontFamily.GenericMonospace, 10);
-            marker.ToolTipText = Math.Round(distance, 0) + "km";
+            marker.ToolTip = new GMapToolTip(marker) {
+                Fill = new SolidBrush(Color.White),
+                Foreground = new SolidBrush(Color.FromArgb(210, 73, 57)),
+                Font = new Font(FontFamily.GenericMonospace, 10)
+            };
+            marker.ToolTipText = tooltipText;
             marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
 
             return marker;
@@ -84,7 +97,7 @@ namespace Casualty_Radar.Core {
         /// </summary>
         /// <returns>The created PointLatLng variable</returns>
         public PointLatLng GetLocationPoint() => new PointLatLng(CurrentLatitude, CurrentLongitude);
-        
+
         /// <summary>
         /// Function which draws a path on a GMap overlay based on a given list of PointLatLng variables
         /// </summary>

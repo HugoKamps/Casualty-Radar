@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -150,9 +151,11 @@ namespace Casualty_Radar {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"Resources/hattem.xml");
+            DataParser parser = new DataParser(@"../../Resources/hattem.xml");
             parser.Deserialize();
             DataCollection col = parser.GetCollection();
+            List<Node> nodes = col.Nodes;
+            NavigationModule nm = (NavigationModule) ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             //DisplayDialog(DialogMessageType.ERROR, "XML Error", "Je moet eem een nieuwe XML Parsen.");
         }
 
