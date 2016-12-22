@@ -91,8 +91,8 @@ namespace Casualty_Radar.Utils {
             foreach (Way w in origin.ConnectedWays) {
                 List<Node> references = w.References.Select(x => x.Node).Where(x=> x!=null).OrderBy(x => x.ID).ToList();
                 int idx = references.IndexOf(origin);
-                if(idx > 0) rtn.Add(references[idx-1]);
-                if(references.Count > idx+1) rtn.Add(references[idx+1]);
+                if (idx > 0) rtn.Add(references[idx - 1]);
+                if (references.Count > idx + 1) rtn.Add(references[idx + 1]);
             }
             return rtn;
         }

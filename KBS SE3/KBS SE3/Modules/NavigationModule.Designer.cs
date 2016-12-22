@@ -169,7 +169,7 @@
             this.map.LevelsKeepInMemmory = 5;
             this.map.Location = new System.Drawing.Point(0, 0);
             this.map.MarkersEnabled = true;
-            this.map.MaxZoom = 32;
+            this.map.MaxZoom = 20;
             this.map.MinZoom = 1;
             this.map.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.map.Name = "map";
