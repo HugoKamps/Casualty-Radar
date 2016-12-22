@@ -40,6 +40,7 @@ namespace Casualty_Radar.Core {
         /// Loads the feed by using SyndicationFeed and converts it into xml
         /// If the website is down we catch it with a WebException
         /// After we caught it with a WebException: display a dialog box with a warning and load in the cached version of the website
+        /// If the website does work but there is no data in the xml file we also catch it with an exception
         /// Initial update - Only updates after the P2000 is read
         /// </summary>
         private Feed() {
@@ -51,6 +52,11 @@ namespace Casualty_Radar.Core {
                 Container.GetInstance()
                     .DisplayDialog(DialogType.DialogMessageType.WARNING, "Website is niet bereikbaar",
                         "Een gecachede versie van deze website wordt ingeladen");
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
+                USE_FEED_URL = CACHED_FEED_URL;
+            } catch(XmlException)
+            {
+                Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.WARNING, "Website bevat geen xml data", "Een gecachede versie van deze website wordt ingeladen");
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
                 USE_FEED_URL = CACHED_FEED_URL;
             }
