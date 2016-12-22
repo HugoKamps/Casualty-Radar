@@ -81,7 +81,7 @@ namespace Casualty_Radar.Core.Algorithms {
             List<Node> nodes = new List<Node>();
             List<Node> adjacentNodes = MapUtil.GetAdjacentNodes(fromNode);
 
-            foreach (var node in adjacentNodes) {
+            foreach (Node node in adjacentNodes) {
                 node.StarData = _openNodes.Find(n => n.ID == node.ID) == null ? new StarData(node, _endNode) : _openNodes.Find(n => n.ID == node.ID).StarData;
 
                 foreach (Node n in _closedNodes) if (n.ID == node.ID) node.StarData.State = NodeState.Closed;

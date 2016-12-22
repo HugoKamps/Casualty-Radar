@@ -13,6 +13,7 @@ using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models.DataControl.Graph;
 
 namespace Casualty_Radar.Modules {
@@ -42,6 +43,9 @@ namespace Casualty_Radar.Modules {
         /// <param name="alert">Alert which contains all the information about the chosen alert</param>
         /// <param name="start">Point with the user's current latitude and longitude</param>
         public void Init(Alert alert, PointLatLng start) {
+            _locationManager.CurrentLatitude = start.Lat;
+            _locationManager.CurrentLongitude = start.Lng;
+
             infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
             alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
             timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
@@ -53,13 +57,19 @@ namespace Casualty_Radar.Modules {
             DataCollection collection = parser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
 
+            List<Node> nodes = collection.Nodes;
+            //foreach (Node node in nodes) map.Overlays[0].Markers.Add(_locationManager.CreateMarkerWithTooltip(node.Lat, node.Lon, 1, node.ID.ToString()));
+            
+            foreach (Node n in MapUtil.GetAdjacentNodes(nodes.Find(n => n.ID == 1281347185)))
+                map.Overlays[0].Markers.Add(_locationManager.CreateMarkerWithTooltip(n.Lat, n.Lon, 2, n.ID.ToString()));
+
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
-
-            _startNode = targetCollection[130];
+            Casualty_Radar.Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.SUCCESS, "Aantal nodes", targetCollection.Count.ToString());
+            _startNode = targetCollection[160];
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
-            _endNode = targetCollection[40];
-            map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 1));
+            _endNode = targetCollection[1];
+            map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 3));
 
             _pathfinder = new Pathfinder(_startNode, _endNode);
             List<Node> path = _pathfinder.FindPath();
@@ -68,7 +78,7 @@ namespace Casualty_Radar.Modules {
 
             int y = 0;
             Color color = Color.Gainsboro;
-            for (var index = 0; index < path.Count; index++) {
+            for (int index = 0; index < path.Count; index++) {
                 Node node = path[index];
                 points.Add(node.GetPoint());
 

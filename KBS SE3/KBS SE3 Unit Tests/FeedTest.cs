@@ -1,4 +1,6 @@
-﻿using Casualty_Radar.Core;
+﻿using System.Collections.Generic;
+using Casualty_Radar.Core;
+using Casualty_Radar.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KBS_SE3_Unit_Tests {
@@ -6,7 +8,7 @@ namespace KBS_SE3_Unit_Tests {
     public class FeedTest {
         [TestMethod]
         public void Feed_InstanceTest() {
-            var feed = Feed.GetInstance();
+            Feed feed = Feed.GetInstance();
 
             // Test if feed is an instance of Feed
             Assert.IsInstanceOfType(feed, typeof(Feed));
@@ -14,10 +16,10 @@ namespace KBS_SE3_Unit_Tests {
 
         [TestMethod]
         public void Feed_Alerts() {
-            var feed = Feed.GetInstance();
+            Feed feed = Feed.GetInstance();
 
             // When feed gets initialized, an alerts list should be created with the CreateAlertList() method
-            var alerts = feed.GetAlerts;
+            List<Alert> alerts = feed.GetAlerts;
 
             // Test if alerts is created
             Assert.IsNotNull(alerts);
@@ -25,14 +27,14 @@ namespace KBS_SE3_Unit_Tests {
 
         [TestMethod]
         public void Feed_UpdateAlerts() {
-            var feed = Feed.GetInstance();
+            Feed feed = Feed.GetInstance();
 
             // Get alerts after initialization
-            var oldAlerts = feed.GetAlerts;
+            List<Alert> oldAlerts = feed.GetAlerts;
             // Update the feed
             feed.UpdateFeed();
             // Get alerts after update
-            var alerts = feed.GetAlerts;
+            List<Alert> alerts = feed.GetAlerts;
 
             // Test if oldAlerts is not equal to the alerts after the update
             Assert.AreNotEqual(oldAlerts, alerts);
