@@ -76,7 +76,7 @@
             // routeInfoLabel
             // 
             this.routeInfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.routeInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular);
             this.routeInfoLabel.ForeColor = System.Drawing.Color.White;
             this.routeInfoLabel.Location = new System.Drawing.Point(0, 0);
             this.routeInfoLabel.Name = "routeInfoLabel";
@@ -110,7 +110,7 @@
             // 
             // timeLabel
             // 
-            this.timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular);
             this.timeLabel.ForeColor = System.Drawing.Color.White;
             this.timeLabel.Location = new System.Drawing.Point(150, 65);
             this.timeLabel.Name = "timeLabel";
@@ -139,7 +139,7 @@
             // alertInfoLabel
             // 
             this.alertInfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.alertInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.alertInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular);
             this.alertInfoLabel.ForeColor = System.Drawing.Color.White;
             this.alertInfoLabel.Location = new System.Drawing.Point(0, 0);
             this.alertInfoLabel.Name = "alertInfoLabel";

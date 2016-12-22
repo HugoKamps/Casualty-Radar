@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Device.Location;
 using System.Drawing;
 using System.Windows.Forms;
@@ -286,12 +287,12 @@ namespace Casualty_Radar.Modules {
         /// <param name="title">The title of the alert</param>
         /// <param name="info">Information about the alert</param>
         /// <param name="time">The time of the alert</param>
-        /// <param name="y">The height of the panel</param>
+        /// <param name="height">The height of the panel</param>
         /// <returns>Returns the panel with all of it's content</returns>
-        public Panel CreateAlertPanel(int type, string title, string info, string time, int y) {
+        public Panel CreateAlertPanel(int type, string title, string info, string time, int height) {
             //The panel which will be filled with all of the controls below
             Panel newPanel = new Panel {
-                Location = new Point(0, y),
+                Location = new Point(0, height),
                 Size = new Size(320, 80),
                 BackColor = Color.FromArgb(236, 89, 71),
                 Cursor = Cursors.Hand
@@ -306,7 +307,7 @@ namespace Casualty_Radar.Modules {
             };
 
             //The label which will be filled with the information about the alert
-            Label label = new Label {
+            Label informationLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(0, 0),
                 Font = new Font("Microsoft Sans Serif", 9),
@@ -316,7 +317,7 @@ namespace Casualty_Radar.Modules {
                 Text = title + "\n" + info
             };
 
-            Label newLabel = new Label {
+            Label newStampLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(280, 0),
                 Size = new Size(40, 20),
@@ -331,7 +332,7 @@ namespace Casualty_Radar.Modules {
                 foreach (object control in _selectedPanel.Controls) {
                     if (control is Label) {
                         Label selectedLabel = (Label) control;
-                        if (selectedLabel.Text == label.Text) {
+                        if (selectedLabel.Text == informationLabel.Text) {
                             newPanel.BackColor = Color.FromArgb(245, 120, 105);
                             _selectedPanel = newPanel;
                         }
@@ -343,7 +344,7 @@ namespace Casualty_Radar.Modules {
             Label timeLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(145, 50),
-                Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold),
+                Font = new Font("Microsoft Sans Serif", 8, FontStyle.Regular),
                 Size = new Size(200, 30),
                 BackColor = Color.Transparent,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -355,9 +356,9 @@ namespace Casualty_Radar.Modules {
             newPictureBox.MouseLeave += feedPanelItem_MouseLeave;
             newPictureBox.Click += feedPanelItem_Click;
 
-            label.MouseEnter += feedPanelItem_MouseEnter;
-            label.MouseLeave += feedPanelItem_MouseLeave;
-            label.Click += feedPanelItem_Click;
+            informationLabel.MouseEnter += feedPanelItem_MouseEnter;
+            informationLabel.MouseLeave += feedPanelItem_MouseLeave;
+            informationLabel.Click += feedPanelItem_Click;
 
             timeLabel.MouseEnter += feedPanelItem_MouseEnter;
             timeLabel.MouseLeave += feedPanelItem_MouseLeave;
@@ -369,9 +370,9 @@ namespace Casualty_Radar.Modules {
 
             //The panel is filled with all the controls initialized above
             newPanel.Controls.Add(newPictureBox);
-            newPanel.Controls.Add(label);
+            newPanel.Controls.Add(informationLabel);
             newPanel.Controls.Add(timeLabel);
-            newPanel.Controls.Add(newLabel);
+            newPanel.Controls.Add(newStampLabel);
 
             return newPanel;
         }
