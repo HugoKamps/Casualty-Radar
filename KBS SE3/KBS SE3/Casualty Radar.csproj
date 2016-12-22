@@ -203,8 +203,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
+    <Content Include="Resources\destination-icon.png" />
     <Content Include="Resources\hattem.xml" />
+    <Content Include="Resources\straight_icon.png" />
     <Content Include="Resources\TESTTT.xml" />
+    <Content Include="Resources\turn_left_icon.png" />
+    <Content Include="Resources\turn_right_icon.png" />
     <None Include="Resources\converted.osm" />
     <None Include="Resources\marker_icon_yellow.png" />
     <None Include="Resources\marker_icon_red.png" />

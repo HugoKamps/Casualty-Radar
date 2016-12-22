@@ -37,7 +37,7 @@ namespace XMLRewriter {
         }
 
         private void convertBtn_Click(object sender, EventArgs e) {
-            XMLFileReader reader = new XMLFileReader(fileLocationBox.Text, fileDestinationBox.Text, outputNameBox.Text);
+            XmlFileReader reader = new XmlFileReader(fileLocationBox.Text, fileDestinationBox.Text, outputNameBox.Text);
             reader.DataLog = convertDataLog;
             reader.StatusBar = convertStatusBar;
             convertBtn.Enabled = false;
