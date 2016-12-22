@@ -183,6 +183,26 @@ namespace Casualty_Radar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap turn_curve_left_icon {
+            get {
+                object obj = ResourceManager.GetObject("turn_curve_left_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap turn_curve_right_icon {
+            get {
+                object obj = ResourceManager.GetObject("turn_curve_right_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap turn_left_icon {
             get {
                 object obj = ResourceManager.GetObject("turn_left_icon", resourceCulture);

@@ -192,7 +192,7 @@ namespace Casualty_Radar.Modules {
                     icon = Resources.straight_icon;
                     break;
                 case RouteStepType.CurveLeft:
-                    icon = Resources.turn_left_icon;
+                    icon = Resources.turn_curve_left_icon;
                     break;
                 case RouteStepType.Left:
                     icon = Resources.turn_left_icon;
@@ -201,7 +201,7 @@ namespace Casualty_Radar.Modules {
                     icon = Resources.turn_left_icon;
                     break;
                 case RouteStepType.CurveRight:
-                    icon = Resources.turn_right_icon;
+                    icon = Resources.turn_curve_right_icon;
                     break;
                 case RouteStepType.Right:
                     icon = Resources.turn_right_icon;
