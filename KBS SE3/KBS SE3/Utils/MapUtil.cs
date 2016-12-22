@@ -96,5 +96,7 @@ namespace Casualty_Radar.Utils {
             }
             return rtn;
         }
+
+        public static Way GetWay(Node node1, Node node2) => node1.ConnectedWays.Find(w => w.References.Contains(w.References.Find(n => n.Node == node2)));
     }
 }

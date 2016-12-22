@@ -57,37 +57,32 @@ namespace Casualty_Radar.Modules {
             DataCollection collection = parser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
 
-            List<Node> nodes = collection.Nodes;
-            //foreach (Node node in nodes) map.Overlays[0].Markers.Add(_locationManager.CreateMarkerWithTooltip(node.Lat, node.Lon, 1, node.ID.ToString()));
-            
-            foreach (Node n in MapUtil.GetAdjacentNodes(nodes.Find(n => n.ID == 1281347185)))
-                map.Overlays[0].Markers.Add(_locationManager.CreateMarkerWithTooltip(n.Lat, n.Lon, 2, n.ID.ToString()));
-
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
             Casualty_Radar.Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.SUCCESS, "Aantal nodes", targetCollection.Count.ToString());
-            _startNode = targetCollection[160];
+            _startNode = targetCollection[131];
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
-            _endNode = targetCollection[1];
+            _endNode = targetCollection[124];
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 3));
 
             _pathfinder = new Pathfinder(_startNode, _endNode);
             List<Node> path = _pathfinder.FindPath();
             List<PointLatLng> points = new List<PointLatLng>();
-
+            double totalDistance = 0;
             int y = 0;
             Color color = Color.Gainsboro;
             for (int index = 0; index < path.Count; index++) {
                 Node node = path[index];
 
-                foreach (Way way in node.ConnectedWays) Debug.WriteLine(way.TypeDescription);
                 points.Add(node.GetPoint());
 
                 if (index + 1 != path.Count) {
-                    map.Overlays[0].Markers.Add(_locationManager.CreateMarker(node.Lat, node.Lon, 0, node.ID.ToString()));
+                    //map.Overlays[0].Markers.Add(_locationManager.CreateMarker(node.Lat, node.Lon, 0, node.ID.ToString()));
                     Node nextNode = path[index + 1];
+                    Debug.WriteLine(MapUtil.GetWay(node, nextNode).Name);
                     RouteStepType type = RouteStepType.Straight;
                     string distance = NavigationStep.GetFormattedDistance(Math.Round(MapUtil.GetDistance(node, nextNode), 2));
+                    totalDistance += MapUtil.GetDistance(node, nextNode);
                     string instruction = "Ga over " + distance + " naar " + type;
                     NavigationStep step = new NavigationStep(instruction, distance, type);
                     CreateRouteStepPanel(step, color, y);
@@ -97,6 +92,8 @@ namespace Casualty_Radar.Modules {
                 y += 51;
             }
             _locationManager.DrawRoute(points, _routeOverlay);
+            totalDistance = Math.Round(totalDistance, 2);
+            routeInfoLabel.Text += " (" + totalDistance + "km)";
         }
 
         /// <summary>
