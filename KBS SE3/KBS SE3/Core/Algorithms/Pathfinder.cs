@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using GMap.NET;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Utils;
 
@@ -29,16 +26,16 @@ namespace Casualty_Radar.Core.Algorithms {
         /// Attempts to find a path from the start location to the end location
         /// </summary>
         /// <returns>Returns a List of Points representing the path. If no path was found, the returned list is empty</returns>
-        public List<PointLatLng> FindPath() {
+        public List<Node> FindPath() {
             // The start node is the first entry in the 'open' list
-            List<PointLatLng> path = new List<PointLatLng>();
+            List<Node> path = new List<Node>();
                 bool success = Search(_startNode);
                 if (!success) return path;
 
                 // If a path was found, follow the parents from the end node to build a list of locations
                 Node node = _endNode;
                 while (node.StarData.Parent != null) {
-                    path.Add(node.GetPoint());
+                    path.Add(node);
                     node = node.StarData.Parent;
                 }
 
