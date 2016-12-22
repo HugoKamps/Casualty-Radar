@@ -238,7 +238,7 @@ namespace Casualty_Radar.Modules {
                 try {
                     for (int i = 0; i < _alertPanels.Count; i++) {
                         foreach (Alert alert in Feed.GetInstance().GetNewAlerts) {
-                            if (alert == Feed.GetInstance().GetAlerts[i]) {
+                            if (alert == Feed.GetInstance().GetAlerts[i] || alert == Feed.GetInstance().GetFilteredAlerts[i]) {
                                 _alertPanels[i].Controls[3].Show();
                             }
                         }
