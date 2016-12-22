@@ -31,7 +31,7 @@ namespace Casualty_Radar {
         private Container() {
             InitializeComponent();
 
-            Thread t = new Thread(new ThreadStart(SplashThread));
+            Thread t = new Thread(SplashThread);
             t.IsBackground = true;
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
@@ -150,7 +150,7 @@ namespace Casualty_Radar {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"C:\Users\richa_000\Desktop\hattem.xml");
+            DataParser parser = new DataParser(@"Resources/hattem.xml");
             parser.Deserialize();
             DataCollection col = parser.GetCollection();
             //DisplayDialog(DialogMessageType.ERROR, "XML Error", "Je moet eem een nieuwe XML Parsen.");

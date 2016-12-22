@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -37,12 +34,12 @@ namespace XMLRewriter.Core {
             } else {
                 this._writer = new XmlFileWriter(_destination, _fileName);
                 Log("Reading started");
-                var elements = ParsedElements();
-                var size = elements.Count();
+                IEnumerable<XElement> elements = ParsedElements();
+                int size = elements.Count();
                 Log("Found " + size + " elements to convert");
                 StatusBar.Maximum = size;
                 Log("Writing data to new XML file");
-                foreach (var element in elements) {
+                foreach (XElement element in elements) {
                     _writer.Append(ConvertElement(element));
                     StatusBar.Value++;
                 }
@@ -102,7 +99,7 @@ namespace XMLRewriter.Core {
                         if (element.Name.ToString().Equals("nd")) {
                             rtn.Add(new XElement("nd", new XAttribute("rf", element.FirstAttribute.Value)));
                         } else if (element.Attribute("k") != null) {
-                            var value = element.Attribute("v").Value;
+                            string value = element.Attribute("v").Value;
                             switch (element.Attribute("k").Value) {
                                 case "highway":
                                     rtn.Add(new XAttribute("t", ParseWayValue(value)));

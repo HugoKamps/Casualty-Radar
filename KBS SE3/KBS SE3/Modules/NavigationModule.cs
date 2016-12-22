@@ -13,6 +13,7 @@ using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models.DataControl.Graph;
 
 namespace Casualty_Radar.Modules {
@@ -55,10 +56,10 @@ namespace Casualty_Radar.Modules {
 
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
-
-            _startNode = targetCollection[130];
+            Casualty_Radar.Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.SUCCESS, "Aantal nodes", targetCollection.Count.ToString());
+            _startNode = targetCollection[160];
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
-            _endNode = targetCollection[40];
+            _endNode = targetCollection[1];
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 1));
 
             _pathfinder = new Pathfinder(_startNode, _endNode);
@@ -67,7 +68,7 @@ namespace Casualty_Radar.Modules {
 
             int y = 0;
             Color color = Color.Gainsboro;
-            for (var index = 0; index < path.Count; index++) {
+            for (int index = 0; index < path.Count; index++) {
                 Node node = path[index];
 
                 foreach(Way way in node.ConnectedWays) Debug.WriteLine(way.TypeDescription);

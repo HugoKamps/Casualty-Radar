@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Casualty_Radar.Core;
 using Casualty_Radar.Modules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,7 +16,7 @@ namespace KBS_SE3_Unit_Tests {
 
         [TestMethod]
         public void HomeModule_IsRefreshing() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             bool expected = false;
 
@@ -33,7 +32,7 @@ namespace KBS_SE3_Unit_Tests {
 
         [TestMethod]
         public void HomeModule_GetLocationManager() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if GetLocationManager() returns an instance of LocationManager
             Assert.IsInstanceOfType(hm.GetLocationManager(), typeof(LocationManager));
@@ -41,8 +40,8 @@ namespace KBS_SE3_Unit_Tests {
 
         [TestMethod]
         public void HomeModule_SetLocationManager() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            var newLm = new LocationManager();
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            LocationManager newLm = new LocationManager();
 
             hm.LocationManager = newLm;
 
@@ -52,7 +51,7 @@ namespace KBS_SE3_Unit_Tests {
 
         [TestMethod]
         public void HomeModule_GetSelectedPanel() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if GetSelectedPanel() returns null as none is selected
             Assert.AreEqual(hm.GetSelectedPanel, null);
@@ -60,7 +59,7 @@ namespace KBS_SE3_Unit_Tests {
 
         [TestMethod]
         public void HomeModule_GetAlertType() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if GetAlertType() returns an integer
             Assert.IsInstanceOfType(hm.GetAlertType, typeof(int));
@@ -68,8 +67,8 @@ namespace KBS_SE3_Unit_Tests {
 
         [TestMethod]
         public void HomeModule_CreateAlert() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            var panel = hm.CreateAlertPanel(0, "", "", "", 0);
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            Panel panel = hm.CreateAlertPanel(0, "", "", "", 0);
 
             // Test if CreateAlertPanel() returns a Panel
             Assert.IsInstanceOfType(panel, typeof(Panel));

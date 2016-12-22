@@ -68,7 +68,7 @@ namespace Casualty_Radar.Core {
             Image image = new Bitmap(@imgLocation);
 
             GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
-            var distance = MapUtil.GetDistance(lat, lng, CurrentLatitude, CurrentLongitude);
+            double distance = MapUtil.GetDistance(lat, lng, CurrentLatitude, CurrentLongitude);
             marker.ToolTip = new GMapToolTip(marker);
             marker.ToolTip.Fill = new SolidBrush(Color.White);
             marker.ToolTip.Foreground = new SolidBrush(Color.FromArgb(210, 73, 57));
