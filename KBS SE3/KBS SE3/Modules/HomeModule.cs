@@ -70,8 +70,7 @@ namespace Casualty_Radar.Modules {
             if (hasLocationService) {
                 markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude,
                     _locationManager.CurrentLongitude, 0));
-            }
-            else {
+            } else {
                 _locationManager.SetCoordinatesByLocationSetting();
                 markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude,
                     _locationManager.CurrentLongitude, 0));
@@ -165,7 +164,7 @@ namespace Casualty_Radar.Modules {
             }
 
             NavigationModule navigationModule =
-                (NavigationModule) ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+                (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             if (selectedAlert != null) {
                 Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
                     selectedAlert.Lat, selectedAlert.Lng);
@@ -177,7 +176,7 @@ namespace Casualty_Radar.Modules {
         }
 
         private void navigationBtn_EnabledChanged(object sender, EventArgs e) {
-            Button button = (Button) sender;
+            Button button = (Button)sender;
             button.ForeColor = Color.White;
             button.BackColor = button.Enabled ? Color.FromArgb(210, 73, 57) : Color.Gray;
         }
@@ -235,14 +234,16 @@ namespace Casualty_Radar.Modules {
                 InitAlertsMap(false);
                 RemoveLoadIcon();
                 try {
-                    for (int i = 0; i < _alertPanels.Count; i++) {
-                        foreach (Alert alert in Feed.GetInstance().GetNewAlerts)
-                            if (alert == Feed.GetInstance().GetFilteredAlerts[i])
-                                _alertPanels[i].Controls[3].Show();
-                        feedPanel.Controls.Add(_alertPanels[i]);
-                    }
-                }
-                catch (InvalidOperationException e) {
+                    if (_alertPanels.Count == Feed.GetInstance().GetFilteredAlerts.Count) {
+                        for (int i = 0; i < _alertPanels.Count; i++) {
+                            foreach (Alert alert in Feed.GetInstance().GetNewAlerts)
+                                if (alert == Feed.GetInstance().GetFilteredAlerts[i])
+                                    _alertPanels[i].Controls[3].Show();
+                            feedPanel.Controls.Add(_alertPanels[i]);
+                        }
+                    } else Casualty_Radar.Container.GetInstance()
+                        .DisplayDialog(DialogType.DialogMessageType.ERROR, "Fout opgetreden", "Kan alert panels niet tekenen.");
+                } catch (InvalidOperationException e) {
                     Casualty_Radar.Container.GetInstance()
                         .DisplayDialog(DialogType.DialogMessageType.ERROR, "Invalid Operation", e.ToString());
                 }
@@ -324,7 +325,7 @@ namespace Casualty_Radar.Modules {
             if (_selectedPanel != null) {
                 foreach (object control in _selectedPanel.Controls) {
                     if (control is Label) {
-                        Label selectedLabel = (Label) control;
+                        Label selectedLabel = (Label)control;
                         if (selectedLabel.Text == label.Text) {
                             newPanel.BackColor = Color.FromArgb(245, 120, 105);
                             _selectedPanel = newPanel;
@@ -372,28 +373,25 @@ namespace Casualty_Radar.Modules {
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel) sender;
+                Panel panel = (Panel)sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == panel) {
                     _selectedPanel = null;
                     navigationBtn.Enabled = false;
                     navigationBtn.BackColor = Color.Gray;
-                }
-                else {
+                } else {
                     _selectedPanel = panel;
                     _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
                     navigationBtn.Enabled = true;
                 }
-            }
-            else {
-                Control control = (Control) sender;
+            } else {
+                Control control = (Control)sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == control.Parent) {
                     _selectedPanel = null;
                     navigationBtn.Enabled = false;
-                }
-                else {
-                    _selectedPanel = (Panel) control.Parent;
+                } else {
+                    _selectedPanel = (Panel)control.Parent;
                     _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
                     navigationBtn.Enabled = true;
                 }
@@ -402,7 +400,7 @@ namespace Casualty_Radar.Modules {
             if (_previousMarker != null) map.Overlays[0].Markers[_previousMarkerIndex] = _previousMarker;
             int index = _alertPanels.FindIndex(panel => panel == _selectedPanel) + 1;
             _previousMarkerIndex = index;
-            _previousMarker = (GMarkerGoogle) map.Overlays[0].Markers[index];
+            _previousMarker = (GMarkerGoogle)map.Overlays[0].Markers[index];
             if (index != 0)
                 map.Overlays[0].Markers[index] = _locationManager.CreateMarker(_previousMarker.Position.Lat,
                     _previousMarker.Position.Lng, 3);
@@ -410,22 +408,20 @@ namespace Casualty_Radar.Modules {
 
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel) sender;
+                Panel panel = (Panel)sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
-            }
-            else {
-                Control control = (Control) sender;
+            } else {
+                Control control = (Control)sender;
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(210, 73, 57);
             }
         }
 
         private void feedPanelItem_MouseLeave(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel) sender;
+                Panel panel = (Panel)sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
-            }
-            else {
-                Control control = (Control) sender;
+            } else {
+                Control control = (Control)sender;
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(236, 86, 71);
             }
         }
