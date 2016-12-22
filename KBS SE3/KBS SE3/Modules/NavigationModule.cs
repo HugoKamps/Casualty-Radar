@@ -76,7 +76,7 @@ namespace Casualty_Radar.Modules {
             List<PointLatLng> points = new List<PointLatLng>();
             double prevAngle = -1;
 
-            int y = 0;
+            int height = 0;
             Color color = Color.Gainsboro;
             for (int index = 0; index < path.Count; index++) {
                 Node node = path[index];
@@ -96,12 +96,13 @@ namespace Casualty_Radar.Modules {
 
                     prevAngle = angle;
 
-                    if (index + 3 == path.Count) CreateRouteStepPanel(new NavigationStep(distance, RouteStepType.DestinationReached), color, y);
-                    else CreateRouteStepPanel(step, color, y);
+                    if (index + 3 == path.Count) CreateRouteStepPanel(new NavigationStep(distance, RouteStepType.DestinationReached), color, height);
+                    else CreateRouteStepPanel(step, color, height);
 
                     color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
-                    y += 51;
+                    height += 51;
                 } else break;
+
             }
             _locationManager.DrawRoute(points, _routeOverlay);
         }
@@ -183,8 +184,8 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         /// <param name="step">The NavigationStep with all the information</param>
         /// <param name="color">Background color for the panel</param>
-        /// <param name="y">Height of the panel</param>
-        public void CreateRouteStepPanel(NavigationStep step, Color color, int y) {
+        /// <param name="Height">Height of the panel</param>
+        public void CreateRouteStepPanel(NavigationStep step, Color color, int height) {
             Image icon;
 
             switch (step.Type) {
@@ -219,7 +220,7 @@ namespace Casualty_Radar.Modules {
 
             //The panel which will be filled with all of the controls below
             Panel newPanel = new Panel {
-                Location = new Point(0, y),
+                Location = new Point(0, Height),
                 Size = new Size(338, 50),
                 BackColor = color
             };
