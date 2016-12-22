@@ -12,7 +12,6 @@ using GMap.NET.WindowsForms.Markers;
 using Casualty_Radar.Core;
 using Casualty_Radar.Models;
 using Casualty_Radar.Properties;
-using Casualty_Radar.Utils;
 
 namespace Casualty_Radar.Modules {
     /// <summary>
@@ -81,7 +80,6 @@ namespace Casualty_Radar.Modules {
                 int type = alert.Type == 1 ? 1 : 2;
                 if (_previousMarker != null && _previousMarker.Position.Lat.Equals(alert.Lat) &&
                     _previousMarker.Position.Lng.Equals(alert.Lng)) type = 3;
-                double distance = Math.Round(MapUtil.GetDistance(alert.Lat, alert.Lng, GetLocationManager().CurrentLatitude, GetLocationManager().CurrentLongitude), 0);
                 markersOverlay.Markers.Add(_locationManager.CreateMarker(alert.Lat, alert.Lng, type));
             }
         }
@@ -168,7 +166,7 @@ namespace Casualty_Radar.Modules {
                 break;
             }
 
-            NavigationModule navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            NavigationModule navigationModule =(NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             if (selectedAlert != null) {
                 Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
                     selectedAlert.Lat, selectedAlert.Lng);
@@ -240,7 +238,7 @@ namespace Casualty_Radar.Modules {
                 try {
                     for (int i = 0; i < _alertPanels.Count; i++) {
                         foreach (Alert alert in Feed.GetInstance().GetNewAlerts) {
-                            if (alert == Feed.GetInstance().GetFilteredAlerts[i]) {
+                            if (alert == Feed.GetInstance().GetAlerts[i]) {
                                 _alertPanels[i].Controls[3].Show();
                             }
                         }
