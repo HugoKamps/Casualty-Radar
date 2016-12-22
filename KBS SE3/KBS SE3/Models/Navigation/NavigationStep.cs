@@ -1,4 +1,6 @@
-﻿namespace Casualty_Radar.Models.Navigation {
+﻿using Casualty_Radar.Models.DataControl.Graph;
+
+namespace Casualty_Radar.Models.Navigation {
     /// <summary>
     /// Indicates what the user needs to do for the current step
     /// </summary>
@@ -29,35 +31,35 @@
         /// </summary>
         public string Instruction { get; set; }
 
-        public NavigationStep(string distance, RouteStepType type) {
+        public NavigationStep(string distance, RouteStepType type, Way way) {
             Distance = distance;
             Type = type;
-            SetInstruction(type, distance);
+            SetInstruction(type, distance, way.Name);
         }
 
-        private void SetInstruction(RouteStepType type, string dist) {
+        private void SetInstruction(RouteStepType type, string dist, string way) {
             string instruction;
             switch (type) {
                 case RouteStepType.Straight:
-                    instruction = "Ga over " + dist + " rechtdoor";
+                    instruction = "Ga over " + dist + " rechtdoor op de " + way;
                     break;
                 case RouteStepType.CurveRight:
-                    instruction = "Flauwe bocht naar rechts over " + dist;
+                    instruction = "Flauwe bocht naar rechts de " + way + " op over " + dist;
                     break;
                 case RouteStepType.Right:
-                    instruction = "Sla over " + dist + " rechtsaf";
+                    instruction = "Sla over " + dist + " rechtsaf de " + way + " op";
                     break;
                 case RouteStepType.SharpRight:
-                    instruction = "Scherpe bocht naar rechts over " + dist;
+                    instruction = "Scherpe bocht naar rechts de " + way + " op over " + dist;
                     break;
                 case RouteStepType.CurveLeft:
-                    instruction = "Flauwe bocht naar links over " + dist;
+                    instruction = "Flauwe bocht naar links de " + way + " op over " + dist;
                     break;
                 case RouteStepType.Left:
-                    instruction = "Sla over " + dist + " linksaf";
+                    instruction = "Sla over " + dist + " linksaf de " + way + " op";
                     break;
                 case RouteStepType.SharpLeft:
-                    instruction = "Scherpe bocht naar links over " + dist;
+                    instruction = "Scherpe bocht naar links de " + way + " op over " + dist;
                     break;
                 case RouteStepType.DestinationReached:
                     instruction = "Bestemming bereikt!";
