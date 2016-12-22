@@ -29,20 +29,21 @@ namespace Casualty_Radar.Core.Algorithms {
         public List<Node> FindPath() {
             // The start node is the first entry in the 'open' list
             List<Node> path = new List<Node>();
-                bool success = Search(_startNode);
-                if (!success) return path;
+            bool success = Search(_startNode);
+            if (!success) return path;
 
-                // If a path was found, follow the parents from the end node to build a list of locations
-                Node node = _endNode;
-                while (node.StarData.Parent != null) {
-                    path.Add(node);
-                    node = node.StarData.Parent;
-                }
+            // If a path was found, follow the parents from the end node to build a list of locations
+            Node node = _endNode;
+            while (node.StarData.Parent != null) {
+                path.Add(node);
+                node = node.StarData.Parent;
+            }
 
-                // Reverse the list so it's in the correct order when returned
-                path.Reverse();
-
-                return path;
+            path.Add(_startNode);
+            // Reverse the list so it's in the correct order when returned
+            path.Reverse();
+            path.Add(_endNode);
+            return path;
         }
 
         /// <summary>

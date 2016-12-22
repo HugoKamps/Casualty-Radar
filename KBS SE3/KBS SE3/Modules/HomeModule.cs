@@ -10,6 +10,7 @@ using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using Casualty_Radar.Core;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
 using Casualty_Radar.Properties;
 
@@ -107,7 +108,7 @@ namespace Casualty_Radar.Modules {
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
             _locationManager.CurrentLatitude = e.Position.Location.Latitude;
             _locationManager.CurrentLongitude = e.Position.Location.Longitude;
-            // InitAlertsMap(true);
+            InitAlertsMap(true);
         }
 
         //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
@@ -116,15 +117,12 @@ namespace Casualty_Radar.Modules {
                 case GeoPositionStatus.Initializing:
                     _hasLocationservice = true;
                     break;
-
                 case GeoPositionStatus.Ready:
                     _hasLocationservice = true;
                     break;
-
                 case GeoPositionStatus.NoData:
                     _hasLocationservice = false;
                     break;
-
                 case GeoPositionStatus.Disabled:
                     _hasLocationservice = false;
                     break;
@@ -167,6 +165,7 @@ namespace Casualty_Radar.Modules {
             }
 
             NavigationModule navigationModule =(NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+
             if (selectedAlert != null) {
                 Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
                     selectedAlert.Lat, selectedAlert.Lng);
@@ -329,7 +328,9 @@ namespace Casualty_Radar.Modules {
                 foreach (object control in _selectedPanel.Controls) {
                     if (control is Label) {
                         Label selectedLabel = (Label)control;
+
                         if (selectedLabel.Text == informationLabel.Text) {
+
                             newPanel.BackColor = Color.FromArgb(245, 120, 105);
                             _selectedPanel = newPanel;
                         }
