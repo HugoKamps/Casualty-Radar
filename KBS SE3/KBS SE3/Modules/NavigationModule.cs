@@ -185,7 +185,7 @@ namespace Casualty_Radar.Modules {
         /// <param name="step">The NavigationStep with all the information</param>
         /// <param name="color">Background color for the panel</param>
         /// <param name="Height">Height of the panel</param>
-        public void CreateRouteStepPanel(NavigationStep step, Color color, int Height) {
+        public void CreateRouteStepPanel(NavigationStep step, Color color, int height) {
             Image icon;
 
             switch (step.Type) {
