@@ -71,43 +71,58 @@ namespace Casualty_Radar.Modules {
             double prevAngle = -1;
             int height = 0;
             Color color = Color.Gainsboro;
+            string startingRoad = "";
+            string endRoad = "";
+            List<NavigationStep> steps = new List<NavigationStep>();
             for (int index = 0; index < path.Count; index++) {
                 Node node = path[index];
                 points.Add(node.GetPoint());
-
                 if (index + 1 != path.Count && index + 2 != path.Count) {
                     map.Overlays[0].Markers.Add(_locationManager.CreateMarker(node.Lat, node.Lon, 0));
                     Node nextNode = path[index + 1];
                     Node nextNextNode = path[index + 2];
+
+                    if (index == 0) startingRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
+
                     double angle = AngleFromCoordinate(nextNode.Lat, nextNode.Lon, nextNextNode.Lat, nextNextNode.Lon);
-                    var type = prevAngle >= 0 ? CalcRouteStepType(CalcBearing(prevAngle, angle)) : RouteStepType.Straight;
+                    var type = prevAngle >= 0
+                        ? CalcRouteStepType(CalcBearing(prevAngle, angle))
+                        : RouteStepType.Straight;
                     string distance =
                         NavigationStep.GetFormattedDistance(Math.Round(MapUtil.GetDistance(node, nextNode), 2));
                     NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
                     totalDistance += MapUtil.GetDistance(node, nextNode);
                     prevAngle = angle;
 
-                    if (index + 3 == path.Count) CreateRouteStepPanel(new NavigationStep(distance, RouteStepType.DestinationReached,
-                        MapUtil.GetWay(nextNode, nextNextNode)), color, height);
+                    if (index + 3 == path.Count) {
+                        step = new NavigationStep(distance, RouteStepType.DestinationReached,
+                            MapUtil.GetWay(nextNode, nextNextNode));
+                        CreateRouteStepPanel(step, color, height);
+                        endRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
+                    }
                     else CreateRouteStepPanel(step, color, height);
 
+                    steps.Add(step);
                     color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
                     height += 51;
-                } else break;
-
+                }
+                else break;
             }
+            PdfUtil pdfUtil = new PdfUtil();
+            pdfUtil.CreatePdf(steps, startingRoad, endRoad);
+
             _locationManager.DrawRoute(points, _routeOverlay);
             totalDistance = Math.Round(totalDistance, 2);
             routeInfoLabel.Text += " (" + totalDistance + "km)";
         }
 
         private double AngleFromCoordinate(double lat1, double long1, double lat2,
-        double long2) {
+            double long2) {
             double dLon = (long2 - long1);
 
             double y = Math.Sin(dLon) * Math.Cos(lat2);
             double x = Math.Cos(lat1) * Math.Sin(lat2) - Math.Sin(lat1)
-                    * Math.Cos(lat2) * Math.Cos(dLon);
+                       * Math.Cos(lat2) * Math.Cos(dLon);
 
             double brng = Math.Atan2(y, x);
 
@@ -130,7 +145,8 @@ namespace Casualty_Radar.Modules {
         private RouteStepType CalcRouteStepType(double bearing) {
             RouteStepType type;
 
-            if (bearing == 0 || bearing == 360 || bearing > 0 && bearing < 25 || bearing < 360 && bearing > 335) // rechtdoor
+            if (bearing == 0 || bearing == 360 || bearing > 0 && bearing < 25 || bearing < 360 && bearing > 335)
+                // rechtdoor
                 type = RouteStepType.Straight;
             else if (bearing >= 25 && bearing < 45)
                 type = RouteStepType.CurveRight;
