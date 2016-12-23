@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using GMap.NET;
@@ -13,7 +12,6 @@ using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Core.Algorithms;
-using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models.DataControl.Graph;
 
 namespace Casualty_Radar.Modules {
@@ -87,9 +85,9 @@ namespace Casualty_Radar.Modules {
                     totalDistance += MapUtil.GetDistance(node, nextNode);
                     prevAngle = angle;
 
-                    if (index + 3 == path.Count) CreateRouteStepPanel(new NavigationStep(distance, RouteStepType.DestinationReached,
-                        MapUtil.GetWay(nextNode, nextNextNode)), color, height);
-                    else CreateRouteStepPanel(step, color, height);
+                    if (index + 3 == path.Count) routeInfoPanel.Controls.Add(NavigationStep.CreateRouteStepPanel(new NavigationStep(distance, RouteStepType.DestinationReached,
+                        MapUtil.GetWay(nextNode, nextNextNode)), color, height));
+                    else routeInfoPanel.Controls.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
 
                     color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
                     height += 51;
@@ -130,7 +128,7 @@ namespace Casualty_Radar.Modules {
         private RouteStepType CalcRouteStepType(double bearing) {
             RouteStepType type;
 
-            if (bearing == 0 || bearing == 360 || bearing > 0 && bearing < 25 || bearing < 360 && bearing > 335) // rechtdoor
+            if (bearing == 0 || bearing == 360 || bearing > 0 && bearing < 25 || bearing < 360 && bearing > 335)
                 type = RouteStepType.Straight;
             else if (bearing >= 25 && bearing < 45)
                 type = RouteStepType.CurveRight;
@@ -171,88 +169,6 @@ namespace Casualty_Radar.Modules {
 
             markersOverlay.Markers.Add(_locationManager.CreateMarker(startLat, startLng, 0));
             markersOverlay.Markers.Add(_locationManager.CreateMarker(destLat, destLng, 2));
-        }
-
-        /// <summary>
-        /// Creates a routestep based on a given NavigationStep
-        /// </summary>
-        /// <param name="step">The NavigationStep with all the information</param>
-        /// <param name="color">Background color for the panel</param>
-        /// <param name="height">Height of the panel</param>
-        public void CreateRouteStepPanel(NavigationStep step, Color color, int height) {
-            Image icon;
-
-            switch (step.Type) {
-                case RouteStepType.Straight:
-                    icon = Resources.straight_icon;
-                    break;
-                case RouteStepType.CurveLeft:
-                    icon = Resources.turn_curve_left_icon;
-                    break;
-                case RouteStepType.Left:
-                    icon = Resources.turn_left_icon;
-                    break;
-                case RouteStepType.SharpLeft:
-                    icon = Resources.turn_left_icon;
-                    break;
-                case RouteStepType.CurveRight:
-                    icon = Resources.turn_curve_right_icon;
-                    break;
-                case RouteStepType.Right:
-                    icon = Resources.turn_right_icon;
-                    break;
-                case RouteStepType.SharpRight:
-                    icon = Resources.turn_right_icon;
-                    break;
-                case RouteStepType.DestinationReached:
-                    icon = Resources.destination_icon;
-                    break;
-                default:
-                    icon = Resources.straight_icon;
-                    break;
-            }
-
-            //The panel which will be filled with all of the controls below
-            Panel newPanel = new Panel {
-                Location = new Point(0, height),
-                Size = new Size(338, 50),
-                BackColor = color
-            };
-
-            if (step.Distance != null) {
-                Label distanceLabel = new Label {
-                    Location = new Point(10, 0),
-                    Size = new Size(50, 50),
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    ForeColor = Color.DarkSlateGray,
-                    Font = new Font("Microsoft Sans Serif", 9, FontStyle.Bold),
-                    Text = step.Distance
-                };
-                newPanel.Controls.Add(distanceLabel);
-            }
-
-            Label instructionLabel = new Label {
-                Location = new Point(60, 0),
-                Size = new Size(210, 50),
-                TextAlign = ContentAlignment.MiddleLeft,
-                ForeColor = Color.DarkSlateGray,
-                Font = new Font("Microsoft Sans Serif", 9),
-                Text = step.Instruction
-            };
-
-            PictureBox instructionIcon = new PictureBox {
-                Location = new Point(280, 10),
-                Size = new Size(30, 30),
-                Image = icon,
-                SizeMode = PictureBoxSizeMode.StretchImage
-            };
-
-            newPanel.Controls.Add(instructionIcon);
-            newPanel.Controls.Add(instructionLabel);
-
-            routeInfoPanel.AutoScroll = true;
-            routeInfoPanel.HorizontalScroll.Enabled = false;
-            routeInfoPanel.Controls.Add(newPanel);
         }
     }
 }
