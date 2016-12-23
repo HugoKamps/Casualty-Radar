@@ -27,7 +27,7 @@ namespace Casualty_Radar.Utils {
             foreach (NavigationStep step in steps) {
                 if (y + 25 > page.Height) {
                     y = 50;
-                    if (x >= 0.525 * page.Width) x = 0.525 * page.Width;
+                    if (x < 0.525 * page.Width) x = 0.525 * page.Width;
                     else {
                         page = document.AddPage();
                         gfx = XGraphics.FromPdfPage(page);
@@ -45,7 +45,6 @@ namespace Casualty_Radar.Utils {
 
             const string filename = "Route.pdf";
             document.Save(filename);
-            Process.Start(filename);
         }
 
         public XImage GetImageWithType(RouteStepType type) {

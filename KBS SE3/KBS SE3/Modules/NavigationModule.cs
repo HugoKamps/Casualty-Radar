@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using GMap.NET;
@@ -184,5 +185,7 @@ namespace Casualty_Radar.Modules {
             markersOverlay.Markers.Add(_locationManager.CreateMarker(startLat, startLng, 0));
             markersOverlay.Markers.Add(_locationManager.CreateMarker(destLat, destLng, 2));
         }
+
+        private void printingPictureBox_Click(object sender, EventArgs e) => Process.Start("Route.pdf"); 
     }
 }
