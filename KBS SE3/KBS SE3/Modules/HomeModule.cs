@@ -9,6 +9,7 @@ using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using Casualty_Radar.Core;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
 using Casualty_Radar.Properties;
 
@@ -69,8 +70,7 @@ namespace Casualty_Radar.Modules {
             if (hasLocationService) {
                 markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude,
                     _locationManager.CurrentLongitude, 0));
-            }
-            else {
+            } else {
                 _locationManager.SetCoordinatesByLocationSetting();
                 markersOverlay.Markers.Add(_locationManager.CreateMarker(_locationManager.CurrentLatitude,
                     _locationManager.CurrentLongitude, 0));
@@ -107,7 +107,7 @@ namespace Casualty_Radar.Modules {
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e) {
             _locationManager.CurrentLatitude = e.Position.Location.Latitude;
             _locationManager.CurrentLongitude = e.Position.Location.Longitude;
-            // InitAlertsMap(true);
+            InitAlertsMap(true);
         }
 
         //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
@@ -116,15 +116,12 @@ namespace Casualty_Radar.Modules {
                 case GeoPositionStatus.Initializing:
                     _hasLocationservice = true;
                     break;
-
                 case GeoPositionStatus.Ready:
                     _hasLocationservice = true;
                     break;
-
                 case GeoPositionStatus.NoData:
                     _hasLocationservice = false;
                     break;
-
                 case GeoPositionStatus.Disabled:
                     _hasLocationservice = false;
                     break;
@@ -166,8 +163,8 @@ namespace Casualty_Radar.Modules {
                 break;
             }
 
-            NavigationModule navigationModule =
-                (NavigationModule) ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            NavigationModule navigationModule =(NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+
             if (selectedAlert != null) {
                 Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
                     selectedAlert.Lat, selectedAlert.Lng);
@@ -179,7 +176,7 @@ namespace Casualty_Radar.Modules {
         }
 
         private void navigationBtn_EnabledChanged(object sender, EventArgs e) {
-            Button button = (Button) sender;
+            Button button = (Button)sender;
             button.ForeColor = Color.White;
             button.BackColor = button.Enabled ? Color.FromArgb(210, 73, 57) : Color.Gray;
         }
@@ -207,7 +204,7 @@ namespace Casualty_Radar.Modules {
                 map.Position = new PointLatLng(_locationManager.CurrentLatitude, _locationManager.CurrentLongitude);
             else map.SetPositionByKeywords(Settings.Default.userLocation);
         }
-        
+
         /// <summary>
         /// Initializes backgroundworkers for readying the feed and map
         /// </summary>
@@ -239,7 +236,7 @@ namespace Casualty_Radar.Modules {
                 try {
                     for (int i = 0; i < _alertPanels.Count; i++) {
                         foreach (Alert alert in Feed.GetInstance().GetNewAlerts) {
-                            if (alert == Feed.GetInstance().GetFilteredAlerts[i]) {
+                            if (alert == Feed.GetInstance().GetAlerts[i] || alert == Feed.GetInstance().GetFilteredAlerts[i]) {
                                 _alertPanels[i].Controls[3].Show();
                             }
                         }
@@ -248,8 +245,7 @@ namespace Casualty_Radar.Modules {
 
                     //foreach (Panel p in _alertPanels)
                     //    feedPanel.Controls.Add(p);
-                }
-                catch (InvalidOperationException e) {
+                } catch (InvalidOperationException e) {
                     MessageBox.Show(e.ToString());
                 }
                 alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count + ")";
@@ -286,12 +282,12 @@ namespace Casualty_Radar.Modules {
         /// <param name="title">The title of the alert</param>
         /// <param name="info">Information about the alert</param>
         /// <param name="time">The time of the alert</param>
-        /// <param name="y">The height of the panel</param>
+        /// <param name="height">The height of the panel</param>
         /// <returns>Returns the panel with all of it's content</returns>
-        public Panel CreateAlertPanel(int type, string title, string info, string time, int y) {
+        public Panel CreateAlertPanel(int type, string title, string info, string time, int height) {
             //The panel which will be filled with all of the controls below
             Panel newPanel = new Panel {
-                Location = new Point(0, y),
+                Location = new Point(0, height),
                 Size = new Size(320, 80),
                 BackColor = Color.FromArgb(236, 89, 71),
                 Cursor = Cursors.Hand
@@ -306,7 +302,7 @@ namespace Casualty_Radar.Modules {
             };
 
             //The label which will be filled with the information about the alert
-            Label label = new Label {
+            Label informationLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(0, 0),
                 Font = new Font("Microsoft Sans Serif", 9),
@@ -316,7 +312,7 @@ namespace Casualty_Radar.Modules {
                 Text = title + "\n" + info
             };
 
-            Label newLabel = new Label {
+            Label newStampLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(280, 0),
                 Size = new Size(40, 20),
@@ -330,8 +326,10 @@ namespace Casualty_Radar.Modules {
             if (_selectedPanel != null) {
                 foreach (object control in _selectedPanel.Controls) {
                     if (control is Label) {
-                        Label selectedLabel = (Label) control;
-                        if (selectedLabel.Text == label.Text) {
+                        Label selectedLabel = (Label)control;
+
+                        if (selectedLabel.Text == informationLabel.Text) {
+
                             newPanel.BackColor = Color.FromArgb(245, 120, 105);
                             _selectedPanel = newPanel;
                         }
@@ -343,7 +341,7 @@ namespace Casualty_Radar.Modules {
             Label timeLabel = new Label {
                 ForeColor = Color.White,
                 Location = new Point(145, 50),
-                Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold),
+                Font = new Font("Microsoft Sans Serif", 8, FontStyle.Regular),
                 Size = new Size(200, 30),
                 BackColor = Color.Transparent,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -355,9 +353,9 @@ namespace Casualty_Radar.Modules {
             newPictureBox.MouseLeave += feedPanelItem_MouseLeave;
             newPictureBox.Click += feedPanelItem_Click;
 
-            label.MouseEnter += feedPanelItem_MouseEnter;
-            label.MouseLeave += feedPanelItem_MouseLeave;
-            label.Click += feedPanelItem_Click;
+            informationLabel.MouseEnter += feedPanelItem_MouseEnter;
+            informationLabel.MouseLeave += feedPanelItem_MouseLeave;
+            informationLabel.Click += feedPanelItem_Click;
 
             timeLabel.MouseEnter += feedPanelItem_MouseEnter;
             timeLabel.MouseLeave += feedPanelItem_MouseLeave;
@@ -369,37 +367,34 @@ namespace Casualty_Radar.Modules {
 
             //The panel is filled with all the controls initialized above
             newPanel.Controls.Add(newPictureBox);
-            newPanel.Controls.Add(label);
+            newPanel.Controls.Add(informationLabel);
             newPanel.Controls.Add(timeLabel);
-            newPanel.Controls.Add(newLabel);
+            newPanel.Controls.Add(newStampLabel);
 
             return newPanel;
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel) sender;
+                Panel panel = (Panel)sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == panel) {
                     _selectedPanel = null;
                     navigationBtn.Enabled = false;
                     navigationBtn.BackColor = Color.Gray;
-                }
-                else {
+                } else {
                     _selectedPanel = panel;
                     _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
                     navigationBtn.Enabled = true;
                 }
-            }
-            else {
-                Control control = (Control) sender;
+            } else {
+                Control control = (Control)sender;
                 if (_selectedPanel != null) _selectedPanel.BackColor = Color.FromArgb(236, 86, 71);
                 if (_selectedPanel == control.Parent) {
                     _selectedPanel = null;
                     navigationBtn.Enabled = false;
-                }
-                else {
-                    _selectedPanel = (Panel) control.Parent;
+                } else {
+                    _selectedPanel = (Panel)control.Parent;
                     _selectedPanel.BackColor = Color.FromArgb(245, 120, 105);
                     navigationBtn.Enabled = true;
                 }
@@ -408,7 +403,7 @@ namespace Casualty_Radar.Modules {
             if (_previousMarker != null) map.Overlays[0].Markers[_previousMarkerIndex] = _previousMarker;
             int index = _alertPanels.FindIndex(panel => panel == _selectedPanel) + 1;
             _previousMarkerIndex = index;
-            _previousMarker = (GMarkerGoogle) map.Overlays[0].Markers[index];
+            _previousMarker = (GMarkerGoogle)map.Overlays[0].Markers[index];
             if (index != 0)
                 map.Overlays[0].Markers[index] = _locationManager.CreateMarker(_previousMarker.Position.Lat,
                     _previousMarker.Position.Lng, 3);
@@ -416,22 +411,20 @@ namespace Casualty_Radar.Modules {
 
         private void feedPanelItem_MouseEnter(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel) sender;
+                Panel panel = (Panel)sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(210, 73, 57);
-            }
-            else {
-                Control control = (Control) sender;
+            } else {
+                Control control = (Control)sender;
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(210, 73, 57);
             }
         }
 
         private void feedPanelItem_MouseLeave(object sender, EventArgs e) {
             if (sender.GetType() == typeof(Panel)) {
-                Panel panel = (Panel) sender;
+                Panel panel = (Panel)sender;
                 if (panel != _selectedPanel) panel.BackColor = Color.FromArgb(236, 86, 71);
-            }
-            else {
-                Control control = (Control) sender;
+            } else {
+                Control control = (Control)sender;
                 if (control.Parent != _selectedPanel) control.Parent.BackColor = Color.FromArgb(236, 86, 71);
             }
         }

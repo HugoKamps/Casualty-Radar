@@ -29,7 +29,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
         /// Because we create only one instance of each WayTypeBase we make sure there aren't duplicate instances.
         /// </summary>
         private void Init() {
-            var wayTypes = Assembly.GetExecutingAssembly().GetTypes()
+            List<Type> wayTypes = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(a => a.IsClass && a.Namespace != null &&
                 a.Namespace.Contains(NAMESPACE_PATH)).ToList();
             foreach (Type t in wayTypes) {

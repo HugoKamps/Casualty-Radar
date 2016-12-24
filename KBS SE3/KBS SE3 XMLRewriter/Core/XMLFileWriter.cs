@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace XMLRewriter.Core {
-    class XMLFileWriter {
+    class XmlFileWriter {
 
         private XDocument _doc;
         private String _destination, _fileName;
         private XElement _root;
-        public XMLFileWriter(String dest, String fileName) {
+        public XmlFileWriter(String dest, String fileName) {
             this._destination = dest;
             this._fileName = fileName;
             this._root = new XElement("osm");

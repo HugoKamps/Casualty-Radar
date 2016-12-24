@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using GMap.NET.WindowsForms;
-using GMap.NET.WindowsForms.Markers;
 using Casualty_Radar.Core;
 using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models.DataControl;
@@ -12,9 +11,6 @@ using Casualty_Radar.Modules;
 using static Casualty_Radar.Core.Dialog.DialogType;
 using System.Threading;
 using System.ComponentModel;
-using System.Collections.Generic;
-using Casualty_Radar.Models.DataControl.Graph.Ways;
-using Casualty_Radar.Utils;
 
 namespace Casualty_Radar {
     public partial class Container : Form {
@@ -36,7 +32,7 @@ namespace Casualty_Radar {
         private Container() {
             InitializeComponent();
 
-            Thread t = new Thread(new ThreadStart(SplashThread));
+            Thread t = new Thread(SplashThread);
             t.IsBackground = true;
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
@@ -155,9 +151,11 @@ namespace Casualty_Radar {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"C:\Users\richa_000\Desktop\hattem.xml");
+            DataParser parser = new DataParser(@"../../Resources/hattem.xml");
             parser.Deserialize();
             DataCollection col = parser.GetCollection();
+            List<Node> nodes = col.Nodes;
+            NavigationModule nm = (NavigationModule) ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             //DisplayDialog(DialogMessageType.ERROR, "XML Error", "Je moet eem een nieuwe XML Parsen.");
         }
 

@@ -18,7 +18,7 @@ namespace Casualty_Radar.Core {
         private SyndicationFeed _p2000;
         private readonly string FEED_URL = "http://feeds.livep2000.nl/";
         private readonly string CACHED_FEED_URL = "http://web.archive.org/web/http://feeds.livep2000.nl/";
-        private string USE_FEED_URL;
+        private readonly string USE_FEED_URL;
         private List<Alert> _alerts;
         private List<Alert> _filteredAlerts;
         private List<Alert> _newAlerts;
@@ -40,14 +40,23 @@ namespace Casualty_Radar.Core {
         /// Loads the feed by using SyndicationFeed and converts it into xml
         /// If the website is down we catch it with a WebException
         /// After we caught it with a WebException: display a dialog box with a warning and load in the cached version of the website
+        /// If the website does work but there is no data in the xml file we also catch it with an exception
         /// Initial update - Only updates after the P2000 is read
         /// </summary>
         private Feed() {
             try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(FEED_URL));
                 USE_FEED_URL = FEED_URL;
-            } catch (WebException) {
-                Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.WARNING, "Website is niet bereikbaar", "Een gecachede versie van deze website wordt ingeladen");
+            }
+            catch (WebException) {
+                Container.GetInstance()
+                    .DisplayDialog(DialogType.DialogMessageType.WARNING, "Website is niet bereikbaar",
+                        "Een gecachede versie van deze website wordt ingeladen");
+                _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
+                USE_FEED_URL = CACHED_FEED_URL;
+            } catch(XmlException)
+            {
+                Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.WARNING, "Website bevat geen xml data", "Een gecachede versie van deze website wordt ingeladen");
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
                 USE_FEED_URL = CACHED_FEED_URL;
             }
@@ -89,9 +98,7 @@ namespace Casualty_Radar.Core {
             List<Alert> tempAlerts = new List<Alert>();
             foreach (SyndicationItem item in items.Items.OrderBy(x => x.PublishDate)) {
                 Alert newAlert = CreateAlert(item);
-
-                if (newAlert != null)
-                    tempAlerts.Add(newAlert);
+                if (newAlert != null) tempAlerts.Add(newAlert);
             }
             tempAlerts.Reverse();
             return tempAlerts;
@@ -124,19 +131,20 @@ namespace Casualty_Radar.Core {
             List<Alert> oldAlerts = _alerts;
             _newAlerts = new List<Alert>();
 
+            // Load the feed
             try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(USE_FEED_URL));
                 _alerts = CreateAlertList(_p2000);
 
                 foreach (Alert item in _alerts)
-                    if (item.Title != oldAlerts[0].Title) {
-                        _newAlerts.Add(item);
-                    } else break;
+                    if (item.Title != oldAlerts[0].Title) _newAlerts.Add(item);
+                    else break;
 
                 if (_newAlerts.Count > 0 && Container.GetInstance().WindowState == FormWindowState.Minimized)
                     new PushMessage(_newAlerts);
                 UpdateAlerts();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 MessageBox.Show(e.Message);
             }
         }

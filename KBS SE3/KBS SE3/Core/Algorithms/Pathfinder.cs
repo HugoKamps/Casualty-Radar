@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using GMap.NET;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Utils;
 
@@ -29,23 +26,24 @@ namespace Casualty_Radar.Core.Algorithms {
         /// Attempts to find a path from the start location to the end location
         /// </summary>
         /// <returns>Returns a List of Points representing the path. If no path was found, the returned list is empty</returns>
-        public List<PointLatLng> FindPath() {
+        public List<Node> FindPath() {
             // The start node is the first entry in the 'open' list
-            List<PointLatLng> path = new List<PointLatLng>();
-                bool success = Search(_startNode);
-                if (!success) return path;
+            List<Node> path = new List<Node>();
+            bool success = Search(_startNode);
+            if (!success) return path;
 
-                // If a path was found, follow the parents from the end node to build a list of locations
-                Node node = _endNode;
-                while (node.StarData.Parent != null) {
-                    path.Add(node.GetPoint());
-                    node = node.StarData.Parent;
-                }
+            // If a path was found, follow the parents from the end node to build a list of locations
+            Node node = _endNode;
+            while (node.StarData.Parent != null) {
+                path.Add(node);
+                node = node.StarData.Parent;
+            }
 
-                // Reverse the list so it's in the correct order when returned
-                path.Reverse();
-
-                return path;
+            path.Add(_startNode);
+            // Reverse the list so it's in the correct order when returned
+            path.Reverse();
+            path.Add(_endNode);
+            return path;
         }
 
         /// <summary>
@@ -83,7 +81,7 @@ namespace Casualty_Radar.Core.Algorithms {
             List<Node> nodes = new List<Node>();
             List<Node> adjacentNodes = MapUtil.GetAdjacentNodes(fromNode);
 
-            foreach (var node in adjacentNodes) {
+            foreach (Node node in adjacentNodes) {
                 node.StarData = _openNodes.Find(n => n.ID == node.ID) == null ? new StarData(node, _endNode) : _openNodes.Find(n => n.ID == node.ID).StarData;
 
                 foreach (Node n in _closedNodes) if (n.ID == node.ID) node.StarData.State = NodeState.Closed;

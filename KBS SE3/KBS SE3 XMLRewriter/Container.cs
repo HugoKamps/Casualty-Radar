@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using XMLRewriter.Core;
 
@@ -37,7 +30,7 @@ namespace XMLRewriter {
         }
 
         private void convertBtn_Click(object sender, EventArgs e) {
-            XMLFileReader reader = new XMLFileReader(fileLocationBox.Text, fileDestinationBox.Text, outputNameBox.Text);
+            XmlFileReader reader = new XmlFileReader(fileLocationBox.Text, fileDestinationBox.Text, outputNameBox.Text);
             reader.DataLog = convertDataLog;
             reader.StatusBar = convertStatusBar;
             convertBtn.Enabled = false;

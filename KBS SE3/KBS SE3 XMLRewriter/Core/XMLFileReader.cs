@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
 namespace XMLRewriter.Core {
-    class XMLFileReader {
+    class XmlFileReader {
 
         private String _path, _destination, _fileName;
-        private XMLFileWriter _writer;
+        private XmlFileWriter _writer;
         public TextBox DataLog { set; private get; }
         public ProgressBar StatusBar { set; private get; }
 
-        public XMLFileReader(String path) {
+        public XmlFileReader(String path) {
             this._path = path;
         }
 
-        public XMLFileReader(String path, String destination, String fileName) : this(path) {
+        public XmlFileReader(String path, String destination, String fileName) : this(path) {
             this._destination = destination;
             this._fileName = fileName;
         }
@@ -35,14 +32,14 @@ namespace XMLRewriter.Core {
             if (String.IsNullOrEmpty(_fileName) || String.IsNullOrWhiteSpace(_fileName)) {
                 MessageBox.Show("Please supply a name for your XML File.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
             } else {
-                this._writer = new XMLFileWriter(_destination, _fileName);
+                this._writer = new XmlFileWriter(_destination, _fileName);
                 Log("Reading started");
-                var elements = ParsedElements();
-                var size = elements.Count();
+                IEnumerable<XElement> elements = ParsedElements();
+                int size = elements.Count();
                 Log("Found " + size + " elements to convert");
                 StatusBar.Maximum = size;
                 Log("Writing data to new XML file");
-                foreach (var element in elements) {
+                foreach (XElement element in elements) {
                     _writer.Append(ConvertElement(element));
                     StatusBar.Value++;
                 }
@@ -92,17 +89,17 @@ namespace XMLRewriter.Core {
                 case "node":
                     string lon = origin.Attribute("lon").Value;
                     string lat = origin.Attribute("lat").Value;
-                    string node_id = origin.Attribute("id").Value;
-                    return new XElement("n", new XAttribute("id", node_id), new XAttribute("l", lon), new XAttribute("b", lat));
+                    string nodeId = origin.Attribute("id").Value;
+                    return new XElement("n", new XAttribute("id", nodeId), new XAttribute("l", lon), new XAttribute("b", lat));
                 default:
                 case "way":
-                    string way_id = origin.Attribute("id").Value;
-                    XElement rtn = new XElement("w", new XAttribute("id", way_id));
+                    string wayId = origin.Attribute("id").Value;
+                    XElement rtn = new XElement("w", new XAttribute("id", wayId));
                     foreach (XElement element in origin.Descendants()) {
                         if (element.Name.ToString().Equals("nd")) {
                             rtn.Add(new XElement("nd", new XAttribute("rf", element.FirstAttribute.Value)));
                         } else if (element.Attribute("k") != null) {
-                            var value = element.Attribute("v").Value;
+                            string value = element.Attribute("v").Value;
                             switch (element.Attribute("k").Value) {
                                 case "highway":
                                     rtn.Add(new XAttribute("t", ParseWayValue(value)));
