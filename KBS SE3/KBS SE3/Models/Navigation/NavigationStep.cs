@@ -39,7 +39,13 @@ namespace Casualty_Radar.Models.Navigation {
             Type = type;
             SetInstruction(type, distance, way.Name);
         }
-
+        
+        /// <summary>
+        /// Set the instruction string based on the current RouteStepType, the distance and the way
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="dist"></param>
+        /// <param name="way"></param>
         private void SetInstruction(RouteStepType type, string dist, string way) {
             string instruction;
             switch (type) {

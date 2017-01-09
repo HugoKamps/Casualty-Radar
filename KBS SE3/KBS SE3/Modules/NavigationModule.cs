@@ -115,6 +115,14 @@ namespace Casualty_Radar.Modules {
             routeInfoLabel.Text += " (" + totalDistance + "km)";
         }
 
+        /// <summary>
+        /// Get the angle in degrees between two lat & long points
+        /// </summary>
+        /// <param name="lat1"></param>
+        /// <param name="long1"></param>
+        /// <param name="lat2"></param>
+        /// <param name="long2"></param>
+        /// <returns>The angle between two coordinates</returns>
         private double AngleFromCoordinate(double lat1, double long1, double lat2,
             double long2) {
             double dLon = (long2 - long1);
@@ -123,15 +131,22 @@ namespace Casualty_Radar.Modules {
             double x = Math.Cos(lat1) * Math.Sin(lat2) - Math.Sin(lat1)
                        * Math.Cos(lat2) * Math.Cos(dLon);
 
-            double brng = Math.Atan2(y, x);
+            double angle = Math.Atan2(y, x);
 
-            brng = brng * (180 / Math.PI);
-            brng = (brng + 360) % 360;
-            brng = 360 - brng;
+            angle = angle * (180 / Math.PI);
+            angle = (angle + 360) % 360;
+            angle = 360 - angle;
 
-            return brng;
+            return angle;
         }
 
+        /// <summary>
+        /// Calculate the bearing between two angles
+        /// If it is lower than 0, add 360 to it so it will always be a positive number
+        /// </summary>
+        /// <param name="angle1"></param>
+        /// <param name="angle2"></param>
+        /// <returns>The bearing between two angles</returns>
         private double CalcBearing(double angle1, double angle2) {
             double bearing = angle2 - angle1;
 
@@ -141,6 +156,11 @@ namespace Casualty_Radar.Modules {
             return bearing;
         }
 
+        /// <summary>
+        /// Determine the RouteStepType based on the bearing
+        /// </summary>
+        /// <param name="bearing"></param>
+        /// <returns>The RouteStepType based on the bearing</returns>
         private RouteStepType CalcRouteStepType(double bearing) {
             RouteStepType type;
 
