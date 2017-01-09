@@ -111,7 +111,7 @@ namespace Casualty_Radar.Modules {
 
             _locationManager.DrawRoute(points, _routeOverlay);
             totalDistance = Math.Round(totalDistance, 2);
-            routeInfoLabel.Text += " (" + totalDistance + "km)";
+            routeInfoLabel.Text = "Routebeschrijving (" + totalDistance + "km)";
         }
 
         private double AngleFromCoordinate(double lat1, double long1, double lat2,
