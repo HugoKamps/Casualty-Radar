@@ -13,7 +13,6 @@ using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Core.Algorithms;
-using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models.DataControl.Graph;
 
 namespace Casualty_Radar.Modules {
@@ -59,10 +58,10 @@ namespace Casualty_Radar.Modules {
 
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
-            _startNode = targetCollection[130];
-            _startNode = targetCollection[131];
+            Random rand = new Random();
+            _startNode = targetCollection[rand.Next(0, 161)]; //131
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
-            _endNode = targetCollection[124];
+            _endNode = targetCollection[rand.Next(0, 161)]; //124
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 3));
 
             _pathfinder = new Pathfinder(_startNode, _endNode);
@@ -72,43 +71,57 @@ namespace Casualty_Radar.Modules {
             double prevAngle = -1;
             int height = 0;
             Color color = Color.Gainsboro;
+            string startingRoad = "";
+            string endRoad = "";
+            List<NavigationStep> steps = new List<NavigationStep>();
             for (int index = 0; index < path.Count; index++) {
                 Node node = path[index];
                 points.Add(node.GetPoint());
-
                 if (index + 1 != path.Count && index + 2 != path.Count) {
                     map.Overlays[0].Markers.Add(_locationManager.CreateMarker(node.Lat, node.Lon, 0));
                     Node nextNode = path[index + 1];
                     Node nextNextNode = path[index + 2];
+
+                    if (index == 0) startingRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
+
                     double angle = AngleFromCoordinate(nextNode.Lat, nextNode.Lon, nextNextNode.Lat, nextNextNode.Lon);
-                    var type = prevAngle >= 0 ? CalcRouteStepType(CalcBearing(prevAngle, angle)) : RouteStepType.Straight;
+                    var type = prevAngle >= 0
+                        ? CalcRouteStepType(CalcBearing(prevAngle, angle))
+                        : RouteStepType.Straight;
                     string distance =
                         NavigationStep.GetFormattedDistance(Math.Round(MapUtil.GetDistance(node, nextNode), 2));
                     NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
                     totalDistance += MapUtil.GetDistance(node, nextNode);
                     prevAngle = angle;
 
-                    if (index + 3 == path.Count) CreateRouteStepPanel(new NavigationStep(distance, RouteStepType.DestinationReached,
-                        MapUtil.GetWay(nextNode, nextNextNode)), color, height);
-                    else CreateRouteStepPanel(step, color, height);
-
+                    if (index + 3 == path.Count) {
+                        step = new NavigationStep(distance, RouteStepType.DestinationReached,
+                            MapUtil.GetWay(nextNode, nextNextNode));
+                        routeInfoPanel.Controls.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
+                        endRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
+                    }
+                    else routeInfoPanel.Controls.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
+                    steps.Add(step);
                     color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
                     height += 51;
-                } else break;
-
+                }
+                else break;
             }
+            PdfUtil pdfUtil = new PdfUtil();
+            pdfUtil.CreatePdf(steps, startingRoad, endRoad);
+
             _locationManager.DrawRoute(points, _routeOverlay);
             totalDistance = Math.Round(totalDistance, 2);
             routeInfoLabel.Text += " (" + totalDistance + "km)";
         }
 
         private double AngleFromCoordinate(double lat1, double long1, double lat2,
-        double long2) {
+            double long2) {
             double dLon = (long2 - long1);
 
             double y = Math.Sin(dLon) * Math.Cos(lat2);
             double x = Math.Cos(lat1) * Math.Sin(lat2) - Math.Sin(lat1)
-                    * Math.Cos(lat2) * Math.Cos(dLon);
+                       * Math.Cos(lat2) * Math.Cos(dLon);
 
             double brng = Math.Atan2(y, x);
 
@@ -131,7 +144,7 @@ namespace Casualty_Radar.Modules {
         private RouteStepType CalcRouteStepType(double bearing) {
             RouteStepType type;
 
-            if (bearing == 0 || bearing == 360 || bearing > 0 && bearing < 25 || bearing < 360 && bearing > 335) // rechtdoor
+            if (bearing == 0 || bearing == 360 || bearing > 0 && bearing < 25 || bearing < 360 && bearing > 335)
                 type = RouteStepType.Straight;
             else if (bearing >= 25 && bearing < 45)
                 type = RouteStepType.CurveRight;
@@ -164,6 +177,7 @@ namespace Casualty_Radar.Modules {
             map.IgnoreMarkerOnMouseWheel = true;
             map.DragButton = MouseButtons.Left;
             GMaps.Instance.Mode = AccessMode.ServerOnly;
+            map.Zoom = 7;
             map.Position = new PointLatLng((startLat + destLat) / 2, (startLng + destLng) / 2);
             GMapOverlay markersOverlay = new GMapOverlay("markers");
             _routeOverlay = new GMapOverlay("routes");
@@ -174,86 +188,6 @@ namespace Casualty_Radar.Modules {
             markersOverlay.Markers.Add(_locationManager.CreateMarker(destLat, destLng, 2));
         }
 
-        /// <summary>
-        /// Creates a routestep based on a given NavigationStep
-        /// </summary>
-        /// <param name="step">The NavigationStep with all the information</param>
-        /// <param name="color">Background color for the panel</param>
-        /// <param name="height">Height of the panel</param>
-        public void CreateRouteStepPanel(NavigationStep step, Color color, int height) {
-            Image icon;
-
-            switch (step.Type) {
-                case RouteStepType.Straight:
-                    icon = Resources.straight_icon;
-                    break;
-                case RouteStepType.CurveLeft:
-                    icon = Resources.turn_curve_left_icon;
-                    break;
-                case RouteStepType.Left:
-                    icon = Resources.turn_left_icon;
-                    break;
-                case RouteStepType.SharpLeft:
-                    icon = Resources.turn_left_icon;
-                    break;
-                case RouteStepType.CurveRight:
-                    icon = Resources.turn_curve_right_icon;
-                    break;
-                case RouteStepType.Right:
-                    icon = Resources.turn_right_icon;
-                    break;
-                case RouteStepType.SharpRight:
-                    icon = Resources.turn_right_icon;
-                    break;
-                case RouteStepType.DestinationReached:
-                    icon = Resources.destination_icon;
-                    break;
-                default:
-                    icon = Resources.straight_icon;
-                    break;
-            }
-
-            //The panel which will be filled with all of the controls below
-            Panel newPanel = new Panel {
-                Location = new Point(0, height),
-                Size = new Size(338, 50),
-                BackColor = color
-            };
-
-            if (step.Distance != null) {
-                Label distanceLabel = new Label {
-                    Location = new Point(10, 0),
-                    Size = new Size(50, 50),
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    ForeColor = Color.DarkSlateGray,
-                    Font = new Font("Microsoft Sans Serif", 9, FontStyle.Bold),
-                    Text = step.Distance
-                };
-                newPanel.Controls.Add(distanceLabel);
-            }
-
-            Label instructionLabel = new Label {
-                Location = new Point(60, 0),
-                Size = new Size(210, 50),
-                TextAlign = ContentAlignment.MiddleLeft,
-                ForeColor = Color.DarkSlateGray,
-                Font = new Font("Microsoft Sans Serif", 9),
-                Text = step.Instruction
-            };
-
-            PictureBox instructionIcon = new PictureBox {
-                Location = new Point(280, 10),
-                Size = new Size(30, 30),
-                Image = icon,
-                SizeMode = PictureBoxSizeMode.StretchImage
-            };
-
-            newPanel.Controls.Add(instructionIcon);
-            newPanel.Controls.Add(instructionLabel);
-
-            routeInfoPanel.AutoScroll = true;
-            routeInfoPanel.HorizontalScroll.Enabled = false;
-            routeInfoPanel.Controls.Add(newPanel);
-        }
+        private void printingPictureBox_Click(object sender, EventArgs e) => Process.Start("Route.pdf"); 
     }
 }
