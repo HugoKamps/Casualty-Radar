@@ -101,6 +101,9 @@ namespace XMLRewriter.Core {
                         } else if (element.Attribute("k") != null) {
                             string value = element.Attribute("v").Value;
                             switch (element.Attribute("k").Value) {
+                                case "junction":
+                                    rtn.Add(new XAttribute("jc", value == "roundabout" ? "ra" : "jh"));
+                                    break;
                                 case "highway":
                                     rtn.Add(new XAttribute("t", ParseWayValue(value)));
                                     break;
