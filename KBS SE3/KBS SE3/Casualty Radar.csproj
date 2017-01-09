@@ -110,8 +110,20 @@
     <Compile Include="Models\DataControl\Graph\Ways\Way.cs" />
     <Compile Include="Models\DataControl\Graph\Ways\WayTypeBase.cs" />
     <Compile Include="Models\DataControl\Graph\Ways\WayTypeControl.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\Living_Street.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\MotorWay.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\MotorWay_Link.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\Path.cs" />
     <Compile Include="Models\DataControl\Graph\Ways\WayTypes\PrimaryWay.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\Primary_Link.cs" />
     <Compile Include="Models\DataControl\Graph\Ways\WayTypes\ResidentialWay.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\SecondaryWay.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\Secondary_Link.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\TertiaryWay.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\Tertiary_Link.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\Trunk.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\Trunk_Link.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\UnclassifiedWay.cs" />
     <Compile Include="Models\DataControl\Graph\Ways\WayZoomLevel.cs" />
     <Compile Include="Modules\SplashScreenModule.cs">
       <SubType>UserControl</SubType>
