@@ -214,7 +214,6 @@
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
     <Content Include="Resources\destination-icon.png" />
-    <Content Include="Resources\hattem.xml" />
     <Content Include="Resources\printing_icon.png" />
     <Content Include="Resources\straight_icon.png" />
     <Content Include="Resources\TESTTT.xml" />
