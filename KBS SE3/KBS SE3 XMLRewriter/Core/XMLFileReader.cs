@@ -130,11 +130,12 @@ namespace XMLRewriter.Core {
         /// </summary>
         /// <param name="origin">The original string value</param>
         /// <returns>A shortened string (key) based on the origin value</returns>
-        public static String ParseWayValue(string origin) {
+        public static string ParseWayValue(string origin) {
             switch (origin) {
                 case "residential": return "res";
                 case "unclassified": return "unc";
                 case "motorway": return "mot";
+                case "living_street": return "liv";
                 case "primary": return "pri";
                 case "path": return "pth";
                 case "trunk": return "tru";
