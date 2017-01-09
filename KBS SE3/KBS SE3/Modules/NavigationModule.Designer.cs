@@ -35,11 +35,13 @@
             this.alertInfoLabel = new System.Windows.Forms.Label();
             this.mapPanel = new System.Windows.Forms.Panel();
             this.map = new GMap.NET.WindowsForms.GMapControl();
+            this.printingPictureBox = new System.Windows.Forms.PictureBox();
             this.routePanel.SuspendLayout();
             this.routeInfoLabelPanel.SuspendLayout();
             this.alertInfoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).BeginInit();
             this.alertInfoLabelPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // routePanel
@@ -57,6 +59,7 @@
             // 
             // routeInfoPanel
             // 
+            this.routeInfoPanel.AutoScroll = true;
             this.routeInfoPanel.BackColor = System.Drawing.Color.White;
             this.routeInfoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.routeInfoPanel.Location = new System.Drawing.Point(0, 179);
@@ -66,6 +69,7 @@
             // 
             // routeInfoLabelPanel
             // 
+            this.routeInfoLabelPanel.Controls.Add(this.printingPictureBox);
             this.routeInfoLabelPanel.Controls.Add(this.routeInfoLabel);
             this.routeInfoLabelPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.routeInfoLabelPanel.Location = new System.Drawing.Point(0, 142);
@@ -76,7 +80,7 @@
             // routeInfoLabel
             // 
             this.routeInfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular);
+            this.routeInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.routeInfoLabel.ForeColor = System.Drawing.Color.White;
             this.routeInfoLabel.Location = new System.Drawing.Point(0, 0);
             this.routeInfoLabel.Name = "routeInfoLabel";
@@ -110,7 +114,7 @@
             // 
             // timeLabel
             // 
-            this.timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular);
+            this.timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.timeLabel.ForeColor = System.Drawing.Color.White;
             this.timeLabel.Location = new System.Drawing.Point(150, 65);
             this.timeLabel.Name = "timeLabel";
@@ -139,7 +143,7 @@
             // alertInfoLabel
             // 
             this.alertInfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.alertInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular);
+            this.alertInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.alertInfoLabel.ForeColor = System.Drawing.Color.White;
             this.alertInfoLabel.Location = new System.Drawing.Point(0, 0);
             this.alertInfoLabel.Name = "alertInfoLabel";
@@ -184,6 +188,17 @@
             this.map.TabIndex = 6;
             this.map.Zoom = 7D;
             // 
+            // printingPictureBox
+            // 
+            this.printingPictureBox.Image = global::Casualty_Radar.Properties.Resources.printing_icon;
+            this.printingPictureBox.Location = new System.Drawing.Point(301, 4);
+            this.printingPictureBox.Name = "printingPictureBox";
+            this.printingPictureBox.Size = new System.Drawing.Size(30, 30);
+            this.printingPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.printingPictureBox.TabIndex = 0;
+            this.printingPictureBox.TabStop = false;
+            this.printingPictureBox.Click += new System.EventHandler(this.printingPictureBox_Click);
+            // 
             // NavigationModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -198,6 +213,7 @@
             this.alertInfoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).EndInit();
             this.alertInfoLabelPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -216,5 +232,6 @@
         private System.Windows.Forms.Label routeInfoLabel;
         private System.Windows.Forms.Panel routeInfoPanel;
         private GMap.NET.WindowsForms.GMapControl map;
+        private System.Windows.Forms.PictureBox printingPictureBox;
     }
 }

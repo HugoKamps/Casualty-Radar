@@ -61,6 +61,14 @@
       <HintPath>..\packages\MySql.Web.6.9.9\lib\net45\MySql.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PdfSharp, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.Charting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -153,6 +161,7 @@
     <Compile Include="Utils\AlertUtil.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utils\MapUtil.cs" />
+    <Compile Include="Utils\PdfUtil.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
     </EmbeddedResource>
@@ -205,6 +214,7 @@
     <Content Include="Resources\app_icon.ico" />
     <Content Include="Resources\destination-icon.png" />
     <Content Include="Resources\hattem.xml" />
+    <Content Include="Resources\printing_icon.png" />
     <Content Include="Resources\straight_icon.png" />
     <Content Include="Resources\TESTTT.xml" />
     <Content Include="Resources\turn_curve_right_icon.png" />
