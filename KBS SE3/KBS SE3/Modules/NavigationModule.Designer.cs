@@ -35,11 +35,13 @@
             this.alertInfoLabel = new System.Windows.Forms.Label();
             this.mapPanel = new System.Windows.Forms.Panel();
             this.map = new GMap.NET.WindowsForms.GMapControl();
+            this.printingPictureBox = new System.Windows.Forms.PictureBox();
             this.routePanel.SuspendLayout();
             this.routeInfoLabelPanel.SuspendLayout();
             this.alertInfoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).BeginInit();
             this.alertInfoLabelPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // routePanel
@@ -67,6 +69,7 @@
             // 
             // routeInfoLabelPanel
             // 
+            this.routeInfoLabelPanel.Controls.Add(this.printingPictureBox);
             this.routeInfoLabelPanel.Controls.Add(this.routeInfoLabel);
             this.routeInfoLabelPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.routeInfoLabelPanel.Location = new System.Drawing.Point(0, 142);
@@ -185,6 +188,17 @@
             this.map.TabIndex = 6;
             this.map.Zoom = 7D;
             // 
+            // printingPictureBox
+            // 
+            this.printingPictureBox.Image = global::Casualty_Radar.Properties.Resources.printing_icon;
+            this.printingPictureBox.Location = new System.Drawing.Point(301, 4);
+            this.printingPictureBox.Name = "printingPictureBox";
+            this.printingPictureBox.Size = new System.Drawing.Size(30, 30);
+            this.printingPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.printingPictureBox.TabIndex = 0;
+            this.printingPictureBox.TabStop = false;
+            this.printingPictureBox.Click += new System.EventHandler(this.printingPictureBox_Click);
+            // 
             // NavigationModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -199,6 +213,7 @@
             this.alertInfoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).EndInit();
             this.alertInfoLabelPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -217,5 +232,6 @@
         private System.Windows.Forms.Label routeInfoLabel;
         private System.Windows.Forms.Panel routeInfoPanel;
         private GMap.NET.WindowsForms.GMapControl map;
+        private System.Windows.Forms.PictureBox printingPictureBox;
     }
 }
