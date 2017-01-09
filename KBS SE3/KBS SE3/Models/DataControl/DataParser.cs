@@ -2,11 +2,11 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace KBS_SE3.Models.DataControl {
+namespace Casualty_Radar.Models.DataControl {
 
     public class DataParser {
 
-        private string _filePath;
+        private readonly string _filePath;
         private DataCollection _collection;
 
         public DataParser(string path) {
@@ -14,11 +14,11 @@ namespace KBS_SE3.Models.DataControl {
             this._collection = null;
         }
 
-        /*
-        * Deserializes XML text data to C# Objects using data annotations.
-        * After building the objects we index the Node and NodeReferences so we 
-        * can link the correct reference with the correct Node.
-        */
+        /// <summary>
+        /// Deserializes XML text data to C# Objects using data annotations.
+        /// After building the objects we index the Node and NodeReferences so we 
+        /// can link the correct reference with the correct Node.
+        /// </summary>
         public void Deserialize() {
             XmlSerializer serializer = new XmlSerializer(typeof(DataCollection));
             using(FileStream stream = new FileStream(_filePath, FileMode.Open)) {
@@ -27,7 +27,11 @@ namespace KBS_SE3.Models.DataControl {
             }
         }
 
-        // Returns the DataCollection which holds the information regarding the Nodes and Ways
+        /// <summary>
+        /// Returns the DataCollection which holds the information regarding the Nodes and Ways
+        /// This method will throw an exception if the data isn't deserialized yet.
+        /// </summary>
+        /// <returns>A DataCollection instance</returns>
         public DataCollection GetCollection() {
             if (_collection == null)
                 throw new Exception("There's no data de-serialized yet.");

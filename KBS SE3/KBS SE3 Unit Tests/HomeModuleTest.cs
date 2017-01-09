@@ -1,14 +1,13 @@
-﻿using System;
-using System.Windows.Forms;
-using KBS_SE3.Core;
-using KBS_SE3.Modules;
+﻿using System.Windows.Forms;
+using Casualty_Radar.Core;
+using Casualty_Radar.Modules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KBS_SE3_Unit_Tests {
     [TestClass]
     public class HomeModuleTest {
         [TestMethod]
-        public void InstanceTest() {
+        public void HomeModule_InstanceTest() {
             IModule mod = ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if hm is an instance of HomeModule
@@ -16,8 +15,8 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void IsRefreshing() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+        public void HomeModule_IsRefreshing() {
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             bool expected = false;
 
@@ -32,44 +31,36 @@ namespace KBS_SE3_Unit_Tests {
         }
 
         [TestMethod]
-        public void GetLocationManager() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+        public void HomeModule_GetLocationManager() {
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if GetLocationManager() returns an instance of LocationManager
             Assert.IsInstanceOfType(hm.GetLocationManager(), typeof(LocationManager));
         }
 
         [TestMethod]
-        public void SetLocationManager() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            var newLM = new LocationManager();
+        public void HomeModule_SetLocationManager() {
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            LocationManager newLm = new LocationManager();
 
-            hm.LocationManager = newLM;
+            hm.LocationManager = newLm;
 
-            // Test if SetLocationManager() sets the locationmanager
-            Assert.AreEqual(hm.GetLocationManager(), newLM);
+            //Test if SetLocationManager() sets the locationmanager
+            Assert.AreEqual(hm.GetLocationManager(), newLm);
         }
 
         [TestMethod]
-        public void GetSelectedPanel() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-
-            // Test if GetSelectedPanel() returns null as none is selected
-            Assert.AreEqual(hm.GetSelectedPanel, null);
-        }
-
-        [TestMethod]
-        public void GetAlertType() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+        public void HomeModule_GetAlertType() {
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
 
             // Test if GetAlertType() returns an integer
             Assert.IsInstanceOfType(hm.GetAlertType, typeof(int));
         }
 
         [TestMethod]
-        public void CreateAlert() {
-            var hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            var panel = hm.CreateAlertPanel(0, "", "", "", 0);
+        public void HomeModule_CreateAlert() {
+            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            Panel panel = hm.CreateAlertPanel(0, "", "", "", 0);
 
             // Test if CreateAlertPanel() returns a Panel
             Assert.IsInstanceOfType(panel, typeof(Panel));

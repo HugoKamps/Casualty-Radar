@@ -7,8 +7,8 @@
     <ProjectGuid>{AD72EEEF-ACA3-408D-9EC4-6F0D02EF2BA9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KBS_SE3</RootNamespace>
-    <AssemblyName>KBS SE3</AssemblyName>
+    <RootNamespace>Casualty_Radar</RootNamespace>
+    <AssemblyName>Casualty Radar</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -61,6 +61,14 @@
       <HintPath>..\packages\MySql.Web.6.9.9\lib\net45\MySql.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PdfSharp, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.Charting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -99,7 +107,11 @@
     <Compile Include="Models\DataControl\DataParser.cs" />
     <Compile Include="Models\DataControl\Graph\Node.cs" />
     <Compile Include="Models\DataControl\Graph\NodeReference.cs" />
-    <Compile Include="Models\DataControl\Graph\Way.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\Way.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypeBase.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypeControl.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayTypes\PrimaryWay.cs" />
+    <Compile Include="Models\DataControl\Graph\Ways\WayZoomLevel.cs" />
     <Compile Include="Modules\SplashScreenModule.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -149,6 +161,7 @@
     <Compile Include="Utils\AlertUtil.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utils\MapUtil.cs" />
+    <Compile Include="Utils\PdfUtil.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
     </EmbeddedResource>
@@ -199,7 +212,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\app_icon.ico" />
+    <Content Include="Resources\destination-icon.png" />
+    <Content Include="Resources\hattem.xml" />
+    <Content Include="Resources\printing_icon.png" />
+    <Content Include="Resources\straight_icon.png" />
     <Content Include="Resources\TESTTT.xml" />
+    <Content Include="Resources\turn_curve_right_icon.png" />
+    <Content Include="Resources\turn_left_icon.png" />
+    <Content Include="Resources\turn_right_icon.png" />
     <None Include="Resources\converted.osm" />
     <None Include="Resources\marker_icon_yellow.png" />
     <None Include="Resources\marker_icon_red.png" />

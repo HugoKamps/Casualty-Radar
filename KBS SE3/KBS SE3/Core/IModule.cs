@@ -1,11 +1,12 @@
-﻿using KBS_SE3.Models;
+﻿using Casualty_Radar.Models;
 
-namespace KBS_SE3.Core {
+namespace Casualty_Radar.Core {
      public interface IModule {
 
-        /*
-        * Returns the name of the Module
-        */
+        /// <summary>
+        /// Returns the breadcrumb from the module
+        /// </summary>
+        /// <returns>An instance of the breadcrumb class</returns>
         Breadcrumb GetBreadcrumb();
     }
 }

@@ -1,26 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using GMap.NET.WindowsForms;
-using GMap.NET.WindowsForms.Markers;
-using KBS_SE3.Core;
-using KBS_SE3.Core.Dialog;
-using KBS_SE3.Models.DataControl;
-using KBS_SE3.Models.DataControl.Graph;
-using KBS_SE3.Modules;
-using static KBS_SE3.Core.Dialog.DialogType;
+using Casualty_Radar.Core;
+using Casualty_Radar.Core.Dialog;
+using Casualty_Radar.Models.DataControl;
+using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Modules;
+using static Casualty_Radar.Core.Dialog.DialogType;
 using System.Threading;
 using System.ComponentModel;
-using System.Collections.Generic;
-using KBS_SE3.Utils;
 
-namespace KBS_SE3 {
+namespace Casualty_Radar {
     public partial class Container : Form {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
         private const int CS_DROPSHADOW = 0x20000;
-        
+
         private Dialog _dialog;
         private static Container _instance;
         private ModuleManager _modManager;
@@ -35,7 +32,7 @@ namespace KBS_SE3 {
         private Container() {
             InitializeComponent();
 
-            Thread t = new Thread(new ThreadStart(SplashThread));
+            Thread t = new Thread(SplashThread);
             t.IsBackground = true;
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
@@ -46,12 +43,15 @@ namespace KBS_SE3 {
             homeBtn.BackColor = Color.FromArgb(236, 89, 71);
         }
 
-        private void SplashThread()
-        {
+        private void SplashThread() {
             SplashScreen = new SplashScreenModule();
             DisplaySplashScreen();
         }
 
+        /// <summary>
+        /// Returns a single-ton instance from the Container class
+        /// </summary>
+        /// <returns>Container instance</returns>
         public static Container GetInstance() => _instance ?? (_instance = new Container());
 
         public void DisplaySplashScreen() {
@@ -60,6 +60,12 @@ namespace KBS_SE3 {
             SplashScreen.BringToFront();
         }
 
+        /// <summary>
+        /// Shows a dialog with the given properties
+        /// </summary>
+        /// <param name="type">The type of the dialog</param>
+        /// <param name="title">The string title of the dialog</param>
+        /// <param name="msg">The message content of the dialog</param>
         public void DisplayDialog(DialogMessageType type, string title, string msg) {
             using (new DialogOverlay()) {
                 _dialog.StartPosition = FormStartPosition.CenterParent;
@@ -68,12 +74,10 @@ namespace KBS_SE3 {
             }
         }
 
-        public Label GetBreadcrumbStart() => breadCrumbStart;
-
-        /*
-        * Method that registers all buttons in the application menu
-        * Each button is bound to a Module; which is an instance of IModule
-        */
+        /// <summary>
+        /// Method that registers all buttons in the application menu
+        /// Each button is bound to a Module; which is an instance of IModule
+        /// </summary>
         private void RegisterButtons() {
             homeBtn.Tag = _modManager.ParseInstance(typeof(HomeModule));
             settingsBtn.Tag = _modManager.ParseInstance(typeof(SettingsModule));
@@ -139,7 +143,7 @@ namespace KBS_SE3 {
             HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             Shown += hm.HomeModule_Load;
             _modManager.UpdateModule(hm);
-            
+
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
@@ -147,14 +151,12 @@ namespace KBS_SE3 {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"../../Resources/TESTTT.xml");
+            DataParser parser = new DataParser(@"../../Resources/hattem.xml");
             parser.Deserialize();
-            DataCollection collection = parser.GetCollection();
-            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-            TestDraw(hm, collection.Nodes[116]);
-            TestDraw(hm, collection.Nodes[123]);
-            TestDraw(hm, collection.Nodes[43]);
-            DisplayDialog(DialogMessageType.SUCCESS, "Test Dialog", "Success");
+            DataCollection col = parser.GetCollection();
+            List<Node> nodes = col.Nodes;
+            NavigationModule nm = (NavigationModule) ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            //DisplayDialog(DialogMessageType.ERROR, "XML Error", "Je moet eem een nieuwe XML Parsen.");
         }
 
         /*

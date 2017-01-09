@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace KBS_SE3.Modules {
+namespace Casualty_Radar.Modules {
     partial class HomeModule {
         /// <summary> 
         /// Required designer variable.
@@ -56,7 +56,7 @@ namespace KBS_SE3.Modules {
             // 
             this.alertsTitleLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
             this.alertsTitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.alertsTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.alertsTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.alertsTitleLabel.ForeColor = System.Drawing.Color.White;
             this.alertsTitleLabel.Location = new System.Drawing.Point(0, 0);
             this.alertsTitleLabel.Margin = new System.Windows.Forms.Padding(0);
@@ -130,7 +130,7 @@ namespace KBS_SE3.Modules {
             this.refreshFeedButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
             this.refreshFeedButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.refreshFeedButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.refreshFeedButton.Image = global::KBS_SE3.Properties.Resources.refresh_icon;
+            this.refreshFeedButton.Image = global::Casualty_Radar.Properties.Resources.refresh_icon;
             this.refreshFeedButton.Location = new System.Drawing.Point(309, 0);
             this.refreshFeedButton.Name = "refreshFeedButton";
             this.refreshFeedButton.Size = new System.Drawing.Size(29, 37);
@@ -164,7 +164,7 @@ namespace KBS_SE3.Modules {
             // 
             // loadFeedPictureBox
             // 
-            this.loadFeedPictureBox.Image = global::KBS_SE3.Properties.Resources.load_feed;
+            this.loadFeedPictureBox.Image = global::Casualty_Radar.Properties.Resources.load_feed;
             this.loadFeedPictureBox.Location = new System.Drawing.Point(118, 91);
             this.loadFeedPictureBox.Name = "loadFeedPictureBox";
             this.loadFeedPictureBox.Size = new System.Drawing.Size(100, 99);
@@ -222,7 +222,7 @@ namespace KBS_SE3.Modules {
             // 
             // blueMarkerPicturebox
             // 
-            this.blueMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_blue;
+            this.blueMarkerPicturebox.Image = global::Casualty_Radar.Properties.Resources.marker_icon_blue;
             this.blueMarkerPicturebox.Location = new System.Drawing.Point(3, 79);
             this.blueMarkerPicturebox.Name = "blueMarkerPicturebox";
             this.blueMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
@@ -231,7 +231,7 @@ namespace KBS_SE3.Modules {
             // 
             // redMarkerPicturebox
             // 
-            this.redMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_red;
+            this.redMarkerPicturebox.Image = global::Casualty_Radar.Properties.Resources.marker_icon_red;
             this.redMarkerPicturebox.Location = new System.Drawing.Point(3, 41);
             this.redMarkerPicturebox.Name = "redMarkerPicturebox";
             this.redMarkerPicturebox.Size = new System.Drawing.Size(28, 32);
@@ -240,7 +240,7 @@ namespace KBS_SE3.Modules {
             // 
             // yellowMarkerPicturebox
             // 
-            this.yellowMarkerPicturebox.Image = global::KBS_SE3.Properties.Resources.marker_icon_yellow;
+            this.yellowMarkerPicturebox.Image = global::Casualty_Radar.Properties.Resources.marker_icon_yellow;
             this.yellowMarkerPicturebox.Location = new System.Drawing.Point(3, 3);
             this.yellowMarkerPicturebox.Name = "yellowMarkerPicturebox";
             this.yellowMarkerPicturebox.Size = new System.Drawing.Size(28, 32);

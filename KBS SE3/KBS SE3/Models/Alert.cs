@@ -1,7 +1,10 @@
 ﻿using System;
 
-namespace KBS_SE3.Models
+namespace Casualty_Radar.Models
 {
+    /// <summary>
+    /// Model class which contains all information regarding alerts that are used for the feed
+    /// </summary>
     public class Alert {
         public string Title { get; set; }
         public string Description { get; set; }

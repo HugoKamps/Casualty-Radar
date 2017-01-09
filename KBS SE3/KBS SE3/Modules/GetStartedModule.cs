@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
-using KBS_SE3.Core;
-using KBS_SE3.Models;
+using Casualty_Radar.Core;
+using Casualty_Radar.Models;
 
-namespace KBS_SE3.Modules {
+namespace Casualty_Radar.Modules {
+     /// <summary>
+     /// Module which is displayed when the user starts the application for the first time. Contains a field where the user needs to fill in his location in case the user's PC doesn't support location services.
+     /// </summary>
      partial class GetStartedModule : UserControl, IModule {
         public GetStartedModule() {
             InitializeComponent();
@@ -13,7 +16,9 @@ namespace KBS_SE3.Modules {
             return new Breadcrumb(this, "Get started");   
         }
 
-        //This function checks if the user filled in a location. If so, the user is redirected to the HomeModule, if not, a warning is displayed.
+        /// <summary>
+        /// This event checks if the user filled in a location. If so, the user is redirected to the HomeModule, if not, a warning is displayed.
+        /// </summary>
         private void continueBtn_Click(object sender, EventArgs e) {
             if (!string.IsNullOrWhiteSpace(locationTextBox.Text)) {
                 Properties.Settings.Default.userLocation = locationTextBox.Text;

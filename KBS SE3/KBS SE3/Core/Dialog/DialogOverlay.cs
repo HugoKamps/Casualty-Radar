@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace KBS_SE3.Core.Dialog {
+namespace Casualty_Radar.Core.Dialog {
     class DialogOverlay : IDisposable {
 
         private List<Form> _forms;
 
-        /*
-        * Creates a form with a black background above all forms except the 
-        * form called after the overlay.
-        */
+        /// <summary>
+        /// Creates a form with a black background above all forms except the 
+        /// form called after the overlay.
+        /// </summary>
         public DialogOverlay() {
             _forms = new List<Form>();
             int cnt = Application.OpenForms.Count;
@@ -32,6 +32,9 @@ namespace KBS_SE3.Core.Dialog {
             }
         }
 
+        /// <summary>
+        /// Disposes all of the dialog overlays
+        /// </summary>
         public void Dispose() {
             foreach (Form form in _forms) form.Close();
         }

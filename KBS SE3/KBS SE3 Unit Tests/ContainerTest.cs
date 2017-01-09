@@ -1,22 +1,21 @@
-﻿using KBS_SE3;
-using KBS_SE3.Core;
-using KBS_SE3.Modules;
+﻿using Casualty_Radar;
+using Casualty_Radar.Modules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KBS_SE3_Unit_Tests {
     [TestClass]
     public class ContainerTest {
         [TestMethod]
-        public void InstanceTest() {
+        public void Container_InstanceTest() {
             Container ct = Container.GetInstance();
 
             Assert.IsInstanceOfType(ct, typeof(Container));
         }
 
         [TestMethod]
-        public void SplashScreenTest() {
+        public void Container_SplashScreenTest() {
             Container ct = Container.GetInstance();
-            var sC = ct.SplashScreen;
+            SplashScreenModule sC = ct.SplashScreen;
 
             // Test if Splashscreen is not null
             Assert.AreNotEqual(null, sC);

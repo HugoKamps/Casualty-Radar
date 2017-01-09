@@ -3,25 +3,29 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using KBS_SE3.Models.DataControl;
-using KBS_SE3.Models.DataControl.Graph;
-using KBS_SE3.Properties;
-using KBS_SE3.Utils;
+using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Properties;
+using Casualty_Radar.Utils;
 
-namespace KBS_SE3.Core {
+
+namespace Casualty_Radar.Core {
+    /// <summary>
+    /// Class that contains functionality which can be used on a GMAP.net control
+    /// </summary>
     public class LocationManager {
         public double CurrentLatitude { get; set; } //The user's current latitude
         public double CurrentLongitude { get; set; } //The user's current longitude
         public List<Way> Ways = new List<Way>();
 
-        //Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
+        /// <summary>
+        /// Function that gets the coordinates of the user's default location (in settings) and changes the local lat and lng variables
+        /// </summary>
         public void SetCoordinatesByLocationSetting() {
             string location = Settings.Default.userLocation + ", The Netherlands";
             string requestUri =
@@ -41,7 +45,19 @@ namespace KBS_SE3.Core {
             }
         }
 
-        //Returns a marker that will be placed on a given location. The color and type are variable
+        /// <summary>
+        /// Instantiates a marker that will be placed on a given location. The color can vary based on the type.
+        /// Every marker gets a tooltip which contains the distance from the user's current location to the marker's location
+        /// </summary>
+        /// <param name="lat">The latitude of the marker's location</param>
+        /// <param name="lng">The longitude of the marker's location</param>
+        /// <param name="type">The type which indicates what kind of marker it is. 
+        /// <para>0 = Current location</para> 
+        /// <para>1 = Ambulance</para>
+        /// <para>2 = Firefighter</para>
+        /// <para>3 = Selected marker</para>
+        /// </param>
+        /// <returns>The created marker</returns>
         public GMarkerGoogle CreateMarker(double lat, double lng, int type) {
             string imgLocation = "../../Resources../marker_icon_";
             if (type == 0) imgLocation += "blue.png";
@@ -51,83 +67,49 @@ namespace KBS_SE3.Core {
 
             Image image = new Bitmap(@imgLocation);
 
+            return new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
+        }
+
+        public GMarkerGoogle CreateMarkerWithTooltip(double lat, double lng, int type, string tooltipText) {
+            string imgLocation = "../../Resources../marker_icon_";
+            if (type == 0) imgLocation += "blue.png";
+            if (type == 1) imgLocation += "yellow.png";
+            if (type == 2) imgLocation += "red.png";
+            if (type == 3) imgLocation += "selected.png";
+
+            Image image = new Bitmap(@imgLocation);
+
             GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
+            double distance = MapUtil.GetDistance(lat, lng, CurrentLatitude, CurrentLongitude);
+            marker.ToolTip = new GMapToolTip(marker) {
+                Fill = new SolidBrush(Color.White),
+                Foreground = new SolidBrush(Color.FromArgb(210, 73, 57)),
+                Font = new Font(FontFamily.GenericMonospace, 10)
+            };
+            marker.ToolTipText = tooltipText;
+            marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+
             return marker;
         }
 
+        /// <summary>
+        /// Creates a PointLatLng variable based on the user's current latitude and longitude
+        /// </summary>
+        /// <returns>The created PointLatLng variable</returns>
         public PointLatLng GetLocationPoint() => new PointLatLng(CurrentLatitude, CurrentLongitude);
 
-        // Draw streets on map
-        public void DrawRoute(DataCollection collection, GMapOverlay routeOverlay) {
-            List<List<PointLatLng>> list = new List<List<PointLatLng>>();
-
-            int loop = 0;
-            foreach (Way w in collection.Ways) {
-                loop++;
-                if (loop == 20) break;
-                List<PointLatLng> points = new List<PointLatLng>();
-
-                for (int i = 0; i < w.References.Count - 1; i++) {
-                    try {
-                        points.Add(new PointLatLng(w.References[i].Node.Lat, w.References[i].Node.Lon));
-                    } catch {
-                        throw new Exception();
-                    }
-                    list.Add(points);
+        /// <summary>
+        /// Function which draws a path on a GMap overlay based on a given list of PointLatLng variables
+        /// </summary>
+        /// <param name="points">The list with points for the path</param>
+        /// <param name="routeOverlay">The overlay which must be drawn on</param>
+        public void DrawRoute(List<PointLatLng> points, GMapOverlay routeOverlay) {
+            routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
+                Stroke = {
+                    DashStyle = DashStyle.Solid,
+                    Color = Color.FromArgb(244, 191, 66)
                 }
-            }
-
-            foreach (List<PointLatLng> l in list) {
-                List<PointLatLng> points = l.ToList();
-                routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
-                    Stroke =
-                    {
-                        DashStyle = DashStyle.Solid,
-                        Color = Color.FromArgb(244, 191, 66)
-                    }
-                });
-            }
-        }
-
-        public void DrawTestRoute(DataCollection collection, GMapOverlay _routeOverlay) {
-            Node begin = MapUtil.GetNearest(CurrentLatitude, CurrentLongitude, collection.Nodes);
-
-            foreach (Way w in begin.ConnectedWays) {
-                Ways.Add(w);
-            }
-
-            for (int i = 0; i < Ways.Count; i++)
-                foreach (NodeReference t in Ways[i].References)
-                    if (t.Node.ConnectedWays.Count >= 2)
-                        for (int x = 0; x <= t.Node.ConnectedWays.Count; x++)
-                            foreach (Way way in t.Node.ConnectedWays)
-                                if (!Ways.Contains(way)) Ways.Add(way);
-
-            foreach (Way w in Ways) {
-                List<PointLatLng> points = new List<PointLatLng>();
-                foreach (NodeReference t in w.References) {
-                    try {
-                        points.Add(new PointLatLng(t.Node.Lat, t.Node.Lon));
-                    } catch {
-                        throw new Exception();
-                    }
-                }
-
-                foreach (PointLatLng p in points) {
-                    List<PointLatLng> l = new List<PointLatLng>();
-
-                    foreach (PointLatLng t in l) {
-                        points.Add(t);
-                    }
-                    _routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
-                        Stroke =
-                        {
-                            DashStyle = DashStyle.Solid,
-                            Color = Color.SeaGreen
-                        }
-                    });
-                }
-            }
+            });
         }
     }
 }
