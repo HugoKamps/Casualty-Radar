@@ -101,6 +101,9 @@ namespace XMLRewriter.Core {
                         } else if (element.Attribute("k") != null) {
                             string value = element.Attribute("v").Value;
                             switch (element.Attribute("k").Value) {
+                                case "junction":
+                                    rtn.Add(new XAttribute("jc", value == "roundabout" ? "ra" : "jh"));
+                                    break;
                                 case "highway":
                                     rtn.Add(new XAttribute("t", ParseWayValue(value)));
                                     break;
@@ -130,11 +133,12 @@ namespace XMLRewriter.Core {
         /// </summary>
         /// <param name="origin">The original string value</param>
         /// <returns>A shortened string (key) based on the origin value</returns>
-        public static String ParseWayValue(string origin) {
+        public static string ParseWayValue(string origin) {
             switch (origin) {
                 case "residential": return "res";
                 case "unclassified": return "unc";
                 case "motorway": return "mot";
+                case "living_street": return "liv";
                 case "primary": return "pri";
                 case "path": return "pth";
                 case "trunk": return "tru";
@@ -144,9 +148,7 @@ namespace XMLRewriter.Core {
                 case "primary_link": return "pri_l";
                 case "secondary_link": return "sec_l";
                 case "tertiary_link": return "ter_l";
-                default: case "secondary": {
-                        return "sec";
-                    }
+                default: return "sec";
             }
         }
 
