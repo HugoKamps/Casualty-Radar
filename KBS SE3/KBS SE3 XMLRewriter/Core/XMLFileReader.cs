@@ -39,7 +39,7 @@ namespace XMLRewriter.Core {
                 Log("Found " + size + " elements to convert");
                 StatusBar.Maximum = size;
                 Log("Writing data to new XML file");
-                foreach (XElement element in elements) {
+                foreach (XElement element in ParsedElements()) {
                     _writer.Append(ConvertElement(element));
                     StatusBar.Value++;
                 }
