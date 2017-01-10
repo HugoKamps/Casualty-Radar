@@ -56,6 +56,7 @@ namespace Casualty_Radar.Modules {
             DataCollection collection = parser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
 
+
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
             Random rand = new Random();
@@ -63,7 +64,7 @@ namespace Casualty_Radar.Modules {
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
             _endNode = targetCollection[rand.Next(0, 161)]; //124
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 3));
-
+            map.OnMapZoomChanged += OnZoomChanged;
             _pathfinder = new Pathfinder(_startNode, _endNode);
             List<Node> path = _pathfinder.FindPath();
             List<PointLatLng> points = new List<PointLatLng>();
@@ -186,6 +187,9 @@ namespace Casualty_Radar.Modules {
 
             markersOverlay.Markers.Add(_locationManager.CreateMarker(startLat, startLng, 0));
             markersOverlay.Markers.Add(_locationManager.CreateMarker(destLat, destLng, 2));
+        }
+        private void OnZoomChanged() {
+            Console.WriteLine("Zoomlevel: " + map.Zoom);
         }
 
         private void printingPictureBox_Click(object sender, EventArgs e) => Process.Start("Route.pdf"); 
