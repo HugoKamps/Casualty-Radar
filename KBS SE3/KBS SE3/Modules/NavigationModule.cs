@@ -49,6 +49,7 @@ namespace Casualty_Radar.Modules {
             alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
             timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
             InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
+            routeInfoPanel.Controls.Clear();
 
             //Instantiates a data parser which creates a collection with all nodes and ways of a specific zone
             DataParser parser = new DataParser(@"../../Resources/hattem.xml");
