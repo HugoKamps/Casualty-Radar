@@ -81,7 +81,7 @@ namespace Casualty_Radar.Modules {
                     Node nextNode = path[index + 1];
                     Node nextNextNode = path[index + 2];
 
-                    if (index == 0) startingRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
+                    if (index == 0) startingRoad = MapUtil.GetWay(_startNode, nextNode).Name;
 
                     double angle = AngleFromCoordinate(nextNode.Lat, nextNode.Lon, nextNextNode.Lat, nextNextNode.Lon);
                     var type = prevAngle >= 0
@@ -111,7 +111,7 @@ namespace Casualty_Radar.Modules {
 
             _locationManager.DrawRoute(points, _routeOverlay);
             totalDistance = Math.Round(totalDistance, 2);
-            routeInfoLabel.Text += " (" + totalDistance + "km)";
+            routeInfoLabel.Text = "Routebeschrijving (" + totalDistance + "km)";
         }
 
         private double AngleFromCoordinate(double lat1, double long1, double lat2,

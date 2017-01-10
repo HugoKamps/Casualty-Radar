@@ -39,7 +39,7 @@ namespace XMLRewriter.Core {
                 Log("Found " + size + " elements to convert");
                 StatusBar.Maximum = size;
                 Log("Writing data to new XML file");
-                foreach (XElement element in elements) {
+                foreach (XElement element in ParsedElements()) {
                     _writer.Append(ConvertElement(element));
                     StatusBar.Value++;
                 }
@@ -148,9 +148,7 @@ namespace XMLRewriter.Core {
                 case "primary_link": return "pri_l";
                 case "secondary_link": return "sec_l";
                 case "tertiary_link": return "ter_l";
-                default: case "secondary": {
-                        return "sec";
-                    }
+                default: return "sec";
             }
         }
 
