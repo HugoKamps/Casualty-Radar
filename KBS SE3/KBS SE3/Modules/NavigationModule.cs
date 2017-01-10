@@ -63,7 +63,6 @@ namespace Casualty_Radar.Modules {
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
             _endNode = targetCollection[rand.Next(0, 161)]; //124
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 3));
-
             _pathfinder = new Pathfinder(_startNode, _endNode);
             List<Node> path = _pathfinder.FindPath();
             List<PointLatLng> points = new List<PointLatLng>();
@@ -82,7 +81,7 @@ namespace Casualty_Radar.Modules {
                     Node nextNode = path[index + 1];
                     Node nextNextNode = path[index + 2];
 
-                    if (index == 0) startingRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
+                    if (index == 0) startingRoad = MapUtil.GetWay(_startNode, nextNode).Name;
 
                     double angle = AngleFromCoordinate(nextNode.Lat, nextNode.Lon, nextNextNode.Lat, nextNextNode.Lon);
                     var type = prevAngle >= 0

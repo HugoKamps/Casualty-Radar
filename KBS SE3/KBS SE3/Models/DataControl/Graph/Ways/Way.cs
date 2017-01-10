@@ -34,6 +34,15 @@ namespace Casualty_Radar.Models.DataControl.Graph {
         [XmlAttribute("ms", DataType = "double")]
         public double MaxSpeed { get; set; }
 
+
+        /// <summary>
+        /// Represents the junction type from the way, may be null.
+        /// If the way is considered a junction there is a chance the way
+        /// is actually a roundabout.
+        /// </summary>
+        [XmlAttribute("jc", DataType = "string")]
+        public String JunctionType { get; set; } 
+
         /// <summary>
         /// Represents the type description of the way, may be null
         /// </summary>
