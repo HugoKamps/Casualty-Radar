@@ -22,7 +22,7 @@ namespace Casualty_Radar.Models {
         /// Starts the timer if the user has it enabled in settings
         /// </summary>
         public void StartTimerIfEnabled() {
-            if (Settings.Default.feedTickerEnabled) _stateTimer.Start();
+            if (Settings.Default.feedTickerEnabled && !_stateTimer.Enabled) _stateTimer.Start();
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Casualty_Radar.Models {
         public void StopTimerIfEnabled() {
             if (_stateTimer.Enabled) _stateTimer.Stop();
         }
-        
+
         /// <summary>
         /// Starts or stops the timer based on the given state
         /// </summary>

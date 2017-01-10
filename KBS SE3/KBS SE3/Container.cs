@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -129,9 +130,13 @@ namespace Casualty_Radar {
 
             homeBtn.BackColor = Color.FromArgb(52, 57, 61);
             settingsBtn.BackColor = Color.FromArgb(52, 57, 61);
-            if(module.GetType() != typeof(GetStartedModule)) {
+            if (module.GetType() != typeof(GetStartedModule)) {
                 Button selectedButton = (Button)sender;
                 selectedButton.BackColor = Color.FromArgb(236, 89, 71);
+                if (selectedButton == homeBtn) {
+                    HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+                    hm.FeedTicker.StartTimerIfEnabled();
+                }
                 ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
             }
         }
@@ -147,7 +152,12 @@ namespace Casualty_Radar {
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
-            ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent);
+            IModule parentModule = ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent;
+            if (parentModule is HomeModule) {
+                HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+                hm.FeedTicker.StartTimerIfEnabled();
+            }
+            ModuleManager.GetInstance().UpdateModule(parentModule);
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
@@ -155,7 +165,7 @@ namespace Casualty_Radar {
             parser.Deserialize();
             DataCollection col = parser.GetCollection();
             List<Node> nodes = col.Nodes;
-            NavigationModule nm = (NavigationModule) ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            NavigationModule nm = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             //DisplayDialog(DialogMessageType.ERROR, "XML Error", "Je moet eem een nieuwe XML Parsen.");
         }
 
