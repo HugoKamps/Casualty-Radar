@@ -125,6 +125,7 @@
     <Compile Include="Models\DataControl\Graph\Ways\WayTypes\Trunk_Link.cs" />
     <Compile Include="Models\DataControl\Graph\Ways\WayTypes\UnclassifiedWay.cs" />
     <Compile Include="Models\DataControl\Graph\Ways\WayZoomLevel.cs" />
+    <Compile Include="Models\Navigation\Route.cs" />
     <Compile Include="Modules\SplashScreenModule.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -175,6 +176,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Utils\MapUtil.cs" />
     <Compile Include="Utils\PdfUtil.cs" />
+    <Compile Include="Utils\RouteUtil.cs" />
     <EmbeddedResource Include="Container.resx">
       <DependentUpon>Container.cs</DependentUpon>
     </EmbeddedResource>
