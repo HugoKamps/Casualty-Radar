@@ -115,7 +115,6 @@ namespace Casualty_Radar.Modules {
         }
 
         /// <summary>
-        /// Initializes backgroundworkers for readying the feed and map
         /// </summary>
         public void LoadComponents() {
             BackgroundWorker bwFeed = new BackgroundWorker();
@@ -125,7 +124,7 @@ namespace Casualty_Radar.Modules {
             bwFeed.DoWork += delegate {
                 int y = 0;
                 _alertPanels.Clear();
-
+                
                 foreach (Alert a in Feed.GetInstance().GetFilteredAlerts) {
                     _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y));
                     y += 81;
@@ -362,7 +361,7 @@ namespace Casualty_Radar.Modules {
             }
             InitAlertsMap(_hasLocationservice);
         }
-        
+
         private void refreshFeedButton_Click(object sender, EventArgs e) {
             if (IsRefreshing) return;
             FeedTicker.StopTimerIfEnabled();
@@ -378,6 +377,7 @@ namespace Casualty_Radar.Modules {
 
         private void navigationBtn_Click(object sender, EventArgs e) {
             Alert selectedAlert = null;
+            FeedTicker.StopTimerIfEnabled();
 
             for (int i = 0; i < _alertPanels.Count; i++) {
                 if (_selectedPanel != _alertPanels[i]) continue;

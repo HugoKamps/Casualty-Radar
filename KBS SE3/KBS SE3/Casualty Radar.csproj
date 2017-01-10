@@ -230,6 +230,7 @@
     <Content Include="Resources\printing_icon.png" />
     <Content Include="Resources\straight_icon.png" />
     <Content Include="Resources\TESTTT.xml" />
+    <Content Include="Resources\turn_curve_left_icon.png" />
     <Content Include="Resources\turn_curve_right_icon.png" />
     <Content Include="Resources\turn_left_icon.png" />
     <Content Include="Resources\turn_right_icon.png" />
