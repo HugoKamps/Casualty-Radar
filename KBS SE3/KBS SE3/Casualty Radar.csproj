@@ -132,6 +132,7 @@
     <Compile Include="Modules\SplashScreenModule.Designer.cs">
       <DependentUpon>SplashScreenModule.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Utils\ConnectionUtil.cs" />
     <Compile Include="Models\Navigation\NavigationStep.cs" />
     <Compile Include="Models\PushMessage.cs" />
@@ -173,7 +174,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\AlertUtil.cs" />
-    <Compile Include="Settings.cs" />
     <Compile Include="Utils\MapUtil.cs" />
     <Compile Include="Utils\PdfUtil.cs" />
     <Compile Include="Utils\RouteUtil.cs" />
@@ -232,7 +232,6 @@
     <Content Include="Resources\Gifs\load_splash_screen.gif" />
     <Content Include="Resources\Icons\Application\printing_icon.png" />
     <Content Include="Resources\Icons\Navigational\straight_icon.png" />
-    <Content Include="Resources\XML\TESTTT.xml" />
     <Content Include="Resources\Icons\Navigational\turn_curve_left_icon.png" />
     <Content Include="Resources\Icons\Navigational\turn_curve_right_icon.png" />
     <Content Include="Resources\Icons\Navigational\turn_left_icon.png" />
