@@ -37,7 +37,7 @@ namespace Casualty_Radar.Modules {
             _pdfUtil = new PdfUtil();
             _route = new Route();
 
-            parser = new DataParser(@"../../Resources/XML/hattem.xml");
+            parser = new DataParser(@"../../Resources/XML/nederland_snelwegen.xml");
             parser.Deserialize();
             collection = parser.GetCollection();
             targetCollection = collection.Intersections;
@@ -57,45 +57,31 @@ namespace Casualty_Radar.Modules {
             _locationManager.CurrentLatitude = start.Lat;
             _locationManager.CurrentLongitude = start.Lng;
 
+            // Set the alert panel with the information of the selected alert
             infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
             alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
             timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
             InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
-            routeInfoPanel.Controls.Clear();
-            map.OnMarkerClick += Marker_Click;
-            //Instantiates a data parser which creates a collection with all nodes and ways of a specific zone
-            /*DataParser parser = new DataParser(@"../../Resources/XML/hattem.xml");
-            parser.Deserialize();
-            DataCollection collection = parser.GetCollection();
-            List<Node> targetCollection = collection.Intersections;*/
-            foreach (Node node in targetCollection) {
-                GMarkerGoogle marker = _locationManager.CreateMarkerWithTooltip(node.Lat, node.Lon, 0,
-                    node.ID.ToString());
-                
-                map.Overlays[0].Markers.Add(marker);
-            }
 
-            //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
-            //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
-            Random rand = new Random();
-            _startNode = targetCollection[rand.Next(0, 161)]; //131
+            routeInfoPanel.Controls.Clear();
+            _routeOverlay.Clear();
+
+            // Get the nearest nodes on the highway of the starting and end point
+            _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
+            _endNode = MapUtil.GetNearest(alert.Lat, alert.Lng, targetCollection);
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
-            _endNode = targetCollection[rand.Next(0, 161)]; //124
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 2));
 
+            // Calculate the route and draw the route on the GMapControl
             _pathfinder = new Pathfinder(_startNode, _endNode);
             _route.RouteNodes = _pathfinder.FindPath();
-            _route.CalculateRouteSteps();
-            _locationManager.DrawRoute(_route.RoutePoints, _routeOverlay);
-            foreach (Panel panel in _route.RouteStepPanels) routeInfoPanel.Controls.Add(panel);
-            routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
-        }
+            _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
 
-        //VOOR TEST
-        private void Marker_Click(GMapMarker item, MouseEventArgs e) {
-            var node = targetCollection.Find(n => n.Lat == item.Position.Lat && n.Lon == item.Position.Lng);
-            List<Node> nodes = MapUtil.GetAdjacentNodes(node);
-            foreach(Node adjacentNode in nodes) map.Overlays[0].Markers.Add(_locationManager.CreateMarker(adjacentNode.Lat, adjacentNode.Lon, 1));
+            // Calculate the navigation steps and generate a panel for each step
+            _route.CalculateRouteSteps();
+            foreach (Panel panel in _route.RouteStepPanels) routeInfoPanel.Controls.Add(panel);
+
+            routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
         }
 
         /// <summary>
