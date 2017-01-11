@@ -12,6 +12,7 @@ using Casualty_Radar.Utils;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Core.Algorithms;
 using Casualty_Radar.Models.DataControl.Graph;
+using GMap.NET.WindowsForms.Markers;
 
 namespace Casualty_Radar.Modules {
     /// <summary>
@@ -26,12 +27,20 @@ namespace Casualty_Radar.Modules {
         private PdfUtil _pdfUtil;
         private Route _route;
 
+        private DataParser parser;
+        private DataCollection collection;
+        private List<Node> targetCollection;
 
         public NavigationModule() {
             InitializeComponent();
             _locationManager = new LocationManager();
             _pdfUtil = new PdfUtil();
             _route = new Route();
+
+            parser = new DataParser(@"../../Resources/XML/hattem.xml");
+            parser.Deserialize();
+            collection = parser.GetCollection();
+            targetCollection = collection.Intersections;
         }
 
         public Breadcrumb GetBreadcrumb() {
@@ -53,12 +62,18 @@ namespace Casualty_Radar.Modules {
             timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
             InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
             routeInfoPanel.Controls.Clear();
-
+            map.OnMarkerClick += Marker_Click;
             //Instantiates a data parser which creates a collection with all nodes and ways of a specific zone
-            DataParser parser = new DataParser(@"../../Resources/hattem.xml");
+            /*DataParser parser = new DataParser(@"../../Resources/XML/hattem.xml");
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
-            List<Node> targetCollection = collection.Intersections;
+            List<Node> targetCollection = collection.Intersections;*/
+            foreach (Node node in targetCollection) {
+                GMarkerGoogle marker = _locationManager.CreateMarkerWithTooltip(node.Lat, node.Lon, 0,
+                    node.ID.ToString());
+                
+                map.Overlays[0].Markers.Add(marker);
+            }
 
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
@@ -74,6 +89,13 @@ namespace Casualty_Radar.Modules {
             _locationManager.DrawRoute(_route.RoutePoints, _routeOverlay);
             foreach (Panel panel in _route.RouteStepPanels) routeInfoPanel.Controls.Add(panel);
             routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+        }
+
+        //VOOR TEST
+        private void Marker_Click(GMapMarker item, MouseEventArgs e) {
+            var node = targetCollection.Find(n => n.Lat == item.Position.Lat && n.Lon == item.Position.Lng);
+            List<Node> nodes = MapUtil.GetAdjacentNodes(node);
+            foreach(Node adjacentNode in nodes) map.Overlays[0].Markers.Add(_locationManager.CreateMarker(adjacentNode.Lat, adjacentNode.Lon, 1));
         }
 
         /// <summary>
