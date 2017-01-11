@@ -226,33 +226,33 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\app_icon.ico" />
-    <Content Include="Resources\destination-icon.png" />
-    <Content Include="Resources\hattem.xml" />
-    <Content Include="Resources\printing_icon.png" />
-    <Content Include="Resources\straight_icon.png" />
-    <Content Include="Resources\TESTTT.xml" />
-    <Content Include="Resources\turn_curve_left_icon.png" />
-    <Content Include="Resources\turn_curve_right_icon.png" />
-    <Content Include="Resources\turn_left_icon.png" />
-    <Content Include="Resources\turn_right_icon.png" />
-    <None Include="Resources\converted.osm" />
-    <None Include="Resources\marker_icon_yellow.png" />
-    <None Include="Resources\marker_icon_red.png" />
-    <None Include="Resources\marker_icon_blue.png" />
-    <None Include="Resources\refresh_icon.png" />
-    <None Include="Resources\wifi_icon.png" />
+    <Content Include="Resources\Icons\Markers\marker_icon_selected.png" />
+    <Content Include="Resources\Icons\Navigational\destination-icon.png" />
+    <Content Include="Resources\XML\hattem.xml" />
+    <Content Include="Resources\Gifs\load_splash_screen.gif" />
+    <Content Include="Resources\Icons\Application\printing_icon.png" />
+    <Content Include="Resources\Icons\Navigational\straight_icon.png" />
+    <Content Include="Resources\XML\TESTTT.xml" />
+    <Content Include="Resources\Icons\Navigational\turn_curve_left_icon.png" />
+    <Content Include="Resources\Icons\Navigational\turn_curve_right_icon.png" />
+    <Content Include="Resources\Icons\Navigational\turn_left_icon.png" />
+    <Content Include="Resources\Icons\Navigational\turn_right_icon.png" />
+    <None Include="Resources\Icons\Markers\marker_icon_yellow.png" />
+    <None Include="Resources\Icons\Markers\marker_icon_red.png" />
+    <None Include="Resources\Icons\Markers\marker_icon_blue.png" />
+    <None Include="Resources\Icons\Application\refresh_icon.png" />
+    <None Include="Resources\Icons\Application\wifi_icon.png" />
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\app_icon.ico" />
-    <Content Include="Resources\case-medic-icon-22.png" />
-    <Content Include="Resources\dialog_icon_error.png" />
-    <Content Include="Resources\dialog_icon_success.png" />
-    <Content Include="Resources\dialog_icon_warning.png" />
-    <Content Include="Resources\Firefighter.png" />
-    <Content Include="Resources\load_feed.gif" />
-    <Content Include="Resources\logo_final.png" />
+    <Content Include="Resources\Icons\Application\app_icon.ico" />
+    <Content Include="Resources\Icons\Alerts\ambulance.png" />
+    <Content Include="Resources\Icons\Application\dialog_icon_error.png" />
+    <Content Include="Resources\Icons\Application\dialog_icon_success.png" />
+    <Content Include="Resources\Icons\Application\dialog_icon_warning.png" />
+    <Content Include="Resources\Icons\Alerts\Firefighter.png" />
+    <Content Include="Resources\Gifs\load_feed.gif" />
+    <Content Include="Resources\Logo\logo_final.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

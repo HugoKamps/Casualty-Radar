@@ -55,7 +55,7 @@ namespace Casualty_Radar.Modules {
             routeInfoPanel.Controls.Clear();
 
             //Instantiates a data parser which creates a collection with all nodes and ways of a specific zone
-            DataParser parser = new DataParser(@"../../Resources/hattem.xml");
+            DataParser parser = new DataParser(@"../../Resources/XML/hattem.xml");
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
