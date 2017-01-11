@@ -59,6 +59,7 @@ namespace Casualty_Radar.Modules {
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
             List<Node> targetCollection = collection.Intersections;
+            foreach(Node node in targetCollection) map.Overlays[0].Markers.Add(_locationManager.CreateMarkerWithTooltip(node.Lat, node.Lon, 0, node.ID.ToString()));
 
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
