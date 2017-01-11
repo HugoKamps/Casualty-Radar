@@ -161,7 +161,7 @@ namespace Casualty_Radar {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"../../Resources/hattem.xml");
+            DataParser parser = new DataParser(@"../../Resources/XML/hattem.xml");
             parser.Deserialize();
             DataCollection col = parser.GetCollection();
             List<Node> nodes = col.Nodes;
