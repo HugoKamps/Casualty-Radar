@@ -83,6 +83,28 @@ namespace Casualty_Radar.Models.Navigation {
         public static string GetFormattedDistance(double tempDistance) => tempDistance < 1 ? tempDistance * 1000 + "m" : tempDistance + "km";
 
 
+        public static RouteStepType CalcRouteStepType(double bearing) {
+            RouteStepType type;
+
+            if (bearing == 0 || bearing == 360 || bearing > 0 && bearing < 25 || bearing < 360 && bearing > 335)
+                type = RouteStepType.Straight;
+            else if (bearing >= 25 && bearing < 45)
+                type = RouteStepType.CurveRight;
+            else if (bearing > 45 && bearing <= 90)
+                type = RouteStepType.Right;
+            else if (bearing > 90 && bearing <= 180)
+                type = RouteStepType.SharpRight;
+            else if (bearing <= 335 && bearing > 315)
+                type = RouteStepType.CurveLeft;
+            else if (bearing < 315 && bearing >= 270)
+                type = RouteStepType.Left;
+            else if (bearing < 270 && bearing >= 180)
+                type = RouteStepType.SharpLeft;
+            else type = RouteStepType.Straight;
+
+            return type;
+        }
+
         /// <summary>
         /// Creates a routestep based on a given NavigationStep
         /// </summary>

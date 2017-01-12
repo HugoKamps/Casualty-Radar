@@ -45,6 +45,7 @@ namespace Casualty_Radar.Utils {
 
             const string filename = "Route.pdf";
             document.Save(filename);
+            Process.Start("Route.pdf");
         }
 
         public XImage GetImageWithType(RouteStepType type) {

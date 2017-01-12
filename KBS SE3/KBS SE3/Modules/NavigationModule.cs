@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -14,6 +12,7 @@ using Casualty_Radar.Utils;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Core.Algorithms;
 using Casualty_Radar.Models.DataControl.Graph;
+using GMap.NET.WindowsForms.Markers;
 
 namespace Casualty_Radar.Modules {
     /// <summary>
@@ -25,10 +24,23 @@ namespace Casualty_Radar.Modules {
         private Pathfinder _pathfinder;
         private Node _startNode;
         private Node _endNode;
+        private PdfUtil _pdfUtil;
+        private Route _route;
+
+        private DataParser parser;
+        private DataCollection collection;
+        private List<Node> targetCollection;
 
         public NavigationModule() {
             InitializeComponent();
             _locationManager = new LocationManager();
+            _pdfUtil = new PdfUtil();
+            _route = new Route();
+
+            parser = new DataParser(@"../../Resources/XML/hattem.xml");
+            parser.Deserialize();
+            collection = parser.GetCollection();
+            targetCollection = collection.Intersections;
         }
 
         public Breadcrumb GetBreadcrumb() {
@@ -50,12 +62,18 @@ namespace Casualty_Radar.Modules {
             timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
             InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
             routeInfoPanel.Controls.Clear();
-
+            map.OnMarkerClick += Marker_Click;
             //Instantiates a data parser which creates a collection with all nodes and ways of a specific zone
-            DataParser parser = new DataParser(@"../../Resources/hattem.xml");
+            /*DataParser parser = new DataParser(@"../../Resources/XML/hattem.xml");
             parser.Deserialize();
             DataCollection collection = parser.GetCollection();
-            List<Node> targetCollection = collection.Intersections;
+            List<Node> targetCollection = collection.Intersections;*/
+            foreach (Node node in targetCollection) {
+                GMarkerGoogle marker = _locationManager.CreateMarkerWithTooltip(node.Lat, node.Lon, 0,
+                    node.ID.ToString());
+                
+                map.Overlays[0].Markers.Add(marker);
+            }
 
             //_startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             //_endNode = MapUtil.GetNearest(dest.Lat, dest.Lng, targetCollection);
@@ -63,124 +81,21 @@ namespace Casualty_Radar.Modules {
             _startNode = targetCollection[rand.Next(0, 161)]; //131
             map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_startNode.Lat, _startNode.Lon, 2));
             _endNode = targetCollection[rand.Next(0, 161)]; //124
-            map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 3));
+            map.Overlays[0].Markers.Add(_locationManager.CreateMarker(_endNode.Lat, _endNode.Lon, 2));
+
             _pathfinder = new Pathfinder(_startNode, _endNode);
-            List<Node> path = _pathfinder.FindPath();
-            List<PointLatLng> points = new List<PointLatLng>();
-            double totalDistance = 0;
-            double prevAngle = -1;
-            int height = 0;
-            Color color = Color.Gainsboro;
-            string startingRoad = "";
-            string endRoad = "";
-            List<NavigationStep> steps = new List<NavigationStep>();
-            for (int index = 0; index < path.Count; index++) {
-                Node node = path[index];
-                points.Add(node.GetPoint());
-                if (index + 1 != path.Count && index + 2 != path.Count) {
-                    map.Overlays[0].Markers.Add(_locationManager.CreateMarker(node.Lat, node.Lon, 0));
-                    Node nextNode = path[index + 1];
-                    Node nextNextNode = path[index + 2];
-
-                    if (index == 0) startingRoad = MapUtil.GetWay(_startNode, nextNode).Name;
-
-                    double angle = AngleFromCoordinate(nextNode.Lat, nextNode.Lon, nextNextNode.Lat, nextNextNode.Lon);
-                    var type = prevAngle >= 0
-                        ? CalcRouteStepType(CalcBearing(prevAngle, angle))
-                        : RouteStepType.Straight;
-                    string distance =
-                        NavigationStep.GetFormattedDistance(Math.Round(MapUtil.GetDistance(node, nextNode), 2));
-                    NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
-                    totalDistance += MapUtil.GetDistance(node, nextNode);
-                    prevAngle = angle;
-
-                    if (index + 3 == path.Count) {
-                        step = new NavigationStep(distance, RouteStepType.DestinationReached,
-                            MapUtil.GetWay(nextNode, nextNextNode));
-                        routeInfoPanel.Controls.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
-                        endRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
-                    }
-                    else routeInfoPanel.Controls.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
-                    steps.Add(step);
-                    color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
-                    height += 51;
-                }
-                else break;
-            }
-            PdfUtil pdfUtil = new PdfUtil();
-            pdfUtil.CreatePdf(steps, startingRoad, endRoad);
-
-            _locationManager.DrawRoute(points, _routeOverlay);
-            totalDistance = Math.Round(totalDistance, 2);
-            routeInfoLabel.Text = "Routebeschrijving (" + totalDistance + "km)";
+            _route.RouteNodes = _pathfinder.FindPath();
+            _route.CalculateRouteSteps();
+            _locationManager.DrawRoute(_route.RoutePoints, _routeOverlay);
+            foreach (Panel panel in _route.RouteStepPanels) routeInfoPanel.Controls.Add(panel);
+            routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
         }
 
-        /// <summary>
-        /// Get the angle in degrees between two lat & long points
-        /// </summary>
-        /// <param name="lat1"></param>
-        /// <param name="long1"></param>
-        /// <param name="lat2"></param>
-        /// <param name="long2"></param>
-        /// <returns>The angle between two coordinates</returns>
-        private double AngleFromCoordinate(double lat1, double long1, double lat2,
-            double long2) {
-            double dLon = (long2 - long1);
-
-            double y = Math.Sin(dLon) * Math.Cos(lat2);
-            double x = Math.Cos(lat1) * Math.Sin(lat2) - Math.Sin(lat1)
-                       * Math.Cos(lat2) * Math.Cos(dLon);
-
-            double angle = Math.Atan2(y, x);
-
-            angle = angle * (180 / Math.PI);
-            angle = (angle + 360) % 360;
-            angle = 360 - angle;
-
-            return angle;
-        }
-
-        /// <summary>
-        /// Calculate the bearing between two angles
-        /// If it is lower than 0, add 360 to it so it will always be a positive number
-        /// </summary>
-        /// <param name="angle1"></param>
-        /// <param name="angle2"></param>
-        /// <returns>The bearing between two angles</returns>
-        private double CalcBearing(double angle1, double angle2) {
-            double bearing = angle2 - angle1;
-
-            if (bearing < 0)
-                bearing = 360 + bearing;
-
-            return bearing;
-        }
-
-        /// <summary>
-        /// Determine the RouteStepType based on the bearing
-        /// </summary>
-        /// <param name="bearing"></param>
-        /// <returns>The RouteStepType based on the bearing</returns>
-        private RouteStepType CalcRouteStepType(double bearing) {
-            RouteStepType type;
-
-            if (bearing == 0 || bearing == 360 || bearing > 0 && bearing < 25 || bearing < 360 && bearing > 335)
-                type = RouteStepType.Straight;
-            else if (bearing >= 25 && bearing < 45)
-                type = RouteStepType.CurveRight;
-            else if (bearing > 45 && bearing <= 90)
-                type = RouteStepType.Right;
-            else if (bearing > 90 && bearing <= 180)
-                type = RouteStepType.SharpRight;
-            else if (bearing <= 335 && bearing > 315)
-                type = RouteStepType.CurveLeft;
-            else if (bearing < 315 && bearing >= 270)
-                type = RouteStepType.Left;
-            else if (bearing < 270 && bearing >= 180)
-                type = RouteStepType.SharpLeft;
-            else type = RouteStepType.Straight;
-
-            return type;
+        //VOOR TEST
+        private void Marker_Click(GMapMarker item, MouseEventArgs e) {
+            var node = targetCollection.Find(n => n.Lat == item.Position.Lat && n.Lon == item.Position.Lng);
+            List<Node> nodes = MapUtil.GetAdjacentNodes(node);
+            foreach(Node adjacentNode in nodes) map.Overlays[0].Markers.Add(_locationManager.CreateMarker(adjacentNode.Lat, adjacentNode.Lon, 1));
         }
 
         /// <summary>
@@ -208,6 +123,6 @@ namespace Casualty_Radar.Modules {
             markersOverlay.Markers.Add(_locationManager.CreateMarker(destLat, destLng, 2));
         }
 
-        private void printingPictureBox_Click(object sender, EventArgs e) => Process.Start("Route.pdf"); 
+        private void printingPictureBox_Click(object sender, EventArgs e) => _pdfUtil.CreatePdf(_route.RouteSteps, _route.StartingRoad, _route.DestinationRoad);
     }
 }

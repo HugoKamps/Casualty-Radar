@@ -19,7 +19,7 @@ namespace Casualty_Radar.Core.Dialog {
         /// <returns>A bitmap representing the icon from the dialog</returns>
         public static Bitmap GetDialogIcon(DialogMessageType type) {
             string fileName = Enum.GetName(typeof(DialogMessageType), type);
-            string path = @"../../Resources/dialog_icon_" + fileName.ToLower() + ".png";
+            string path = @"../../Resources/Icons/Application/dialog_icon_" + fileName.ToLower() + ".png";
             return new Bitmap(path);
         }
 
