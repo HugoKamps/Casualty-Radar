@@ -112,9 +112,8 @@ namespace XMLRewriter.Core {
                                     break;
                                 case "maxspeed":
                                     int speed;
-                                    if (int.TryParse(value, out speed)) {
+                                    if (int.TryParse(value, out speed))
                                         rtn.Add(new XAttribute("ms", value));
-                                    }
                                     break;
                                 case "oneway":
                                     rtn.Add(new XAttribute("ow", value));
@@ -140,7 +139,6 @@ namespace XMLRewriter.Core {
                 case "motorway": return "mot";
                 case "living_street": return "liv";
                 case "primary": return "pri";
-                case "path": return "pth";
                 case "trunk": return "tru";
                 case "tertiary": return "ter";
                 case "motorway_link": return "mot_l";

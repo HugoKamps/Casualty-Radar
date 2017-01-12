@@ -70,7 +70,7 @@ namespace Casualty_Radar.Models.DataControl {
                     if (nodeCollection.ContainsKey(reference.ReferenceID)) {
                         reference.Node = nodeCollection[reference.ReferenceID];
                         reference.Node.ConnectedWays.Add(way);
-                        if (reference.Node.ConnectedWays.Count > INTERSECTION_WAY_MINIMUM)
+                        if (reference.Node.IsIntersection())
                             Intersections.Add(reference.Node);
                     }
             }

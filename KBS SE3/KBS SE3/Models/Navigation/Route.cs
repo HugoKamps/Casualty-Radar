@@ -21,6 +21,7 @@ namespace Casualty_Radar.Models.Navigation {
             RouteStepPanels = new List<Panel>();
         }
 
+
         /// <summary>
         /// Gets all latitude and longitude points of each node in the route
         /// </summary>
@@ -64,14 +65,11 @@ namespace Casualty_Radar.Models.Navigation {
                             MapUtil.GetWay(nextNode, nextNextNode));
                         RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
                         DestinationRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
-                    }
-                    else RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
-
+                    } else RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
                     color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
                     height += 51;
                     prevAngle = angle;
-                }
-                else break;
+                } else break;
             }
             TotalDistance = Math.Round(TotalDistance, 2);
         }
