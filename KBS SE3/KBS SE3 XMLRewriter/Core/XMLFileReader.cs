@@ -140,7 +140,6 @@ namespace XMLRewriter.Core {
                 case "motorway": return "mot";
                 case "living_street": return "liv";
                 case "primary": return "pri";
-                case "path": return "pth";
                 case "trunk": return "tru";
                 case "tertiary": return "ter";
                 case "motorway_link": return "mot_l";
