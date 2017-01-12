@@ -1,18 +1,14 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Casualty_Radar.Core;
 using Casualty_Radar.Core.Dialog;
-using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Modules;
 using static Casualty_Radar.Core.Dialog.DialogType;
 using System.Threading;
 using System.ComponentModel;
-using GMap.NET;
 
 namespace Casualty_Radar {
     public partial class Container : Form {

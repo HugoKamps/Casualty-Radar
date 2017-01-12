@@ -12,7 +12,6 @@ using Casualty_Radar.Utils;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Core.Algorithms;
 using Casualty_Radar.Models.DataControl.Graph;
-using GMap.NET.WindowsForms.Markers;
 
 namespace Casualty_Radar.Modules {
     /// <summary>
@@ -58,8 +57,8 @@ namespace Casualty_Radar.Modules {
             _locationManager.CurrentLongitude = start.Lng;
 
             // Get the provinces for the start and destination and set the needed XML file paths
-            string startingXML = _locationManager.GetProvinceWithLatLng(start) + ".xml";
-            string destinationXML = _locationManager.GetProvinceWithLatLng(new PointLatLng(alert.Lat, alert.Lng)) + ".xml";
+            string startingXml = _locationManager.GetProvinceWithLatLng(start) + ".xml";
+            string destinationXml = _locationManager.GetProvinceWithLatLng(new PointLatLng(alert.Lat, alert.Lng)) + ".xml";
 
             // Set the alert panel with the information of the selected alert
             infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
@@ -79,7 +78,7 @@ namespace Casualty_Radar.Modules {
             List<Node> highwayNodes = _pathfinder.FindPath();
 
             //Calculate the route from the user's location to the starting point on the highway
-            SetParserData(startingXML);
+            SetParserData(startingXml);
             _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             _endNode = highwayNodes[0];
             _pathfinder = new Pathfinder(_startNode, _endNode);
@@ -89,7 +88,7 @@ namespace Casualty_Radar.Modules {
             _route.RouteNodes.AddRange(highwayNodes);
             
             // Calculate the route from the last point on the highway to the location of the alert
-            SetParserData(destinationXML);
+            SetParserData(destinationXml);
             _startNode = highwayNodes[highwayNodes.Count - 1];
             _endNode = MapUtil.GetNearest(alert.Lat, alert.Lng, targetCollection);
             _pathfinder = new Pathfinder(_startNode, _endNode);
