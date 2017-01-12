@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using GMap.NET;
-using GMap.NET.WindowsForms;
-using GMap.NET.WindowsForms.Markers;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
-
+using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 
 namespace Casualty_Radar.Core {
     /// <summary>
@@ -45,6 +46,29 @@ namespace Casualty_Radar.Core {
             }
         }
 
+
+        /// <summary>
+        /// Gets the province of a given latitude and longitude
+        /// </summary>
+        /// <returns>The name of the province</returns>
+        public string GetProvinceWithLatLng(PointLatLng point) {
+
+            string location = point.Lat.ToString(CultureInfo.InvariantCulture) + "," + point.Lng.ToString(CultureInfo.InvariantCulture);
+            string requestUri =
+                "http://maps.googleapis.com/maps/api/geocode/xml?latlng= " + location + "&sensor=false";
+
+            WebRequest request = WebRequest.Create(requestUri);
+            WebResponse response = request.GetResponse();
+            XDocument xdoc = XDocument.Load(response.GetResponseStream());
+
+            XElement result = xdoc.Element("GeocodeResponse").Element("result");
+            if (result != null) {
+                List<XElement> locationElement = result.Elements("address_component").ToList();
+                return locationElement.Find(element => element.Element("type").Value == "administrative_area_level_1").Element("long_name").Value.ToLower();
+            }
+            return "";
+        }
+
         /// <summary>
         /// Instantiates a marker that will be placed on a given location. The color can vary based on the type.
         /// Every marker gets a tooltip which contains the distance from the user's current location to the marker's location
@@ -64,8 +88,9 @@ namespace Casualty_Radar.Core {
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
             if (type == 3) imgLocation += "selected.png";
+            if (type == 4) imgLocation += "destination.png";
 
-            Image image = new Bitmap(@imgLocation);
+            Image image = new Bitmap(imgLocation);
 
             return new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
         }
@@ -76,8 +101,9 @@ namespace Casualty_Radar.Core {
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
             if (type == 3) imgLocation += "selected.png";
+            if (type == 4) imgLocation += "destination.png";
 
-            Image image = new Bitmap(@imgLocation);
+            Image image = new Bitmap(imgLocation);
 
             GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
             double distance = MapUtil.GetDistance(lat, lng, CurrentLatitude, CurrentLongitude);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Utils;
 
@@ -52,7 +53,9 @@ namespace Casualty_Radar.Core.Algorithms {
         /// </summary>
         /// <param name="currentNode">The node where the path currently is</param>
         /// <returns></returns>
-        private bool Search(Node currentNode) {
+        private bool Search(Node currentNode)
+        {
+            Debug.WriteLine("Checking node: " + currentNode.ID);
             // Set the current node to Closed since it cannot be traversed more than once
             currentNode.StarData.State = NodeState.Closed;
             _closedNodes.Add(currentNode);

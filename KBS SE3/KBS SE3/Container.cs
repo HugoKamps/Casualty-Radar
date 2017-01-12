@@ -12,6 +12,7 @@ using Casualty_Radar.Modules;
 using static Casualty_Radar.Core.Dialog.DialogType;
 using System.Threading;
 using System.ComponentModel;
+using GMap.NET;
 
 namespace Casualty_Radar {
     public partial class Container : Form {
@@ -160,13 +161,9 @@ namespace Casualty_Radar {
             ModuleManager.GetInstance().UpdateModule(parentModule);
         }
 
-        private void testBtn_Click(object sender, EventArgs e) {
-            DataParser parser = new DataParser(@"../../Resources/XML/hattem.xml");
-            parser.Deserialize();
-            DataCollection col = parser.GetCollection();
-            List<Node> nodes = col.Nodes;
-            NavigationModule nm = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
-            //DisplayDialog(DialogMessageType.ERROR, "XML Error", "Je moet eem een nieuwe XML Parsen.");
+        private void testBtn_Click(object sender, EventArgs e)
+        {
+            HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
         }
 
         /*
