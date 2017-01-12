@@ -75,16 +75,17 @@ namespace Casualty_Radar.Modules {
 
             // Calculate the route on the highway
             _pathfinder = new Pathfinder(_startNode, _endNode);
-            List<Node> highwayNodes = _pathfinder.FindPath();
+            _route.RouteNodes = _pathfinder.FindPath(); // Moet 'List<Node> highwaynodes' zijn
 
+            /*
             //Calculate the route from the user's location to the starting point on the highway
             SetParserData(startingXml);
             _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             _endNode = highwayNodes[0];
             _pathfinder = new Pathfinder(_startNode, _endNode);
-
+            
             // Set the list with nodes in the route with the starting route and the highway route
-            _route.RouteNodes = _pathfinder.FindPath();
+            _route.RouteNodes = _pathfinder.FindPath();            
             _route.RouteNodes.AddRange(highwayNodes);
             
             // Calculate the route from the last point on the highway to the location of the alert
@@ -95,7 +96,7 @@ namespace Casualty_Radar.Modules {
 
             // Add the final route to the current route
             _route.RouteNodes.AddRange(_pathfinder.FindPath());
-
+            */
             // Draw the entire calculated route
             _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
 
