@@ -7,8 +7,7 @@ using Casualty_Radar.Utils;
 using GMap.NET;
 
 namespace Casualty_Radar.Models.Navigation {
-    class Route
-    {
+    class Route {
         public List<Node> RouteNodes { get; set; }
         public List<PointLatLng> RoutePoints { get; set; }
         public List<NavigationStep> RouteSteps { get; set; }
@@ -17,8 +16,7 @@ namespace Casualty_Radar.Models.Navigation {
         public string DestinationRoad { get; set; }
         public double TotalDistance { get; set; }
 
-        public Route()
-        {
+        public Route() {
             RoutePoints = new List<PointLatLng>();
             RouteSteps = new List<NavigationStep>();
             RouteStepPanels = new List<Panel>();
@@ -27,8 +25,7 @@ namespace Casualty_Radar.Models.Navigation {
         /// <summary>
         /// Calculates all the route steps and sets information about the route
         /// </summary>
-        public void CalculateRouteSteps()
-        {
+        public void CalculateRouteSteps() {
             double prevAngle = -1;
             int height = 0;
             Color color = Color.Gainsboro;
@@ -60,7 +57,7 @@ namespace Casualty_Radar.Models.Navigation {
                         step = new NavigationStep(distance, RouteStepType.DestinationReached,
                             MapUtil.GetWay(nextNode, nextNextNode));
                         RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
-                        DestinationRoad = MapUtil.GetWay(nextNode, nextNextNode).Name; 
+                        DestinationRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
                     } else RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
 
                     color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
