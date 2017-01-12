@@ -35,6 +35,21 @@ namespace Casualty_Radar.Models.DataControl.Graph {
         public double MaxSpeed { get; set; }
 
         /// <summary>
+        /// Represents the way direction tag, may be null
+        /// Using this field you can determine whether a way is one-way only or both directions.
+        /// </summary>
+        [XmlAttribute("ow", DataType = "string")]
+        public String OneWayTag { get; set; }
+
+        /// <summary>
+        /// Represents the junction type from the way, may be null.
+        /// If the way is considered a junction there is a chance the way
+        /// is actually a roundabout.
+        /// </summary>
+        [XmlAttribute("jc", DataType = "string")]
+        public String JunctionType { get; set; } 
+
+        /// <summary>
         /// Represents the type description of the way, may be null
         /// </summary>
         [XmlAttribute("t", DataType = "string")]
@@ -56,6 +71,25 @@ namespace Casualty_Radar.Models.DataControl.Graph {
 
         public Way() {
             this.References = new List<NodeReference>();
+        }
+
+        /// <summary>
+        /// Determines whether the current Way is one-way or not.
+        /// If there is no available tag the method will return false
+        /// </summary>
+        /// <returns>True if the way is considered a one-way street</returns>
+        public bool OneWay() {
+            return OneWayTag != null && OneWayTag == "yes";
+        }
+
+        /// <summary>
+        /// Determines whether the current way is a roundabout or not.
+        /// This is based on the junction type and will return false if the junction type
+        /// is not available
+        /// </summary>
+        /// <returns>True if the way is a roundabout</returns>
+        public bool Roundabout() {
+            return JunctionType != null && JunctionType == "ra";
         }
     }
 }

@@ -39,7 +39,13 @@ namespace Casualty_Radar.Models.Navigation {
             Type = type;
             SetInstruction(type, distance, way.Name);
         }
-
+        
+        /// <summary>
+        /// Set the instruction string based on the current RouteStepType, the distance and the way
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="dist"></param>
+        /// <param name="way"></param>
         private void SetInstruction(RouteStepType type, string dist, string way) {
             string instruction;
             switch (type) {
@@ -119,7 +125,7 @@ namespace Casualty_Radar.Models.Navigation {
             //The panel which will be filled with all of the controls below
             Panel newPanel = new Panel {
                 Location = new Point(0, height),
-                Size = new Size(338, 50),
+                Size = new Size(321, 50),
                 BackColor = color
             };
 

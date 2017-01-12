@@ -46,7 +46,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
         /// <param name="key">The key name of the waytype</param>
         /// <returns>A WayTypeBase instance if a there's a link between the key and a way type, null if there's no link.</returns>
         public WayTypeBase GetTypeBase(string key) {
-            WayTypeBase rtn = null;
+            WayTypeBase rtn;
             return _typeMap.TryGetValue(key, out rtn) ? rtn : null;
         }
 
