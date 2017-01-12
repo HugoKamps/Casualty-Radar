@@ -59,7 +59,7 @@ namespace Casualty_Radar.Core {
         /// </param>
         /// <returns>The created marker</returns>
         public GMarkerGoogle CreateMarker(double lat, double lng, int type) {
-            string imgLocation = "../../Resources../marker_icon_";
+            string imgLocation = "../../Resources../Icons/Markers/marker_icon_";
             if (type == 0) imgLocation += "blue.png";
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
@@ -71,7 +71,7 @@ namespace Casualty_Radar.Core {
         }
 
         public GMarkerGoogle CreateMarkerWithTooltip(double lat, double lng, int type, string tooltipText) {
-            string imgLocation = "../../Resources../marker_icon_";
+            string imgLocation = "../../Resources../Icons/Markers/marker_icon_";
             if (type == 0) imgLocation += "blue.png";
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
