@@ -57,8 +57,8 @@ namespace Casualty_Radar.Modules {
             _locationManager.CurrentLongitude = start.Lng;
 
             // Get the provinces for the start and destination and set the needed XML file paths
-            string startingXml = _locationManager.GetProvinceWithLatLng(start) + ".xml";
-            string destinationXml = _locationManager.GetProvinceWithLatLng(new PointLatLng(alert.Lat, alert.Lng)) + ".xml";
+            //string startingXml = 
+            //string destinationXml = 
 
             // Set the alert panel with the information of the selected alert
             infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
@@ -102,7 +102,10 @@ namespace Casualty_Radar.Modules {
 
             // Calculate the navigation steps and generate a panel for each step
             _route.CalculateRouteSteps();
-            foreach (Panel panel in _route.RouteStepPanels) routeInfoPanel.Controls.Add(panel);
+            for (var index = 0; index < 7; index++) {
+                Panel panel = _route.RouteStepPanels[index];
+                routeInfoPanel.Controls.Add(panel);
+            }
 
             routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
         }

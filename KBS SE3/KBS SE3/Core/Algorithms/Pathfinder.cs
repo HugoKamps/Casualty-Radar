@@ -55,7 +55,6 @@ namespace Casualty_Radar.Core.Algorithms {
         /// <returns></returns>
         private bool Search(Node currentNode)
         {
-            Debug.WriteLine("Checking node: " + currentNode.ID);
             // Set the current node to Closed since it cannot be traversed more than once
             currentNode.StarData.State = NodeState.Closed;
             _closedNodes.Add(currentNode);

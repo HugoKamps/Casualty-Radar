@@ -45,29 +45,6 @@ namespace Casualty_Radar.Core {
             }
         }
 
-
-        /// <summary>
-        /// Gets the province of a given latitude and longitude
-        /// </summary>
-        /// <returns>The name of the province</returns>
-        public string GetProvinceWithLatLng(PointLatLng point) {
-
-            string location = point.Lat.ToString(CultureInfo.InvariantCulture) + "," + point.Lng.ToString(CultureInfo.InvariantCulture);
-            string requestUri =
-                "http://maps.googleapis.com/maps/api/geocode/xml?latlng= " + location + "&sensor=false";
-
-            WebRequest request = WebRequest.Create(requestUri);
-            WebResponse response = request.GetResponse();
-            XDocument xdoc = XDocument.Load(response.GetResponseStream());
-
-            XElement result = xdoc.Element("GeocodeResponse").Element("result");
-            if (result != null) {
-                List<XElement> locationElement = result.Elements("address_component").ToList();
-                return locationElement.Find(element => element.Element("type").Value == "administrative_area_level_1").Element("long_name").Value.ToLower();
-            }
-            return "";
-        }
-
         /// <summary>
         /// Instantiates a marker that will be placed on a given location. The color can vary based on the type.
         /// Every marker gets a tooltip which contains the distance from the user's current location to the marker's location
