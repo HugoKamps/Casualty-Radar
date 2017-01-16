@@ -75,7 +75,8 @@ namespace Casualty_Radar.Modules {
 
             // Calculate the route on the highway
             _pathfinder = new Pathfinder(_startNode, _endNode);
-            _route.RouteNodes = _pathfinder.FindPath(); // Moet 'List<Node> highwaynodes' zijn
+            //_route.RouteNodes = _pathfinder.FindPath(); // Moet 'List<Node> highwaynodes' zijn
+            _route.RouteNodes = result.GetNodes();
 
             /*
             //Calculate the route from the user's location to the starting point on the highway
@@ -102,10 +103,10 @@ namespace Casualty_Radar.Modules {
 
             // Calculate the navigation steps and generate a panel for each step
             _route.CalculateRouteSteps();
-            for (var index = 0; index < 7; index++) {
+            /*for (var index = 0; index < 7; index++) {
                 Panel panel = _route.RouteStepPanels[index];
                 routeInfoPanel.Controls.Add(panel);
-            }
+            } */
 
             routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
         }
