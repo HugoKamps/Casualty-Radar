@@ -45,27 +45,29 @@ namespace Casualty_Radar.Modules {
         }
 
         private void StartNewTest() {
-            List<List<PointLatLng>> locations = CreateRandomRouteLocations(Convert.ToInt32(amountOfRoutesNumeric.Value));
-            RunCasualtyRadarAlgorithm(locations);
-            RunGoogleMapsAlgorithm(locations);
+            List<List<Node>> casualtyRadarLocations = CreateRandomRouteLocations(Convert.ToInt32(amountOfRoutesNumeric.Value));
+            RunCasualtyRadarAlgorithm(casualtyRadarLocations);
+
+            List<List<PointLatLng>> gMapsLocations = GeneratePointLatLngList(casualtyRadarLocations);
+            RunGoogleMapsAlgorithm(gMapsLocations);
         }
 
         private void Log(string text) => testStatusBox.AppendText(text + Environment.NewLine);
         private void LogResult(string text) => testResultsBox.AppendText(text + Environment.NewLine);
 
-        private List<List<PointLatLng>> CreateRandomRouteLocations(int amountOfRoutes)
+        private List<List<Node>> CreateRandomRouteLocations(int amountOfRoutes)
         {
             Log("Start generating " + amountOfRoutes + " random route points");
-            List<List<PointLatLng>> routeLocations = new List<List<PointLatLng>>();
+            List<List<Node>> routeLocations = new List<List<Node>>();
 
             int addToStatusBar = 20 / amountOfRoutes;
 
             for (int i = 0; i < amountOfRoutes; i++)
             {
-                List<PointLatLng> locations = new List<PointLatLng>();
+                List<Node> locations = new List<Node>();
 
-                locations.Add(GenerateRandomPoint());
-                locations.Add(GenerateRandomPoint());
+                locations.Add(GetRandomNode());
+                locations.Add(GetRandomNode());
 
                 routeLocations.Add(locations);
                 Log("Route point " + i + " added");
@@ -77,25 +79,34 @@ namespace Casualty_Radar.Modules {
             return routeLocations;
         }
 
-        private PointLatLng GenerateRandomPoint() {
-            PointLatLng point = new PointLatLng();
-
-            double minLat = 51.921;
-            double maxLat = 52.945;
-            double minLng = 4.719;
-            double maxLng = 6.669;
-
-            double randomLat = random.NextDouble() * (maxLat - minLat) + minLat;
-            double randomLng = random.NextDouble() * (maxLng - minLng) + minLng;
-
-            point.Lat = randomLat;
-            point.Lng = randomLng;
-
-            Log("Generated point: " + point.Lat + ", " + point.Lng);
-            return point;
+        private Node GetRandomNode() {
+            int randomInt = random.Next(0, collection.Nodes.Count);
+            return collection.Nodes[randomInt];
         }
 
-        private void RunCasualtyRadarAlgorithm(List<List<PointLatLng>> locations) {
+        private List<List<PointLatLng>> GeneratePointLatLngList(List<List<Node>> locations) {
+            List<List<PointLatLng>> routeLocations = new List<List<PointLatLng>>();
+
+            foreach (List<Node> nodes in locations) {
+                List<PointLatLng> route = new List<PointLatLng>();
+
+                PointLatLng start = new PointLatLng();
+                start.Lat = nodes.First().Lat;
+                start.Lng = nodes.First().Lon;
+
+                PointLatLng end = new PointLatLng();
+                end.Lat = nodes.Last().Lat;
+                end.Lng = nodes.Last().Lon;
+
+                route.Add(start);
+                route.Add(end);
+                routeLocations.Add(route);
+            }
+            
+           return routeLocations;
+        }
+
+        private void RunCasualtyRadarAlgorithm(List<List<Node>> locations) {
             Log("Running Casualty Radar Algorithm...");
             var watch = System.Diagnostics.Stopwatch.StartNew();
             Pathfinder pathfinder;
@@ -103,10 +114,10 @@ namespace Casualty_Radar.Modules {
 
             int addToStatusBar = 40 / locations.Count;
 
-            foreach (List<PointLatLng> routePoints  in locations)
+            foreach (List<Node> routePoints  in locations)
             {
-                Node startNode = MapUtil.GetNearest(routePoints.First().Lat, routePoints.First().Lng, targetCollection);
-                Node endNode = MapUtil.GetNearest(routePoints.Last().Lat, routePoints.Last().Lng, targetCollection);
+                Node startNode = routePoints.First();
+                Node endNode = routePoints.Last();
 
                 pathfinder = new Pathfinder(startNode, endNode);
                 route.RouteNodes = pathfinder.FindPath();
