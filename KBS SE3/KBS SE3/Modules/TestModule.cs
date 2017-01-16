@@ -10,18 +10,15 @@ using System.Windows.Forms;
 using Casualty_Radar.Core;
 using Casualty_Radar.Models;
 
-namespace Casualty_Radar.Modules
-{
-    partial class TestModule : UserControl, IModule
-    {
-        public TestModule()
-        {
+namespace Casualty_Radar.Modules {
+    partial class TestModule : UserControl, IModule {
+        public TestModule() {
             InitializeComponent();
         }
 
-        public Breadcrumb GetBreadcrumb()
-        {
-            return new Breadcrumb(this, "Testmodule");
+        public Breadcrumb GetBreadcrumb() {
+            return new Breadcrumb(this, "Testomgeving", null,
+                ModuleManager.GetInstance().ParseInstance(typeof(SettingsModule)));
         }
     }
 }
