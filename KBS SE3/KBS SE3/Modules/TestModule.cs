@@ -89,7 +89,7 @@ namespace Casualty_Radar.Modules {
                 locations.Add(GetRandomNode());
 
                 routeLocations.Add(locations);
-                Log("Route point " + i + " added");
+                Log("Route point " + (i + 1) + " added");
                 testStatusBar.Value += addToStatusBar;
             }
 
