@@ -75,6 +75,8 @@ namespace Casualty_Radar.Modules {
 
             // Calculate the route on the highway
             _pathfinder = new Pathfinder(_startNode, _endNode);
+            var result = new RouteCalculation(_startNode, _endNode);
+            result.Search();
             //_route.RouteNodes = _pathfinder.FindPath(); // Moet 'List<Node> highwaynodes' zijn
             _route.RouteNodes = result.GetNodes();
 
