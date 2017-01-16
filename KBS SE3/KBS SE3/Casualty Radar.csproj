@@ -235,6 +235,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Icons\Markers\marker_icon_destination.png" />
     <Content Include="Resources\Icons\Markers\marker_icon_selected.png" />
     <Content Include="Resources\Icons\Navigational\destination-icon.png" />
     <Content Include="Resources\XML\hattem.xml" />

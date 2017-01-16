@@ -95,6 +95,7 @@ namespace XMLRewriter.Core {
                 case "way":
                     string wayId = origin.Attribute("id").Value;
                     XElement rtn = new XElement("w", new XAttribute("id", wayId));
+                    string name = null;
                     foreach (XElement element in origin.Descendants()) {
                         if (element.Name.ToString().Equals("nd")) {
                             rtn.Add(new XElement("nd", new XAttribute("rf", element.FirstAttribute.Value)));
@@ -108,7 +109,11 @@ namespace XMLRewriter.Core {
                                     rtn.Add(new XAttribute("t", ParseWayValue(value)));
                                     break;
                                 case "name":
-                                    rtn.Add(new XAttribute("nm", value));
+                                    name = value;
+                                    break;
+                                case "ref":
+                                    if (name == null)
+                                        name = value;
                                     break;
                                 case "maxspeed":
                                     int speed;
@@ -121,6 +126,8 @@ namespace XMLRewriter.Core {
                             }
                         }
                     }
+                    if(name != null)
+                        rtn.Add(new XAttribute("nm", name));
                     return rtn;
             }
         }
