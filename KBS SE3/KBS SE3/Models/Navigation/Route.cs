@@ -15,6 +15,7 @@ namespace Casualty_Radar.Models.Navigation {
         public string StartingRoad { get; set; } // The starting road for the route
         public string DestinationRoad { get; set; } // The destination road for the route
         public double TotalDistance { get; set; } // The total distance of the route
+        public NavigationStep LastStep { get; set; }
 
         public Route() {
             RouteSteps = new List<NavigationStep>();
@@ -52,28 +53,48 @@ namespace Casualty_Radar.Models.Navigation {
                         : RouteStepType.Straight;
 
                     // Get the distance for the step
-                    string distance =
-                        NavigationStep.GetFormattedDistance(Math.Round(MapUtil.GetDistance(node, nextNode), 2));
+                    double distance = Math.Round(MapUtil.GetDistance(node, nextNode), 2);
+                    string distanceString =
+                        NavigationStep.GetFormattedDistance(distance);
+
 
                     NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
-                    RouteSteps.Add(step);
+
+
+                    if (LastStep != null) {
+                        if (LastStep.Way.Name == step.Way.Name && step.Type == LastStep.Type)
+                            LastStep.Distance += step.Distance;
+                        RouteSteps[RouteSteps.Count - 1] = LastStep;
+                    } else {
+                        RouteSteps.Add(step);
+                        LastStep = step;
+                        RouteSteps[RouteSteps.Count - 1] = LastStep;
+                    }
+                    step.SetInstruction();
 
                     // Check if the route is finished
                     if (index + 3 == RouteNodes.Count) {
-                        step = new NavigationStep(distance, RouteStepType.DestinationReached,
-                            MapUtil.GetWay(nextNode, nextNextNode));
-                        RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
+                        step = new NavigationStep(distance, RouteStepType.DestinationReached,MapUtil.GetWay(nextNode,nextNextNode));
+                        //RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
                         DestinationRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
-                    }
-                    else RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
+                    } else //RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
 
-                    color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
-                    height += 51;
+                    //color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
+                    //height += 51;
                     prevAngle = angle;
-                }
-                else break;
+                } 
             }
+            PrintPanels();
             TotalDistance = Math.Round(TotalDistance, 2);
         }
+        public void PrintPanels() {
+            int height = 0;
+            for(int i = 0; i < RouteStepPanels.Count; i++) {
+                NavigationStep n = RouteSteps[i];
+                RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(n, Color.Gainsboro, height));
+                height += 51;
+            }
+        }
+
     }
 }
