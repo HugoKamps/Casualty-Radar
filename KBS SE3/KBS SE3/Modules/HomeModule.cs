@@ -63,7 +63,7 @@ namespace Casualty_Radar.Modules {
                     LocationManager.CurrentLongitude, 0));
             }
 
-            foreach (Alert alert in Feed.GetInstance().GetAlerts) {
+            foreach (Alert alert in Feed.GetInstance().GetFilteredAlerts) {
                 int type = alert.Type == 1 ? 1 : 2;
                 if (_previousMarker != null && _previousMarker.Position.Lat.Equals(alert.Lat) &&
                     _previousMarker.Position.Lng.Equals(alert.Lng)) type = 3;

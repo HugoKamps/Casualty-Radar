@@ -15,6 +15,7 @@ namespace Casualty_Radar.Models.Navigation {
         public string StartingRoad { get; set; } // The starting road for the route
         public string DestinationRoad { get; set; } // The destination road for the route
         public double TotalDistance { get; set; } // The total distance of the route
+        public NavigationStep LastStep { get; set; }
 
         public Route() {
             RouteSteps = new List<NavigationStep>();
@@ -31,13 +32,16 @@ namespace Casualty_Radar.Models.Navigation {
         /// <summary>
         /// Calculates all the route steps and sets information about the route
         /// </summary>
-        public void CalculateRouteSteps() {
+        public void CalculateRouteSteps()
+        {
             double prevAngle = -1;
             int height = 0;
             Color color = Color.Gainsboro;
-            for (int index = 0; index < RouteNodes.Count; index++) {
+            for (int index = 0; index < RouteNodes.Count; index++)
+            {
                 Node node = RouteNodes[index];
-                if (index + 1 != RouteNodes.Count && index + 2 != RouteNodes.Count) {
+                if (index + 1 != RouteNodes.Count && index + 2 != RouteNodes.Count)
+                {
                     Node nextNode = RouteNodes[index + 1];
                     Node nextNextNode = RouteNodes[index + 2];
 
@@ -53,25 +57,59 @@ namespace Casualty_Radar.Models.Navigation {
                         : RouteStepType.Straight;
 
                     // Get the distance for the step
-                    string distance =
-                        NavigationStep.GetFormattedDistance(Math.Round(MapUtil.GetDistance(node, nextNode), 2));
+                    double distance = Math.Round(MapUtil.GetDistance(node, nextNode), 2);
+                    string distanceString =
+                        NavigationStep.GetFormattedDistance(distance);
+
 
                     NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
-                    RouteSteps.Add(step);
 
-                    // Check if the route is finished
-                    if (index + 3 == RouteNodes.Count) {
-                        step = new NavigationStep(distance, RouteStepType.DestinationReached,
-                            MapUtil.GetWay(nextNode, nextNextNode));
-                        RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
-                        DestinationRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
-                    } else RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(step, color, height));
-                    color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
-                    height += 51;
-                    prevAngle = angle;
-                } else break;
+                    if (LastStep != null)
+                    {
+                        if (LastStep.Way.Name == step.Way.Name && step.Type == LastStep.Type)
+                        {
+                            LastStep.Distance += step.Distance;
+                        }
+                        else
+                        {
+                            RouteSteps.Add(step);
+                            LastStep = step;
+                        }
+
+                        // Check if the route is finished
+                        if (index + 3 == RouteNodes.Count)
+                        {
+                            step = new NavigationStep(distance, RouteStepType.DestinationReached, MapUtil.GetWay(nextNode, nextNextNode));
+                            DestinationRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
+                            RouteSteps.Add(step);
+                            LastStep = step;
+                        }
+                        prevAngle = angle;
+                        RouteSteps[RouteSteps.Count - 1] = LastStep;
+                    }
+                    else
+                    {
+                        RouteSteps.Add(step);
+                        LastStep = step;
+                        RouteSteps[RouteSteps.Count - 1] = LastStep;
+                    }
+                    LastStep.SetInstruction();
+
+                }
+                TotalDistance = Math.Round(TotalDistance, 2);
+
             }
-            TotalDistance = Math.Round(TotalDistance, 2);
+            PrintPanels();
         }
+
+        public void PrintPanels() {
+            var route = RouteSteps;
+            int height = 0;
+            for(int i = 0; i < RouteSteps.Count; i++) {
+                    RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(RouteSteps[i] , Color.Gainsboro, height));
+                    height += 51;        
+            }
+        }
+
     }
 }
