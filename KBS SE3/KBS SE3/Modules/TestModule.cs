@@ -18,6 +18,7 @@ using Casualty_Radar.Models.Navigation;
 using Casualty_Radar.Utils;
 using GMap.NET;
 using GMap.NET.MapProviders;
+using System.Linq;
 
 namespace Casualty_Radar.Modules {
     partial class TestModule : UserControl, IModule {
@@ -25,6 +26,8 @@ namespace Casualty_Radar.Modules {
         private DataParser parser;
         private DataCollection collection;
         private List<Node> targetCollection;
+        private List<long> cRadarTimes;
+        private List<long> gMapsTimes;
 
         public TestModule() {
             InitializeComponent();
@@ -50,12 +53,19 @@ namespace Casualty_Radar.Modules {
         /// Various functions will be called which will generate random routes and run algorithms
         /// </summary>
         private void StartNewTest() {
+            cRadarTimes = new List<long>();
+
             List<List<Node>> casualtyRadarLocations =
                 CreateRandomRouteLocations(Convert.ToInt32(amountOfRoutesNumeric.Value));
             RunCasualtyRadarAlgorithm(casualtyRadarLocations);
 
+            gMapsTimes = new List<long>();
+
             List<List<PointLatLng>> gMapsLocations = GeneratePointLatLngList(casualtyRadarLocations);
             RunGoogleMapsAlgorithm(gMapsLocations);
+
+            CompareSingleRouteTimes();
+            AppendAverageRouteTime();
         }
 
         /// <summary>
@@ -63,12 +73,6 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         /// <param name="text">The text that has to be appended</param>
         private void Log(string text) => testStatusBox.AppendText(text + Environment.NewLine);
-
-        /// <summary>
-        /// Append text to the results of the test
-        /// </summary>
-        /// <param name="text">The text that has to be appended</param>
-        private void LogResult(string text) => testResultsBox.AppendText(text + Environment.NewLine);
 
         /// <summary>
         /// Creates a list with multiple lists which include two random nodes
@@ -143,14 +147,18 @@ namespace Casualty_Radar.Modules {
         private void RunCasualtyRadarAlgorithm(List<List<Node>> locations) {
             Log("Running Casualty Radar Algorithm...");
             var watch = System.Diagnostics.Stopwatch.StartNew();
+            Pathfinder pf;
 
             int addToStatusBar = 40 / locations.Count;
-
+            long previousWatchTime = watch.ElapsedMilliseconds;
             // Loop through the list of nodes and run the algorithm for each route
             foreach (List<Node> routePoints in locations) {
-                Pathfinder pathfinder = new Pathfinder(routePoints.First(), routePoints.Last());
+                pf = new Pathfinder(routePoints.First(), routePoints.Last());
 
-                List<Node> path = pathfinder.FindPath();
+                List<Node> path = pf.FindPath();
+
+                // Add elapsed time of algorithm to list
+                cRadarTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
 
                 Log("Calculated route " + (locations.IndexOf(routePoints) + 1));
                 testStatusBar.Value += addToStatusBar;
@@ -159,8 +167,7 @@ namespace Casualty_Radar.Modules {
             watch.Stop();
             Log("Finished running Casualty Radar Algorithm");
             testStatusBar.Value = 60;
-            LogResult("Casualty Radar: " + watch.ElapsedMilliseconds + "ms");
-            LogResult("Totale Afstand: ");
+            aOneTotalDurationLabel.Text = watch.ElapsedMilliseconds + " ms";
         }
 
         /// <summary>
@@ -174,13 +181,17 @@ namespace Casualty_Radar.Modules {
             uint totalDistance = 0;
 
             int addToStatusBar = 40 / locations.Count;
-
+            long previousWatchTime = watch.ElapsedMilliseconds;
             // Loop through the list of points and run the algorithm for each route
             foreach (List<PointLatLng> routePoints in locations) {
                 GDirections directions;
                 var route = GMapProviders.GoogleMap.GetDirections(out directions, routePoints.First(),
                     routePoints.Last(), false, false, false, false, false);
                 totalDistance += directions.DistanceValue;
+
+                // Add elapsed time of algorithm to list
+                gMapsTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
+
                 Log("Calculated route " + (locations.IndexOf(routePoints) + 1));
                 testStatusBar.Value += addToStatusBar;
             }
@@ -188,8 +199,31 @@ namespace Casualty_Radar.Modules {
             watch.Stop();
             Log("Finished running Google Maps Algorithm");
             testStatusBar.Value = 100;
-            LogResult("Google Maps: " + watch.ElapsedMilliseconds + "ms");
-            LogResult("Totale Afstand: " + totalDistance);
+            aTwoTotalDurationLabel.Text = watch.ElapsedMilliseconds + " ms";
+            aTwoTotalDistanceLabel.Text = (totalDistance / 1000) + "km";
+        }
+
+        private void AppendAverageRouteTime() {
+            aOneAverageDurationLabel.Text = cRadarTimes.Average(item => item) + " ms";
+            aTwoAverageDurationLabel.Text = gMapsTimes.Average(item => item) + " ms";
+        }
+
+        /// <summary>
+        /// Compare the times for each route of both algorithms and determine which one is faster
+        /// Add the amount of routes where the algorithm was faster than the other one to the label
+        /// </summary>
+        private void CompareSingleRouteTimes() {
+            int cRadarCount = 0;
+            int gMapsCount = 0;
+
+            foreach (long time in cRadarTimes) {
+                int index = cRadarTimes.IndexOf(time);
+                if (time < gMapsTimes[index]) cRadarCount++;
+                else if (gMapsTimes[index] < time) gMapsCount++;
+            }
+
+            aOneBestRoutesLabel.Text = cRadarCount.ToString();
+            aTwoBestRoutesLabel.Text = gMapsCount.ToString();
         }
 
         /// <summary>
@@ -198,7 +232,16 @@ namespace Casualty_Radar.Modules {
         private void ClearTests() {
             testStatusBox.Clear();
             testStatusBar.Value = 0;
-            testResultsBox.Clear();
+
+            aOneAverageDurationLabel.Text = "-";
+            aOneBestRoutesLabel.Text = "-";
+            aOneTotalDistanceLabel.Text = "-";
+            aOneTotalDurationLabel.Text = "-";
+
+            aTwoAverageDurationLabel.Text = "-";
+            aTwoBestRoutesLabel.Text = "-";
+            aTwoTotalDistanceLabel.Text = "-";
+            aTwoTotalDurationLabel.Text = "-";
         }
 
         private void clearPreviousTest_Click(object sender, EventArgs e) {
