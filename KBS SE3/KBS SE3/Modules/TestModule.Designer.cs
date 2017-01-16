@@ -57,10 +57,10 @@
             // testResultsBox
             // 
             this.testResultsBox.BackColor = System.Drawing.SystemColors.Control;
-            this.testResultsBox.Location = new System.Drawing.Point(464, 385);
+            this.testResultsBox.Location = new System.Drawing.Point(464, 379);
             this.testResultsBox.Multiline = true;
             this.testResultsBox.Name = "testResultsBox";
-            this.testResultsBox.Size = new System.Drawing.Size(466, 63);
+            this.testResultsBox.Size = new System.Drawing.Size(466, 75);
             this.testResultsBox.TabIndex = 1;
             // 
             // testStatusLabel
@@ -145,7 +145,7 @@
             // 
             this.amountOfRoutesNumeric.Location = new System.Drawing.Point(198, 172);
             this.amountOfRoutesNumeric.Maximum = new decimal(new int[] {
-            1000,
+            10,
             0,
             0,
             0});
@@ -158,7 +158,7 @@
             this.amountOfRoutesNumeric.Size = new System.Drawing.Size(89, 20);
             this.amountOfRoutesNumeric.TabIndex = 10;
             this.amountOfRoutesNumeric.Value = new decimal(new int[] {
-            25,
+            5,
             0,
             0,
             0});
@@ -167,7 +167,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(462, 361);
+            this.label1.Location = new System.Drawing.Point(462, 355);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 15);
             this.label1.TabIndex = 11;
@@ -175,24 +175,28 @@
             // 
             // startTestButton
             // 
+            this.startTestButton.BackColor = System.Drawing.SystemColors.Control;
             this.startTestButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.startTestButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.startTestButton.Location = new System.Drawing.Point(32, 228);
             this.startTestButton.Name = "startTestButton";
             this.startTestButton.Size = new System.Drawing.Size(107, 41);
             this.startTestButton.TabIndex = 12;
             this.startTestButton.Text = "Test Algoritmes";
-            this.startTestButton.UseVisualStyleBackColor = true;
+            this.startTestButton.UseVisualStyleBackColor = false;
             this.startTestButton.Click += new System.EventHandler(this.startTestButton_Click);
             // 
             // clearPreviousTest
             // 
+            this.clearPreviousTest.BackColor = System.Drawing.SystemColors.Control;
             this.clearPreviousTest.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.clearPreviousTest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.clearPreviousTest.Location = new System.Drawing.Point(253, 246);
             this.clearPreviousTest.Name = "clearPreviousTest";
             this.clearPreviousTest.Size = new System.Drawing.Size(75, 23);
             this.clearPreviousTest.TabIndex = 13;
             this.clearPreviousTest.Text = "Clear";
-            this.clearPreviousTest.UseVisualStyleBackColor = true;
+            this.clearPreviousTest.UseVisualStyleBackColor = false;
             this.clearPreviousTest.Click += new System.EventHandler(this.clearPreviousTest_Click);
             // 
             // TestModule

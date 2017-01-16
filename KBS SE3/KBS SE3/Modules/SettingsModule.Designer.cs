@@ -197,13 +197,16 @@ namespace Casualty_Radar.Modules {
             // 
             // testModuleButton
             // 
+            this.testModuleButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.testModuleButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.testModuleButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.testModuleButton.ForeColor = System.Drawing.Color.DimGray;
             this.testModuleButton.Location = new System.Drawing.Point(19, 287);
             this.testModuleButton.Name = "testModuleButton";
             this.testModuleButton.Size = new System.Drawing.Size(136, 23);
             this.testModuleButton.TabIndex = 13;
             this.testModuleButton.Text = "Open Testomgeving";
-            this.testModuleButton.UseVisualStyleBackColor = true;
+            this.testModuleButton.UseVisualStyleBackColor = false;
             this.testModuleButton.Click += new System.EventHandler(this.testModuleButton_Click);
             // 
             // testModuleLabel
