@@ -22,6 +22,7 @@ namespace Casualty_Radar.Models.Navigation {
             RouteStepPanels = new List<Panel>();
         }
 
+
         /// <summary>
         /// Gets all latitude and longitude points of each node in the route
         /// </summary>
@@ -63,7 +64,6 @@ namespace Casualty_Radar.Models.Navigation {
 
                     NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
 
-
                     if (LastStep != null)
                     {
                         if (LastStep.Way.Name == step.Way.Name && step.Type == LastStep.Type)
@@ -97,6 +97,7 @@ namespace Casualty_Radar.Models.Navigation {
 
                 }
                 TotalDistance = Math.Round(TotalDistance, 2);
+
             }
             PrintPanels();
         }
