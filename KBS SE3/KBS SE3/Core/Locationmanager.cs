@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using GMap.NET;
-using GMap.NET.WindowsForms;
-using GMap.NET.WindowsForms.Markers;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
-
+using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 
 namespace Casualty_Radar.Core {
     /// <summary>
@@ -64,8 +64,9 @@ namespace Casualty_Radar.Core {
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
             if (type == 3) imgLocation += "selected.png";
+            if (type == 4) imgLocation += "destination.png";
 
-            Image image = new Bitmap(@imgLocation);
+            Image image = new Bitmap(imgLocation);
 
             return new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
         }
@@ -76,8 +77,9 @@ namespace Casualty_Radar.Core {
             if (type == 1) imgLocation += "yellow.png";
             if (type == 2) imgLocation += "red.png";
             if (type == 3) imgLocation += "selected.png";
+            if (type == 4) imgLocation += "destination.png";
 
-            Image image = new Bitmap(@imgLocation);
+            Image image = new Bitmap(imgLocation);
 
             GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
             double distance = MapUtil.GetDistance(lat, lng, CurrentLatitude, CurrentLongitude);
