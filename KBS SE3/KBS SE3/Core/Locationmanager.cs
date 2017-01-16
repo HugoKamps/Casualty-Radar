@@ -71,29 +71,6 @@ namespace Casualty_Radar.Core {
             return new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
         }
 
-        public GMarkerGoogle CreateMarkerWithTooltip(double lat, double lng, int type, string tooltipText) {
-            string imgLocation = "../../Resources../Icons/Markers/marker_icon_";
-            if (type == 0) imgLocation += "blue.png";
-            if (type == 1) imgLocation += "yellow.png";
-            if (type == 2) imgLocation += "red.png";
-            if (type == 3) imgLocation += "selected.png";
-            if (type == 4) imgLocation += "destination.png";
-
-            Image image = new Bitmap(imgLocation);
-
-            GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), new Bitmap(image, 30, 30));
-            double distance = MapUtil.GetDistance(lat, lng, CurrentLatitude, CurrentLongitude);
-            marker.ToolTip = new GMapToolTip(marker) {
-                Fill = new SolidBrush(Color.White),
-                Foreground = new SolidBrush(Color.FromArgb(210, 73, 57)),
-                Font = new Font(FontFamily.GenericMonospace, 10)
-            };
-            marker.ToolTipText = tooltipText;
-            marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
-
-            return marker;
-        }
-
         /// <summary>
         /// Creates a PointLatLng variable based on the user's current latitude and longitude
         /// </summary>
