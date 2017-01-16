@@ -38,10 +38,11 @@
             this.firstAlgorithmTypeLabel = new System.Windows.Forms.Label();
             this.secondAlgorithmTypeLabel = new System.Windows.Forms.Label();
             this.moduleTitleLabel = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.amountOfRoutesNumeric = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.startTestButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.clearPreviousTest = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.amountOfRoutesNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // testStatusBox
@@ -77,6 +78,7 @@
             this.testStatusBar.Location = new System.Drawing.Point(465, 316);
             this.testStatusBar.Name = "testStatusBar";
             this.testStatusBar.Size = new System.Drawing.Size(465, 23);
+            this.testStatusBar.Step = 100;
             this.testStatusBar.TabIndex = 3;
             // 
             // firstAlgorithmLabel
@@ -139,24 +141,24 @@
             this.moduleTitleLabel.TabIndex = 9;
             this.moduleTitleLabel.Text = "Testomgeving";
             // 
-            // numericUpDown1
+            // amountOfRoutesNumeric
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(198, 172);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.amountOfRoutesNumeric.Location = new System.Drawing.Point(198, 172);
+            this.amountOfRoutesNumeric.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this.amountOfRoutesNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(89, 20);
-            this.numericUpDown1.TabIndex = 10;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            1,
+            this.amountOfRoutesNumeric.Name = "amountOfRoutesNumeric";
+            this.amountOfRoutesNumeric.Size = new System.Drawing.Size(89, 20);
+            this.amountOfRoutesNumeric.TabIndex = 10;
+            this.amountOfRoutesNumeric.Value = new decimal(new int[] {
+            25,
             0,
             0,
             0});
@@ -180,15 +182,28 @@
             this.startTestButton.TabIndex = 12;
             this.startTestButton.Text = "Test Algoritmes";
             this.startTestButton.UseVisualStyleBackColor = true;
+            this.startTestButton.Click += new System.EventHandler(this.startTestButton_Click);
+            // 
+            // clearPreviousTest
+            // 
+            this.clearPreviousTest.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.clearPreviousTest.Location = new System.Drawing.Point(253, 246);
+            this.clearPreviousTest.Name = "clearPreviousTest";
+            this.clearPreviousTest.Size = new System.Drawing.Size(75, 23);
+            this.clearPreviousTest.TabIndex = 13;
+            this.clearPreviousTest.Text = "Clear";
+            this.clearPreviousTest.UseVisualStyleBackColor = true;
+            this.clearPreviousTest.Click += new System.EventHandler(this.clearPreviousTest_Click);
             // 
             // TestModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.clearPreviousTest);
             this.Controls.Add(this.startTestButton);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.amountOfRoutesNumeric);
             this.Controls.Add(this.moduleTitleLabel);
             this.Controls.Add(this.secondAlgorithmTypeLabel);
             this.Controls.Add(this.firstAlgorithmTypeLabel);
@@ -201,7 +216,7 @@
             this.Controls.Add(this.testStatusBox);
             this.Name = "TestModule";
             this.Size = new System.Drawing.Size(953, 480);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.amountOfRoutesNumeric)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -219,8 +234,9 @@
         private System.Windows.Forms.Label firstAlgorithmTypeLabel;
         private System.Windows.Forms.Label secondAlgorithmTypeLabel;
         private System.Windows.Forms.Label moduleTitleLabel;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown amountOfRoutesNumeric;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button startTestButton;
+        private System.Windows.Forms.Button clearPreviousTest;
     }
 }
