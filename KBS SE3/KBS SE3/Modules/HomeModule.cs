@@ -283,6 +283,7 @@ namespace Casualty_Radar.Modules {
             Panel selectedPanel = _alertPanels[markerIndex];
             feedPanelItem_Click(selectedPanel, EventArgs.Empty);
             feedPanel.ScrollControlIntoView(selectedPanel);
+
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
