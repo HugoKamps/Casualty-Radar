@@ -112,9 +112,8 @@ namespace XMLRewriter.Core {
                                     break;
                                 case "maxspeed":
                                     int speed;
-                                    if (int.TryParse(value, out speed)) {
+                                    if (int.TryParse(value, out speed))
                                         rtn.Add(new XAttribute("ms", value));
-                                    }
                                     break;
                                 case "oneway":
                                     rtn.Add(new XAttribute("ow", value));
