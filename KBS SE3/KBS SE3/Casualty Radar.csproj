@@ -96,6 +96,7 @@
     <Compile Include="Core\Algorithms\StarData.cs" />
     <Compile Include="Core\Dialog\DialogOverlay.cs" />
     <Compile Include="Core\Dialog\DialogType.cs" />
+    <Compile Include="Core\GeoMapLoader.cs" />
     <Compile Include="Core\LocationManager.cs" />
     <Compile Include="Dialog.cs">
       <SubType>Form</SubType>
@@ -126,6 +127,7 @@
     <Compile Include="Models\DataControl\Graph\Ways\WayTypes\Trunk_Link.cs" />
     <Compile Include="Models\DataControl\Graph\Ways\WayTypes\UnclassifiedWay.cs" />
     <Compile Include="Models\DataControl\Graph\Ways\WayZoomLevel.cs" />
+    <Compile Include="Models\GeoMapSection.cs" />
     <Compile Include="Models\Navigation\Route.cs" />
     <Compile Include="Modules\SplashScreenModule.cs">
       <SubType>UserControl</SubType>

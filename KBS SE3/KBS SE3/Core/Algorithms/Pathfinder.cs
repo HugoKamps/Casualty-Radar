@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Utils;
@@ -18,7 +19,7 @@ namespace Casualty_Radar.Core.Algorithms {
             _endNode = endNode;
             _endNode.StarData = new StarData(_endNode, _endNode);
             _startNode = startNode;
-            _startNode.StarData = new StarData(_startNode, _endNode) { State = NodeState.Open };
+            _startNode.StarData = new StarData(_startNode, _endNode) {State = NodeState.Open};
         }
 
         /// <summary>
@@ -81,7 +82,9 @@ namespace Casualty_Radar.Core.Algorithms {
             List<Node> adjacentNodes = MapUtil.GetAdjacentNodes(fromNode);
 
             foreach (Node node in adjacentNodes) {
-                node.StarData = _openNodes.Find(n => n.ID == node.ID) == null ? new StarData(node, _endNode) : _openNodes.Find(n => n.ID == node.ID).StarData;
+                node.StarData = _openNodes.Find(n => n.ID == node.ID) == null
+                    ? new StarData(node, _endNode)
+                    : _openNodes.Find(n => n.ID == node.ID).StarData;
 
                 foreach (Node n in _closedNodes) if (n.ID == node.ID) node.StarData.State = NodeState.Closed;
                 foreach (Node n in _openNodes) if (n.ID == node.ID) node.StarData.State = NodeState.Open;
@@ -91,7 +94,7 @@ namespace Casualty_Radar.Core.Algorithms {
                     case NodeState.Closed:
                         continue;
                     case NodeState.Open:
-                        double traversalCost = MapUtil.GetDistance(node, node.StarData.Parent);
+                        double traversalCost = ComputeHScore(node.Lat, node.Lon, node.StarData.Parent.Lat, node.StarData.Parent.Lon);
                         double gTemp = fromNode.StarData.G + traversalCost;
                         if (gTemp < node.StarData.G) {
                             node.StarData.Parent = fromNode;
@@ -109,6 +112,11 @@ namespace Casualty_Radar.Core.Algorithms {
             }
 
             return nodes;
+        }
+
+        private double ComputeHScore(double lat1, double lon1, double lat2, double lon2)
+        {
+            return Math.Abs(lat2 - lat1) + Math.Abs(lon2 - lon1);
         }
     }
 }
