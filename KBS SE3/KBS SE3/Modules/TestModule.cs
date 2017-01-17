@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Casualty_Radar.Core;
 using Casualty_Radar.Core.Algorithms;
 using Casualty_Radar.Models;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Models.DataControl.Graph;
-using Casualty_Radar.Models.Navigation;
-using Casualty_Radar.Utils;
 using GMap.NET;
 using GMap.NET.MapProviders;
-using System.Linq;
 
 namespace Casualty_Radar.Modules {
     partial class TestModule : UserControl, IModule {
