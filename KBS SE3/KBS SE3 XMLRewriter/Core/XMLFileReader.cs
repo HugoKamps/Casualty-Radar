@@ -95,6 +95,7 @@ namespace XMLRewriter.Core {
                 case "way":
                     string wayId = origin.Attribute("id").Value;
                     XElement rtn = new XElement("w", new XAttribute("id", wayId));
+                    string name = null;
                     foreach (XElement element in origin.Descendants()) {
                         if (element.Name.ToString().Equals("nd")) {
                             rtn.Add(new XElement("nd", new XAttribute("rf", element.FirstAttribute.Value)));
@@ -108,13 +109,16 @@ namespace XMLRewriter.Core {
                                     rtn.Add(new XAttribute("t", ParseWayValue(value)));
                                     break;
                                 case "name":
-                                    rtn.Add(new XAttribute("nm", value));
+                                    name = value;
+                                    break;
+                                case "ref":
+                                    if (name == null)
+                                        name = value;
                                     break;
                                 case "maxspeed":
                                     int speed;
-                                    if (int.TryParse(value, out speed)) {
+                                    if (int.TryParse(value, out speed))
                                         rtn.Add(new XAttribute("ms", value));
-                                    }
                                     break;
                                 case "oneway":
                                     rtn.Add(new XAttribute("ow", value));
@@ -122,6 +126,8 @@ namespace XMLRewriter.Core {
                             }
                         }
                     }
+                    if(name != null)
+                        rtn.Add(new XAttribute("nm", name));
                     return rtn;
             }
         }
@@ -140,7 +146,6 @@ namespace XMLRewriter.Core {
                 case "motorway": return "mot";
                 case "living_street": return "liv";
                 case "primary": return "pri";
-                case "path": return "pth";
                 case "trunk": return "tru";
                 case "tertiary": return "ter";
                 case "motorway_link": return "mot_l";

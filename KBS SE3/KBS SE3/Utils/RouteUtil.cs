@@ -2,8 +2,7 @@
 using Casualty_Radar.Models.DataControl.Graph;
 
 namespace Casualty_Radar.Utils {
-    class RouteUtil
-    {
+    class RouteUtil {
          /// <summary>		
          /// Get the angle in degrees between two lat & long points		
          /// </summary>		
