@@ -123,6 +123,7 @@ namespace Casualty_Radar.Modules {
             this.alertTypeComboBox.Name = "alertTypeComboBox";
             this.alertTypeComboBox.Size = new System.Drawing.Size(129, 26);
             this.alertTypeComboBox.TabIndex = 6;
+            this.alertTypeComboBox.SelectedIndex = 0;
             this.alertTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.alertTypeComboBox_SelectedIndexChanged);
             // 
             // refreshFeedButton
