@@ -273,6 +273,7 @@ namespace Casualty_Radar.Modules {
 
         public void PreviousButton_Click() {
             _previousMarker = null;
+            _selectedPanel = null;
             Feed.GetInstance().UpdateFeed();
         }
 
