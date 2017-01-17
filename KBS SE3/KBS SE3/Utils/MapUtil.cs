@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Casualty_Radar.Models;
+using GMap.NET;
 
 namespace Casualty_Radar.Utils {
     static class MapUtil {
@@ -97,5 +99,9 @@ namespace Casualty_Radar.Utils {
         }
 
         public static Way GetWay(Node node1, Node node2) => node1.ConnectedWays.Find(w => w.References.Contains(w.References.Find(n => n.Node == node2)));
+
+        public static bool IsInSection(PointLatLng point, GeoMapSection section) => 
+            point.Lat > section.LowerBound.Lat && point.Lat < section.UpperBound.Lat &&
+                   point.Lng > section.LowerBound.Lng && point.Lng < section.UpperBound.Lng;
     }
 }

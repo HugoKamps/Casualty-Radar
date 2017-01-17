@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Casualty_Radar.Core;
 using Casualty_Radar.Core.Dialog;
-using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Modules;
 using static Casualty_Radar.Core.Dialog.DialogType;
 using System.Threading;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using Casualty_Radar.Models;
+using GMap.NET;
 
 namespace Casualty_Radar {
     public partial class Container : Form {
@@ -24,6 +28,7 @@ namespace Casualty_Radar {
 
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
         [DllImport("user32.dll")]
         private static extern bool ReleaseCapture();
 
@@ -96,23 +101,24 @@ namespace Casualty_Radar {
 
         /* This event is triggered when the user's mouse hovers over the minimize or exit button. 
         It changes the color to show which button is being hovered over. */
+
         private void topBarButtons_MouseEnter(object sender, EventArgs e) {
-            Label selected = (Label)sender;
+            Label selected = (Label) sender;
             selected.BackColor = Color.FromArgb(220, 82, 66);
         }
 
         private void prevBtn_MouseEnter(object sender, EventArgs e) {
-            Label selected = (Label)sender;
+            Label selected = (Label) sender;
             selected.ForeColor = Color.White;
         }
 
         private void prevBtn_MouseLeave(object sender, EventArgs e) {
-            Label selected = (Label)sender;
+            Label selected = (Label) sender;
             selected.ForeColor = Color.Gainsboro;
         }
 
         private void topBarButtons_MouseLeave(object sender, EventArgs e) {
-            Label selected = (Label)sender;
+            Label selected = (Label) sender;
             selected.BackColor = Color.FromArgb(210, 73, 57);
         }
 
@@ -128,10 +134,10 @@ namespace Casualty_Radar {
             homeBtn.BackColor = Color.FromArgb(52, 57, 61);
             settingsBtn.BackColor = Color.FromArgb(52, 57, 61);
             if (module.GetType() != typeof(GetStartedModule)) {
-                Button selectedButton = (Button)sender;
+                Button selectedButton = (Button) sender;
                 selectedButton.BackColor = Color.FromArgb(236, 89, 71);
                 if (selectedButton == homeBtn) {
-                    HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+                    HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
                     hm.FeedTicker.StartTimerIfEnabled();
                 }
                 ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
@@ -142,37 +148,26 @@ namespace Casualty_Radar {
 
         private void Container_Load(object sender, EventArgs e) {
             BackgroundWorker bW = new BackgroundWorker();
-            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             Shown += hm.HomeModule_Load;
             _modManager.UpdateModule(hm);
-
         }
 
         private void prevBtn_Click(object sender, EventArgs e) {
             IModule parentModule = ModuleManager.GetInstance().GetCurrentModule().GetBreadcrumb().Parent;
             if (parentModule is HomeModule) {
-                HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+                HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
                 hm.FeedTicker.StartTimerIfEnabled();
             }
             ModuleManager.GetInstance().UpdateModule(parentModule);
         }
 
-        private void testBtn_Click(object sender, EventArgs e)
-        {
+        private void testBtn_Click(object sender, EventArgs e) {
             HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
-        }
-
-        /*
-        * TEST METHOD 
-        */
-        private void TestDraw(HomeModule hm, Node n) {
-            //hm.RouteOverlay.Markers.Add(new GMarkerGoogle(n.GetPoint(), GMarkerGoogleType.red_big_stop));
-            //foreach (Node adjacent in MapUtil.GetAdjacentNodes(n)) {
-            //    GMapMarker m = new GMarkerGoogle(adjacent.GetPoint(), GMarkerGoogleType.blue_dot);
-            //    hm.RouteOverlay.Markers.Add(m);
-            //}
-            ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().ParseInstance(typeof(GetStartedModule)));
-
+            GeoMapLoader geoMapLoader = new GeoMapLoader();
+            foreach (GeoMapSection section in geoMapLoader.GetGeoMapSections()) {
+                hm.LocationManager.DrawRoute(new List<PointLatLng>{ section.UpperBound, section.LowerBound}, hm.RouteOverlay);
+            }
         }
     }
 }
