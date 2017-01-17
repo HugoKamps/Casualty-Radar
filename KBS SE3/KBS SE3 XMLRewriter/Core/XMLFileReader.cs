@@ -60,7 +60,7 @@ namespace XMLRewriter.Core {
                 reader.MoveToContent();
                 while (reader.Read()) {
                     if (reader.NodeType == XmlNodeType.Element) {
-                        if (reader.Name.Equals("node") || reader.Name.Equals("way")) {
+                        if (reader.Name.Equals("node") || reader.Name.Equals("way") || reader.Name.Equals("bounds")) {
                             XElement element = XElement.ReadFrom(reader) as XElement;
                             yield return element;
                         }
@@ -86,6 +86,12 @@ namespace XMLRewriter.Core {
         /// <returns>A newly, shortened, XElement that is used for the new XML file</returns>
         private XElement ConvertElement(XElement origin) {
             switch (origin.Name.ToString()) {
+                case "bounds":
+                    return new XElement("bnd",
+                        origin.Attribute("minlon"),
+                        origin.Attribute("minlat"),
+                        origin.Attribute("maxlon"),
+                        origin.Attribute("maxlat"));
                 case "node":
                     string lon = origin.Attribute("lon").Value;
                     string lat = origin.Attribute("lat").Value;
@@ -126,7 +132,7 @@ namespace XMLRewriter.Core {
                             }
                         }
                     }
-                    if(name != null)
+                    if (name != null)
                         rtn.Add(new XAttribute("nm", name));
                     return rtn;
             }
