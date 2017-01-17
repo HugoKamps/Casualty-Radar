@@ -106,8 +106,11 @@ namespace Casualty_Radar.Models.Navigation {
             var route = RouteSteps;
             int height = 0;
             for(int i = 0; i < RouteSteps.Count; i++) {
-                    RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(RouteSteps[i] , Color.Gainsboro, height));
-                    height += 51;        
+                if(i != RouteSteps.Count - 2) {
+                    RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(RouteSteps[i], Color.Gainsboro, height));
+                    height += 51;
+
+                }
             }
         }
 
