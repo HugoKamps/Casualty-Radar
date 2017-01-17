@@ -139,6 +139,7 @@ namespace Casualty_Radar {
                 if (selectedButton == homeBtn) {
                     HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
                     hm.FeedTicker.StartTimerIfEnabled();
+                    hm.PreviousButton_Click();
                 }
                 ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
             }
@@ -158,6 +159,7 @@ namespace Casualty_Radar {
             if (parentModule is HomeModule) {
                 HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
                 hm.FeedTicker.StartTimerIfEnabled();
+                hm.PreviousButton_Click();
             }
             ModuleManager.GetInstance().UpdateModule(parentModule);
         }
