@@ -71,14 +71,6 @@ namespace Casualty_Radar.Modules {
             }
         }
 
-        private void Marker_Click(GMapMarker item, MouseEventArgs e) {
-            int markerIndex = map.Overlays[0].Markers.IndexOf(item) - 1;
-            if (markerIndex < 0) return;
-            Panel selectedPanel = _alertPanels[markerIndex];
-            feedPanelItem_Click(selectedPanel, EventArgs.Empty);
-            feedPanel.ScrollControlIntoView(selectedPanel);
-        }
-
         public static Image ResizeImage(Image imgToResize, Size size) => new Bitmap(imgToResize, size);
         public Panel GetSelectedPanel => _selectedPanel;
         public int GetAlertType => alertTypeComboBox.SelectedIndex;
@@ -277,6 +269,20 @@ namespace Casualty_Radar.Modules {
             newPanel.Controls.Add(newStampLabel);
 
             return newPanel;
+        }
+
+        public void PreviousButton_Click() {
+            _previousMarker = null;
+            _selectedPanel = null;
+            Feed.GetInstance().UpdateFeed();
+        }
+
+        private void Marker_Click(GMapMarker item, MouseEventArgs e) {
+            int markerIndex = map.Overlays[0].Markers.IndexOf(item) - 1;
+            if (markerIndex < 0) return;
+            Panel selectedPanel = _alertPanels[markerIndex];
+            feedPanelItem_Click(selectedPanel, EventArgs.Empty);
+            feedPanel.ScrollControlIntoView(selectedPanel);
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {
