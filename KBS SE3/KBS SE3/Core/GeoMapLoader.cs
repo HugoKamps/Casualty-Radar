@@ -23,9 +23,10 @@ namespace Casualty_Radar.Core {
             foreach (string fileName in directory) {
                 XDocument document = XDocument.Load(FILE_PATH + "/" + fileName);
                 List<double> points = new List<double>();
-                foreach (var attribute in document.Element("osm").Element("bnd").Attributes().ToList()) points.Add(double.Parse(attribute.Value, CultureInfo.InvariantCulture));
-                PointLatLng upperBound = new PointLatLng(points[2], points[3]);
-                PointLatLng lowerBound = new PointLatLng(points[0], points[1]);
+                foreach (var attribute in document.Element("osm").Element("bnd").Attributes().ToList())
+                    points.Add(double.Parse(attribute.Value, CultureInfo.InvariantCulture));
+                PointLatLng upperBound = new PointLatLng(points[3], points[2]);
+                PointLatLng lowerBound = new PointLatLng(points[1], points[0]);
                 _geoMapSections.Add(new GeoMapSection(upperBound, lowerBound, FILE_PATH + "/" + fileName));
             }
         }
