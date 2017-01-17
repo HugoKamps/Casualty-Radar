@@ -20,30 +20,16 @@ namespace Casualty_Radar.Modules {
     partial class NavigationModule : UserControl, IModule {
         private readonly LocationManager _locationManager;
         private GMapOverlay _routeOverlay;
-        private Pathfinder _pathfinder;
-        private Node _startNode;
-        private Node _endNode;
         private PdfUtil _pdfUtil;
         private Route _route;
-
-        private DataParser parser;
-        private DataCollection collection;
-        private List<Node> targetCollection;
-        private List<GeoMapSection> _sections;
+        private GeoMapLoader _mapLoader;
 
         public NavigationModule() {
             InitializeComponent();
             _locationManager = new LocationManager();
             _pdfUtil = new PdfUtil();
             _route = new Route();
-
-            parser = new DataParser(@"../../Resources/XML/nederland_snelwegen.xml");
-            parser.Deserialize();
-            collection = parser.GetCollection();
-            targetCollection = collection.Intersections;
-
-            GeoMapLoader loader = new GeoMapLoader();
-            _sections = loader.GetGeoMapSections();
+            _mapLoader = new GeoMapLoader();
         }
 
         public Breadcrumb GetBreadcrumb() {
@@ -69,42 +55,22 @@ namespace Casualty_Radar.Modules {
             routeInfoPanel.Controls.Clear();
             _routeOverlay.Clear();
 
-            // Get the nearest nodes on the highway of the starting and end point
-            _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
-            _endNode = MapUtil.GetNearest(alert.Lat, alert.Lng, targetCollection);
+            List<Node> highWay = ParseRoute(ParseHighways(), start, alert.GetPoint());
+            List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count-1].GetPoint());
+            //List<Node> dest = ParseRoute(FetchDataSection(alert.GetPoint()), highWay[0].GetPoint(), alert.GetPoint());
 
-            // Calculate the route on the highway
-            _pathfinder = new Pathfinder(_startNode, _endNode);
-            var result = new RouteCalculation(_startNode, _endNode);
-            result.Search();
-            //_route.RouteNodes = _pathfinder.FindPath(); // Moet 'List<Node> highwaynodes' zijn
-            _route.RouteNodes = result.GetNodes();
-            /*
-            // Calculate the route from the user's location to the starting point on the highway
-            SetParserData(_startNode.GetPoint());
-            _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
-            _endNode = highwayNodes[0];
-            _pathfinder = new Pathfinder(_startNode, _endNode);
-            
-            // Set the list with nodes in the route with the starting route and the highway route
-            _route.RouteNodes = _pathfinder.FindPath();            
-            _route.RouteNodes.AddRange(highwayNodes);
-            
-            // Calculate the route from the last point on the highway to the location of the alert
-            SetParserData(_endNode.GetPoint());
-            _startNode = highwayNodes[highwayNodes.Count - 1];
-            _endNode = MapUtil.GetNearest(alert.Lat, alert.Lng, targetCollection);
-            _pathfinder = new Pathfinder(_startNode, _endNode);
+            _route.RouteNodes = highWay;
+            _route.RouteNodes.AddRange(origin);
+            _routeOverlay.Markers.Add(_locationManager.CreateMarker(highWay[0].GetPoint().Lat, highWay[0].GetPoint().Lng, 3));
+            _routeOverlay.Markers.Add(_locationManager.CreateMarker(origin[0].GetPoint().Lat, origin[0].GetPoint().Lng, 3));
 
-            // Add the final route to the current route
-            _route.RouteNodes.AddRange(_pathfinder.FindPath());
-            */
+            //_route.RouteNodes.AddRange(dest);           
 
             // Draw the entire calculated route
             _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
 
             // Calculate the navigation steps and generate a panel for each step
-            _route.CalculateRouteSteps();
+            //_route.CalculateRouteSteps();
             /*
             for (var index = 0; index < _route.RouteStepPanels.Count ; index++) {
                 Panel panel = _route.RouteStepPanels[index];
@@ -112,6 +78,25 @@ namespace Casualty_Radar.Modules {
             } */
 
             routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+        }
+
+        private List<Node> ParseRoute(DataCollection collection, PointLatLng origin, PointLatLng dest) {
+            Node start = MapUtil.GetNearest(origin.Lat, origin.Lng, collection.Intersections);
+            Node end = MapUtil.GetNearest(dest.Lat, dest.Lng, collection.Intersections);
+            RouteCalculation calc = new RouteCalculation(start, end);
+            calc.Search();
+            return calc.GetNodes();
+        }
+
+        private List<Node> ParseRoute(GeoMapSection section, PointLatLng origin, PointLatLng dest) {
+            section.Load();
+            return ParseRoute(section.Data, origin, dest);
+        }
+
+        private DataCollection ParseHighways() {
+            DataParser parser = new DataParser(@"../../Resources/XML/nederland_snelwegen.xml");
+            parser.Deserialize();
+            return parser.GetCollection();
         }
 
         /// <summary>
@@ -141,18 +126,14 @@ namespace Casualty_Radar.Modules {
 
         private void printingPictureBox_Click(object sender, EventArgs e) => _pdfUtil.CreatePdf(_route.RouteSteps, _route.StartingRoad, _route.DestinationRoad);
 
-        private void SetParserData(PointLatLng point) {
-            string path = "";
-            foreach (GeoMapSection section in _sections) {
+        private GeoMapSection FetchDataSection(PointLatLng point) {
+            foreach (GeoMapSection section in _mapLoader.GetGeoMapSections()) {
                 if (MapUtil.IsInSection(point, section)) {
-                    path = section.TargetFilePath;
+                    section.Load();
+                    return section;
                 }
             }
-
-            parser = new DataParser(@"../../Resources/XML/" + path);
-            parser.Deserialize();
-            collection = parser.GetCollection();
-            targetCollection = collection.Intersections;
+            return null;
         }
     }
 }
