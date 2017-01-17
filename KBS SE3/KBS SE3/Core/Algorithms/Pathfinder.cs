@@ -36,7 +36,8 @@ namespace Casualty_Radar.Core.Algorithms {
 
             // If a path was found, follow the parents from the end node to build a list of locations
             Node node = _endNode;
-            while (node.StarData.Parent != null) {
+            while (node.StarData.Parent != null)
+            {
                 path.Add(node);
                 node = node.StarData.Parent;
             }

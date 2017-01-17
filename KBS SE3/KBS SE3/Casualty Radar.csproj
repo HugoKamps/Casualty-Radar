@@ -134,6 +134,12 @@
     <Compile Include="Modules\SplashScreenModule.Designer.cs">
       <DependentUpon>SplashScreenModule.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\TestModule.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\TestModule.Designer.cs">
+      <DependentUpon>TestModule.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Utils\ConnectionUtil.cs" />
     <Compile Include="Models\Navigation\NavigationStep.cs" />
@@ -202,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\SplashScreenModule.resx">
       <DependentUpon>SplashScreenModule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\TestModule.resx">
+      <DependentUpon>TestModule.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

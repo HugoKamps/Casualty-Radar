@@ -14,12 +14,12 @@ namespace Casualty_Radar.Modules {
         }
 
         public Breadcrumb GetBreadcrumb() {
-            return new Breadcrumb(this, "Settings");
+            return new Breadcrumb(this, "Settings", ModuleManager.GetInstance().ParseInstance(typeof(TestModule)), null);
         }
 
         //If the user changed the value of the textbox the Setting is changed
         private void saveBtn_Click(object sender, EventArgs e) {
-            HomeModule hm = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             if (locationTextBox.Text != "") {
                 Settings.Default.userLocation = locationTextBox.Text;
                 int feedTickerNumericValue = Convert.ToInt32(feedTickerNumeric.Value);
@@ -38,7 +38,8 @@ namespace Casualty_Radar.Modules {
                 }
                 saveBtn.Enabled = false;
                 Settings.Default.Save();
-            } else {
+            }
+            else {
                 warningLabel.Show();
             }
         }
@@ -64,12 +65,19 @@ namespace Casualty_Radar.Modules {
                 if (value < 30 || value > 300) {
                     feedNumericErrorLabel.Visible = true;
                     saveBtn.Enabled = false;
-                } else {
+                }
+                else {
                     feedNumericErrorLabel.Visible = false;
                     saveBtn.Enabled = true;
                     feedTickerNumeric.Value = value;
                 }
-            } else feedNumericErrorLabel.Visible = true;
+            }
+            else feedNumericErrorLabel.Visible = true;
+        }
+
+        private void testModuleButton_Click(object sender, EventArgs e) {
+            ModuleManager mM = ModuleManager.GetInstance();
+            mM.UpdateModule(mM.ParseInstance(typeof(TestModule)));
         }
     }
 }
