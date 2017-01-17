@@ -25,8 +25,9 @@ namespace Casualty_Radar.Models.Navigation {
         /// <summary>
         /// Indicates how long it takes until the next step
         /// </summary>
-        public string Distance { get; set; }
+        public double Distance { get; set; }
 
+        public string FormattedDistance { get; set; }
         public RouteStepType Type { get; set; }
 
         /// <summary>
@@ -34,10 +35,13 @@ namespace Casualty_Radar.Models.Navigation {
         /// </summary>
         public string Instruction { get; set; }
 
-        public NavigationStep(string distance, RouteStepType type, Way way) {
+
+        public Way Way { get; set; }
+
+        public NavigationStep(double distance, RouteStepType type, Way way) {
             Distance = distance;
             Type = type;
-            SetInstruction(type, distance, way.Name);
+            Way = way;
         }
         
         /// <summary>
@@ -46,29 +50,32 @@ namespace Casualty_Radar.Models.Navigation {
         /// <param name="type"></param>
         /// <param name="dist"></param>
         /// <param name="way"></param>
-        private void SetInstruction(RouteStepType type, string dist, string way) {
+        public void SetInstruction() {
             string instruction;
+            FormattedDistance = GetFormattedDistance(Distance);
+            string way = Way.Name;
+            var type = Type;
             switch (type) {
                 case RouteStepType.Straight:
-                    instruction = "Ga over " + dist + " rechtdoor op de " + way;
+                    instruction = "Ga over " + FormattedDistance + " rechtdoor op de " + way;
                     break;
                 case RouteStepType.CurveRight:
-                    instruction = "Flauwe bocht naar rechts de " + way + " op over " + dist;
+                    instruction = "Flauwe bocht naar rechts de " + way + " op over " + FormattedDistance;
                     break;
                 case RouteStepType.Right:
-                    instruction = "Sla over " + dist + " rechtsaf de " + way + " op";
+                    instruction = "Sla over " + FormattedDistance + " rechtsaf de " + way + " op";
                     break;
                 case RouteStepType.SharpRight:
-                    instruction = "Scherpe bocht naar rechts de " + way + " op over " + dist;
+                    instruction = "Scherpe bocht naar rechts de " + way + " op over " + FormattedDistance;
                     break;
                 case RouteStepType.CurveLeft:
-                    instruction = "Flauwe bocht naar links de " + way + " op over " + dist;
+                    instruction = "Flauwe bocht naar links de " + way + " op over " + FormattedDistance;
                     break;
                 case RouteStepType.Left:
-                    instruction = "Sla over " + dist + " linksaf de " + way + " op";
+                    instruction = "Sla over " + FormattedDistance + " linksaf de " + way + " op";
                     break;
                 case RouteStepType.SharpLeft:
-                    instruction = "Scherpe bocht naar links de " + way + " op over " + dist;
+                    instruction = "Scherpe bocht naar links de " + way + " op over " + FormattedDistance;
                     break;
                 case RouteStepType.DestinationReached:
                     instruction = "Bestemming bereikt!";
@@ -158,7 +165,7 @@ namespace Casualty_Radar.Models.Navigation {
                     TextAlign = ContentAlignment.MiddleCenter,
                     ForeColor = Color.DarkSlateGray,
                     Font = new Font("Microsoft Sans Serif", 9, FontStyle.Bold),
-                    Text = step.Distance
+                    Text = step.FormattedDistance
                 };
                 newPanel.Controls.Add(distanceLabel);
             }
@@ -182,6 +189,6 @@ namespace Casualty_Radar.Models.Navigation {
             newPanel.Controls.Add(instructionIcon);
             newPanel.Controls.Add(instructionLabel);
             return newPanel;
-        }
+         }
     }
 }
