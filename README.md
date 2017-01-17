@@ -17,7 +17,7 @@ Casualty Radar kan niet geïnstalleerd worden.
 
 GEBRUIKERSHANDLEIDING
 -----------
-Casualty Radar is een drama voor gebruikers zonder computer ervaring
+Casualty Radar is een drama voor gebruikers zonder computer ervaring, vooral Eelco
 
 TEAM
 -----------
