@@ -47,13 +47,9 @@ namespace Casualty_Radar.Modules {
             _locationManager.CurrentLongitude = start.Lng;
 
             // Set the alert panel with the information of the selected alert
-            infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
-            alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
-            timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
-            InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
-
+            UpdatePanel(alert);
             routeInfoPanel.Controls.Clear();
-            _routeOverlay.Clear();
+            InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
 
             List<Node> highWay = ParseRoute(ParseHighways(), start, alert.GetPoint());
             List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count-1].GetPoint());
@@ -61,8 +57,6 @@ namespace Casualty_Radar.Modules {
 
             _route.RouteNodes = highWay;
             _route.RouteNodes.AddRange(origin);
-            _routeOverlay.Markers.Add(_locationManager.CreateMarker(highWay[0].GetPoint().Lat, highWay[0].GetPoint().Lng, 3));
-            _routeOverlay.Markers.Add(_locationManager.CreateMarker(origin[0].GetPoint().Lat, origin[0].GetPoint().Lng, 3));
 
             //_route.RouteNodes.AddRange(dest);           
 
@@ -78,6 +72,12 @@ namespace Casualty_Radar.Modules {
             } */
 
             routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+        }
+
+        private void UpdatePanel(Alert alert) {
+            infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
+            alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
+            timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
         }
 
         private List<Node> ParseRoute(DataCollection collection, PointLatLng origin, PointLatLng dest) {
