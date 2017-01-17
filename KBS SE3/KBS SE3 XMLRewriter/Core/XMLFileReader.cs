@@ -47,7 +47,13 @@ namespace XMLRewriter.Core {
                 _writer.Save();
                 Log("Saved succesfully");
                 MessageBox.Show("Converting finished, you can locate the converted file at: " + _path + @"\" + _fileName + ".xml", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                Reset();
             }
+        }
+
+        private void Reset() {
+            StatusBar.Value = 0;
+            DataLog.Clear();
         }
 
         /// <summary>
