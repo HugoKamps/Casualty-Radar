@@ -12,6 +12,7 @@ namespace Casualty_Radar.Core {
 
         private readonly List<GeoMapSection> _geoMapSections; // List that contains all the GeoMapSection instances of the XML files
 
+        private const string FILE_PATH = @"../../Resources/XML/Sections";
 
         public GeoMapLoader() {
             _geoMapSections = new List<GeoMapSection>();
