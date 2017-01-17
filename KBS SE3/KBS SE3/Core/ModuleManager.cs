@@ -42,7 +42,8 @@ namespace Casualty_Radar.Core {
                 new SettingsModule(),
                 new NavigationModule(),
                 new GetStartedModule(),
-                new NoConnectionModule() 
+                new NoConnectionModule(),
+                new TestModule()
             });
         }
 
