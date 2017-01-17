@@ -103,7 +103,7 @@ namespace Casualty_Radar.Modules {
 
             // Calculate the navigation steps and generate a panel for each step
             _route.CalculateRouteSteps();
-            for (var index = 0; index < 30; index++) {
+            for (var index = 0; index < _route.RouteStepPanels.Count ; index++) {
                 Panel panel = _route.RouteStepPanels[index];
                 routeInfoPanel.Controls.Add(panel);
             }
