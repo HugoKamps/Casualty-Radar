@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Properties;
@@ -48,6 +49,7 @@ namespace Casualty_Radar.Models.Navigation {
         /// </summary>
         public void SetInstruction() {
             string instruction;
+            Distance = Math.Round(Distance, 2);
             FormattedDistance = GetFormattedDistance(Distance);
             string way = Way.Name;
             var type = Type;
