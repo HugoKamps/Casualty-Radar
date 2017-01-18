@@ -163,6 +163,7 @@ namespace Casualty_Radar.Modules {
             {
                 routeInfoPanel.Controls.Clear();
             }
+            Console.WriteLine(routeInfoPanel.Controls.Count);
         }
 
         /// <summary>
