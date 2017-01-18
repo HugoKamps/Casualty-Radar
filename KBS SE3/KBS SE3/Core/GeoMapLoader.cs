@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -18,13 +19,17 @@ namespace Casualty_Radar.Core {
             _geoMapSections = new List<GeoMapSection>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void Init() {
             List<string> directory = Directory.GetFiles(FILE_PATH).Select(Path.GetFileName).ToList();
             foreach (string fileName in directory) {
                 XDocument document = XDocument.Load(FILE_PATH + "/" + fileName);
                 List<double> points = new List<double>();
-                foreach (var attribute in document.Element("osm").Element("bnd").Attributes().ToList())
+                foreach (var attribute in document.Element("osm").Element("bnd").Attributes().ToList()) {
                     points.Add(double.Parse(attribute.Value, CultureInfo.InvariantCulture));
+                }
                 PointLatLng upperBound = new PointLatLng(points[3], points[2]);
                 PointLatLng lowerBound = new PointLatLng(points[1], points[0]);
                 _geoMapSections.Add(new GeoMapSection(upperBound, lowerBound, FILE_PATH + "/" + fileName));

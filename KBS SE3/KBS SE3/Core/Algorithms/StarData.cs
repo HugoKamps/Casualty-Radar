@@ -46,7 +46,7 @@ namespace Casualty_Radar.Core.Algorithms {
         public StarData(Node origin, Node dest) {
             _origin = origin;
             State = NodeState.Untested;
-            H = MapUtil.GetDistance(_origin, dest);
+            H = MapUtil.GetAbsoluteDistance(_origin.Lat, _origin.Lon, dest.Lat, dest.Lon);
             G = 0;
         }
     }
