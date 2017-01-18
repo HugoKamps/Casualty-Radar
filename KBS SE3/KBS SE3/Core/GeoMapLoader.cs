@@ -27,7 +27,7 @@ namespace Casualty_Radar.Core {
         /// </summary>
         private void Init() {
             List<string> directory = Directory.GetFiles(FILE_PATH).Select(Path.GetFileName).ToList();
-            foreach (string fileName in directory) {
+            foreach (string fileName in directory) {              
                 XmlReader reader = XmlReader.Create(FILE_PATH + "/" + fileName);
                 if (reader.ReadToDescendant("bnd")) {
                     double minLat = double.Parse(reader.GetAttribute("minlat"), CultureInfo.InvariantCulture);

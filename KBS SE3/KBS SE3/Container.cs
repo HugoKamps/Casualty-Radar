@@ -148,7 +148,6 @@ namespace Casualty_Radar {
         private void exitBtn_Click(object sender, EventArgs e) => Application.Exit();
 
         private void Container_Load(object sender, EventArgs e) {
-            BackgroundWorker bW = new BackgroundWorker();
             HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             Shown += hm.HomeModule_Load;
             _modManager.UpdateModule(hm);
@@ -165,7 +164,6 @@ namespace Casualty_Radar {
         }
 
         private void testBtn_Click(object sender, EventArgs e) {
-            HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             GeoMapLoader geoMapLoader = new GeoMapLoader();
             geoMapLoader.GetGeoMapSections();
         }

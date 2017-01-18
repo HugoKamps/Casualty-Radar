@@ -112,8 +112,7 @@ namespace Casualty_Radar {
             this.dialogContentLabel.Padding = new System.Windows.Forms.Padding(5);
             this.dialogContentLabel.Size = new System.Drawing.Size(355, 121);
             this.dialogContentLabel.TabIndex = 2;
-            this.dialogContentLabel.Text = "lore jasd hasdeh d shade hehha sadhdasdd e heha asdashs ehehehe asdsahds ehassdah" +
-    "a";
+            this.dialogContentLabel.Text = "Placeholder";
             this.dialogContentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // dialogContentPanel
