@@ -43,13 +43,10 @@ namespace Casualty_Radar.Models.Navigation {
             Type = type;
             Way = way;
         }
-        
+
         /// <summary>
         /// Set the instruction string based on the current RouteStepType, the distance and the way
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="dist"></param>
-        /// <param name="way"></param>
         public void SetInstruction() {
             string instruction;
             FormattedDistance = GetFormattedDistance(Distance);
@@ -87,7 +84,8 @@ namespace Casualty_Radar.Models.Navigation {
             Instruction = instruction;
         }
 
-        public static string GetFormattedDistance(double tempDistance) => tempDistance < 1 ? tempDistance * 1000 + "m" : tempDistance + "km";
+        public static string GetFormattedDistance(double tempDistance)
+            => tempDistance < 1 ? tempDistance * 1000 + "m" : tempDistance + "km";
 
 
         public static RouteStepType CalcRouteStepType(double bearing) {
@@ -158,17 +156,15 @@ namespace Casualty_Radar.Models.Navigation {
                 BackColor = color
             };
 
-            if (step.Distance != null) {
-                Label distanceLabel = new Label {
-                    Location = new Point(10, 0),
-                    Size = new Size(50, 50),
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    ForeColor = Color.DarkSlateGray,
-                    Font = new Font("Microsoft Sans Serif", 9, FontStyle.Bold),
-                    Text = step.FormattedDistance
-                };
-                newPanel.Controls.Add(distanceLabel);
-            }
+            Label distanceLabel = new Label {
+                Location = new Point(10, 0),
+                Size = new Size(50, 50),
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.DarkSlateGray,
+                Font = new Font("Microsoft Sans Serif", 9, FontStyle.Bold),
+                Text = step.FormattedDistance
+            };
+            newPanel.Controls.Add(distanceLabel);
 
             Label instructionLabel = new Label {
                 Location = new Point(60, 0),
@@ -189,6 +185,6 @@ namespace Casualty_Radar.Models.Navigation {
             newPanel.Controls.Add(instructionIcon);
             newPanel.Controls.Add(instructionLabel);
             return newPanel;
-         }
+        }
     }
 }
