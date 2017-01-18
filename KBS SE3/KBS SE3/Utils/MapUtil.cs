@@ -105,6 +105,9 @@ namespace Casualty_Radar.Utils {
         /// This will return an offset of a distance and not a parsed KM distance 
         /// </summary>
         /// <param name="lat1">First coordinate latitude</param>
+        /// <param name="lon1">First coordinate longitude</param>
+        /// <param name="lat2">Second coordinate latitude</param>
+        /// <param name="lon2">Second coordinate longitude</param>
         /// <returns></returns>
         public static double GetAbsoluteDistance(double lat1, double lon1, double lat2, double lon2) {
             return Math.Abs(lat2 - lat1) + Math.Abs(lon2 - lon1);
