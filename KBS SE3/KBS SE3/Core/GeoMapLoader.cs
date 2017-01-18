@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
 using Casualty_Radar.Models;
 using Casualty_Radar.Models.DataControl;
@@ -20,19 +22,21 @@ namespace Casualty_Radar.Core {
         }
 
         /// <summary>
-        /// 
+        /// Initializes the geoMap collection and fill it with all sections.
+        /// All sections are loaded in dynamically and do not require manual registration.
         /// </summary>
         private void Init() {
             List<string> directory = Directory.GetFiles(FILE_PATH).Select(Path.GetFileName).ToList();
             foreach (string fileName in directory) {
-                XDocument document = XDocument.Load(FILE_PATH + "/" + fileName);
-                List<double> points = new List<double>();
-                foreach (var attribute in document.Element("osm").Element("bnd").Attributes().ToList()) {
-                    points.Add(double.Parse(attribute.Value, CultureInfo.InvariantCulture));
+                XmlReader reader = XmlReader.Create(FILE_PATH + "/" + fileName);
+                if (reader.ReadToDescendant("bnd")) {
+                    double minLat = double.Parse(reader.GetAttribute("minlat"), CultureInfo.InvariantCulture);
+                    double minLon = double.Parse(reader.GetAttribute("minlon"), CultureInfo.InvariantCulture);
+                    double maxLat = double.Parse(reader.GetAttribute("maxlat"), CultureInfo.InvariantCulture);
+                    double maxLon = double.Parse(reader.GetAttribute("maxlon"), CultureInfo.InvariantCulture);
+                    _geoMapSections.Add(new GeoMapSection(new PointLatLng(maxLat, maxLon), new PointLatLng(minLat, minLon), FILE_PATH + "/" + fileName));
+                    reader.Close();
                 }
-                PointLatLng upperBound = new PointLatLng(points[3], points[2]);
-                PointLatLng lowerBound = new PointLatLng(points[1], points[0]);
-                _geoMapSections.Add(new GeoMapSection(upperBound, lowerBound, FILE_PATH + "/" + fileName));
             }
         }
 
