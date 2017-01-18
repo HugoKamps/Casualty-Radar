@@ -167,9 +167,7 @@ namespace Casualty_Radar {
         private void testBtn_Click(object sender, EventArgs e) {
             HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             GeoMapLoader geoMapLoader = new GeoMapLoader();
-            foreach (GeoMapSection section in geoMapLoader.GetGeoMapSections()) {
-                hm.LocationManager.DrawRoute(new List<PointLatLng>{ section.UpperBound, section.LowerBound}, hm.RouteOverlay);
-            }
+            geoMapLoader.GetGeoMapSections();
         }
     }
 }
