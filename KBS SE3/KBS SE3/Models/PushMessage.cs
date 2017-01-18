@@ -44,7 +44,6 @@ namespace Casualty_Radar.Models {
         /// </summary>
         private void notifyIcon_BalloonTipClicked(object sender, EventArgs e) {
             // Show the form when the user double clicks on the notify icon.
-
             // Set the WindowState to normal if the form is minimized.
             if (Container.GetInstance().WindowState == FormWindowState.Minimized)
                 Container.GetInstance().WindowState = FormWindowState.Normal;
