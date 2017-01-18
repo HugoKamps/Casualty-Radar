@@ -25,7 +25,12 @@
         private void InitializeComponent() {
             this.routePanel = new System.Windows.Forms.Panel();
             this.routeInfoPanel = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.PageNumber = new System.Windows.Forms.Label();
+            this.NextPageButton = new System.Windows.Forms.Button();
+            this.PreviousPageButton = new System.Windows.Forms.Button();
             this.routeInfoLabelPanel = new System.Windows.Forms.Panel();
+            this.printingPictureBox = new System.Windows.Forms.PictureBox();
             this.routeInfoLabel = new System.Windows.Forms.Label();
             this.alertInfoPanel = new System.Windows.Forms.Panel();
             this.infoTitleLabel = new System.Windows.Forms.Label();
@@ -35,19 +40,20 @@
             this.alertInfoLabel = new System.Windows.Forms.Label();
             this.mapPanel = new System.Windows.Forms.Panel();
             this.map = new GMap.NET.WindowsForms.GMapControl();
-            this.printingPictureBox = new System.Windows.Forms.PictureBox();
             this.routePanel.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.routeInfoLabelPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).BeginInit();
             this.alertInfoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).BeginInit();
             this.alertInfoLabelPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // routePanel
             // 
             this.routePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
             this.routePanel.Controls.Add(this.routeInfoPanel);
+            this.routePanel.Controls.Add(this.panel2);
             this.routePanel.Controls.Add(this.routeInfoLabelPanel);
             this.routePanel.Controls.Add(this.alertInfoPanel);
             this.routePanel.Controls.Add(this.alertInfoLabelPanel);
@@ -64,8 +70,70 @@
             this.routeInfoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.routeInfoPanel.Location = new System.Drawing.Point(0, 179);
             this.routeInfoPanel.Name = "routeInfoPanel";
-            this.routeInfoPanel.Size = new System.Drawing.Size(338, 301);
+            this.routeInfoPanel.Size = new System.Drawing.Size(338, 254);
             this.routeInfoPanel.TabIndex = 6;
+            this.routeInfoPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.routeInfoPanel_Paint);
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(89)))), ((int)(((byte)(71)))));
+            this.panel2.Controls.Add(this.PageNumber);
+            this.panel2.Controls.Add(this.NextPageButton);
+            this.panel2.Controls.Add(this.PreviousPageButton);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 433);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(338, 47);
+            this.panel2.TabIndex = 0;
+            // 
+            // PageNumber
+            // 
+            this.PageNumber.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
+            this.PageNumber.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PageNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+            this.PageNumber.ForeColor = System.Drawing.Color.White;
+            this.PageNumber.Location = new System.Drawing.Point(88, 0);
+            this.PageNumber.Name = "PageNumber";
+            this.PageNumber.Size = new System.Drawing.Size(162, 47);
+            this.PageNumber.TabIndex = 3;
+            this.PageNumber.Text = "Pagina";
+            this.PageNumber.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // NextPageButton
+            // 
+            this.NextPageButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(89)))), ((int)(((byte)(71)))));
+            this.NextPageButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.NextPageButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.NextPageButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.NextPageButton.FlatAppearance.BorderSize = 0;
+            this.NextPageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.NextPageButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+            this.NextPageButton.ForeColor = System.Drawing.Color.White;
+            this.NextPageButton.Location = new System.Drawing.Point(250, 0);
+            this.NextPageButton.Name = "NextPageButton";
+            this.NextPageButton.Size = new System.Drawing.Size(88, 47);
+            this.NextPageButton.TabIndex = 1;
+            this.NextPageButton.Text = "Volgende";
+            this.NextPageButton.UseVisualStyleBackColor = false;
+            this.NextPageButton.Click += new System.EventHandler(this.NextPageButton_Click);
+            // 
+            // PreviousPageButton
+            // 
+            this.PreviousPageButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(89)))), ((int)(((byte)(71)))));
+            this.PreviousPageButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.PreviousPageButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.PreviousPageButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.PreviousPageButton.FlatAppearance.BorderSize = 0;
+            this.PreviousPageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PreviousPageButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+            this.PreviousPageButton.ForeColor = System.Drawing.Color.White;
+            this.PreviousPageButton.Location = new System.Drawing.Point(0, 0);
+            this.PreviousPageButton.Name = "PreviousPageButton";
+            this.PreviousPageButton.Size = new System.Drawing.Size(88, 47);
+            this.PreviousPageButton.TabIndex = 0;
+            this.PreviousPageButton.Text = "Vorige";
+            this.PreviousPageButton.UseVisualStyleBackColor = false;
+            this.PreviousPageButton.Click += new System.EventHandler(this.PreviousPageButton_Click);
             // 
             // routeInfoLabelPanel
             // 
@@ -76,6 +144,17 @@
             this.routeInfoLabelPanel.Name = "routeInfoLabelPanel";
             this.routeInfoLabelPanel.Size = new System.Drawing.Size(338, 37);
             this.routeInfoLabelPanel.TabIndex = 5;
+            // 
+            // printingPictureBox
+            // 
+            this.printingPictureBox.Image = global::Casualty_Radar.Properties.Resources.printing_icon;
+            this.printingPictureBox.Location = new System.Drawing.Point(301, 4);
+            this.printingPictureBox.Name = "printingPictureBox";
+            this.printingPictureBox.Size = new System.Drawing.Size(30, 30);
+            this.printingPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.printingPictureBox.TabIndex = 0;
+            this.printingPictureBox.TabStop = false;
+            this.printingPictureBox.Click += new System.EventHandler(this.printingPictureBox_Click);
             // 
             // routeInfoLabel
             // 
@@ -157,9 +236,9 @@
             // 
             this.mapPanel.BackColor = System.Drawing.Color.Silver;
             this.mapPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapPanel.Location = new System.Drawing.Point(0, 0);
+            this.mapPanel.Location = new System.Drawing.Point(615, 0);
             this.mapPanel.Name = "mapPanel";
-            this.mapPanel.Size = new System.Drawing.Size(615, 480);
+            this.mapPanel.Size = new System.Drawing.Size(0, 480);
             this.mapPanel.TabIndex = 1;
             // 
             // map
@@ -188,32 +267,22 @@
             this.map.TabIndex = 6;
             this.map.Zoom = 7D;
             // 
-            // printingPictureBox
-            // 
-            this.printingPictureBox.Image = global::Casualty_Radar.Properties.Resources.printing_icon;
-            this.printingPictureBox.Location = new System.Drawing.Point(301, 4);
-            this.printingPictureBox.Name = "printingPictureBox";
-            this.printingPictureBox.Size = new System.Drawing.Size(30, 30);
-            this.printingPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.printingPictureBox.TabIndex = 0;
-            this.printingPictureBox.TabStop = false;
-            this.printingPictureBox.Click += new System.EventHandler(this.printingPictureBox_Click);
-            // 
             // NavigationModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.map);
             this.Controls.Add(this.mapPanel);
             this.Controls.Add(this.routePanel);
+            this.Controls.Add(this.map);
             this.Name = "NavigationModule";
             this.Size = new System.Drawing.Size(953, 480);
             this.routePanel.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.routeInfoLabelPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).EndInit();
             this.alertInfoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).EndInit();
             this.alertInfoLabelPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -233,5 +302,9 @@
         private System.Windows.Forms.Panel routeInfoPanel;
         private GMap.NET.WindowsForms.GMapControl map;
         private System.Windows.Forms.PictureBox printingPictureBox;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button NextPageButton;
+        private System.Windows.Forms.Button PreviousPageButton;
+        private System.Windows.Forms.Label PageNumber;
     }
 }
