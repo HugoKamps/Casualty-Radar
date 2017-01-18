@@ -153,7 +153,7 @@ namespace Casualty_Radar.Models.Navigation {
             //The panel which will be filled with all of the controls below
             Panel newPanel = new Panel {
                 Location = new Point(0, height),
-                Size = new Size(321, 50),
+                Size = new Size(338, 50),
                 BackColor = color
             };
 
