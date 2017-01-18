@@ -9,9 +9,8 @@ namespace Casualty_Radar.Models {
         public PointLatLng UpperBound { get; set; } // The coordinates for the upper boundary
         public PointLatLng LowerBound { get; set; } // The coordinates for the lower boundary
         public string FilePath { get; set; }  // The filename of the XML file
-        public DataCollection Data { get; set; }
+        public DataCollection Data { get; private set; }
 
-        private DataParser _parser;
 
         public GeoMapSection(PointLatLng upperBound, PointLatLng lowerBound, string filePath) {
             UpperBound = upperBound;
@@ -20,9 +19,9 @@ namespace Casualty_Radar.Models {
         }
 
         public void Load() {
-            _parser = new DataParser(FilePath);
-            _parser.Deserialize();
-            Data = _parser.GetCollection();
+            DataParser parser = new DataParser(FilePath);
+            parser.Deserialize();
+            Data = parser.GetCollection();
         }
 
     }

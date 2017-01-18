@@ -88,7 +88,7 @@ namespace Casualty_Radar.Modules {
 
         private List<Node> ParseRoute(DataCollection collection, PointLatLng origin, PointLatLng dest) {
             Node start = MapUtil.GetNearest(origin.Lat, origin.Lng, collection.Intersections);
-            Node end = MapUtil.GetNearest(dest.Lat, dest.Lng, collection.Nodes);
+            Node end = MapUtil.GetNearest(dest.Lat, dest.Lng, collection.Intersections);
             RouteCalculation calc = new RouteCalculation(start, end);
             calc.Search();
             return calc.GetNodes();
