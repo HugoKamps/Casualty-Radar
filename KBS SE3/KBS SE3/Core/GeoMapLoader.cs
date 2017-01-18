@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,10 @@ namespace Casualty_Radar.Core {
             _geoMapSections = new List<GeoMapSection>();
         }
 
+        /// <summary>
+        /// Initializes the geoMap collection and fill it with all sections.
+        /// All sections are loaded in dynamically and do not require manual registration.
+        /// </summary>
         private void Init() {
             List<string> directory = Directory.GetFiles(FILE_PATH).Select(Path.GetFileName).ToList();
             foreach (string fileName in directory) {              
@@ -29,10 +34,7 @@ namespace Casualty_Radar.Core {
                     double minLon = double.Parse(reader.GetAttribute("minlon"), CultureInfo.InvariantCulture);
                     double maxLat = double.Parse(reader.GetAttribute("maxlat"), CultureInfo.InvariantCulture);
                     double maxLon = double.Parse(reader.GetAttribute("maxlon"), CultureInfo.InvariantCulture);
-
-                    PointLatLng upperBound = new PointLatLng(maxLat, maxLon);
-                    PointLatLng lowerBound = new PointLatLng(minLat, minLon);
-                    _geoMapSections.Add(new GeoMapSection(upperBound, lowerBound, FILE_PATH + "/" + fileName));
+                    _geoMapSections.Add(new GeoMapSection(new PointLatLng(maxLat, maxLon), new PointLatLng(minLat, minLon), FILE_PATH + "/" + fileName));
                     reader.Close();
                 }
             }
