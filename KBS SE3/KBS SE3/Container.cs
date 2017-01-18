@@ -139,6 +139,7 @@ namespace Casualty_Radar {
                 if (selectedButton == homeBtn) {
                     HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
                     hm.FeedTicker.StartTimerIfEnabled();
+                    hm.PreviousButton_Click();
                 }
                 ModuleManager.GetInstance().UpdateModule(selectedButton.Tag);
             }
@@ -158,6 +159,7 @@ namespace Casualty_Radar {
             if (parentModule is HomeModule) {
                 HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
                 hm.FeedTicker.StartTimerIfEnabled();
+                hm.PreviousButton_Click();
             }
             ModuleManager.GetInstance().UpdateModule(parentModule);
         }
@@ -165,9 +167,7 @@ namespace Casualty_Radar {
         private void testBtn_Click(object sender, EventArgs e) {
             HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             GeoMapLoader geoMapLoader = new GeoMapLoader();
-            foreach (GeoMapSection section in geoMapLoader.GetGeoMapSections()) {
-                hm.LocationManager.DrawRoute(new List<PointLatLng>{ section.UpperBound, section.LowerBound}, hm.RouteOverlay);
-            }
+            geoMapLoader.GetGeoMapSections();
         }
     }
 }

@@ -33,7 +33,6 @@ namespace XMLRewriter {
             XmlFileReader reader = new XmlFileReader(fileLocationBox.Text, fileDestinationBox.Text, outputNameBox.Text);
             reader.DataLog = convertDataLog;
             reader.StatusBar = convertStatusBar;
-            convertBtn.Enabled = false;
             reader.Convert();
         }
     }
