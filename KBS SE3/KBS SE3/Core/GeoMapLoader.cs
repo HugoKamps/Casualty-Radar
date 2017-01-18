@@ -22,9 +22,7 @@ namespace Casualty_Radar.Core {
 
         private void Init() {
             List<string> directory = Directory.GetFiles(FILE_PATH).Select(Path.GetFileName).ToList();
-            foreach (string fileName in directory) {
-                XmlReaderSettings settings = new XmlReaderSettings();
-                
+            foreach (string fileName in directory) {              
                 XmlReader reader = XmlReader.Create(FILE_PATH + "/" + fileName);
                 if (reader.ReadToDescendant("bnd")) {
                     double minLat = double.Parse(reader.GetAttribute("minlat"), CultureInfo.InvariantCulture);
@@ -37,10 +35,6 @@ namespace Casualty_Radar.Core {
                     _geoMapSections.Add(new GeoMapSection(upperBound, lowerBound, FILE_PATH + "/" + fileName));
                     reader.Close();
                 }
-
-                /*XDocument document = XDocument.Load(FILE_PATH + "/" + fileName);
-                List<double> points = document.Element("osm").Element("bnd").Attributes().ToList().
-                    Select(attribute => double.Parse(attribute.Value, CultureInfo.InvariantCulture)).ToList();*/
             }
         }
 

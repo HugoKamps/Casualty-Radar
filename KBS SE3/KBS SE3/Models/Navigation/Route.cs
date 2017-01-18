@@ -18,7 +18,6 @@ namespace Casualty_Radar.Models.Navigation {
         public NavigationStep LastStep { get; set; }
 
 
-
         public Route() {
             RouteSteps = new List<NavigationStep>();
             RouteStepPanels = new List<Panel>();
@@ -36,8 +35,6 @@ namespace Casualty_Radar.Models.Navigation {
         /// </summary>
         public void CalculateRouteSteps() {
             double prevAngle = -1;
-            int height = 0;
-            Color color = Color.Gainsboro;
             for (int index = 0; index < RouteNodes.Count; index++) {
                 Node node = RouteNodes[index];
                 if (index + 1 != RouteNodes.Count && index + 2 != RouteNodes.Count) {
@@ -59,14 +56,13 @@ namespace Casualty_Radar.Models.Navigation {
 
                     // Get the distance for the step
                     double distance = Math.Round(MapUtil.GetDistance(node, nextNode), 2);
-                    string distanceString =
-                        NavigationStep.GetFormattedDistance(distance);
 
                     if (distance != 0) {
-
                         NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
 
-                        if (LastStep != null && step.Way != null) {
+                        if (step.Way == null) step.Way = LastStep.Way;
+
+                        if (LastStep != null) {
                             if (LastStep.Way.Name == step.Way.Name && step.Type == LastStep.Type) {
                                 LastStep.Distance += step.Distance;
                             }
@@ -100,17 +96,16 @@ namespace Casualty_Radar.Models.Navigation {
         }
 
         public void PrintPanels() {
-            var route = RouteSteps;
             int height = 0;
-            for(int i = 0; i < RouteSteps.Count; i++) {
+            Color color = Color.Gainsboro;
+            for (int i = 0; i < RouteSteps.Count; i++) {
                 if (i % 5 == 0) {
                     height = 0;
                 }
-                if (i != RouteSteps.Count - 2) {
-                    RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(RouteSteps[i], Color.Gainsboro, height));
-                    height += 51;
-                }
-                
+                if (i == RouteSteps.Count - 2) continue;
+                RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(RouteSteps[i], color, height));
+                height += 51;
+                color = color == Color.Gainsboro ? Color.White : Color.Gainsboro;
             }
         }
     }
