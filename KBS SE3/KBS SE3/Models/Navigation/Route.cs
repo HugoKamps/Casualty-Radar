@@ -63,7 +63,7 @@ namespace Casualty_Radar.Models.Navigation {
 
                         NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
 
-                        if (LastStep != null) {
+                        if (LastStep != null && step.Way != null) {
                             if (LastStep.Way.Name == step.Way.Name && step.Type == LastStep.Type) {
                                 LastStep.Distance += step.Distance;
                             }
