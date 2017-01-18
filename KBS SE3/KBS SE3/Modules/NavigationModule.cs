@@ -142,10 +142,13 @@ namespace Casualty_Radar.Modules {
             return null;
         }
 
+        /// <summary>
+        /// Function for printing 5 routesteps, which depend from the given pagenumber
+        /// </summary>
+        /// <param name="page">The pagenumber</param>
         private void PageRoutePanel(int page) {
             if (routeInfoPanel.Controls.Count > 0) {
                 routeInfoPanel.Controls.Clear();
-
             }
             for (int index = 0; index < 5; index++) {
                 if (index + (page * 5 - 5) < _route.RouteStepPanels.Count && index + (page * 5 - 5) < _route.RouteStepPanels.Count) {
@@ -153,16 +156,16 @@ namespace Casualty_Radar.Modules {
                     routeInfoPanel.Controls.Add(panel);
                 }
                 PreviousPageButton.Enabled = page != 1;
-                NextPageButton.Enabled = page != _route.RouteStepPanels.Count / 5 + 1;
-                
+                NextPageButton.Enabled = page != _route.RouteStepPanels.Count / 5 + 1;              
             }
             PageNumber.Text = "Pagina " + page + "/" + ((_route.RouteStepPanels.Count / 5) + 1); 
         }
 
-        private void routeInfoPanel_Paint(object sender, PaintEventArgs e) {
-
-        }
-
+        /// <summary>
+        ///  Function for going to previous page with route steps
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PreviousPageButton_Click(object sender, EventArgs e) {
             if(page > 1) {
                 page--;
@@ -170,6 +173,11 @@ namespace Casualty_Radar.Modules {
             }
         }
 
+        /// <summary>
+        /// Function for going to next page with route steps
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NextPageButton_Click(object sender, EventArgs e) {
             if (page * 5 < _route.RouteStepPanels.Count) {
                 page++;
