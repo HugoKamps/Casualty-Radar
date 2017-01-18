@@ -22,6 +22,13 @@ namespace Casualty_Radar.Modules {
         private GMapOverlay _routeOverlay;
         private PdfUtil _pdfUtil;
         private Route _route;
+
+        private DataParser parser;
+        private DataCollection collection;
+        private List<Node> targetCollection;
+        private int page = 1;
+        private Panel panel;
+        private List<GeoMapSection> _sections;
         private GeoMapLoader _mapLoader;
 
         public NavigationModule() {
@@ -67,14 +74,11 @@ namespace Casualty_Radar.Modules {
             _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
 
             // Calculate the navigation steps and generate a panel for each step
-            //_route.CalculateRouteSteps();
-            /*
-            for (var index = 0; index < _route.RouteStepPanels.Count ; index++) {
-                Panel panel = _route.RouteStepPanels[index];
-                routeInfoPanel.Controls.Add(panel);
-            } */
+            _route.CalculateRouteSteps();
+            PageRoutePanel(page);
 
             routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+
         }
 
         private void UpdatePanel(Alert alert) {
@@ -137,6 +141,49 @@ namespace Casualty_Radar.Modules {
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Function for printing 5 routesteps, which depend from the given pagenumber
+        /// </summary>
+        /// <param name="page">The pagenumber</param>
+        private void PageRoutePanel(int page) {
+            if (routeInfoPanel.Controls.Count > 0) {
+                routeInfoPanel.Controls.Clear();
+            }
+            for (int index = 0; index < 5; index++) {
+                if (index + (page * 5 - 5) < _route.RouteStepPanels.Count && index + (page * 5 - 5) < _route.RouteStepPanels.Count) {
+                    panel = _route.RouteStepPanels[index + (page * 5 - 5)];
+                    routeInfoPanel.Controls.Add(panel);
+                }
+                PreviousPageButton.Enabled = page != 1;
+                NextPageButton.Enabled = page != _route.RouteStepPanels.Count / 5 + 1;              
+            }
+            PageNumber.Text = "Pagina " + page + "/" + ((_route.RouteStepPanels.Count / 5) + 1); 
+        }
+
+        /// <summary>
+        ///  Function for going to previous page with route steps
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PreviousPageButton_Click(object sender, EventArgs e) {
+            if(page > 1) {
+                page--;
+                PageRoutePanel(page);
+            }
+        }
+
+        /// <summary>
+        /// Function for going to next page with route steps
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NextPageButton_Click(object sender, EventArgs e) {
+            if (page * 5 < _route.RouteStepPanels.Count) {
+                page++;
+                PageRoutePanel(page);
+            }
         }
     }
 }
