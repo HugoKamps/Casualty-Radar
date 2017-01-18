@@ -17,6 +17,8 @@ namespace Casualty_Radar.Models.Navigation {
         public double TotalDistance { get; set; } // The total distance of the route
         public NavigationStep LastStep { get; set; }
 
+
+
         public Route() {
             RouteSteps = new List<NavigationStep>();
             RouteStepPanels = new List<Panel>();
@@ -106,13 +108,15 @@ namespace Casualty_Radar.Models.Navigation {
             var route = RouteSteps;
             int height = 0;
             for(int i = 0; i < RouteSteps.Count; i++) {
-                if(i != RouteSteps.Count - 2) {
+                if (i % 5 == 0) {
+                    height = 0;
+                }
+                if (i != RouteSteps.Count - 2) {
                     RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(RouteSteps[i], Color.Gainsboro, height));
                     height += 51;
-
                 }
+                
             }
         }
-
     }
 }
