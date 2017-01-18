@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq.Expressions;
 using Casualty_Radar.Models.Navigation;
 using Casualty_Radar.Properties;
 using PdfSharp.Drawing;
@@ -44,14 +46,22 @@ namespace Casualty_Radar.Utils {
                 id++;
             }
 
-            const string filename = "Route.pdf";
-            try {
-                document.Save(filename);
+            string basefilename = "route";
+            string filename = "";
+
+            bool success = false;
+            int i = 0;
+
+            while (!success) {
+                try {
+                    document.Save(filename = basefilename +  i + ".pdf");
+                    success = true;
+                }
+                catch (IOException) {
+                    i++;
+                }
             }
-            catch (Exception e) {
-                
-            }
-            Process.Start("Route.pdf");
+            Process.Start(filename);
         }
 
         public XImage GetImageWithType(RouteStepType type) {
