@@ -404,15 +404,11 @@ namespace Casualty_Radar.Modules {
             if (selectedAlert != null) {
                 Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
                     selectedAlert.Lat, selectedAlert.Lng) {Type = selectedAlert.Type};
-                Thread testingThread = new Thread(() => navigationModule.Init(alert,
+                Thread thread = new Thread(() => navigationModule.Init(alert,
                     new PointLatLng(LocationManager.CurrentLatitude, LocationManager.CurrentLongitude)));
-                testingThread.Start();                
+                thread.Start();                
             }
             ModuleManager.GetInstance().UpdateModule(navigationModule);
-        }
-
-        private void ThreadInit() {
-            
         }
 
         private void navigationBtn_EnabledChanged(object sender, EventArgs e) {
