@@ -50,7 +50,7 @@ namespace Casualty_Radar.Modules {
             _locationManager.CurrentLongitude = start.Lng;
 
             // Set the alert _panel with the information of the selected alert
-            UpdatePanel(alert);
+            Invoke(new Action(() => UpdatePanel(alert)));
             routeInfoPanel.Controls.Clear();
             Invoke(new Action(() => InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng)));
 
