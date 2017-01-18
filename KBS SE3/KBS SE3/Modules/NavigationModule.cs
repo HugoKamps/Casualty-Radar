@@ -46,21 +46,23 @@ namespace Casualty_Radar.Modules {
         /// <param name="alert">Alert which contains all the information about the chosen alert</param>
         /// <param name="start">Point with the user's current latitude and longitude</param>
         public void Init(Alert alert, PointLatLng start) {
+            ClearPanels();
+
             _locationManager.CurrentLatitude = start.Lat;
             _locationManager.CurrentLongitude = start.Lng;
 
             // Set the alert _panel with the information of the selected alert
-            Invoke(new Action(() => UpdatePanel(alert)));
-            routeInfoPanel.Controls.Clear();
-            Invoke(new Action(() => InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng)));
+            UpdatePanel(alert);
+            InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
 
             List<Node> highWay = ParseRoute(ParseHighways(), start, alert.GetPoint());
-            List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count-1].GetPoint());
+            List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
             List<Node> dest = ParseRoute(FetchDataSection(alert.GetPoint()), highWay[0].GetPoint(), alert.GetPoint());
 
             highWay.Reverse();
             origin.Reverse();
             dest.Reverse();
+
             _route.RouteNodes = origin;
             _route.RouteNodes.AddRange(highWay);
             _route.RouteNodes.AddRange(dest);
@@ -70,10 +72,8 @@ namespace Casualty_Radar.Modules {
 
             // Calculate the navigation steps and generate a _panel for each step
             _route.CalculateRouteSteps();
-            Invoke(new Action(() => PageRoutePanel(_page)));
-
-            Invoke(new Action(() => routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)"));
-
+            PageRoutePanel(_page);
+            routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
         }
 
         private void UpdatePanel(Alert alert) {
@@ -126,14 +126,14 @@ namespace Casualty_Radar.Modules {
             markersOverlay.Markers.Add(_locationManager.CreateMarker(destLat, destLng, 4));
         }
 
-        private void printingPictureBox_Click(object sender, EventArgs e) => _pdfUtil.CreatePdf(_route.RouteSteps, _route.StartingRoad, _route.DestinationRoad);
+        private void printingPictureBox_Click(object sender, EventArgs e)
+            => _pdfUtil.CreatePdf(_route.RouteSteps, _route.StartingRoad, _route.DestinationRoad);
 
         private GeoMapSection FetchDataSection(PointLatLng point) {
             foreach (GeoMapSection section in _mapLoader.GetGeoMapSections()) {
-                if (MapUtil.IsInSection(point, section)) {
-                    section.Load();
-                    return section;
-                }
+                if (!MapUtil.IsInSection(point, section)) continue;
+                section.Load();
+                return section;
             }
             return null;
         }
@@ -143,28 +143,23 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         /// <param name="page">The pagenumber</param>
         private void PageRoutePanel(int page) {
-            ClearPanels();
             for (int index = 0; index < 5; index++) {
-                if (index + (page * 5 - 5) < _route.RouteStepPanels.Count && index + (page * 5 - 5) < _route.RouteStepPanels.Count) {
+                if (index + (page * 5 - 5) < _route.RouteStepPanels.Count &&
+                    index + (page * 5 - 5) < _route.RouteStepPanels.Count) {
                     _panel = _route.RouteStepPanels[index + (page * 5 - 5)];
                     routeInfoPanel.Controls.Add(_panel);
                 }
                 PreviousPageButton.Enabled = page != 1;
-                NextPageButton.Enabled = page != _route.RouteStepPanels.Count / 5 + 1;              
+                NextPageButton.Enabled = page != _route.RouteStepPanels.Count / 5 + 1;
             }
-            PageNumber.Text = "Pagina " + page + "/" + ((_route.RouteStepPanels.Count / 5) + 1); 
+            PageNumber.Text = "Pagina " + page + "/" + ((_route.RouteStepPanels.Count / 5) + 1);
         }
 
         /// <summary>
         /// Clears all route step panels
         /// </summary>
-        public void ClearPanels()
-        {
-            if (routeInfoPanel.Controls.Count > 0)
-            {
-                routeInfoPanel.Controls.Clear();
-            }
-            Console.WriteLine(routeInfoPanel.Controls.Count);
+        public void ClearPanels() {
+            if (routeInfoPanel.Controls.Count > 0) routeInfoPanel.Controls.Clear();
         }
 
         /// <summary>
@@ -173,10 +168,9 @@ namespace Casualty_Radar.Modules {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void PreviousPageButton_Click(object sender, EventArgs e) {
-            if(_page > 1) {
-                _page--;
-                PageRoutePanel(_page);
-            }
+            if (_page <= 1) return;
+            _page--;
+            PageRoutePanel(_page);
         }
 
         /// <summary>
@@ -185,10 +179,9 @@ namespace Casualty_Radar.Modules {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void NextPageButton_Click(object sender, EventArgs e) {
-            if (_page * 5 < _route.RouteStepPanels.Count) {
-                _page++;
-                PageRoutePanel(_page);
-            }
+            if (_page * 5 >= _route.RouteStepPanels.Count) return;
+            _page++;
+            PageRoutePanel(_page);
         }
     }
 }
