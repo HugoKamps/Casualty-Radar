@@ -72,7 +72,6 @@
             this.routeInfoPanel.Name = "routeInfoPanel";
             this.routeInfoPanel.Size = new System.Drawing.Size(338, 254);
             this.routeInfoPanel.TabIndex = 6;
-            this.routeInfoPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.routeInfoPanel_Paint);
             // 
             // panel2
             // 
