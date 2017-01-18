@@ -19,6 +19,7 @@ namespace Casualty_Radar.Modules {
         private List<Node> targetCollection;
         private List<long> cRadarTimes;
         private List<long> gMapsTimes;
+        private Thread testingThread;
 
         public TestModule() {
             InitializeComponent();
@@ -36,8 +37,8 @@ namespace Casualty_Radar.Modules {
 
         private void startTestButton_Click(object sender, EventArgs e) {
             ClearTests();
-            Thread thread = new Thread(StartNewTest);
-            thread.Start();
+            testingThread = new Thread(StartNewTest);
+            testingThread.Start();
         }
 
         /// <summary>
@@ -106,7 +107,9 @@ namespace Casualty_Radar.Modules {
             }
 
             Log(amountOfRoutes + " random route points generated");
-            testStatusBar.Value = 20;
+            this.Invoke((MethodInvoker)delegate {
+                testStatusBar.Value = 20;
+            });
             return routeLocations;
         }
 
@@ -132,13 +135,11 @@ namespace Casualty_Radar.Modules {
             long previousWatchTime = 0;
             // Loop through the list of nodes and run the algorithm for each route
             foreach (List<PointLatLng> routePoints in locations) {
-                Log("Calculating route " + (locations.IndexOf(routePoints) + 1));
+                Log("Calculating route " + (locations.IndexOf(routePoints) + 1) + "...");
                 nM.ParseRoute(collection, routePoints.First(), routePoints.Last());
 
                 // Add elapsed time of algorithm to list
                 cRadarTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
-                Log("Calculated route " + (locations.IndexOf(routePoints) + 1));
-                testStatusBar.Value += addToStatusBar;
                 this.Invoke((MethodInvoker)delegate {
                     testStatusBar.Value += addToStatusBar;
                 });
@@ -167,7 +168,7 @@ namespace Casualty_Radar.Modules {
             long previousWatchTime = watch.ElapsedMilliseconds;
             // Loop through the list of points and run the algorithm for each route
             foreach (List<PointLatLng> routePoints in locations) {
-                Log("Calculating route " + (locations.IndexOf(routePoints) + 1));
+                Log("Calculating route " + (locations.IndexOf(routePoints) + 1) + "...");
                 GDirections directions;
                 GMapProviders.GoogleMap.GetDirections(out directions, routePoints.First(), routePoints.Last(), false, false, false, false, false);
                 totalDistance += directions.DistanceValue;
@@ -221,6 +222,10 @@ namespace Casualty_Radar.Modules {
         /// Clears the controls which are used for displaying the test status and results
         /// </summary>
         private void ClearTests() {
+            // Stop the current test if one is running
+            if (testingThread != null)
+                testingThread.Abort();
+
             testStatusBox.Clear();
             testStatusBar.Value = 0;
 
