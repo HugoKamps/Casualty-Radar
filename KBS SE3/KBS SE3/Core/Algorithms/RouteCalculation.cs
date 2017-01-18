@@ -29,7 +29,7 @@ namespace Casualty_Radar.Core.Algorithms {
                 _g++;
                 foreach (Node n in nodes) {
                     if (n.StarData != null && n.StarData.Closed) continue;
-                    else if (n.StarData == null) {
+                    if (n.StarData == null) {
                         n.StarData = new StarData(n, _end) {
                             G = _g,
                             H = MapUtil.GetAbsoluteDistance(n.Lat, n.Lon, _end.Lat, _end.Lon),
