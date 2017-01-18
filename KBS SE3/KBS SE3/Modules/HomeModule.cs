@@ -281,6 +281,10 @@ namespace Casualty_Radar.Modules {
             _previousMarker = null;
             _selectedPanel = null;
             Feed.GetInstance().UpdateFeed();
+
+            NavigationModule navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            navigationModule.ClearPanels();
+
         }
 
         private void Marker_Click(GMapMarker item, MouseEventArgs e) {

@@ -148,9 +148,7 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         /// <param name="page">The pagenumber</param>
         private void PageRoutePanel(int page) {
-            if (routeInfoPanel.Controls.Count > 0) {
-                routeInfoPanel.Controls.Clear();
-            }
+            ClearPanels();
             for (int index = 0; index < 5; index++) {
                 if (index + (page * 5 - 5) < _route.RouteStepPanels.Count && index + (page * 5 - 5) < _route.RouteStepPanels.Count) {
                     panel = _route.RouteStepPanels[index + (page * 5 - 5)];
@@ -160,6 +158,17 @@ namespace Casualty_Radar.Modules {
                 NextPageButton.Enabled = page != _route.RouteStepPanels.Count / 5 + 1;              
             }
             PageNumber.Text = "Pagina " + page + "/" + ((_route.RouteStepPanels.Count / 5) + 1); 
+        }
+
+        /// <summary>
+        /// Clears all route step panels
+        /// </summary>
+        public void ClearPanels()
+        {
+            if (routeInfoPanel.Controls.Count > 0)
+            {
+                routeInfoPanel.Controls.Clear();
+            }
         }
 
         /// <summary>
