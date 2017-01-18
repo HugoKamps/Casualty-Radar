@@ -10,10 +10,8 @@ namespace Casualty_Radar.Core.Algorithms {
     /// A class which contains all methods needed for calculating a path with the A-Star algorithm
     /// </summary>
     class Pathfinder {
-        private Node _startNode; // The beginning point for the route
-        private Node _endNode; // The destination for the route
-        private List<Node> _closedNodes; // A list with all closed nodes, for the application to compare
-        private List<Node> _openNodes; // A list with all open nodes, for the application to compare
+        private Node _startNode, _endNode; // The beginning point for the route and the destination for the route
+        private List<Node> _closedNodes, _openNodes; // A list with all closed nodes, for the application to compare A list with all open nodes, for the application to compare
 
         public Pathfinder(Node startNode, Node endNode) {
             _closedNodes = new List<Node>();

@@ -9,6 +9,7 @@ using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using Casualty_Radar.Core;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
 using Casualty_Radar.Properties;
 
@@ -71,14 +72,6 @@ namespace Casualty_Radar.Modules {
             }
         }
 
-        private void Marker_Click(GMapMarker item, MouseEventArgs e) {
-            int markerIndex = map.Overlays[0].Markers.IndexOf(item) - 1;
-            if (markerIndex < 0) return;
-            Panel selectedPanel = _alertPanels[markerIndex];
-            feedPanelItem_Click(selectedPanel, EventArgs.Empty);
-            feedPanel.ScrollControlIntoView(selectedPanel);
-        }
-
         public static Image ResizeImage(Image imgToResize, Size size) => new Bitmap(imgToResize, size);
         public Panel GetSelectedPanel => _selectedPanel;
         public int GetAlertType => alertTypeComboBox.SelectedIndex;
@@ -124,7 +117,7 @@ namespace Casualty_Radar.Modules {
             bwFeed.DoWork += delegate {
                 int y = 0;
                 _alertPanels.Clear();
-                
+
                 foreach (Alert a in Feed.GetInstance().GetFilteredAlerts) {
                     _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y));
                     y += 81;
@@ -142,19 +135,24 @@ namespace Casualty_Radar.Modules {
                 InitAlertsMap(false);
                 RemoveLoadIcon();
                 try {
-                    for (int i = 0; i < _alertPanels.Count; i++) {
-                        foreach (Alert alert in Feed.GetInstance().GetNewAlerts) {
-                            if (alert == Feed.GetInstance().GetAlerts[i] || alert == Feed.GetInstance().GetFilteredAlerts[i]) {
-                                _alertPanels[i].Controls[3].Show();
+                    if (_alertPanels.Count > 0) {
+                        noAlertsLabel.Visible = false;
+                        for (int i = 0; i < _alertPanels.Count; i++) {
+                            foreach (Alert alert in Feed.GetInstance().GetNewAlerts) {
+                                if (alert == Feed.GetInstance().GetAlerts[i] ||
+                                    alert == Feed.GetInstance().GetFilteredAlerts[i]) {
+                                    _alertPanels[i].Controls[3].Show();
+                                }
                             }
+                            feedPanel.Controls.Add(_alertPanels[i]);
                         }
-                        feedPanel.Controls.Add(_alertPanels[i]);
+                    } else {
+                        feedPanel.Controls.Add(noAlertsLabel);
+                        noAlertsLabel.Visible = true;
                     }
-
-                    //foreach (Panel p in _alertPanels)
-                    //    feedPanel.Controls.Add(p);
                 } catch (InvalidOperationException e) {
-                    MessageBox.Show(e.ToString());
+                    Casualty_Radar.Container.GetInstance()
+                    .DisplayDialog(DialogType.DialogMessageType.ERROR, "Invalid Operation Exception", e.ToString());
                 }
                 alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count + ")";
                 Casualty_Radar.Container.GetInstance().SplashScreen.Hide();
@@ -277,6 +275,21 @@ namespace Casualty_Radar.Modules {
             newPanel.Controls.Add(newStampLabel);
 
             return newPanel;
+        }
+
+        public void PreviousButton_Click() {
+            _previousMarker = null;
+            _selectedPanel = null;
+            Feed.GetInstance().UpdateFeed();
+        }
+
+        private void Marker_Click(GMapMarker item, MouseEventArgs e) {
+            int markerIndex = map.Overlays[0].Markers.IndexOf(item) - 1;
+            if (markerIndex < 0) return;
+            Panel selectedPanel = _alertPanels[markerIndex];
+            feedPanelItem_Click(selectedPanel, EventArgs.Empty);
+            feedPanel.ScrollControlIntoView(selectedPanel);
+
         }
 
         private void feedPanelItem_Click(object sender, EventArgs e) {

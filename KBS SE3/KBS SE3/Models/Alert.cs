@@ -1,4 +1,5 @@
 ﻿using System;
+using GMap.NET;
 
 namespace Casualty_Radar.Models
 {
@@ -28,5 +29,10 @@ namespace Casualty_Radar.Models
             string returnString = Code + ": " + Type + ", " + Info;
             return returnString;
         }
+
+        public PointLatLng GetPoint() {
+            return new PointLatLng(Lat, Lng);
+        }
+
     }
 }

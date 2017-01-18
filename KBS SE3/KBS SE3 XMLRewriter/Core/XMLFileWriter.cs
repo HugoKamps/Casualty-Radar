@@ -26,7 +26,7 @@ namespace XMLRewriter.Core {
         /// Saves the new XDocument to the destination folder with the new file name
         /// </summary>
         public void Save() {
-            _doc.Save(_destination + "/"+_fileName+".xml");
+            _doc.Save(_destination + "/"+_fileName+".xml", SaveOptions.DisableFormatting);
         }
     }
 }

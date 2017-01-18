@@ -42,10 +42,12 @@ namespace Casualty_Radar.Modules {
             this.yellowMarkerPicturebox = new System.Windows.Forms.PictureBox();
             this.ambulanceLabel = new System.Windows.Forms.Label();
             this.navigationBtn = new System.Windows.Forms.Button();
+            this.noAlertsLabel = new System.Windows.Forms.Label();
             this.refreshPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.refreshFeedButton)).BeginInit();
             this.rightPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadFeedPictureBox)).BeginInit();
+            this.feedPanel.SuspendLayout();
             this.legendaPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.redMarkerPicturebox)).BeginInit();
@@ -123,6 +125,7 @@ namespace Casualty_Radar.Modules {
             this.alertTypeComboBox.Name = "alertTypeComboBox";
             this.alertTypeComboBox.Size = new System.Drawing.Size(129, 26);
             this.alertTypeComboBox.TabIndex = 6;
+            this.alertTypeComboBox.SelectedIndex = 0;
             this.alertTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.alertTypeComboBox_SelectedIndexChanged);
             // 
             // refreshFeedButton
@@ -174,6 +177,7 @@ namespace Casualty_Radar.Modules {
             // feedPanel
             // 
             this.feedPanel.BackColor = System.Drawing.Color.White;
+            this.feedPanel.Controls.Add(this.noAlertsLabel);
             this.feedPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.feedPanel.Location = new System.Drawing.Point(0, 37);
             this.feedPanel.Name = "feedPanel";
@@ -276,6 +280,16 @@ namespace Casualty_Radar.Modules {
             this.navigationBtn.EnabledChanged += new System.EventHandler(this.navigationBtn_EnabledChanged);
             this.navigationBtn.Click += new System.EventHandler(this.navigationBtn_Click);
             // 
+            // noAlertsLabel
+            // 
+            this.noAlertsLabel.AutoSize = true;
+            this.noAlertsLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.noAlertsLabel.Location = new System.Drawing.Point(83, 20);
+            this.noAlertsLabel.Name = "noAlertsLabel";
+            this.noAlertsLabel.Size = new System.Drawing.Size(174, 13);
+            this.noAlertsLabel.TabIndex = 17;
+            this.noAlertsLabel.Text = "Er zijn geen ongevallen gevonden..";
+            // 
             // HomeModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -292,6 +306,8 @@ namespace Casualty_Radar.Modules {
             this.rightPanel.ResumeLayout(false);
             this.rightPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadFeedPictureBox)).EndInit();
+            this.feedPanel.ResumeLayout(false);
+            this.feedPanel.PerformLayout();
             this.legendaPanel.ResumeLayout(false);
             this.legendaPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.blueMarkerPicturebox)).EndInit();
@@ -319,5 +335,6 @@ namespace Casualty_Radar.Modules {
         public Label alertsTitleLabel;
         public PictureBox loadFeedPictureBox;
         public Label loadFeedLabel;
+        public Label noAlertsLabel;
     }
 }
