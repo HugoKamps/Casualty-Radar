@@ -67,12 +67,10 @@ namespace Casualty_Radar.Modules {
             _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
 
             // Calculate the navigation steps and generate a panel for each step
-            //_route.CalculateRouteSteps();
-            /*
-            for (var index = 0; index < _route.RouteStepPanels.Count ; index++) {
-                Panel panel = _route.RouteStepPanels[index];
+            _route.CalculateRouteSteps();
+            foreach (Panel panel in _route.RouteStepPanels) {
                 routeInfoPanel.Controls.Add(panel);
-            } */
+            }
 
             routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
         }

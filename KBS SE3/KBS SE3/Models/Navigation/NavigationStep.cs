@@ -43,13 +43,10 @@ namespace Casualty_Radar.Models.Navigation {
             Type = type;
             Way = way;
         }
-        
+
         /// <summary>
         /// Set the instruction string based on the current RouteStepType, the distance and the way
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="dist"></param>
-        /// <param name="way"></param>
         public void SetInstruction() {
             string instruction;
             FormattedDistance = GetFormattedDistance(Distance);
