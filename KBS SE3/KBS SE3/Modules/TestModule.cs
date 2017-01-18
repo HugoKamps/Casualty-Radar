@@ -19,6 +19,7 @@ namespace Casualty_Radar.Modules {
         private List<Node> targetCollection;
         private List<long> cRadarTimes;
         private List<long> gMapsTimes;
+        private Thread testingThread;
 
         public TestModule() {
             InitializeComponent();
@@ -36,8 +37,8 @@ namespace Casualty_Radar.Modules {
 
         private void startTestButton_Click(object sender, EventArgs e) {
             ClearTests();
-            Thread thread = new Thread(StartNewTest);
-            thread.Start();
+            testingThread = new Thread(StartNewTest);
+            testingThread.Start();
         }
 
         /// <summary>
@@ -222,6 +223,10 @@ namespace Casualty_Radar.Modules {
         /// Clears the controls which are used for displaying the test status and results
         /// </summary>
         private void ClearTests() {
+            // Stop the current test if one is running
+            if (testingThread != null)
+                testingThread.Abort();
+
             testStatusBox.Clear();
             testStatusBar.Value = 0;
 
