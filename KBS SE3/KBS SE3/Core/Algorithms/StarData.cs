@@ -4,17 +4,7 @@ using Casualty_Radar.Utils;
 
 
 namespace Casualty_Radar.Core.Algorithms {
-    /// <summary>
-    /// Untested nodes are nodes which are new to the algorithm.
-    /// Open nodes are nodes which are being tested or have been tested and not been used.
-    /// Closed nodes are the nodes that have been chosen for the path.
-    /// </summary>
-    public enum NodeState {
-        Untested,
-        Open,
-        Closed
-    }
-
+    
     /// <summary>
     /// A class which contains all the data needed for a node in the A-Star algorithm
     /// </summary>
@@ -24,7 +14,7 @@ namespace Casualty_Radar.Core.Algorithms {
         public double G { get; set; } // The value which indicates the distance from the current node to an adjacent node
         public double H { get; set; } // The value which indicates the distance from the current node to the destination node
         public double F => G + H; // The value that determines the current node's usefulness for the route
-        public NodeState State { get; set; } // Indicates the state of the node, see the enum
+        public bool Closed { get; set; } 
 
         /// <summary>
         /// Returns the parent of the current node.
@@ -45,7 +35,7 @@ namespace Casualty_Radar.Core.Algorithms {
         /// <param name="dest">The destination of the current path</param>
         public StarData(Node origin, Node dest) {
             _origin = origin;
-            State = NodeState.Untested;
+            Closed = false;
             H = MapUtil.GetAbsoluteDistance(_origin.Lat, _origin.Lon, dest.Lat, dest.Lon);
             G = 0;
         }

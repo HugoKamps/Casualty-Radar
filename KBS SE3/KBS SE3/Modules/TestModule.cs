@@ -137,8 +137,9 @@ namespace Casualty_Radar.Modules {
         private void RunCasualtyRadarAlgorithm(List<List<Node>> locations) {
             Log("Running Casualty Radar Algorithm...");
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            Pathfinder pf;
+            /*Pathfinder pf;
 
+            REMOVE THIS
             int addToStatusBar = 40 / locations.Count;
             long previousWatchTime = watch.ElapsedMilliseconds;
             // Loop through the list of nodes and run the algorithm for each route
@@ -152,7 +153,7 @@ namespace Casualty_Radar.Modules {
 
                 Log("Calculated route " + (locations.IndexOf(routePoints) + 1));
                 testStatusBar.Value += addToStatusBar;
-            }
+            } */
 
             watch.Stop();
             Log("Finished running Casualty Radar Algorithm");
