@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Device.Location;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -402,12 +403,16 @@ namespace Casualty_Radar.Modules {
 
             if (selectedAlert != null) {
                 Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
-                    selectedAlert.Lat, selectedAlert.Lng);
-                alert.Type = selectedAlert.Type;
-                navigationModule.Init(alert,
-                    new PointLatLng(LocationManager.CurrentLatitude, LocationManager.CurrentLongitude));
+                    selectedAlert.Lat, selectedAlert.Lng) {Type = selectedAlert.Type};
+                Thread testingThread = new Thread(() => navigationModule.Init(alert,
+                    new PointLatLng(LocationManager.CurrentLatitude, LocationManager.CurrentLongitude)));
+                testingThread.Start();                
             }
             ModuleManager.GetInstance().UpdateModule(navigationModule);
+        }
+
+        private void ThreadInit() {
+            
         }
 
         private void navigationBtn_EnabledChanged(object sender, EventArgs e) {

@@ -48,11 +48,12 @@ namespace Casualty_Radar.Modules {
         public void Init(Alert alert, PointLatLng start) {
             _locationManager.CurrentLatitude = start.Lat;
             _locationManager.CurrentLongitude = start.Lng;
-            var time = DateTime.Now.Ticks;
+
             // Set the alert _panel with the information of the selected alert
             UpdatePanel(alert);
             routeInfoPanel.Controls.Clear();
-            InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
+            Invoke(new Action(() => InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng)));
+
             List<Node> highWay = ParseRoute(ParseHighways(), start, alert.GetPoint());
             List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count-1].GetPoint());
             List<Node> dest = ParseRoute(FetchDataSection(alert.GetPoint()), highWay[0].GetPoint(), alert.GetPoint());
@@ -66,12 +67,12 @@ namespace Casualty_Radar.Modules {
 
             // Draw the entire calculated route
             _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
-            Console.WriteLine("Done: "+((DateTime.Now.Ticks - time) / 20000)+"ms");
+
             // Calculate the navigation steps and generate a _panel for each step
             _route.CalculateRouteSteps();
-            PageRoutePanel(_page);
+            Invoke(new Action(() => PageRoutePanel(_page)));
 
-            routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+            Invoke(new Action(() => routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)"));
 
         }
 
