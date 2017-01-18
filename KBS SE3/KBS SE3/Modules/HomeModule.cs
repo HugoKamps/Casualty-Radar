@@ -30,7 +30,6 @@ namespace Casualty_Radar.Modules {
 
         public HomeModule() {
             InitializeComponent();
-            this.alertTypeComboBox.SelectedIndex = 0;
         }
 
         public Breadcrumb GetBreadcrumb() => new Breadcrumb(this, "Home", ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule)));
