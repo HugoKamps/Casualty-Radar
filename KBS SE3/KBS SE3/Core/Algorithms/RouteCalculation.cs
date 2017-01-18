@@ -39,7 +39,7 @@ namespace Casualty_Radar.Core.Algorithms {
                     else if (!_open.Contains(n)) {
                         n.StarData = new StarData(n, _end);
                         n.StarData.G = _g;
-                        n.StarData.H = GetDistance(n, _end);
+                        n.StarData.H = MapUtil.GetAbsoluteDistance(n.Lat, n.Lon, _end.Lat, _end.Lon);
                         n.StarData.Parent = _current;
                         _open.Insert(0, n);
                     } else if (_g + n.StarData.H < n.StarData.F) {
@@ -57,10 +57,6 @@ namespace Casualty_Radar.Core.Algorithms {
                 _current = _current.StarData.Parent;
             }
             return rtn;
-        }
-
-        private double GetDistance(Node first, Node second) {
-            return Math.Abs(second.Lat - first.Lat) + Math.Abs(second.Lon - first.Lon);
         }
     }
 }
