@@ -35,7 +35,6 @@ namespace Casualty_Radar.Models.Navigation {
         /// </summary>
         public string Instruction { get; set; }
 
-
         public Way Way { get; set; }
 
         public NavigationStep(double distance, RouteStepType type, Way way) {
