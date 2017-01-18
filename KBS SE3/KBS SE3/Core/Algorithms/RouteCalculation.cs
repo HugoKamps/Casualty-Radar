@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Utils;
-using GMap.NET;
 
 namespace Casualty_Radar.Core.Algorithms {
     class RouteCalculation {
-
-        /* Eelco is een beest */
         private Node _current;
-        private readonly Node _end, _start;
+        private readonly Node _start, _end;
         private readonly List<Node> _open, _closed;
         private int _g;
 
         public RouteCalculation(Node start, Node end) {
-            this._open = new List<Node>();
-            this._closed = new List<Node>();
-            this._end = end;
-            this._start = start;
-            this._g = 0;
+            _open = new List<Node>();
+            _closed = new List<Node>();
+            _start = start;
+            _end = end;
+            _g = 0;
         }
 
         public void Search() {
@@ -36,11 +30,12 @@ namespace Casualty_Radar.Core.Algorithms {
                 _g++;
                 foreach (Node n in nodes) {
                     if (_closed.Contains(n)) continue;
-                    else if (!_open.Contains(n)) {
-                        n.StarData = new StarData(n, _end);
-                        n.StarData.G = _g;
-                        n.StarData.H = GetDistance(n, _end);
-                        n.StarData.Parent = _current;
+                    if (!_open.Contains(n)) {
+                        n.StarData = new StarData(n, _end) {
+                            G = _g,
+                            H = MapUtil.GetAbsoluteDistance(n.Lat, n.Lon, _end.Lat, _end.Lon),
+                            Parent = _current
+                        };
                         _open.Insert(0, n);
                     } else if (_g + n.StarData.H < n.StarData.F) {
                         n.StarData.G = _g;
@@ -57,10 +52,6 @@ namespace Casualty_Radar.Core.Algorithms {
                 _current = _current.StarData.Parent;
             }
             return rtn;
-        }
-
-        private double GetDistance(Node first, Node second) {
-            return Math.Abs(second.Lat - first.Lat) + Math.Abs(second.Lon - first.Lon);
         }
     }
 }

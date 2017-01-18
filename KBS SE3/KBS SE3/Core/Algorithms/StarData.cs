@@ -34,15 +34,9 @@ namespace Casualty_Radar.Core.Algorithms {
             get { return _parentNode; }
             set {
                 _parentNode = value;
-                G = _parentNode.StarData.G + ComputeHScore(_origin.Lat, _origin.Lon, _parentNode.Lat, _parentNode.Lon);
+                G = _parentNode.StarData.G + MapUtil.GetAbsoluteDistance(_origin.Lat, _origin.Lon, _parentNode.Lat, _parentNode.Lon);
             }
         }
-
-        private double ComputeHScore(double lat1, double lon1, double lat2, double lon2)
-        {
-            return Math.Abs(lat2 - lat1) + Math.Abs(lon2 - lon1);
-        }
-
 
         /// <summary>
         /// Sets and calculates the StarData for a node
@@ -52,7 +46,7 @@ namespace Casualty_Radar.Core.Algorithms {
         public StarData(Node origin, Node dest) {
             _origin = origin;
             State = NodeState.Untested;
-            H = MapUtil.GetDistance(_origin, dest);
+            H = MapUtil.GetAbsoluteDistance(_origin.Lat, _origin.Lon, dest.Lat, dest.Lon);
             G = 0;
         }
     }
