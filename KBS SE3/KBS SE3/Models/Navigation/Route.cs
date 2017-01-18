@@ -17,13 +17,10 @@ namespace Casualty_Radar.Models.Navigation {
         public double TotalDistance { get; set; } // The total distance of the route
         public NavigationStep LastStep { get; set; }
 
-
-
         public Route() {
             RouteSteps = new List<NavigationStep>();
             RouteStepPanels = new List<Panel>();
         }
-
 
         /// <summary>
         /// Gets all latitude and longitude points of each node in the route
