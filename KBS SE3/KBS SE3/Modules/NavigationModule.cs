@@ -108,6 +108,7 @@ namespace Casualty_Radar.Modules {
             PageRoutePanel(page);
 
             routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+
         }
 
         /// <summary>

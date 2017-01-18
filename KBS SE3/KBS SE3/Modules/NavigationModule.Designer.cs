@@ -88,8 +88,9 @@
             // 
             // PageNumber
             // 
-            this.PageNumber.BackColor = System.Drawing.Color.Transparent;
+            this.PageNumber.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
             this.PageNumber.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PageNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
             this.PageNumber.ForeColor = System.Drawing.Color.White;
             this.PageNumber.Location = new System.Drawing.Point(88, 0);
             this.PageNumber.Name = "PageNumber";
@@ -100,26 +101,38 @@
             // 
             // NextPageButton
             // 
+            this.NextPageButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(89)))), ((int)(((byte)(71)))));
+            this.NextPageButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.NextPageButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.NextPageButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F);
+            this.NextPageButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.NextPageButton.FlatAppearance.BorderSize = 0;
+            this.NextPageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.NextPageButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+            this.NextPageButton.ForeColor = System.Drawing.Color.White;
             this.NextPageButton.Location = new System.Drawing.Point(250, 0);
             this.NextPageButton.Name = "NextPageButton";
             this.NextPageButton.Size = new System.Drawing.Size(88, 47);
             this.NextPageButton.TabIndex = 1;
             this.NextPageButton.Text = "Volgende";
-            this.NextPageButton.UseVisualStyleBackColor = true;
+            this.NextPageButton.UseVisualStyleBackColor = false;
             this.NextPageButton.Click += new System.EventHandler(this.NextPageButton_Click);
             // 
             // PreviousPageButton
             // 
+            this.PreviousPageButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(89)))), ((int)(((byte)(71)))));
+            this.PreviousPageButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PreviousPageButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.PreviousPageButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F);
+            this.PreviousPageButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.PreviousPageButton.FlatAppearance.BorderSize = 0;
+            this.PreviousPageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PreviousPageButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+            this.PreviousPageButton.ForeColor = System.Drawing.Color.White;
             this.PreviousPageButton.Location = new System.Drawing.Point(0, 0);
             this.PreviousPageButton.Name = "PreviousPageButton";
             this.PreviousPageButton.Size = new System.Drawing.Size(88, 47);
             this.PreviousPageButton.TabIndex = 0;
             this.PreviousPageButton.Text = "Vorige";
-            this.PreviousPageButton.UseVisualStyleBackColor = true;
+            this.PreviousPageButton.UseVisualStyleBackColor = false;
             this.PreviousPageButton.Click += new System.EventHandler(this.PreviousPageButton_Click);
             // 
             // routeInfoLabelPanel
