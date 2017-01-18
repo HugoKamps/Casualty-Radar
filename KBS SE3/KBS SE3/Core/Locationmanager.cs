@@ -86,7 +86,7 @@ namespace Casualty_Radar.Core {
             routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
                 Stroke = {
                     DashStyle = DashStyle.Solid,
-                    Color = Color.FromArgb(244, 191, 66)
+                    Color = Color.FromArgb(210, 73, 57)
                 }
             });
         }

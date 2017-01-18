@@ -31,6 +31,7 @@ namespace Casualty_Radar.Modules {
         private List<Node> targetCollection;
         private int page = 1;
         private Panel panel;
+        private List<GeoMapSection> _sections;
 
         public NavigationModule() {
             InitializeComponent();
@@ -42,6 +43,9 @@ namespace Casualty_Radar.Modules {
             parser.Deserialize();
             collection = parser.GetCollection();
             targetCollection = collection.Intersections;
+
+            GeoMapLoader loader = new GeoMapLoader();
+            _sections = loader.GetGeoMapSections();
         }
 
         public Breadcrumb GetBreadcrumb() {
@@ -58,10 +62,6 @@ namespace Casualty_Radar.Modules {
             _locationManager.CurrentLatitude = start.Lat;
             _locationManager.CurrentLongitude = start.Lng;
 
-            // Get the provinces for the start and destination and set the needed XML file paths
-            //string startingXml = 
-            //string destinationXml = 
-
             // Set the alert panel with the information of the selected alert
             infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
             alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
@@ -77,11 +77,11 @@ namespace Casualty_Radar.Modules {
 
             // Calculate the route on the highway
             _pathfinder = new Pathfinder(_startNode, _endNode);
-            _route.RouteNodes = _pathfinder.FindPath(); // Moet 'List<Node> highwaynodes' zijn
-
+            _route.RouteNodes = _pathfinder.FindPath(); // Moet "List<Node> highwayNodes" zijn.
+            
             /*
-            //Calculate the route from the user's location to the starting point on the highway
-            SetParserData(startingXml);
+            // Calculate the route from the user's location to the starting point on the highway
+            SetParserData(_startNode.GetPoint());
             _startNode = MapUtil.GetNearest(start.Lat, start.Lng, targetCollection);
             _endNode = highwayNodes[0];
             _pathfinder = new Pathfinder(_startNode, _endNode);
@@ -91,7 +91,7 @@ namespace Casualty_Radar.Modules {
             _route.RouteNodes.AddRange(highwayNodes);
             
             // Calculate the route from the last point on the highway to the location of the alert
-            SetParserData(destinationXml);
+            SetParserData(_endNode.GetPoint());
             _startNode = highwayNodes[highwayNodes.Count - 1];
             _endNode = MapUtil.GetNearest(alert.Lat, alert.Lng, targetCollection);
             _pathfinder = new Pathfinder(_startNode, _endNode);
@@ -99,6 +99,7 @@ namespace Casualty_Radar.Modules {
             // Add the final route to the current route
             _route.RouteNodes.AddRange(_pathfinder.FindPath());
             */
+
             // Draw the entire calculated route
             _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
 
@@ -136,7 +137,14 @@ namespace Casualty_Radar.Modules {
 
         private void printingPictureBox_Click(object sender, EventArgs e) => _pdfUtil.CreatePdf(_route.RouteSteps, _route.StartingRoad, _route.DestinationRoad);
 
-        private void SetParserData(string path) {
+        private void SetParserData(PointLatLng point) {
+            string path = "";
+            foreach (GeoMapSection section in _sections) {
+                if (MapUtil.IsInSection(point, section)) {
+                    path = section.TargetFilePath;
+                }
+            }
+
             parser = new DataParser(@"../../Resources/XML/" + path);
             parser.Deserialize();
             collection = parser.GetCollection();

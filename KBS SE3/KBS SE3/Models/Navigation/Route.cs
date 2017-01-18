@@ -34,23 +34,22 @@ namespace Casualty_Radar.Models.Navigation {
         /// <summary>
         /// Calculates all the route steps and sets information about the route
         /// </summary>
-        public void CalculateRouteSteps()
-        {
+        public void CalculateRouteSteps() {
             double prevAngle = -1;
             int height = 0;
             Color color = Color.Gainsboro;
-            for (int index = 0; index < RouteNodes.Count; index++)
-            {
+            for (int index = 0; index < RouteNodes.Count; index++) {
                 Node node = RouteNodes[index];
-                if (index + 1 != RouteNodes.Count && index + 2 != RouteNodes.Count)
-                {
+                if (index + 1 != RouteNodes.Count && index + 2 != RouteNodes.Count) {
                     Node nextNode = RouteNodes[index + 1];
                     Node nextNextNode = RouteNodes[index + 2];
 
                     if (index == 0)
-                        StartingRoad = MapUtil.GetWay(RouteNodes[0], nextNode).Name; // Set the starting road for the route
+                        StartingRoad = MapUtil.GetWay(RouteNodes[0], nextNode).Name;
+                    // Set the starting road for the route
 
-                    TotalDistance += MapUtil.GetDistance(node, nextNode); // Add this step's distance to the total distance
+                    TotalDistance += MapUtil.GetDistance(node, nextNode);
+                    // Add this step's distance to the total distance
 
                     // Check in which direction the step should point
                     double angle = RouteUtil.AngleFromCoordinate(nextNode, nextNextNode);
@@ -63,43 +62,39 @@ namespace Casualty_Radar.Models.Navigation {
                     string distanceString =
                         NavigationStep.GetFormattedDistance(distance);
 
+                    if (distance != 0) {
 
-                    NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
+                        NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
 
-                    if (LastStep != null)
-                    {
-                        if (LastStep.Way.Name == step.Way.Name && step.Type == LastStep.Type)
-                        {
-                            LastStep.Distance += step.Distance;
+                        if (LastStep != null) {
+                            if (LastStep.Way.Name == step.Way.Name && step.Type == LastStep.Type) {
+                                LastStep.Distance += step.Distance;
+                            }
+                            else {
+                                RouteSteps.Add(step);
+                                LastStep = step;
+                            }
+
+                            // Check if the route is finished
+                            if (index + 3 == RouteNodes.Count) {
+                                step = new NavigationStep(distance, RouteStepType.DestinationReached,
+                                    MapUtil.GetWay(nextNode, nextNextNode));
+                                DestinationRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
+                                RouteSteps.Add(step);
+                                LastStep = step;
+                            }
+                            prevAngle = angle;
+                            RouteSteps[RouteSteps.Count - 1] = LastStep;
                         }
-                        else
-                        {
+                        else {
                             RouteSteps.Add(step);
                             LastStep = step;
+                            RouteSteps[RouteSteps.Count - 1] = LastStep;
                         }
-
-                        // Check if the route is finished
-                        if (index + 3 == RouteNodes.Count)
-                        {
-                            step = new NavigationStep(distance, RouteStepType.DestinationReached, MapUtil.GetWay(nextNode, nextNextNode));
-                            DestinationRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
-                            RouteSteps.Add(step);
-                            LastStep = step;
-                        }
-                        prevAngle = angle;
-                        RouteSteps[RouteSteps.Count - 1] = LastStep;
+                        LastStep.SetInstruction();
                     }
-                    else
-                    {
-                        RouteSteps.Add(step);
-                        LastStep = step;
-                        RouteSteps[RouteSteps.Count - 1] = LastStep;
-                    }
-                    LastStep.SetInstruction();
-
                 }
                 TotalDistance = Math.Round(TotalDistance, 2);
-
             }
             PrintPanels();
         }

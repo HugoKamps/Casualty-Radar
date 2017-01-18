@@ -36,6 +36,9 @@ namespace Casualty_Radar.Modules {
             this.feedTickerCheckBox = new System.Windows.Forms.CheckBox();
             this.feedTickerNumeric = new System.Windows.Forms.NumericUpDown();
             this.feedNumericErrorLabel = new System.Windows.Forms.Label();
+            this.advancedSettingsLabel = new System.Windows.Forms.Label();
+            this.testModuleButton = new System.Windows.Forms.Button();
+            this.testModuleLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.feedTickerNumeric)).BeginInit();
             this.SuspendLayout();
             // 
@@ -181,11 +184,50 @@ namespace Casualty_Radar.Modules {
             this.feedNumericErrorLabel.Text = "De waarde moet tussen 30 en 300 zijn";
             this.feedNumericErrorLabel.Visible = false;
             // 
+            // advancedSettingsLabel
+            // 
+            this.advancedSettingsLabel.AutoSize = true;
+            this.advancedSettingsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.advancedSettingsLabel.ForeColor = System.Drawing.Color.DimGray;
+            this.advancedSettingsLabel.Location = new System.Drawing.Point(16, 256);
+            this.advancedSettingsLabel.Name = "advancedSettingsLabel";
+            this.advancedSettingsLabel.Size = new System.Drawing.Size(91, 15);
+            this.advancedSettingsLabel.TabIndex = 12;
+            this.advancedSettingsLabel.Text = "Geavanceerd";
+            // 
+            // testModuleButton
+            // 
+            this.testModuleButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.testModuleButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.testModuleButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.testModuleButton.ForeColor = System.Drawing.Color.DimGray;
+            this.testModuleButton.Location = new System.Drawing.Point(19, 287);
+            this.testModuleButton.Name = "testModuleButton";
+            this.testModuleButton.Size = new System.Drawing.Size(136, 23);
+            this.testModuleButton.TabIndex = 13;
+            this.testModuleButton.Text = "Open Testomgeving";
+            this.testModuleButton.UseVisualStyleBackColor = false;
+            this.testModuleButton.Click += new System.EventHandler(this.testModuleButton_Click);
+            // 
+            // testModuleLabel
+            // 
+            this.testModuleLabel.AutoSize = true;
+            this.testModuleLabel.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            this.testModuleLabel.Location = new System.Drawing.Point(16, 315);
+            this.testModuleLabel.Name = "testModuleLabel";
+            this.testModuleLabel.Size = new System.Drawing.Size(602, 13);
+            this.testModuleLabel.TabIndex = 14;
+            this.testModuleLabel.Text = "Binnen de testomgeving kunnen de snelheden worden vergeleken van het Casualty Rad" +
+    "ar algoritme en die van Google Maps.";
+            // 
             // SettingsModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.testModuleLabel);
+            this.Controls.Add(this.testModuleButton);
+            this.Controls.Add(this.advancedSettingsLabel);
             this.Controls.Add(this.feedNumericErrorLabel);
             this.Controls.Add(this.feedTickerCheckBox);
             this.Controls.Add(this.feedTickerEnabledLabel);
@@ -218,5 +260,8 @@ namespace Casualty_Radar.Modules {
         private System.Windows.Forms.Label feedTickerEnabledLabel;
         private System.Windows.Forms.CheckBox feedTickerCheckBox;
         private System.Windows.Forms.Label feedNumericErrorLabel;
+        private System.Windows.Forms.Label advancedSettingsLabel;
+        private System.Windows.Forms.Button testModuleButton;
+        private System.Windows.Forms.Label testModuleLabel;
     }
 }
