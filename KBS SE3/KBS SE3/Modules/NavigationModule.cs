@@ -54,9 +54,13 @@ namespace Casualty_Radar.Modules {
             List<Node> highWay = ParseRoute(ParseHighways(), start, alert.GetPoint());
             List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count-1].GetPoint());
             List<Node> dest = ParseRoute(FetchDataSection(alert.GetPoint()), highWay[0].GetPoint(), alert.GetPoint());
+            
+            highWay.Reverse();
+            origin.Reverse();
+            dest.Reverse();
 
-            _route.RouteNodes = highWay;
-            _route.RouteNodes.AddRange(origin);
+            _route.RouteNodes = origin;
+            _route.RouteNodes.AddRange(highWay);
             _route.RouteNodes.AddRange(dest);
 
             // Draw the entire calculated route
