@@ -100,6 +100,23 @@ namespace Casualty_Radar.Utils {
 
         public static Way GetWay(Node node1, Node node2) => node1.ConnectedWays.Find(w => w.References.Contains(w.References.Find(n => n.Node == node2)));
 
+        /// <summary>
+        /// Calculates the given absolute distance between te given coordinates.
+        /// This will return an offset of a distance and not a parsed KM distance 
+        /// </summary>
+        /// <param name="lat1">First coordinate latitude</param>
+        /// <returns></returns>
+        public static double GetAbsoluteDistance(double lat1, double lon1, double lat2, double lon2) {
+            return Math.Abs(lat2 - lat1) + Math.Abs(lon2 - lon1);
+        }
+
+        /// <summary>
+        /// Checks if the given location is inside the given GeoMapSection,
+        /// This is used to fetch the local route data around a coordinate.
+        /// </summary>
+        /// <param name="point">Geolocation location</param>
+        /// <param name="section">GeoMapSection section</param>
+        /// <returns>True if the geo location is in the section</returns>
         public static bool IsInSection(PointLatLng point, GeoMapSection section) => 
             point.Lat > section.LowerBound.Lat && point.Lat < section.UpperBound.Lat &&
                    point.Lng > section.LowerBound.Lng && point.Lng < section.UpperBound.Lng;
