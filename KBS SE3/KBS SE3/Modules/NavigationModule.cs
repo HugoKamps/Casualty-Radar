@@ -46,8 +46,7 @@ namespace Casualty_Radar.Modules {
         /// <param name="alert">Alert which contains all the information about the chosen alert</param>
         /// <param name="start">Point with the user's current latitude and longitude</param>
         public void Init(Alert alert, PointLatLng start) {
-            ClearPanels();
-
+            Reset();
             _locationManager.CurrentLatitude = start.Lat;
             _locationManager.CurrentLongitude = start.Lng;
 
@@ -84,7 +83,7 @@ namespace Casualty_Radar.Modules {
 
         public List<Node> ParseRoute(DataCollection collection, PointLatLng origin, PointLatLng dest) {
             Node start = MapUtil.GetNearest(origin.Lat, origin.Lng, collection.Intersections);
-            Node end = MapUtil.GetNearest(dest.Lat, dest.Lng, collection.Nodes);
+            Node end = MapUtil.GetNearest(dest.Lat, dest.Lng, collection.Intersections);
             RouteCalculation calc = new RouteCalculation(start, end);
             calc.Search();
             return calc.GetNodes();
@@ -143,6 +142,7 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         /// <param name="page">The pagenumber</param>
         private void PageRoutePanel(int page) {
+            routeInfoPanel.Controls.Clear();
             for (int index = 0; index < 5; index++) {
                 if (index + (page * 5 - 5) < _route.RouteStepPanels.Count &&
                     index + (page * 5 - 5) < _route.RouteStepPanels.Count) {
@@ -152,14 +152,15 @@ namespace Casualty_Radar.Modules {
                 PreviousPageButton.Enabled = page != 1;
                 NextPageButton.Enabled = page != _route.RouteStepPanels.Count / 5 + 1;
             }
-            PageNumber.Text = "Pagina " + page + "/" + ((_route.RouteStepPanels.Count / 5) + 1);
+            PageNumber.Text = "Pagina " + page + "/" + (_route.RouteStepPanels.Count / 5 + 1);
         }
 
         /// <summary>
         /// Clears all route step panels
         /// </summary>
-        public void ClearPanels() {
+        public void Reset() {
             if (routeInfoPanel.Controls.Count > 0) routeInfoPanel.Controls.Clear();
+            _route = new Route();
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Casualty_Radar.Models.Navigation;
 using Casualty_Radar.Properties;
@@ -13,9 +14,10 @@ namespace Casualty_Radar.Utils {
             XGraphics gfx = XGraphics.FromPdfPage(page);
             XFont font = new XFont("Microsoft Sans Serif", 12);
 
-            gfx.DrawRectangle(new XSolidBrush(XColor.FromArgb(236, 89, 71)),  0, 0, page.Width, 40);
+            gfx.DrawRectangle(new XSolidBrush(XColor.FromArgb(236, 89, 71)), 0, 0, page.Width, 40);
             gfx.DrawImage(Resources.logo_final, new XPoint(10, 5));
-            gfx.DrawString("Van " + start + " naar " + dest, font, XBrushes.White, new XPoint(0.6 * page.Width, 20), XStringFormats.Center);
+            gfx.DrawString("Van " + start + " naar " + dest, font, XBrushes.White, new XPoint(0.6 * page.Width, 20),
+                XStringFormats.Center);
 
             double x = 0.025 * page.Width;
             int y = 50;
@@ -43,7 +45,12 @@ namespace Casualty_Radar.Utils {
             }
 
             const string filename = "Route.pdf";
-            document.Save(filename);
+            try {
+                document.Save(filename);
+            }
+            catch (Exception e) {
+                
+            }
             Process.Start("Route.pdf");
         }
 
