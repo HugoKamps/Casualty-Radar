@@ -22,6 +22,7 @@ namespace Casualty_Radar.Modules {
         private GMapOverlay _routeOverlay;
         private PdfUtil _pdfUtil;
         private Route _route;
+
         private DataParser parser;
         private DataCollection collection;
         private List<Node> targetCollection;
