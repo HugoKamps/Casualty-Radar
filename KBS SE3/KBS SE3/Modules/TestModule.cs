@@ -126,10 +126,9 @@ namespace Casualty_Radar.Modules {
         /// <param name="locations">A list with lists which include two Node objects, the start and end points.</param>
         private long RunCasualtyRadarAlgorithm(List<List<PointLatLng>> locations) {
             Log("Running Casualty Radar Algorithm...");
-            var nM = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
-
-            int addToStatusBar = 40 / locations.Count;
             var watch = System.Diagnostics.Stopwatch.StartNew();
+            var nM = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            int addToStatusBar = 40 / locations.Count;
             long previousWatchTime = 0;
             // Loop through the list of nodes and run the algorithm for each route
             foreach (List<PointLatLng> routePoints in locations) {
@@ -138,12 +137,12 @@ namespace Casualty_Radar.Modules {
 
                 // Add elapsed time of algorithm to list
                 cRadarTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
-
+                Log("Calculated route " + (locations.IndexOf(routePoints) + 1));
+                testStatusBar.Value += addToStatusBar;
                 this.Invoke((MethodInvoker)delegate {
                     testStatusBar.Value += addToStatusBar;
                 });
             }
-
             watch.Stop();
             Log("Finished running Casualty Radar Algorithm");
             this.Invoke((MethodInvoker)delegate {
