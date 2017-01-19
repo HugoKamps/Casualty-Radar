@@ -100,6 +100,16 @@ namespace Casualty_Radar.Utils {
 
         public static Way GetWay(Node node1, Node node2) => node1.ConnectedWays.Find(w => w.References.Contains(w.References.Find(n => n.Node == node2)));
 
+        public static double GetTotalDistance(List<PointLatLng> points)
+        {
+            double totalDistance = 0;
+            for (int index = 0; index < points.Count; index++)
+            {
+                PointLatLng point = points[index];
+                if(index + 1 <= points.Count) totalDistance += GetDistance(point.Lat, point.Lng, points[index + 1].Lat, points[index + 1].Lng);
+            }
+            return totalDistance;
+        }
         /// <summary>
         /// Calculates the given absolute distance between te given coordinates.
         /// This will return an offset of a distance and not a parsed KM distance 

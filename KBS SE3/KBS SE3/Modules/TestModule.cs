@@ -8,6 +8,7 @@ using Casualty_Radar.Core.Algorithms;
 using Casualty_Radar.Models;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Utils;
 using GMap.NET;
 using GMap.NET.MapProviders;
 
@@ -136,10 +137,12 @@ namespace Casualty_Radar.Modules {
             var watch = System.Diagnostics.Stopwatch.StartNew();
             int addToStatusBar = 40 / locations.Count;
             long previousWatchTime = 0;
+
+            List<PointLatLng> points = new List<PointLatLng>();
             // Loop through the list of nodes and run the algorithm for each route
             foreach (List<PointLatLng> routePoints in locations) {
                 Log("Calculating route " + (locations.IndexOf(routePoints) + 1) + "...");
-                nM.ParseRoutes(routePoints.First(), routePoints.Last());
+                points.AddRange(nM.ParseRoutes(routePoints.First(), routePoints.Last()));
 
                 // Add elapsed time of algorithm to list
                 cRadarTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
@@ -150,6 +153,7 @@ namespace Casualty_Radar.Modules {
             Invoke((MethodInvoker)delegate {
                 testStatusBar.Value = 60;
                 aOneTotalDurationLabel.Text = watch.ElapsedMilliseconds + " ms";
+                aOneTotalDistanceLabel.Text = Math.Round(MapUtil.GetTotalDistance(points), 2) + "km";
             });
 
             return watch.ElapsedMilliseconds;
