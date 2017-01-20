@@ -96,7 +96,7 @@ namespace Casualty_Radar.Modules {
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
             if (_hasLocationservice)
-                map.Position = new PointLatLng(LocationManager.CurrentLatitude, LocationManager.CurrentLongitude);
+                map.Position = GetLocationManager().GetLocationPoint();
             else map.SetPositionByKeywords(Settings.Default.userLocation);
         }
 
@@ -405,7 +405,7 @@ namespace Casualty_Radar.Modules {
                 Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
                     selectedAlert.Lat, selectedAlert.Lng) { Type = selectedAlert.Type };
                 navigationModule.Init(alert,
-                    new PointLatLng(LocationManager.CurrentLatitude, LocationManager.CurrentLongitude));
+                    LocationManager.GetLocationPoint());
             }
             ModuleManager.GetInstance().UpdateModule(navigationModule);
         }
