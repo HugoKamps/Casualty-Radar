@@ -8,7 +8,8 @@ namespace Casualty_Radar.Models.DataControl {
 
     /// <summary>
     /// The DataCollection consists of the result of the DataParser class.
-    /// This class is the main link between the object data and the object logic
+    /// All nodes, ways and references are accessed using the DataCollection;
+    /// this instance is created based on XML deserialization.
     /// </summary>
     [XmlRoot("osm")]
     public class DataCollection {
@@ -16,36 +17,15 @@ namespace Casualty_Radar.Models.DataControl {
         [XmlIgnore]
         public static readonly int INTERSECTION_WAY_MINIMUM = 2;
 
-        /// <summary>
-        /// The WayControl is used to apply logic and calculations to the ways.
-        /// This field is also used to determine zoomlevels on waytypes
-        /// </summary>
         [XmlIgnore]
         public WayTypeControl WayControl { get; }
 
-        /// <summary>
-        /// All 'Node' elements that are returned from the deserialization.
-        /// We require an in-memory list of nodes to link Node references that are linked to a way
-        /// to a Node instance from our software.
-        /// </summary>
         [XmlElement("n")]
         public List<Node> Nodes { get; private set; }
 
-
-        /// <summary>
-        /// All 'Way' elements that are returned from the deserialization.
-        /// We require an in-memory list of ways for applying our own algorithms 
-        /// and draw a graph.
-        /// </summary>
         [XmlElement("w")]
         public List<Way> Ways { get; private set; }
 
-
-        /// <summary>
-        /// Nodes that have connected ways are considered Intersections.
-        /// Intersections are used to build maps and calculate routes.
-        /// Without intersections we wouldn't know how the roads are connected.
-        /// </summary>
         [XmlIgnore]
         public List<Node> Intersections { get; }
 
@@ -63,9 +43,9 @@ namespace Casualty_Radar.Models.DataControl {
         /// This method prevents identical instances of the Node object.
         /// </summary>
         public void Index() {
-            Dictionary<long, Node> nodeCollection = Nodes.ToDictionary(n => n.ID, n => n);
-            foreach (Way way in Ways) {
-                way.WayType = WayControl.GetTypeBase(way.TypeDescription);
+            Dictionary<long, Node> nodeCollection = this.Nodes.ToDictionary(n => n.ID, n => n);
+            foreach (Way way in this.Ways) {
+                way.WayType = WayControl.ParseWayType(way.TypeDescription);
                 foreach (NodeReference reference in way.References)
                     if (nodeCollection.ContainsKey(reference.ReferenceID)) {
                         reference.Node = nodeCollection[reference.ReferenceID];
@@ -75,12 +55,5 @@ namespace Casualty_Radar.Models.DataControl {
                     }
             }
         }
-
-        public void Dispose() {
-            Nodes.Clear();
-            Intersections.Clear();
-            Ways.Clear();
-        }
-
     }
 }

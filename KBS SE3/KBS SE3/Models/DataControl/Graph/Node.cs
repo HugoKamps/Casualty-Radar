@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Models.DataControl.Graph.Ways;
 using Casualty_Radar.Utils;
 using GMap.NET;
 

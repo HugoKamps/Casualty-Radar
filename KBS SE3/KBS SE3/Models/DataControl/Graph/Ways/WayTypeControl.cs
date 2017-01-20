@@ -6,58 +6,53 @@ using System.Reflection;
 namespace Casualty_Radar.Models.DataControl.Graph.Ways {
     
     /// <summary>
-    /// A WayTypeControl consist of calculations and logic that are used for zoomlevels and waytypes.
-    /// The WayTypeControl can only be accessed using the DataCollection.
+    /// The WayTypeControl class is used to identify waytypes of a way.
+    /// Using the given datacollection each way will be linked to a waytype which 
+    /// in itself is linked to a zoomlevel.
     /// </summary>
     public class WayTypeControl {
 
-        private readonly Dictionary<string, WayTypeBase> _typeMap;
         private readonly DataCollection _collection;
 
-        private const string NAMESPACE_PATH = @"Casualty_Radar.Models.DataControl.Graph.Ways.WayTypes";
-
         public WayTypeControl(DataCollection collection) {
-            _typeMap = new Dictionary<string, WayTypeBase>();
-            _collection = collection;
-            Init();
+            this._collection = collection;
         }
 
         /// <summary>
-        /// Uses C# reflection to loop through a folder and initializes every instance of WayTypeBase.
-        /// Because we use reflection every new waytype will be initalized dynamically.This means we don't have to
-        /// manually initialize every instance of WayTypeBase.
-        /// Because we create only one instance of each WayTypeBase we make sure there aren't duplicate instances.
-        /// </summary>
-        private void Init() {
-            List<Type> wayTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(a => a.IsClass && a.Namespace != null &&
-                a.Namespace.Contains(NAMESPACE_PATH)).ToList();
-            foreach (Type t in wayTypes) {
-                WayTypeBase type = (WayTypeBase)Activator.CreateInstance(t);
-                _typeMap[type.Key] = type;
-            }
-        }
-
-        /// <summary>
-        /// Returns a WayTypeBase that has the same key as the given key.
-        /// This method is used to link ways to the proper WayTypeBase using a dictionary.
-        /// Dictionaries are much faster than a list in this case because we don't require a loop.
+        /// Returns a WayType based on the given key.
+        /// A waytype is related to a zoomlevel therefor it is important to identify ways.
         /// </summary>
         /// <param name="key">The key name of the waytype</param>
-        /// <returns>A WayTypeBase instance if a there's a link between the key and a way type, null if there's no link.</returns>
-        public WayTypeBase GetTypeBase(string key) {
-            WayTypeBase rtn;
-            return _typeMap.TryGetValue(key, out rtn) ? rtn : null;
+        /// <returns>A WayType constant</returns>
+        public WayType ParseWayType(string key) {
+            switch (key) {
+                case "liv": return WayType.LivingStreet;
+                case "mot": return WayType.MotorWay;
+                case "mot_l": return WayType.MotorWayLink;
+                case "pth": return WayType.Path;
+                case "pri_l": return WayType.PrimaryLink;
+                case "pri": return WayType.PrimaryWay;
+                case "res": return WayType.ResidentialWay;
+                case "sec_l": return WayType.SecondaryLink;
+                case "sec": return WayType.SecondaryWay;
+                case "ter_l": return WayType.TertiaryLink;
+                case "ter": return WayType.TertiaryWay;
+                case "tru": return WayType.Trunk;
+                case "tru_l": return WayType.TrunkLink;
+                default: case "unc": return WayType.UnclassifiedWay;
+
+
+            }
         }
 
         /// <summary>
         /// Returns a collection of ways based on the given Zoomlevel.
         /// This method returns a(lazy-loaded) IEnumerable filled with all ways that are at the same zoom level 
         /// as the given zoomlevel.
-        /// This method uses the entire way collection inside the datacollection.
+        /// This method uses the given data collection
         /// </summary>
         /// <param name="level">The requested zoomlevel</param>
         /// <returns>An lazy-loaded collection with all ways that have the same zoomlevel as the given level</returns>
-        public IEnumerable<Way> GetByZoomLevel(WayZoomLevel level) => _collection.Ways.Select(x => x).Where(x => x.WayType.ZoomLevel == level);
+        public IEnumerable<Way> GetByZoomLevel(WayZoomLevel level) => _collection.Ways.Select(x => x).Where(x => (int) x.WayType == (int) level);
     }
 }

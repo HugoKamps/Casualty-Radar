@@ -19,7 +19,7 @@
         Regional = 4,
 
         /// <summary>
-        ///  Zoomlevel of a few roads
+        ///  Zoomlevel of a few roads 
         /// </summary>
         Local = 3
 
