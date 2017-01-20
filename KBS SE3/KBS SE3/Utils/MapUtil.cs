@@ -106,7 +106,7 @@ namespace Casualty_Radar.Utils {
             for (int index = 0; index < points.Count; index++)
             {
                 PointLatLng point = points[index];
-                if(index + 1 <= points.Count) totalDistance += GetDistance(point.Lat, point.Lng, points[index + 1].Lat, points[index + 1].Lng);
+                if(index + 1 < points.Count) totalDistance += GetDistance(point.Lat, point.Lng, points[index + 1].Lat, points[index + 1].Lng);
             }
             return totalDistance;
         }

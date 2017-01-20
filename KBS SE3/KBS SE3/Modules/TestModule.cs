@@ -8,6 +8,7 @@ using Casualty_Radar.Core.Algorithms;
 using Casualty_Radar.Models;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Models.Navigation;
 using Casualty_Radar.Utils;
 using GMap.NET;
 using GMap.NET.MapProviders;
