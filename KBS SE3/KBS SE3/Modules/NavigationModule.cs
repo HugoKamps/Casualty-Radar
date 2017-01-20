@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -25,6 +26,8 @@ namespace Casualty_Radar.Modules {
         private int _page;
         private Panel _panel;
         private GeoMapLoader _mapLoader;
+        private Thread _drawingThread;
+        private Thread _routeThread;
 
         public NavigationModule() {
             InitializeComponent();
