@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq.Expressions;
 using Casualty_Radar.Models.Navigation;
 using Casualty_Radar.Properties;
 using PdfSharp.Drawing;

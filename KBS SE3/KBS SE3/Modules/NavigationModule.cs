@@ -11,6 +11,7 @@ using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models.DataControl.Graph;
 
 namespace Casualty_Radar.Modules {
@@ -25,6 +26,9 @@ namespace Casualty_Radar.Modules {
         private int _page;
         private Panel _panel;
         private GeoMapLoader _mapLoader;
+
+        private GeoMapSection _startingSection;
+        private GeoMapSection _endingSection;
 
         public NavigationModule() {
             InitializeComponent();
@@ -54,7 +58,10 @@ namespace Casualty_Radar.Modules {
             UpdatePanel(alert);
             InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
 
-            ParseRoutes(start, alert.GetPoint());
+            _startingSection = FetchDataSection(start);
+            _endingSection = FetchDataSection(alert.GetPoint());
+            if (_startingSection.FilePath == _endingSection.FilePath) ParseLocalRoute(start, alert.GetPoint(), _startingSection);
+            else ParseRoutes(start, alert.GetPoint());
 
             // Draw the entire calculated route
             _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
@@ -73,12 +80,15 @@ namespace Casualty_Radar.Modules {
             highWay.Reverse();
             origin.Reverse();
             dest.Reverse();
+
             _route.RouteNodes = origin;
             _route.RouteNodes.AddRange(highWay);
             _route.RouteNodes.AddRange(dest);
 
             return _route.GetRoutePoints();
         }
+
+        public void ParseLocalRoute(PointLatLng start, PointLatLng end, GeoMapSection section) => _route.RouteNodes = ParseRoute(section, start, end);
 
         private void UpdatePanel(Alert alert) {
             infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
@@ -135,9 +145,10 @@ namespace Casualty_Radar.Modules {
 
         private GeoMapSection FetchDataSection(PointLatLng point) {
             foreach (GeoMapSection section in _mapLoader.GetGeoMapSections()) {
-                if (!MapUtil.IsInSection(point, section)) continue;
-                section.Load();
-                return section;
+                if (MapUtil.IsInSection(point, section)) {
+                    section.Load();
+                    return section;
+                }
             }
             return null;
         }
@@ -168,7 +179,7 @@ namespace Casualty_Radar.Modules {
         public void Reset() {
             if (routeInfoPanel.Controls.Count > 0) routeInfoPanel.Controls.Clear();
             _route = new Route();
-            _page = 0;
+            _page = 1;
         }
 
         /// <summary>
