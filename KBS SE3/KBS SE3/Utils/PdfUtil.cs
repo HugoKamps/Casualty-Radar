@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq.Expressions;
 using Casualty_Radar.Models.Navigation;
 using Casualty_Radar.Properties;
 using PdfSharp.Drawing;
@@ -13,9 +16,10 @@ namespace Casualty_Radar.Utils {
             XGraphics gfx = XGraphics.FromPdfPage(page);
             XFont font = new XFont("Microsoft Sans Serif", 12);
 
-            gfx.DrawRectangle(new XSolidBrush(XColor.FromArgb(236, 89, 71)),  0, 0, page.Width, 40);
+            gfx.DrawRectangle(new XSolidBrush(XColor.FromArgb(236, 89, 71)), 0, 0, page.Width, 40);
             gfx.DrawImage(Resources.logo_final, new XPoint(10, 5));
-            gfx.DrawString("Van " + start + " naar " + dest, font, XBrushes.White, new XPoint(0.6 * page.Width, 20), XStringFormats.Center);
+            gfx.DrawString("Van " + start + " naar " + dest, font, XBrushes.White, new XPoint(0.6 * page.Width, 20),
+                XStringFormats.Center);
 
             double x = 0.025 * page.Width;
             int y = 50;
@@ -42,9 +46,22 @@ namespace Casualty_Radar.Utils {
                 id++;
             }
 
-            const string filename = "Route.pdf";
-            document.Save(filename);
-            Process.Start("Route.pdf");
+            string basefilename = "route";
+            string filename = "";
+
+            bool success = false;
+            int i = 0;
+
+            while (!success) {
+                try {
+                    document.Save(filename = basefilename +  i + ".pdf");
+                    success = true;
+                }
+                catch (IOException) {
+                    i++;
+                }
+            }
+            Process.Start(filename);
         }
 
         public XImage GetImageWithType(RouteStepType type) {
