@@ -66,7 +66,7 @@ namespace Casualty_Radar.Utils {
         /// <param name="targetCollection">The collection with nodes that will be compared</param>
         /// <returns>A node from the given collection that is considered the most near one to the given location</returns>
         public static Node GetNearest(double lat, double lon, List<Node> targetCollection) =>
-            targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, lat, lon)).First();
+            targetCollection.Select(x => x).OrderBy(x => GetAbsoluteDistance(x.Lat, x.Lon, lat, lon)).First();
 
         /// <summary>
         /// Returns the node that is the most near to the given Node.
@@ -77,7 +77,7 @@ namespace Casualty_Radar.Utils {
         /// <param name="targetCollection">The collection with nodes that will be compared</param>
         /// <returns>A node from the given collection that is considered the most near one to the origin node</returns>
         public static Node GetNearest(Node origin, List<Node> targetCollection) =>
-            targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, origin.Lat, origin.Lon)).ElementAt(1);
+            targetCollection.Select(x => x).OrderBy(x => GetAbsoluteDistance(x.Lat, x.Lon, origin.Lat, origin.Lon)).ElementAt(1);
 
         /// <summary>
         /// Returns all nodes that are adjacent to the given origin Node.
