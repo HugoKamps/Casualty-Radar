@@ -4,6 +4,9 @@ using System.Drawing;
 using System.Windows.Forms;
 
 namespace Casualty_Radar.Core.Dialog {
+    /// <summary>
+    /// The base class for dialog, here is a form made which we can use to show "custom" dialogs
+    /// </summary>
     class DialogOverlay : IDisposable {
 
         private List<Form> _forms;
