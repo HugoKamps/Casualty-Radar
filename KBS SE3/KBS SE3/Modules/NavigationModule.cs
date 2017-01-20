@@ -167,7 +167,7 @@ namespace Casualty_Radar.Modules {
         public void Reset() {
             if (routeInfoPanel.Controls.Count > 0) routeInfoPanel.Controls.Clear();
             _route = new Route();
-            _page = 0;
+            _page = 1;
         }
 
         /// <summary>
