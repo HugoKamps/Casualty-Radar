@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -66,7 +65,7 @@ namespace Casualty_Radar.Modules {
             routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
         }
 
-        public void ParseRoutes(PointLatLng start, PointLatLng end) {
+        public List<PointLatLng> ParseRoutes(PointLatLng start, PointLatLng end) {
             List<Node> highWay = ParseRoute(ParseHighways(), start, end);
             List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
             List<Node> dest = ParseRoute(FetchDataSection(end), highWay[0].GetPoint(), end);
@@ -77,6 +76,8 @@ namespace Casualty_Radar.Modules {
             _route.RouteNodes = origin;
             _route.RouteNodes.AddRange(highWay);
             _route.RouteNodes.AddRange(dest);
+
+            return _route.GetRoutePoints();
         }
 
         private void UpdatePanel(Alert alert) {
@@ -167,6 +168,7 @@ namespace Casualty_Radar.Modules {
         public void Reset() {
             if (routeInfoPanel.Controls.Count > 0) routeInfoPanel.Controls.Clear();
             _route = new Route();
+            _page = 0;
         }
 
         /// <summary>
