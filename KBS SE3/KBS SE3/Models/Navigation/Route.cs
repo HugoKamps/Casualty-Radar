@@ -38,13 +38,12 @@ namespace Casualty_Radar.Models.Navigation {
                 if (index + 1 != RouteNodes.Count && index + 2 != RouteNodes.Count) {
                     Node nextNode = RouteNodes[index + 1];
                     Node nextNextNode = RouteNodes[index + 2];
-
+                    // Set the starting road for the route
                     if (index == 0)
                         StartingRoad = MapUtil.GetWay(RouteNodes[0], nextNode).Name;
-                    // Set the starting road for the route
 
-                    TotalDistance += MapUtil.GetDistance(node, nextNode);
                     // Add this step's distance to the total distance
+                    TotalDistance += MapUtil.GetDistance(node, nextNode);
 
                     // Check in which direction the step should point
                     double angle = RouteUtil.AngleFromCoordinate(nextNode, nextNextNode);

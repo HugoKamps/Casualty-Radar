@@ -72,9 +72,6 @@ namespace Casualty_Radar.Modules {
                 markersOverlay.Markers.Add(LocationManager.CreateMarker(alert.Lat, alert.Lng, type));
             }
         }
-
-        public static Image ResizeImage(Image imgToResize, Size size) => new Bitmap(imgToResize, size);
-        public Panel GetSelectedPanel => _selectedPanel;
         public int GetAlertType => alertTypeComboBox.SelectedIndex;
 
         public LocationManager GetLocationManager() {

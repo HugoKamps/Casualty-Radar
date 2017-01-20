@@ -17,7 +17,7 @@ namespace Casualty_Radar.Modules {
             return new Breadcrumb(this, "Settings", ModuleManager.GetInstance().ParseInstance(typeof(TestModule)), null);
         }
 
-        //If the user changed the value of the textbox the Setting is changed
+        //If the user changed the value of the textbox the setting is changed
         private void saveBtn_Click(object sender, EventArgs e) {
             HomeModule hm = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             if (locationTextBox.Text != "") {
