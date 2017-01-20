@@ -1,9 +1,12 @@
-﻿namespace Casualty_Radar.Modules {
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Casualty_Radar.Modules {
     partial class NoConnectionModule {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -65,7 +68,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private Label label1;
+        private PictureBox pictureBox1;
     }
 }

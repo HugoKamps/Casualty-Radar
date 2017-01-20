@@ -17,8 +17,8 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
         private const string NAMESPACE_PATH = @"Casualty_Radar.Models.DataControl.Graph.Ways.WayTypes";
 
         public WayTypeControl(DataCollection collection) {
-            this._typeMap = new Dictionary<string, WayTypeBase>();
-            this._collection = collection;
+            _typeMap = new Dictionary<string, WayTypeBase>();
+            _collection = collection;
             Init();
         }
 

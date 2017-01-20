@@ -10,8 +10,8 @@ namespace Casualty_Radar.Models.DataControl {
         private DataCollection _collection;
 
         public DataParser(string path) {
-            this._filePath = path;
-            this._collection = null;
+            _filePath = path;
+            _collection = null;
         }
 
         /// <summary>
@@ -22,8 +22,8 @@ namespace Casualty_Radar.Models.DataControl {
         public void Deserialize() {
             XmlSerializer serializer = new XmlSerializer(typeof(DataCollection));
             using(FileStream stream = new FileStream(_filePath, FileMode.Open)) {
-                this._collection = (DataCollection)serializer.Deserialize(stream);
-                this._collection.Index();
+                _collection = (DataCollection)serializer.Deserialize(stream);
+                _collection.Index();
             }
         }
 

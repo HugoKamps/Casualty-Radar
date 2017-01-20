@@ -9,7 +9,7 @@ namespace Casualty_Radar.Models.DataControl.Graph {
     /// A Way is a geographical way that consists of multiple node references.
     /// Those nodes connected make the way.
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class Way {
 
 
@@ -70,7 +70,7 @@ namespace Casualty_Radar.Models.DataControl.Graph {
         public List<NodeReference> References { get; private set; }
 
         public Way() {
-            this.References = new List<NodeReference>();
+            References = new List<NodeReference>();
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using Casualty_Radar.Models;
 
-
 namespace Casualty_Radar.Utils {
     
     /// <summary>
@@ -8,7 +7,7 @@ namespace Casualty_Radar.Utils {
     /// This collection is used to fetch readable information based on unreadable alert details.
     /// </summary>
     static class AlertUtil {
-        public static string[,] P2000 = new string[,] {
+        public static string[,] P2000 = {
             { "A1", "1", "Ambulance", "Hoogste Prioriteit" },
             { "A2", "1", "Ambulance", "Normale Prioriteit" },
             { "B", "1", "Ambulance", "Besteld vervoer" },

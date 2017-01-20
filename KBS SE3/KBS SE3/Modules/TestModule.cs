@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Casualty_Radar.Core;
-using Casualty_Radar.Core.Algorithms;
 using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
-using Casualty_Radar.Models.DataControl;
-using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Models.Navigation;
 using Casualty_Radar.Utils;
 using GMap.NET;
@@ -93,7 +91,7 @@ namespace Casualty_Radar.Modules {
                 routeLocations.Add(locations);
                 Log("Route point " + (i + 1) + " added");
 
-                this.Invoke((MethodInvoker)delegate {
+                Invoke((MethodInvoker)delegate {
                     testStatusBar.Value += addToStatusBar;
                 });
             }
@@ -136,7 +134,7 @@ namespace Casualty_Radar.Modules {
         /// <param name="locations">A list with lists which include two Node objects, the start and end points.</param>
         private long RunCasualtyRadarAlgorithm(List<List<PointLatLng>> locations) {
             Log("Running Casualty Radar Algorithm...");
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            var watch = Stopwatch.StartNew();
             int addToStatusBar = 40 / locations.Count;
             long previousWatchTime = 0;
 
@@ -168,7 +166,7 @@ namespace Casualty_Radar.Modules {
         /// <param name="locations">A list with lists which include two PointLatLng variables, the start and end points.</param>
         private long RunGoogleMapsAlgorithm(List<List<PointLatLng>> locations) {
             Log("Running Google Maps Algorithm...");
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            var watch = Stopwatch.StartNew();
             uint totalDistance = 0;
 
             int addToStatusBar = 40 / locations.Count;

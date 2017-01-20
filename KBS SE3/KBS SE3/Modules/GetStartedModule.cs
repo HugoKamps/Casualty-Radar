@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Casualty_Radar.Core;
 using Casualty_Radar.Models;
+using Casualty_Radar.Properties;
 
 namespace Casualty_Radar.Modules {
      /// <summary>
@@ -21,8 +22,8 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         private void continueBtn_Click(object sender, EventArgs e) {
             if (!string.IsNullOrWhiteSpace(locationTextBox.Text)) {
-                Properties.Settings.Default.userLocation = locationTextBox.Text;
-                Properties.Settings.Default.Save();
+                Settings.Default.userLocation = locationTextBox.Text;
+                Settings.Default.Save();
                 SettingsModule s = (SettingsModule) ModuleManager.GetInstance().ParseInstance(typeof (SettingsModule));
                 s.locationTextBox.Text = locationTextBox.Text;
                 ModuleManager.GetInstance().UpdateModule(ModuleManager.GetInstance().ParseInstance(typeof (HomeModule)));
