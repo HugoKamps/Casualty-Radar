@@ -54,6 +54,7 @@ namespace Casualty_Radar.Core {
         /// <para>1 = Ambulance</para>
         /// <para>2 = Firefighter</para>
         /// <para>3 = Selected marker</para>
+        /// <para>4 = Destination marker</para>
         /// </param>
         /// <returns>The created marker</returns>
         public GMarkerGoogle CreateMarker(double lat, double lng, int type) {

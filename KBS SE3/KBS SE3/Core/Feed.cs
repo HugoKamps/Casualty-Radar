@@ -13,6 +13,10 @@ using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
 
 namespace Casualty_Radar.Core {
+    /// <summary>
+    /// The feed class arranges all the functionalities from the alerts we get out of our RSS feed
+    /// In this class we create,update and filter the alerts 
+    /// </summary>
     public class Feed {
         private static Feed _instance;
         private SyndicationFeed _p2000;
