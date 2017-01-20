@@ -75,12 +75,5 @@ namespace Casualty_Radar.Models.DataControl {
                     }
             }
         }
-
-        public void Dispose() {
-            Nodes.Clear();
-            Intersections.Clear();
-            Ways.Clear();
-        }
-
     }
 }
