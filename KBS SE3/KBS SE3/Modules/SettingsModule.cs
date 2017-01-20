@@ -5,6 +5,9 @@ using Casualty_Radar.Models;
 using Casualty_Radar.Properties;
 
 namespace Casualty_Radar.Modules {
+    /// <summary>
+    ///  Module that contains the settings, such as options for the ticker and location
+    /// </summary>
     partial class SettingsModule : UserControl, IModule {
         public SettingsModule() {
             InitializeComponent();

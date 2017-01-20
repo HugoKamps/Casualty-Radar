@@ -7,6 +7,9 @@ using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 
 namespace Casualty_Radar.Utils {
+    /// <summary>
+    /// Util that is in control of making a pdf of route steps from your location to an accident
+    /// </summary>
     class PdfUtil {
         public void CreatePdf(List<NavigationStep> steps, string start, string dest) {
             PdfDocument document = new PdfDocument();

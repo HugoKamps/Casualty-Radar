@@ -15,6 +15,9 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 
 namespace Casualty_Radar.Modules {
+    /// <summary>
+    /// Module to create random routes and compare that same route with our algoritm and googles algoritm
+    /// </summary>
     partial class TestModule : UserControl, IModule {
         private Random _random;
         private List<long> _cRadarTimes;
