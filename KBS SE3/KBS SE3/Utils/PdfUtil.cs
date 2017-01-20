@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq.Expressions;
 using Casualty_Radar.Models.Navigation;
 using Casualty_Radar.Properties;
 using PdfSharp.Drawing;
@@ -39,7 +37,6 @@ namespace Casualty_Radar.Utils {
                 }
                 gfx.DrawRectangle(color, x, y, 0.45 * page.Width, 25);
                 gfx.DrawString(id + " - " + step.Instruction, font, XBrushes.DarkSlateGray, new XPoint(x + 10, y + 15));
-                //gfx.DrawImage(GetImageWithType(step.Type), new XPoint(0.8 * page.Width, y + 5));
 
                 color = color == XBrushes.Gainsboro ? XBrushes.Silver : XBrushes.Gainsboro;
                 y += 25;

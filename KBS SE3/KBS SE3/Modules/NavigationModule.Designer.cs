@@ -40,13 +40,20 @@
             this.map = new GMap.NET.WindowsForms.GMapControl();
             this.printingPictureBox = new System.Windows.Forms.PictureBox();
             this.alertTypePicturebox = new System.Windows.Forms.PictureBox();
+            this.mapLoadingOverlay = new System.Windows.Forms.PictureBox();
+            this.mapLoadingLabel = new System.Windows.Forms.Label();
+            this.loadMapIcon = new System.Windows.Forms.PictureBox();
             this.routePanel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.routeInfoLabelPanel.SuspendLayout();
             this.alertInfoPanel.SuspendLayout();
             this.alertInfoLabelPanel.SuspendLayout();
+            this.map.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mapLoadingOverlay)).BeginInit();
+            this.mapLoadingOverlay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loadMapIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // routePanel
@@ -224,6 +231,7 @@
             // 
             this.map.Bearing = 0F;
             this.map.CanDragMap = true;
+            this.map.Controls.Add(this.mapLoadingOverlay);
             this.map.Dock = System.Windows.Forms.DockStyle.Left;
             this.map.EmptyTileColor = System.Drawing.Color.Navy;
             this.map.GrayScaleMode = false;
@@ -267,6 +275,41 @@
             this.alertTypePicturebox.TabIndex = 1;
             this.alertTypePicturebox.TabStop = false;
             // 
+            // mapLoadingOverlay
+            // 
+            this.mapLoadingOverlay.BackColor = System.Drawing.Color.Transparent;
+            this.mapLoadingOverlay.BackgroundImage = global::Casualty_Radar.Properties.Resources.load_map_overlay;
+            this.mapLoadingOverlay.Controls.Add(this.mapLoadingLabel);
+            this.mapLoadingOverlay.Controls.Add(this.loadMapIcon);
+            this.mapLoadingOverlay.Image = global::Casualty_Radar.Properties.Resources.load_map_overlay;
+            this.mapLoadingOverlay.InitialImage = null;
+            this.mapLoadingOverlay.Location = new System.Drawing.Point(0, 0);
+            this.mapLoadingOverlay.Name = "mapLoadingOverlay";
+            this.mapLoadingOverlay.Size = new System.Drawing.Size(615, 480);
+            this.mapLoadingOverlay.TabIndex = 7;
+            this.mapLoadingOverlay.TabStop = false;
+            this.mapLoadingOverlay.Visible = false;
+            // 
+            // mapLoadingLabel
+            // 
+            this.mapLoadingLabel.AutoSize = true;
+            this.mapLoadingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mapLoadingLabel.Location = new System.Drawing.Point(245, 256);
+            this.mapLoadingLabel.Name = "mapLoadingLabel";
+            this.mapLoadingLabel.Size = new System.Drawing.Size(134, 15);
+            this.mapLoadingLabel.TabIndex = 8;
+            this.mapLoadingLabel.Text = "Route wordt berekend..";
+            // 
+            // loadMapIcon
+            // 
+            this.loadMapIcon.BackColor = System.Drawing.Color.Transparent;
+            this.loadMapIcon.Image = global::Casualty_Radar.Properties.Resources.load_map;
+            this.loadMapIcon.Location = new System.Drawing.Point(280, 177);
+            this.loadMapIcon.Name = "loadMapIcon";
+            this.loadMapIcon.Size = new System.Drawing.Size(62, 64);
+            this.loadMapIcon.TabIndex = 7;
+            this.loadMapIcon.TabStop = false;
+            // 
             // NavigationModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -281,8 +324,13 @@
             this.routeInfoLabelPanel.ResumeLayout(false);
             this.alertInfoPanel.ResumeLayout(false);
             this.alertInfoLabelPanel.ResumeLayout(false);
+            this.map.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mapLoadingOverlay)).EndInit();
+            this.mapLoadingOverlay.ResumeLayout(false);
+            this.mapLoadingOverlay.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loadMapIcon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -306,5 +354,8 @@
         private System.Windows.Forms.Button NextPageButton;
         private System.Windows.Forms.Button PreviousPageButton;
         private System.Windows.Forms.Label PageNumber;
+        private System.Windows.Forms.PictureBox mapLoadingOverlay;
+        private System.Windows.Forms.PictureBox loadMapIcon;
+        private System.Windows.Forms.Label mapLoadingLabel;
     }
 }

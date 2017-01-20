@@ -224,9 +224,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\app_icon.ico" />
+    <None Include="Resources\Gifs\load_map.gif" />
     <Content Include="Resources\Icons\Markers\marker_icon_destination.png" />
     <Content Include="Resources\Icons\Markers\marker_icon_selected.png" />
     <Content Include="Resources\Icons\Navigational\destination-icon.png" />
+    <None Include="Resources\load_map_overlay.png" />
+    <Content Include="Resources\mapLoadingOverlay.png" />
     <Content Include="Resources\XML\Sections\hattem.xml" />
     <Content Include="Resources\Gifs\load_splash_screen.gif" />
     <Content Include="Resources\Icons\Application\printing_icon.png" />

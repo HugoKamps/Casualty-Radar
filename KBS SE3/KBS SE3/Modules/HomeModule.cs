@@ -72,9 +72,6 @@ namespace Casualty_Radar.Modules {
                 markersOverlay.Markers.Add(LocationManager.CreateMarker(alert.Lat, alert.Lng, type));
             }
         }
-
-        public static Image ResizeImage(Image imgToResize, Size size) => new Bitmap(imgToResize, size);
-        public Panel GetSelectedPanel => _selectedPanel;
         public int GetAlertType => alertTypeComboBox.SelectedIndex;
 
         public LocationManager GetLocationManager() {
@@ -96,7 +93,7 @@ namespace Casualty_Radar.Modules {
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
             if (_hasLocationservice)
-                map.Position = new PointLatLng(LocationManager.CurrentLatitude, LocationManager.CurrentLongitude);
+                map.Position = GetLocationManager().GetLocationPoint();
             else map.SetPositionByKeywords(Settings.Default.userLocation);
         }
 
@@ -108,7 +105,11 @@ namespace Casualty_Radar.Modules {
             }
         }
 
+        
         /// <summary>
+        /// Loads the feed and the map with markers
+        /// Both the feed and the map will be loaded in a different BackgroundWorker
+        /// When the feed is finished loading, the BackgroundWorker for the map will start
         /// </summary>
         public void LoadComponents() {
             BackgroundWorker bwFeed = new BackgroundWorker();
@@ -119,6 +120,7 @@ namespace Casualty_Radar.Modules {
                 int y = 0;
                 _alertPanels.Clear();
 
+                // Create a panel for each alert and set the pixels for the top margin
                 foreach (Alert a in Feed.GetInstance().GetFilteredAlerts) {
                     _alertPanels.Add(CreateAlertPanel(a.Type, a.Title, a.Info, a.PubDate.TimeOfDay.ToString(), y));
                     y += 81;
@@ -139,12 +141,14 @@ namespace Casualty_Radar.Modules {
                     if (_alertPanels.Count > 0) {
                         noAlertsLabel.Visible = false;
                         for (int i = 0; i < _alertPanels.Count; i++) {
+                            // Append a 'new' label to the new alerts
                             foreach (Alert alert in Feed.GetInstance().GetNewAlerts) {
                                 if (alert == Feed.GetInstance().GetAlerts[i] ||
                                     alert == Feed.GetInstance().GetFilteredAlerts[i]) {
                                     _alertPanels[i].Controls[3].Show();
                                 }
                             }
+                            // Append the alert panel to the feedPanel
                             feedPanel.Controls.Add(_alertPanels[i]);
                         }
                     } else {
@@ -155,6 +159,7 @@ namespace Casualty_Radar.Modules {
                     Casualty_Radar.Container.GetInstance()
                     .DisplayDialog(DialogType.DialogMessageType.ERROR, "Invalid Operation Exception", e.ToString());
                 }
+                // Display the amount of alerts
                 alertsTitleLabel.Text = "Meldingen (" + Feed.GetInstance().GetFilteredAlerts.Count + ")";
                 Casualty_Radar.Container.GetInstance().SplashScreen.Hide();
             };
@@ -405,7 +410,7 @@ namespace Casualty_Radar.Modules {
                 Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
                     selectedAlert.Lat, selectedAlert.Lng) { Type = selectedAlert.Type };
                 navigationModule.Init(alert,
-                    new PointLatLng(LocationManager.CurrentLatitude, LocationManager.CurrentLongitude));
+                    LocationManager.GetLocationPoint());
             }
             ModuleManager.GetInstance().UpdateModule(navigationModule);
         }
