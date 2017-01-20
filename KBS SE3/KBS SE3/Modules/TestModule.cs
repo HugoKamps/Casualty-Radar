@@ -144,7 +144,7 @@ namespace Casualty_Radar.Modules {
             // Loop through the list of nodes and run the algorithm for each route
             foreach (List<PointLatLng> routePoints in locations) {
                 Log("Calculating route " + (locations.IndexOf(routePoints) + 1) + "...");
-                points.AddRange(nM.ParseRoutes(routePoints.First(), routePoints.Last()));
+                points.AddRange(nM.ParseRoutes(routePoints.First(), routePoints.Last(), new Route()));
 
                 // Add elapsed time of algorithm to list
                 cRadarTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
