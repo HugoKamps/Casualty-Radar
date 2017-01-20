@@ -33,7 +33,7 @@ namespace Casualty_Radar.Models {
         }
 
         /// <summary>
-        /// Starts or stops the timer based on the given state
+        /// Starts or stops the timer based on current state
         /// </summary>
         public void TimerStateChanged() {
             StopTimerIfEnabled();
