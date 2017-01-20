@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
 using Casualty_Radar.Models;
-using Casualty_Radar.Models.DataControl;
 using GMap.NET;
 
 namespace Casualty_Radar.Core {
@@ -15,7 +11,7 @@ namespace Casualty_Radar.Core {
 
         private readonly List<GeoMapSection> _geoMapSections; // List that contains all the GeoMapSection instances of the XML files
 
-        private const string FILE_PATH = @"../../Resources/XML/Sections";
+        private const string FILE_PATH = @"../../Resources/XML/Sections"; // File path that reads out the xml data
 
         public GeoMapLoader() {
             _geoMapSections = new List<GeoMapSection>();

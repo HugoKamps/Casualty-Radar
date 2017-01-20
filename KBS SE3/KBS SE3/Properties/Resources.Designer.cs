@@ -133,6 +133,26 @@ namespace Casualty_Radar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap load_map {
+            get {
+                object obj = ResourceManager.GetObject("load_map", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap load_map_overlay {
+            get {
+                object obj = ResourceManager.GetObject("load_map_overlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap load_splash_screen {
             get {
                 object obj = ResourceManager.GetObject("load_splash_screen", resourceCulture);
