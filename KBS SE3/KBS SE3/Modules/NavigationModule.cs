@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Threading;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -28,6 +27,9 @@ namespace Casualty_Radar.Modules {
         private int _page;
         private Panel _panel;
         private GeoMapLoader _mapLoader;
+
+        private GeoMapSection _startingSection;
+        private GeoMapSection _endingSection;
 
         public NavigationModule() {
             InitializeComponent();
@@ -64,7 +66,10 @@ namespace Casualty_Radar.Modules {
 
             // The BackgroundWorker has to call the method ParseRoutes for calculating a route
             routeWorker.DoWork += delegate {
-                ParseRoutes(start, alert.GetPoint());
+                _startingSection = FetchDataSection(start);
+                _endingSection = FetchDataSection(alert.GetPoint());
+                if (_startingSection.FilePath == _endingSection.FilePath) ParseLocalRoute(start, alert.GetPoint(), _startingSection);
+                else ParseRoutes(start, alert.GetPoint());
             };
 
             // When the BackgroundWorker is done, display the route on the map
@@ -91,7 +96,7 @@ namespace Casualty_Radar.Modules {
         /// <param name="start">The starting point for the route</param>
         /// <param name="end">The ending point for the route</param>
         /// <returns></returns>
-        private List<PointLatLng> ParseRoutes(PointLatLng start, PointLatLng end) {
+        private void ParseRoutes(PointLatLng start, PointLatLng end) {
             List<Node> highWay = ParseRoute(ParseHighways(), start, end);
             List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
             List<Node> dest = ParseRoute(FetchDataSection(end), highWay[0].GetPoint(), end);
@@ -99,12 +104,19 @@ namespace Casualty_Radar.Modules {
             highWay.Reverse();
             origin.Reverse();
             dest.Reverse();
+
             _route.RouteNodes = origin;
             _route.RouteNodes.AddRange(highWay);
             _route.RouteNodes.AddRange(dest);
-
-            return _route.GetRoutePoints();
         }
+
+        /// <summary>
+        /// This function calculates the route when the user's location and the destination are in the same XML section
+        /// </summary>
+        /// <param name="start">The point of the user's location</param>
+        /// <param name="end">The point of the destination</param>
+        /// <param name="section">The section the user and destination are both in</param>
+        public void ParseLocalRoute(PointLatLng start, PointLatLng end, GeoMapSection section) => _route.RouteNodes = ParseRoute(section, start, end);
 
         /// <summary>
         /// Similar to the previous ParseRoutes method, except this one is for testing
@@ -182,9 +194,10 @@ namespace Casualty_Radar.Modules {
 
         private GeoMapSection FetchDataSection(PointLatLng point) {
             foreach (GeoMapSection section in _mapLoader.GetGeoMapSections()) {
-                if (!MapUtil.IsInSection(point, section)) continue;
-                section.Load();
-                return section;
+                if (MapUtil.IsInSection(point, section)) {
+                    section.Load();
+                    return section;
+                }
             }
             return null;
         }
