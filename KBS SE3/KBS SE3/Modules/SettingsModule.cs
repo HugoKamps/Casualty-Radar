@@ -37,7 +37,7 @@ namespace Casualty_Radar.Modules {
                 if (feedTickerEnabled != Settings.Default.feedTickerEnabled) {
                     Settings.Default.feedTickerEnabled = feedTickerEnabled;
                     // Apply changes
-                    hm.FeedTicker.TimerStateChanged(feedTickerEnabled);
+                    hm.FeedTicker.TimerStateChanged();
                 }
                 saveBtn.Enabled = false;
                 Settings.Default.Save();

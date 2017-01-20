@@ -24,33 +24,34 @@
         /// </summary>
         private void InitializeComponent() {
             this.routePanel = new System.Windows.Forms.Panel();
+            this.stepsLoadingLabel = new System.Windows.Forms.Label();
             this.routeInfoPanel = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.PageNumber = new System.Windows.Forms.Label();
             this.NextPageButton = new System.Windows.Forms.Button();
             this.PreviousPageButton = new System.Windows.Forms.Button();
             this.routeInfoLabelPanel = new System.Windows.Forms.Panel();
+            this.printingPictureBox = new System.Windows.Forms.PictureBox();
             this.routeInfoLabel = new System.Windows.Forms.Label();
             this.alertInfoPanel = new System.Windows.Forms.Panel();
             this.infoTitleLabel = new System.Windows.Forms.Label();
             this.timeLabel = new System.Windows.Forms.Label();
+            this.alertTypePicturebox = new System.Windows.Forms.PictureBox();
             this.alertInfoLabelPanel = new System.Windows.Forms.Panel();
             this.alertInfoLabel = new System.Windows.Forms.Label();
             this.mapPanel = new System.Windows.Forms.Panel();
             this.map = new GMap.NET.WindowsForms.GMapControl();
-            this.printingPictureBox = new System.Windows.Forms.PictureBox();
-            this.alertTypePicturebox = new System.Windows.Forms.PictureBox();
             this.mapLoadingOverlay = new System.Windows.Forms.PictureBox();
             this.mapLoadingLabel = new System.Windows.Forms.Label();
             this.loadMapIcon = new System.Windows.Forms.PictureBox();
             this.routePanel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.routeInfoLabelPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).BeginInit();
             this.alertInfoPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).BeginInit();
             this.alertInfoLabelPanel.SuspendLayout();
             this.map.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mapLoadingOverlay)).BeginInit();
             this.mapLoadingOverlay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadMapIcon)).BeginInit();
@@ -59,6 +60,7 @@
             // routePanel
             // 
             this.routePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
+            this.routePanel.Controls.Add(this.stepsLoadingLabel);
             this.routePanel.Controls.Add(this.routeInfoPanel);
             this.routePanel.Controls.Add(this.panel2);
             this.routePanel.Controls.Add(this.routeInfoLabelPanel);
@@ -69,6 +71,18 @@
             this.routePanel.Name = "routePanel";
             this.routePanel.Size = new System.Drawing.Size(338, 480);
             this.routePanel.TabIndex = 0;
+            // 
+            // stepsLoadingLabel
+            // 
+            this.stepsLoadingLabel.AutoSize = true;
+            this.stepsLoadingLabel.BackColor = System.Drawing.Color.White;
+            this.stepsLoadingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stepsLoadingLabel.Location = new System.Drawing.Point(76, 209);
+            this.stepsLoadingLabel.Name = "stepsLoadingLabel";
+            this.stepsLoadingLabel.Size = new System.Drawing.Size(178, 15);
+            this.stepsLoadingLabel.TabIndex = 9;
+            this.stepsLoadingLabel.Text = "Routestappen wordt berekend..";
+            this.stepsLoadingLabel.Visible = false;
             // 
             // routeInfoPanel
             // 
@@ -151,6 +165,18 @@
             this.routeInfoLabelPanel.Size = new System.Drawing.Size(338, 37);
             this.routeInfoLabelPanel.TabIndex = 5;
             // 
+            // printingPictureBox
+            // 
+            this.printingPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.printingPictureBox.Image = global::Casualty_Radar.Properties.Resources.printing_icon;
+            this.printingPictureBox.Location = new System.Drawing.Point(301, 4);
+            this.printingPictureBox.Name = "printingPictureBox";
+            this.printingPictureBox.Size = new System.Drawing.Size(30, 30);
+            this.printingPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.printingPictureBox.TabIndex = 0;
+            this.printingPictureBox.TabStop = false;
+            this.printingPictureBox.Click += new System.EventHandler(this.printingPictureBox_Click);
+            // 
             // routeInfoLabel
             // 
             this.routeInfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -195,6 +221,15 @@
             this.timeLabel.Size = new System.Drawing.Size(200, 30);
             this.timeLabel.TabIndex = 2;
             this.timeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // alertTypePicturebox
+            // 
+            this.alertTypePicturebox.Location = new System.Drawing.Point(220, 10);
+            this.alertTypePicturebox.Name = "alertTypePicturebox";
+            this.alertTypePicturebox.Size = new System.Drawing.Size(60, 60);
+            this.alertTypePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.alertTypePicturebox.TabIndex = 1;
+            this.alertTypePicturebox.TabStop = false;
             // 
             // alertInfoLabelPanel
             // 
@@ -254,27 +289,6 @@
             this.map.TabIndex = 6;
             this.map.Zoom = 7D;
             // 
-            // printingPictureBox
-            // 
-            this.printingPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.printingPictureBox.Image = global::Casualty_Radar.Properties.Resources.printing_icon;
-            this.printingPictureBox.Location = new System.Drawing.Point(301, 4);
-            this.printingPictureBox.Name = "printingPictureBox";
-            this.printingPictureBox.Size = new System.Drawing.Size(30, 30);
-            this.printingPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.printingPictureBox.TabIndex = 0;
-            this.printingPictureBox.TabStop = false;
-            this.printingPictureBox.Click += new System.EventHandler(this.printingPictureBox_Click);
-            // 
-            // alertTypePicturebox
-            // 
-            this.alertTypePicturebox.Location = new System.Drawing.Point(220, 10);
-            this.alertTypePicturebox.Name = "alertTypePicturebox";
-            this.alertTypePicturebox.Size = new System.Drawing.Size(60, 60);
-            this.alertTypePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.alertTypePicturebox.TabIndex = 1;
-            this.alertTypePicturebox.TabStop = false;
-            // 
             // mapLoadingOverlay
             // 
             this.mapLoadingOverlay.BackColor = System.Drawing.Color.Transparent;
@@ -320,13 +334,14 @@
             this.Name = "NavigationModule";
             this.Size = new System.Drawing.Size(953, 480);
             this.routePanel.ResumeLayout(false);
+            this.routePanel.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.routeInfoLabelPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).EndInit();
             this.alertInfoPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).EndInit();
             this.alertInfoLabelPanel.ResumeLayout(false);
             this.map.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.alertTypePicturebox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mapLoadingOverlay)).EndInit();
             this.mapLoadingOverlay.ResumeLayout(false);
             this.mapLoadingOverlay.PerformLayout();
@@ -357,5 +372,6 @@
         private System.Windows.Forms.PictureBox mapLoadingOverlay;
         private System.Windows.Forms.PictureBox loadMapIcon;
         private System.Windows.Forms.Label mapLoadingLabel;
+        private System.Windows.Forms.Label stepsLoadingLabel;
     }
 }
