@@ -12,6 +12,7 @@ using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models.DataControl.Graph;
 
 namespace Casualty_Radar.Modules {
@@ -57,6 +58,8 @@ namespace Casualty_Radar.Modules {
             // Set the alert _panel with the information of the selected alert
             UpdatePanel(alert);
             InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
+            mapLoadingOverlay.Visible = true;
+            routeInfoLabel.Text = "Routebeschrijving";
 
             // Creating a BackgroundWorker for running the route algorithm in the background
             BackgroundWorker routeWorker = new BackgroundWorker();
@@ -77,6 +80,7 @@ namespace Casualty_Radar.Modules {
                 _route.CalculateRouteSteps();
                 PageRoutePanel(_page);
                 routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+                mapLoadingOverlay.Visible = false;
             };
 
             // Run the BackgroundWorker
