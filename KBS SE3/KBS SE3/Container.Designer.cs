@@ -1,16 +1,13 @@
 
-﻿using Casualty_Radar.Core;
-using Casualty_Radar.Modules;
-using System;
-using System.Windows.Forms;
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+ using System.Windows.Forms;
 
 namespace Casualty_Radar {
     partial class Container {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -272,13 +269,13 @@ namespace Casualty_Radar {
 
         #endregion
 
-        private System.Windows.Forms.Panel topBar;
-        private System.Windows.Forms.Panel subBar;
-        private System.Windows.Forms.Label minimizeBtn;
-        private System.Windows.Forms.Label closeBtn;
-        public System.Windows.Forms.Panel contentPanel;
-        private System.Windows.Forms.PictureBox logoTopBar;
-        private System.Windows.Forms.Panel menuPanel;
+        private Panel topBar;
+        private Panel subBar;
+        private Label minimizeBtn;
+        private Label closeBtn;
+        public Panel contentPanel;
+        private PictureBox logoTopBar;
+        private Panel menuPanel;
         public Label breadCrumbStart;
         public Button settingsBtn;
         public Button homeBtn;

@@ -1,11 +1,13 @@
-﻿using XMLRewriter.Core;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using XMLRewriter.Core;
 
 namespace XMLRewriter {
     partial class Container {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -201,20 +203,20 @@ namespace XMLRewriter {
 
         #endregion
 
-        private System.Windows.Forms.Button browseFileBtn;
-        private System.Windows.Forms.Label fileLocationLabel;
-        private System.Windows.Forms.TextBox fileLocationBox;
+        private Button browseFileBtn;
+        private Label fileLocationLabel;
+        private TextBox fileLocationBox;
         private SectionPanel fileSettingsContainer;
-        private System.Windows.Forms.Button destinationFileSelectBtn;
-        private System.Windows.Forms.TextBox fileDestinationBox;
-        private System.Windows.Forms.Label fileDestinationLabel;
+        private Button destinationFileSelectBtn;
+        private TextBox fileDestinationBox;
+        private Label fileDestinationLabel;
         private SectionPanel convertContainer;
-        private System.Windows.Forms.Button convertBtn;
-        private System.Windows.Forms.TextBox outputNameBox;
-        private System.Windows.Forms.Label outputNameLabel;
-        private System.Windows.Forms.Label outputTypeLabel;
-        private System.Windows.Forms.TextBox convertDataLog;
-        private System.Windows.Forms.ProgressBar convertStatusBar;
+        private Button convertBtn;
+        private TextBox outputNameBox;
+        private Label outputNameLabel;
+        private Label outputTypeLabel;
+        private TextBox convertDataLog;
+        private ProgressBar convertStatusBar;
     }
 }
 

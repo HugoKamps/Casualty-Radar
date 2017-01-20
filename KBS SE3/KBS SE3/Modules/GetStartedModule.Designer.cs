@@ -1,9 +1,12 @@
-﻿namespace Casualty_Radar.Modules {
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Casualty_Radar.Modules {
     partial class GetStartedModule {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -140,12 +143,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Label welcomeLabel;
-        private System.Windows.Forms.Label welcomeInstructionsLabel;
-        private System.Windows.Forms.Label fillLocationLabel;
-        private System.Windows.Forms.TextBox locationTextBox;
-        private System.Windows.Forms.Button continueBtn;
-        private System.Windows.Forms.Label warningLabel;
-        private System.Windows.Forms.Label label1;
+        private Label welcomeLabel;
+        private Label welcomeInstructionsLabel;
+        private Label fillLocationLabel;
+        private TextBox locationTextBox;
+        private Button continueBtn;
+        private Label warningLabel;
+        private Label label1;
     }
 }

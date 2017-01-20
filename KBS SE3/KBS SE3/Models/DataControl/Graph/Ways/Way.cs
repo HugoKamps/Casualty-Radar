@@ -9,7 +9,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
     /// Those nodes connected make the way.
     /// A way consists of multiple attributes that are deserialized from the flatfile. 
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class Way {
 
         [XmlAttribute("id", DataType = "long")]
@@ -45,7 +45,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
         public List<NodeReference> References { get; private set; }
 
         public Way() {
-            this.References = new List<NodeReference>();
+            References = new List<NodeReference>();
         }
 
         /// <summary>

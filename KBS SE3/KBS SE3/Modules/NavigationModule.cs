@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
-using GMap.NET;
-using GMap.NET.MapProviders;
-using GMap.NET.WindowsForms;
 using Casualty_Radar.Core;
+using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
+using Casualty_Radar.Models.DataControl;
+using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Models.Navigation;
 using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
-using Casualty_Radar.Models.DataControl;
-using Casualty_Radar.Core.Algorithms;
-using Casualty_Radar.Core.Dialog;
-using Casualty_Radar.Models.DataControl.Graph;
+using GMap.NET;
+using GMap.NET.MapProviders;
+using GMap.NET.WindowsForms;
 
 namespace Casualty_Radar.Modules {
     /// <summary>

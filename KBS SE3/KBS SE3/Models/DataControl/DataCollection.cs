@@ -1,7 +1,7 @@
-﻿using Casualty_Radar.Models.DataControl.Graph;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Models.DataControl.Graph.Ways;
 
 namespace Casualty_Radar.Models.DataControl {
@@ -30,10 +30,10 @@ namespace Casualty_Radar.Models.DataControl {
         public List<Node> Intersections { get; }
 
         public DataCollection() {
-            this.Nodes = new List<Node>();
-            this.Ways = new List<Way>();
-            this.Intersections = new List<Node>();
-            this.WayControl = new WayTypeControl(this);
+            Nodes = new List<Node>();
+            Ways = new List<Way>();
+            Intersections = new List<Node>();
+            WayControl = new WayTypeControl(this);
         }
 
         /// <summary>

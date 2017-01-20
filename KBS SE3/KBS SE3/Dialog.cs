@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static Casualty_Radar.Core.Dialog.DialogType;
-using System.Runtime.InteropServices;
 
 namespace Casualty_Radar {
      public partial class Dialog : Form {
