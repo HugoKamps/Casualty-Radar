@@ -88,6 +88,12 @@ namespace Casualty_Radar.Modules {
             return _route.GetRoutePoints();
         }
 
+        /// <summary>
+        /// This function calculates the route when the user's location and the destination are in the same XML section
+        /// </summary>
+        /// <param name="start">The point of the user's location</param>
+        /// <param name="end">The point of the destination</param>
+        /// <param name="section">The section the user and destination are both in</param>
         public void ParseLocalRoute(PointLatLng start, PointLatLng end, GeoMapSection section) => _route.RouteNodes = ParseRoute(section, start, end);
 
         private void UpdatePanel(Alert alert) {
