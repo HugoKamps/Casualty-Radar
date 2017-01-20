@@ -7,7 +7,6 @@ using GMap.NET;
 
 namespace Casualty_Radar.Utils {
     static class MapUtil {
-
         /// <summary>
         /// Radius of the earth in KM
         /// </summary>
@@ -65,7 +64,7 @@ namespace Casualty_Radar.Utils {
         /// <param name="lon">The longitude of the location</param>
         /// <param name="targetCollection">The collection with nodes that will be compared</param>
         /// <returns>A node from the given collection that is considered the most near one to the given location</returns>
-        public static Node GetNearest(double lat, double lon, List<Node> targetCollection) => 
+        public static Node GetNearest(double lat, double lon, List<Node> targetCollection) =>
             targetCollection.Select(x => x).OrderBy(x => GetDistance(x.Lat, x.Lon, lat, lon)).First();
 
         /// <summary>
@@ -90,7 +89,7 @@ namespace Casualty_Radar.Utils {
         public static List<Node> GetAdjacentNodes(Node origin) {
             List<Node> rtn = new List<Node>();
             foreach (Way w in origin.ConnectedWays) {
-                List<Node> references = w.References.Select(x => x.Node).Where(x=> x!=null).ToList();
+                List<Node> references = w.References.Select(x => x.Node).Where(x => x != null).ToList();
                 int idx = references.IndexOf(origin);
                 if (idx > 0) rtn.Add(references[idx - 1]);
                 if (references.Count > idx + 1) rtn.Add(references[idx + 1]);
@@ -98,18 +97,31 @@ namespace Casualty_Radar.Utils {
             return rtn;
         }
 
-        public static Way GetWay(Node node1, Node node2) => node1.ConnectedWays.Find(w => w.References.Contains(w.References.Find(n => n.Node == node2)));
+        /// <summary>
+        /// Retrieves the Way instance of the way that two nodes are connected to
+        /// </summary>
+        /// <param name="node1">The first node to check</param>
+        /// <param name="node2">The second node to check</param>
+        /// <returns>The Way that was found</returns>
+        public static Way GetWay(Node node1, Node node2)
+            => node1.ConnectedWays.Find(w => w.References.Contains(w.References.Find(n => n.Node == node2)));
 
-        public static double GetTotalDistance(List<PointLatLng> points)
-        {
+
+        /// <summary>
+        /// Calculates the total distance of a route according to a list of points
+        /// </summary>
+        /// <param name="points">The list with all the points of the route</param>
+        /// <returns>The total distance of the route</returns>
+        public static double GetTotalDistance(List<PointLatLng> points) {
             double totalDistance = 0;
-            for (int index = 0; index < points.Count; index++)
-            {
+            for (int index = 0; index < points.Count; index++) {
                 PointLatLng point = points[index];
-                if(index + 1 < points.Count) totalDistance += GetDistance(point.Lat, point.Lng, points[index + 1].Lat, points[index + 1].Lng);
+                if (index + 1 < points.Count)
+                    totalDistance += GetDistance(point.Lat, point.Lng, points[index + 1].Lat, points[index + 1].Lng);
             }
             return totalDistance;
         }
+
         /// <summary>
         /// Calculates the given absolute distance between te given coordinates.
         /// This will return an offset of a distance and not a parsed KM distance 
@@ -130,8 +142,8 @@ namespace Casualty_Radar.Utils {
         /// <param name="point">Geolocation location</param>
         /// <param name="section">GeoMapSection section</param>
         /// <returns>True if the geo location is in the section</returns>
-        public static bool IsInSection(PointLatLng point, GeoMapSection section) => 
+        public static bool IsInSection(PointLatLng point, GeoMapSection section) =>
             point.Lat > section.LowerBound.Lat && point.Lat < section.UpperBound.Lat &&
-                   point.Lng > section.LowerBound.Lng && point.Lng < section.UpperBound.Lng;
+            point.Lng > section.LowerBound.Lng && point.Lng < section.UpperBound.Lng;
     }
 }
