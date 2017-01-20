@@ -130,8 +130,6 @@ namespace Casualty_Radar.Core {
         public void UpdateFeed() {
             List<Alert> oldAlerts = _alerts;
             _newAlerts = new List<Alert>();
-
-            // Load the feed
             try {
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(USE_FEED_URL));
                 _alerts = CreateAlertList(_p2000);
