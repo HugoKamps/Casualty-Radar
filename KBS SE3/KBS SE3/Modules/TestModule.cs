@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Casualty_Radar.Core;
 using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Models.DataControl.Graph;
@@ -175,9 +176,17 @@ namespace Casualty_Radar.Modules {
             // Loop through the list of points and run the algorithm for each route
             foreach (List<PointLatLng> routePoints in locations) {
                 Log("Calculating route " + (locations.IndexOf(routePoints) + 1) + "...");
-                GDirections directions;
-                GMapProviders.GoogleMap.GetDirections(out directions, routePoints.First(), routePoints.Last(), false, false, false, false, false);
-                totalDistance += directions.DistanceValue;
+                try {
+                    GDirections directions;
+                    GMapProviders.GoogleMap.GetDirections(out directions, routePoints.First(), routePoints.Last(), false,
+                        false, false, false, false);
+                    totalDistance += directions.DistanceValue;
+                }
+                catch (NullReferenceException e) {
+                    Invoke((MethodInvoker)delegate {
+                        Casualty_Radar.Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.ERROR, "GMaps Query Limit", "Het aantal op te vragen routes bij Google Maps is overschreden.");
+                    });
+                }
 
                 // Add elapsed time of algorithm to list
                 gMapsTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
