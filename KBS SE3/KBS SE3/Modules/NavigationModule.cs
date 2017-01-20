@@ -59,6 +59,7 @@ namespace Casualty_Radar.Modules {
             UpdatePanel(alert);
             InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
             mapLoadingOverlay.Visible = true;
+            stepsLoadingLabel.Visible = true;
             routeInfoLabel.Text = "Routebeschrijving";
 
             // Creating a BackgroundWorker for running the route algorithm in the background
@@ -94,6 +95,7 @@ namespace Casualty_Radar.Modules {
                     routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
                 }
                 mapLoadingOverlay.Visible = false;
+                stepsLoadingLabel.Visible = false;
             };
 
             // Run the BackgroundWorker
