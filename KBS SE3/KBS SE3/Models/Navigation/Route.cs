@@ -59,6 +59,7 @@ namespace Casualty_Radar.Models.Navigation {
                         NavigationStep step = new NavigationStep(distance, type, MapUtil.GetWay(nextNode, nextNextNode));
 
                         if (step.Way == null) step.Way = LastStep.Way;
+                        if (step.Way.Name == null) step.Way.Name = LastStep.Way.Name;
 
                         if (LastStep != null) {
                             if (LastStep.Way.Name == step.Way.Name && step.Type == LastStep.Type) {
@@ -73,7 +74,8 @@ namespace Casualty_Radar.Models.Navigation {
                             if (index + 3 == RouteNodes.Count) {
                                 step = new NavigationStep(distance, RouteStepType.DestinationReached,
                                     MapUtil.GetWay(nextNode, nextNextNode));
-                                DestinationRoad = MapUtil.GetWay(nextNode, nextNextNode).Name;
+                                Way way = MapUtil.GetWay(nextNode, nextNextNode);
+                                DestinationRoad = way != null ? way.Name : LastStep.Way.Name;
                                 RouteSteps.Add(step);
                                 LastStep = step;
                             }
