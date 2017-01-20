@@ -1,7 +1,5 @@
-﻿using System;
-using Casualty_Radar.Models.DataControl.Graph;
+﻿using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Utils;
-
 
 namespace Casualty_Radar.Core.Algorithms {
     

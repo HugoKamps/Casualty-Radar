@@ -8,7 +8,7 @@ namespace Casualty_Radar.Models.DataControl.Graph {
     /// Each ReferenceID attribute is equal to a Node ID attribute.
     /// Using this class we can link Ways directly to the connected nodes
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class NodeReference {
 
         /// <summary>

@@ -1,6 +1,4 @@
-﻿using Casualty_Radar.Modules;
-using Casualty_Radar.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -11,6 +9,8 @@ using System.Xml;
 using System.Xml.Linq;
 using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
+using Casualty_Radar.Modules;
+using Casualty_Radar.Utils;
 
 namespace Casualty_Radar.Core {
     /// <summary>

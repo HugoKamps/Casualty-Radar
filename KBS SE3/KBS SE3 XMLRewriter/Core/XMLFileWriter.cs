@@ -8,10 +8,10 @@ namespace XMLRewriter.Core {
         private String _destination, _fileName;
         private XElement _root;
         public XmlFileWriter(String dest, String fileName) {
-            this._destination = dest;
-            this._fileName = fileName;
-            this._root = new XElement("osm");
-            this._doc = new XDocument(new XDeclaration("1.0", "utf - 16", "true"), _root);
+            _destination = dest;
+            _fileName = fileName;
+            _root = new XElement("osm");
+            _doc = new XDocument(new XDeclaration("1.0", "utf - 16", "true"), _root);
         }
 
         /// <summary>
