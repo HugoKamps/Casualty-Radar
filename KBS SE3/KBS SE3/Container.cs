@@ -156,10 +156,5 @@ namespace Casualty_Radar {
             }
             ModuleManager.GetInstance().UpdateModule(parentModule);
         }
-
-        private void testBtn_Click(object sender, EventArgs e) {
-            GeoMapLoader geoMapLoader = new GeoMapLoader();
-            geoMapLoader.GetGeoMapSections();
-        }
     }
 }

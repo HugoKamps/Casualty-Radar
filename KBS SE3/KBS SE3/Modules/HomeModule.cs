@@ -399,7 +399,7 @@ namespace Casualty_Radar.Modules {
 
             for (int i = 0; i < _alertPanels.Count; i++) {
                 if (_selectedPanel != _alertPanels[i]) continue;
-                selectedAlert = Feed.GetInstance().GetAlerts[i];
+                selectedAlert = Feed.GetInstance().GetFilteredAlerts[i];
                 break;
             }
 
