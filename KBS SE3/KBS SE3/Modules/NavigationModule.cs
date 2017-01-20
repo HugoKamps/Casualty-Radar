@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -54,18 +56,38 @@ namespace Casualty_Radar.Modules {
             UpdatePanel(alert);
             InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
 
-            ParseRoutes(start, alert.GetPoint());
+            // Creating a BackgroundWorker for running the route algorithm in the background
+            BackgroundWorker routeWorker = new BackgroundWorker();
 
-            // Draw the entire calculated route
-            _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
+            // The BackgroundWorker has to call the method ParseRoutes for calculating a route
+            routeWorker.DoWork += delegate {
+                ParseRoutes(start, alert.GetPoint());
+            };
 
-            // Calculate the navigation steps and generate a _panel for each step
-            _route.CalculateRouteSteps();
-            PageRoutePanel(_page);
-            routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+            // When the BackgroundWorker is done, display the route on the map
+            routeWorker.RunWorkerCompleted += delegate {
+                // Draw the entire calculated route
+                _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
+                // Calculate the navigation steps and generate a _panel for each step
+                _route.CalculateRouteSteps();
+                PageRoutePanel(_page);
+                routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+            };
+
+            // Run the BackgroundWorker
+            routeWorker.RunWorkerAsync();
         }
 
-        public List<PointLatLng> ParseRoutes(PointLatLng start, PointLatLng end) {
+        /// <summary>
+        /// Creates the route by using the algorithm
+        /// First, a route on the highways will be generated
+        /// Then the routes from starting point to highway and highway to ending point will be generated
+        /// These routes get reversed to be in the correct order of nodes
+        /// </summary>
+        /// <param name="start">The starting point for the route</param>
+        /// <param name="end">The ending point for the route</param>
+        /// <returns></returns>
+        private List<PointLatLng> ParseRoutes(PointLatLng start, PointLatLng end) {
             List<Node> highWay = ParseRoute(ParseHighways(), start, end);
             List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
             List<Node> dest = ParseRoute(FetchDataSection(end), highWay[0].GetPoint(), end);
@@ -77,6 +99,27 @@ namespace Casualty_Radar.Modules {
             _route.RouteNodes.AddRange(dest);
 
             return _route.GetRoutePoints();
+        }
+
+        /// <summary>
+        /// Similar to the previous ParseRoutes method, except this one is for testing
+        /// It will be used by the TestModule for running and testing the route algorithm
+        /// </summary>
+        /// <param name="start">The starting point for the route</param>
+        /// <param name="end">The ending point for the route</param>
+        public List<PointLatLng> ParseRoutes(PointLatLng start, PointLatLng end, Route route) {
+            List<Node> highWay = ParseRoute(ParseHighways(), start, end);
+            List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
+            List<Node> dest = ParseRoute(FetchDataSection(end), highWay[0].GetPoint(), end);
+
+            highWay.Reverse();
+            origin.Reverse();
+            dest.Reverse();
+            route.RouteNodes = origin;
+            route.RouteNodes.AddRange(highWay);
+            route.RouteNodes.AddRange(dest);
+
+            return route.GetRoutePoints();
         }
 
         private void UpdatePanel(Alert alert) {
@@ -166,6 +209,8 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         public void Reset() {
             if (routeInfoPanel.Controls.Count > 0) routeInfoPanel.Controls.Clear();
+            if (_routeOverlay != null) _routeOverlay.Clear();
+            PageNumber.Text = "";
             _route = new Route();
             _page = 1;
         }
