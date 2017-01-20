@@ -14,8 +14,8 @@ using Casualty_Radar.Models;
 
 namespace Casualty_Radar.Core {
     /// <summary>
-    /// The feed class arranges all the functionalities from the alerts we get out of our RSS feed
-    /// In this class we create,update and filter the alerts 
+    /// The feed class arranges all the functionalities for the alerts
+    /// In this class we create,update and filter the alerts, we also refresh the feed
     /// </summary>
     public class Feed {
         private static Feed _instance;

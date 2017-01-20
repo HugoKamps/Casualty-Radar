@@ -6,6 +6,9 @@ using Casualty_Radar.Modules;
 using Casualty_Radar.Properties;
 
 namespace Casualty_Radar.Core {
+    /// <summary>
+    /// Nog in te vullen door Eelco
+    /// </summary>
     public class ModuleManager {
 
         private static ModuleManager _instance;

@@ -99,7 +99,6 @@ namespace Casualty_Radar.Modules {
 
         public void HomeModule_Load(object sender, EventArgs e) {
             if (LocationManager == null) {
-                // Load the feed & instantiate the location manager
                 int tickTime = Settings.Default.feedTickerTime * 1000;
                 FeedTicker = new FeedTicker(tickTime, Feed.GetInstance());
             }
