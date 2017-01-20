@@ -27,8 +27,6 @@ namespace Casualty_Radar.Modules {
         private int _page;
         private Panel _panel;
         private GeoMapLoader _mapLoader;
-        private Thread _drawingThread;
-        private Thread _routeThread;
 
         public NavigationModule() {
             InitializeComponent();
