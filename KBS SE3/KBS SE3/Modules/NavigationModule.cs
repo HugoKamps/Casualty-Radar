@@ -66,8 +66,8 @@ namespace Casualty_Radar.Modules {
 
             // The BackgroundWorker has to call the method ParseRoutes for calculating a route
             routeWorker.DoWork += delegate {
-                _startingSection = FetchDataSection(start);
-                _endingSection = FetchDataSection(alert.GetPoint());
+                _startingSection = ParseDataSection(start);
+                _endingSection = ParseDataSection(alert.GetPoint());
                 if (_startingSection.FilePath == _endingSection.FilePath) ParseLocalRoute(start, alert.GetPoint(), _startingSection);
                 else ParseRoutes(start, alert.GetPoint());
             };
