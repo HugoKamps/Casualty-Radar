@@ -33,12 +33,11 @@ namespace Casualty_Radar.Models {
         }
 
         /// <summary>
-        /// Starts or stops the timer based on the given state
+        /// Starts or stops the timer based on current state
         /// </summary>
-        /// <param name="state">Indicates whether the timer should be started or stopped</param>
-        public void TimerStateChanged(bool state) {
-            if (state) _stateTimer.Start();
-            else _stateTimer.Stop();
+        public void TimerStateChanged() {
+            StopTimerIfEnabled();
+            StartTimerIfEnabled();
         }
 
         /// <summary>

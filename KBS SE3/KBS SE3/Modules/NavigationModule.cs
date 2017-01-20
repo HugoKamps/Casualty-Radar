@@ -28,9 +28,6 @@ namespace Casualty_Radar.Modules {
         private Panel _panel;
         private GeoMapLoader _mapLoader;
 
-        private GeoMapSection _startingSection;
-        private GeoMapSection _endingSection;
-
         public NavigationModule() {
             InitializeComponent();
             _locationManager = new LocationManager();
@@ -59,28 +56,45 @@ namespace Casualty_Radar.Modules {
             UpdatePanel(alert);
             InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
             mapLoadingOverlay.Visible = true;
+            stepsLoadingLabel.Visible = true;
             routeInfoLabel.Text = "Routebeschrijving";
 
             // Creating a BackgroundWorker for running the route algorithm in the background
             BackgroundWorker routeWorker = new BackgroundWorker();
+            GeoMapSection startingSection = null;
+            GeoMapSection endingSection = null;
 
             // The BackgroundWorker has to call the method ParseRoutes for calculating a route
             routeWorker.DoWork += delegate {
-                _startingSection = FetchDataSection(start);
-                _endingSection = FetchDataSection(alert.GetPoint());
-                if (_startingSection.FilePath == _endingSection.FilePath) ParseLocalRoute(start, alert.GetPoint(), _startingSection);
-                else ParseRoutes(start, alert.GetPoint());
+                startingSection = FetchDataSection(start);
+                endingSection = FetchDataSection(alert.GetPoint());
+                if (startingSection != null && endingSection != null) {
+                    if (startingSection.FilePath == endingSection.FilePath)
+                        ParseLocalRoute(start, alert.GetPoint(), startingSection);
+                    else ParseRoutes(start, alert.GetPoint(), startingSection, endingSection);
+                }
+                else {
+                    Invoke((MethodInvoker) delegate {
+                        Casualty_Radar.Container.GetInstance()
+                            .DisplayDialog(DialogType.DialogMessageType.ERROR, "Kan route niet berekenen",
+                                "Locatie is onbereikbaar.");
+                    });
+                }
             };
 
             // When the BackgroundWorker is done, display the route on the map
             routeWorker.RunWorkerCompleted += delegate {
-                // Draw the entire calculated route
-                _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
-                // Calculate the navigation steps and generate a _panel for each step
-                _route.CalculateRouteSteps();
-                PageRoutePanel(_page);
-                routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+                if (startingSection != null && endingSection != null)
+                {
+                    // Draw the entire calculated route
+                    _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
+                    // Calculate the navigation steps and generate a _panel for each step
+                    _route.CalculateRouteSteps();
+                    PageRoutePanel(_page);
+                    routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
+                }
                 mapLoadingOverlay.Visible = false;
+                stepsLoadingLabel.Visible = false;
             };
 
             // Run the BackgroundWorker
@@ -96,10 +110,10 @@ namespace Casualty_Radar.Modules {
         /// <param name="start">The starting point for the route</param>
         /// <param name="end">The ending point for the route</param>
         /// <returns></returns>
-        private void ParseRoutes(PointLatLng start, PointLatLng end) {
+        private void ParseRoutes(PointLatLng start, PointLatLng end, GeoMapSection startingSection, GeoMapSection endingSection) {
             List<Node> highWay = ParseRoute(ParseHighways(), start, end);
-            List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
-            List<Node> dest = ParseRoute(FetchDataSection(end), highWay[0].GetPoint(), end);
+            List<Node> origin = ParseRoute(startingSection, start, highWay[highWay.Count - 1].GetPoint());
+            List<Node> dest = ParseRoute(endingSection, highWay[0].GetPoint(), end);
 
             highWay.Reverse();
             origin.Reverse();
@@ -116,7 +130,8 @@ namespace Casualty_Radar.Modules {
         /// <param name="start">The point of the user's location</param>
         /// <param name="end">The point of the destination</param>
         /// <param name="section">The section the user and destination are both in</param>
-        public void ParseLocalRoute(PointLatLng start, PointLatLng end, GeoMapSection section) => _route.RouteNodes = ParseRoute(section, start, end);
+        public void ParseLocalRoute(PointLatLng start, PointLatLng end, GeoMapSection section)
+            => _route.RouteNodes = ParseRoute(section, start, end);
 
         /// <summary>
         /// Similar to the previous ParseRoutes method, except this one is for testing
