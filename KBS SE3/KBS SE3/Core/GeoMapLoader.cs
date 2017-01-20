@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Casualty_Radar.Models;
+using Casualty_Radar.Utils;
 using GMap.NET;
 
 namespace Casualty_Radar.Core {
@@ -44,7 +45,23 @@ namespace Casualty_Radar.Core {
             if (_geoMapSections.Count == 0)
                 Init();
             return _geoMapSections;
-        } 
-       
+        }
+
+        /// <summary>
+        /// Parses a Map section based om the given geographical location.
+        /// This method checks if the given location is within the bounds of a map section.
+        /// </summary>
+        /// <param name="point">The geographical coordinate</param>
+        /// <returns>An instance of a GeoMapSection, might return null if the coordinate isn't inside any section bounds</returns>
+        public GeoMapSection ParseDataSection(PointLatLng point) {
+            foreach (GeoMapSection section in GetGeoMapSections()) {
+                if (MapUtil.IsInSection(point, section)) {
+                    section.Load();
+                    return section;
+                }
+            }
+            return null;
+        }
+
     }
 }
