@@ -28,9 +28,6 @@ namespace Casualty_Radar.Modules {
         private Panel _panel;
         private GeoMapLoader _mapLoader;
 
-        private GeoMapSection _startingSection;
-        private GeoMapSection _endingSection;
-
         public NavigationModule() {
             InitializeComponent();
             _locationManager = new LocationManager();
@@ -64,15 +61,17 @@ namespace Casualty_Radar.Modules {
 
             // Creating a BackgroundWorker for running the route algorithm in the background
             BackgroundWorker routeWorker = new BackgroundWorker();
+            GeoMapSection startingSection = null;
+            GeoMapSection endingSection = null;
 
             // The BackgroundWorker has to call the method ParseRoutes for calculating a route
             routeWorker.DoWork += delegate {
-                _startingSection = FetchDataSection(start);
-                _endingSection = FetchDataSection(alert.GetPoint());
-                if (_startingSection != null && _endingSection != null) {
-                    if (_startingSection.FilePath == _endingSection.FilePath)
-                        ParseLocalRoute(start, alert.GetPoint(), _startingSection);
-                    else ParseRoutes(start, alert.GetPoint());
+                startingSection = FetchDataSection(start);
+                endingSection = FetchDataSection(alert.GetPoint());
+                if (startingSection != null && endingSection != null) {
+                    if (startingSection.FilePath == endingSection.FilePath)
+                        ParseLocalRoute(start, alert.GetPoint(), startingSection);
+                    else ParseRoutes(start, alert.GetPoint(), startingSection, endingSection);
                 }
                 else {
                     Invoke((MethodInvoker) delegate {
@@ -85,7 +84,7 @@ namespace Casualty_Radar.Modules {
 
             // When the BackgroundWorker is done, display the route on the map
             routeWorker.RunWorkerCompleted += delegate {
-                if (_startingSection != null && _endingSection != null)
+                if (startingSection != null && endingSection != null)
                 {
                     // Draw the entire calculated route
                     _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
@@ -111,10 +110,10 @@ namespace Casualty_Radar.Modules {
         /// <param name="start">The starting point for the route</param>
         /// <param name="end">The ending point for the route</param>
         /// <returns></returns>
-        private void ParseRoutes(PointLatLng start, PointLatLng end) {
+        private void ParseRoutes(PointLatLng start, PointLatLng end, GeoMapSection startingSection, GeoMapSection endingSection) {
             List<Node> highWay = ParseRoute(ParseHighways(), start, end);
-            List<Node> origin = ParseRoute(_startingSection, start, highWay[highWay.Count - 1].GetPoint());
-            List<Node> dest = ParseRoute(_endingSection, highWay[0].GetPoint(), end);
+            List<Node> origin = ParseRoute(startingSection, start, highWay[highWay.Count - 1].GetPoint());
+            List<Node> dest = ParseRoute(endingSection, highWay[0].GetPoint(), end);
 
             highWay.Reverse();
             origin.Reverse();
