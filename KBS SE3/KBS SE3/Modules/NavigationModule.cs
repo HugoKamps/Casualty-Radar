@@ -13,6 +13,7 @@ using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models.DataControl.Graph;
 
 namespace Casualty_Radar.Modules {
@@ -89,8 +90,8 @@ namespace Casualty_Radar.Modules {
         /// <returns></returns>
         private List<PointLatLng> ParseRoutes(PointLatLng start, PointLatLng end) {
             List<Node> highWay = ParseRoute(ParseHighways(), start, end);
-            List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
-            List<Node> dest = ParseRoute(FetchDataSection(end), highWay[0].GetPoint(), end);
+            List<Node> origin = ParseRoute(ParseDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
+            List<Node> dest = ParseRoute(ParseDataSection(end), highWay[0].GetPoint(), end);
             highWay.Reverse();
             origin.Reverse();
             dest.Reverse();
@@ -109,8 +110,8 @@ namespace Casualty_Radar.Modules {
         /// <param name="end">The ending point for the route</param>
         public List<PointLatLng> ParseRoutes(PointLatLng start, PointLatLng end, Route route) {
             List<Node> highWay = ParseRoute(ParseHighways(), start, end);
-            List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
-            List<Node> dest = ParseRoute(FetchDataSection(end), highWay[0].GetPoint(), end);
+            List<Node> origin = ParseRoute(ParseDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
+            List<Node> dest = ParseRoute(ParseDataSection(end), highWay[0].GetPoint(), end);
 
             highWay.Reverse();
             origin.Reverse();
@@ -123,11 +124,18 @@ namespace Casualty_Radar.Modules {
         }
 
         private void UpdatePanel(Alert alert) {
-            infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
+            infoTitleLabel.Text = $@"{alert.Title}{alert.Info}";
             alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
             timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
         }
 
+        /// <summary>
+        /// Parses a route based on the given datacollection and coordinates
+        /// </summary>
+        /// <param name="collection">The datacollection that is used to run the algorithm over</param>
+        /// <param name="origin">The original geographical location</param>
+        /// <param name="dest">The destination from the route</param>
+        /// <returns>A list of nodes that represent the final route</returns>
         private List<Node> ParseRoute(DataCollection collection, PointLatLng origin, PointLatLng dest) {
             Node start = MapUtil.GetNearest(origin.Lat, origin.Lng, collection.Intersections);
             Node end = MapUtil.GetNearest(dest.Lat, dest.Lng, collection.Intersections);
@@ -136,11 +144,27 @@ namespace Casualty_Radar.Modules {
             return calc.GetNodes();
         }
 
+        /// <summary>
+        /// Parses a route based on the given mapsection and coordinates
+        /// </summary>
+        /// <param name="section">The current mapsection that requires a route</param>
+        /// <param name="origin">The original geographical location</param>
+        /// <param name="dest">The destination from the route</param>
+        /// <returns>A list of nodes that represent the final route</returns>
         private List<Node> ParseRoute(GeoMapSection section, PointLatLng origin, PointLatLng dest) {
-            section.Load();
-            return ParseRoute(section.Data, origin, dest);
+            try {
+                section.Load();
+                return ParseRoute(section.Data, origin, dest);
+            } catch (NullReferenceException) {
+                Casualty_Radar.Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.ERROR, "Route niet gevonden", "Er is helaas geen route beschikbaar op dit moment.");
+                return new List<Node>();
+            }
         }
 
+        /// <summary>
+        /// Parses all highways from the netherlands
+        /// </summary>
+        /// <returns>The deserialized data collection with all highways and large roads</returns>
         private DataCollection ParseHighways() {
             DataParser parser = new DataParser(@"../../Resources/XML/nederland_snelwegen.xml");
             parser.Deserialize();
@@ -175,7 +199,13 @@ namespace Casualty_Radar.Modules {
         private void printingPictureBox_Click(object sender, EventArgs e)
             => _pdfUtil.CreatePdf(_route.RouteSteps, _route.StartingRoad, _route.DestinationRoad);
 
-        private GeoMapSection FetchDataSection(PointLatLng point) {
+        /// <summary>
+        /// Parses a Map section based om the given geographical location.
+        /// This method checks if the given location is within the bounds of a map section.
+        /// </summary>
+        /// <param name="point">The geographical coordinate</param>
+        /// <returns>An instance of a GeoMapSection, might return null if the coordinate isn't inside any section bounds</returns>
+        private GeoMapSection ParseDataSection(PointLatLng point) {
             foreach (GeoMapSection section in _mapLoader.GetGeoMapSections()) {
                 if (!MapUtil.IsInSection(point, section)) continue;
                 section.Load();
@@ -209,28 +239,18 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         public void Reset() {
             if (routeInfoPanel.Controls.Count > 0) routeInfoPanel.Controls.Clear();
-            if (_routeOverlay != null) _routeOverlay.Clear();
+            _routeOverlay?.Clear();
             PageNumber.Text = "";
             _route = new Route();
             _page = 1;
         }
 
-        /// <summary>
-        ///  Function for going to previous page with route steps
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void PreviousPageButton_Click(object sender, EventArgs e) {
             if (_page <= 1) return;
             _page--;
             PageRoutePanel(_page);
         }
 
-        /// <summary>
-        /// Function for going to next _page with route steps
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void NextPageButton_Click(object sender, EventArgs e) {
             if (_page * 5 >= _route.RouteStepPanels.Count) return;
             _page++;

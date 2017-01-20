@@ -8,6 +8,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Models.DataControl.Graph.Ways;
 using Casualty_Radar.Properties;
 using Casualty_Radar.Utils;
 using GMap.NET;
