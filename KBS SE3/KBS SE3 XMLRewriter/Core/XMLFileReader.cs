@@ -14,12 +14,12 @@ namespace XMLRewriter.Core {
         public ProgressBar StatusBar { set; private get; }
 
         public XmlFileReader(String path) {
-            this._path = path;
+            _path = path;
         }
 
         public XmlFileReader(String path, String destination, String fileName) : this(path) {
-            this._destination = destination;
-            this._fileName = fileName;
+            _destination = destination;
+            _fileName = fileName;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace XMLRewriter.Core {
             if (String.IsNullOrEmpty(_fileName) || String.IsNullOrWhiteSpace(_fileName)) {
                 MessageBox.Show("Please supply a name for your XML File.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
             } else {
-                this._writer = new XmlFileWriter(_destination, _fileName);
+                _writer = new XmlFileWriter(_destination, _fileName);
                 Log("Reading started");
                 IEnumerable<XElement> elements = ParsedElements();
                 int size = elements.Count();

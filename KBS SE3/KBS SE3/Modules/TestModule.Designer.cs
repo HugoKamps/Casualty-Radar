@@ -1,11 +1,14 @@
-﻿namespace Casualty_Radar.Modules
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Casualty_Radar.Modules
 {
     partial class TestModule
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -399,33 +402,33 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox testStatusBox;
-        private System.Windows.Forms.Label testStatusLabel;
-        private System.Windows.Forms.ProgressBar testStatusBar;
-        private System.Windows.Forms.Label firstAlgorithmLabel;
-        private System.Windows.Forms.Label secondAlgorithmLabel;
-        private System.Windows.Forms.Label totalRoutesLabel;
-        private System.Windows.Forms.Label firstAlgorithmTypeLabel;
-        private System.Windows.Forms.Label secondAlgorithmTypeLabel;
-        private System.Windows.Forms.Label moduleTitleLabel;
-        private System.Windows.Forms.NumericUpDown amountOfRoutesNumeric;
-        private System.Windows.Forms.Label resultsLabel;
-        private System.Windows.Forms.Button startTestButton;
-        private System.Windows.Forms.Button clearPreviousTest;
-        private System.Windows.Forms.Label algorithmOneResultsLabel;
-        private System.Windows.Forms.Label algorithmTwoResultsLabel;
-        private System.Windows.Forms.Label totalDurationTextLabel;
-        private System.Windows.Forms.Label averageDurationTextLabel;
-        private System.Windows.Forms.Label totalDistanceTextLabel;
-        private System.Windows.Forms.Label bestRoutesTextLabel;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label aTwoBestRoutesLabel;
-        private System.Windows.Forms.Label aOneBestRoutesLabel;
-        private System.Windows.Forms.Label aTwoTotalDistanceLabel;
-        private System.Windows.Forms.Label aOneTotalDistanceLabel;
-        private System.Windows.Forms.Label aTwoAverageDurationLabel;
-        private System.Windows.Forms.Label aOneAverageDurationLabel;
-        private System.Windows.Forms.Label aTwoTotalDurationLabel;
-        private System.Windows.Forms.Label aOneTotalDurationLabel;
+        private TextBox testStatusBox;
+        private Label testStatusLabel;
+        private ProgressBar testStatusBar;
+        private Label firstAlgorithmLabel;
+        private Label secondAlgorithmLabel;
+        private Label totalRoutesLabel;
+        private Label firstAlgorithmTypeLabel;
+        private Label secondAlgorithmTypeLabel;
+        private Label moduleTitleLabel;
+        private NumericUpDown amountOfRoutesNumeric;
+        private Label resultsLabel;
+        private Button startTestButton;
+        private Button clearPreviousTest;
+        private Label algorithmOneResultsLabel;
+        private Label algorithmTwoResultsLabel;
+        private Label totalDurationTextLabel;
+        private Label averageDurationTextLabel;
+        private Label totalDistanceTextLabel;
+        private Label bestRoutesTextLabel;
+        private Panel panel1;
+        private Label aTwoBestRoutesLabel;
+        private Label aOneBestRoutesLabel;
+        private Label aTwoTotalDistanceLabel;
+        private Label aOneTotalDistanceLabel;
+        private Label aTwoAverageDurationLabel;
+        private Label aOneAverageDurationLabel;
+        private Label aTwoTotalDurationLabel;
+        private Label aOneTotalDurationLabel;
     }
 }

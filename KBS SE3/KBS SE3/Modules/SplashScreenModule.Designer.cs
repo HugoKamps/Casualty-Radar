@@ -1,9 +1,12 @@
-﻿namespace Casualty_Radar.Modules {
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Casualty_Radar.Modules {
     partial class SplashScreenModule {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -82,7 +85,7 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox logo;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private PictureBox logo;
+        private PictureBox pictureBox1;
     }
 }

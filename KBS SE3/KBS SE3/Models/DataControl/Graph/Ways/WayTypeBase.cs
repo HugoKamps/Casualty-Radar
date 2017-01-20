@@ -9,12 +9,12 @@
         protected WayTypeBase() { }
 
         protected WayTypeBase(string key, string name) {
-            this.Key = key;
-            this.Name = name;
+            Key = key;
+            Name = name;
         }
 
         protected WayTypeBase(string key, string name, WayZoomLevel level) : this(key, name) {
-            this.ZoomLevel = level;
+            ZoomLevel = level;
         }
 
         /*

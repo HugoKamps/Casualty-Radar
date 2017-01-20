@@ -1,11 +1,12 @@
-﻿using Casualty_Radar.Properties;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace Casualty_Radar.Modules {
     partial class SettingsModule {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -249,19 +250,19 @@ namespace Casualty_Radar.Modules {
 
         #endregion
 
-        private System.Windows.Forms.Label locationLabel;
-        public System.Windows.Forms.TextBox locationTextBox;
-        private System.Windows.Forms.Label locationExampleLabel;
-        private System.Windows.Forms.Button saveBtn;
-        private System.Windows.Forms.Label warningLabel;
-        private System.Windows.Forms.NumericUpDown feedTickerNumeric;
-        private System.Windows.Forms.Label feedTickerLabel;
-        private System.Windows.Forms.Label feedTickerInfoLabel;
-        private System.Windows.Forms.Label feedTickerEnabledLabel;
-        private System.Windows.Forms.CheckBox feedTickerCheckBox;
-        private System.Windows.Forms.Label feedNumericErrorLabel;
-        private System.Windows.Forms.Label advancedSettingsLabel;
-        private System.Windows.Forms.Button testModuleButton;
-        private System.Windows.Forms.Label testModuleLabel;
+        private Label locationLabel;
+        public TextBox locationTextBox;
+        private Label locationExampleLabel;
+        private Button saveBtn;
+        private Label warningLabel;
+        private NumericUpDown feedTickerNumeric;
+        private Label feedTickerLabel;
+        private Label feedTickerInfoLabel;
+        private Label feedTickerEnabledLabel;
+        private CheckBox feedTickerCheckBox;
+        private Label feedNumericErrorLabel;
+        private Label advancedSettingsLabel;
+        private Button testModuleButton;
+        private Label testModuleLabel;
     }
 }

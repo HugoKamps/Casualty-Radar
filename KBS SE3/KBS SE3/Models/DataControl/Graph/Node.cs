@@ -1,9 +1,9 @@
-﻿using GMap.NET;
-using Casualty_Radar.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using Casualty_Radar.Core.Algorithms;
+using Casualty_Radar.Utils;
+using GMap.NET;
 
 namespace Casualty_Radar.Models.DataControl.Graph {
 
@@ -11,7 +11,7 @@ namespace Casualty_Radar.Models.DataControl.Graph {
     /// A Node is a geographic point that is used to connect paths and ways.
     /// Multiple Nodes combined form a way
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class Node {
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Casualty_Radar.Models.DataControl.Graph {
         /// Returns the Geo location from the Node based on the Longitude and Latitude of the Node.
         /// </summary>
         /// <returns>The location as PointLatLng object</returns>
-        public PointLatLng GetPoint() => new PointLatLng(this.Lat, this.Lon);
+        public PointLatLng GetPoint() => new PointLatLng(Lat, Lon);
 
         /// <summary>
         /// Calculates the distance between the current node and the given node
@@ -65,7 +65,7 @@ namespace Casualty_Radar.Models.DataControl.Graph {
         /// Determines whether the current Node is considered an intersection
         /// </summary>
         /// <returns>True if the Node is an intersection, false if it isn't</returns>
-        public bool IsIntersection() => this.ConnectedWays.Count > DataCollection.INTERSECTION_WAY_MINIMUM;
+        public bool IsIntersection() => ConnectedWays.Count > DataCollection.INTERSECTION_WAY_MINIMUM;
 
 
     }

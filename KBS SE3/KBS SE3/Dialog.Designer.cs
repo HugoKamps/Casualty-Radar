@@ -1,11 +1,12 @@
-﻿using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace Casualty_Radar {
     partial class Dialog {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -166,9 +167,9 @@ namespace Casualty_Radar {
 
         #endregion
 
-        private System.Windows.Forms.Panel dialogHeader;
-        private System.Windows.Forms.Label dialogCloseBtn;
-        private System.Windows.Forms.Label dialogHeaderText;
+        private Panel dialogHeader;
+        private Label dialogCloseBtn;
+        private Label dialogHeaderText;
         private Label dialogHeaderTitle;
         private PictureBox dialogIconPicturebox;
         private Label dialogContentLabel;
