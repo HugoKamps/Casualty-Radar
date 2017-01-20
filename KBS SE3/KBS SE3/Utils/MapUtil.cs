@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Casualty_Radar.Models;
+using Casualty_Radar.Models.DataControl.Graph.Ways;
 using GMap.NET;
 
 namespace Casualty_Radar.Utils {
