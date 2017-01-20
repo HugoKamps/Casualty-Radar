@@ -9,8 +9,7 @@ namespace Casualty_Radar.Core.Dialog {
         private List<Form> _forms;
 
         /// <summary>
-        /// Creates a form with a black background above all forms except the 
-        /// form called after the overlay.
+        /// Creates a form with a black background above all forms except the form called from the overlay
         /// </summary>
         public DialogOverlay() {
             _forms = new List<Form>();

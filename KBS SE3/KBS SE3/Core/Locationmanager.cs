@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Properties;
-using Casualty_Radar.Utils;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
@@ -56,6 +54,7 @@ namespace Casualty_Radar.Core {
         /// <para>1 = Ambulance</para>
         /// <para>2 = Firefighter</para>
         /// <para>3 = Selected marker</para>
+        /// <para>4 = Destination marker</para>
         /// </param>
         /// <returns>The created marker</returns>
         public GMarkerGoogle CreateMarker(double lat, double lng, int type) {

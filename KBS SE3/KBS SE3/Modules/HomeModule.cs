@@ -72,9 +72,6 @@ namespace Casualty_Radar.Modules {
                 markersOverlay.Markers.Add(LocationManager.CreateMarker(alert.Lat, alert.Lng, type));
             }
         }
-
-        public static Image ResizeImage(Image imgToResize, Size size) => new Bitmap(imgToResize, size);
-        public Panel GetSelectedPanel => _selectedPanel;
         public int GetAlertType => alertTypeComboBox.SelectedIndex;
 
         public LocationManager GetLocationManager() {
@@ -96,7 +93,7 @@ namespace Casualty_Radar.Modules {
             watcher.StatusChanged += watcher_StatusChanged;
             watcher.Start();
             if (_hasLocationservice)
-                map.Position = new PointLatLng(LocationManager.CurrentLatitude, LocationManager.CurrentLongitude);
+                map.Position = GetLocationManager().GetLocationPoint();
             else map.SetPositionByKeywords(Settings.Default.userLocation);
         }
 
@@ -413,7 +410,7 @@ namespace Casualty_Radar.Modules {
                 Alert alert = new Alert(selectedAlert.Title, selectedAlert.Info, selectedAlert.PubDate,
                     selectedAlert.Lat, selectedAlert.Lng) { Type = selectedAlert.Type };
                 navigationModule.Init(alert,
-                    new PointLatLng(LocationManager.CurrentLatitude, LocationManager.CurrentLongitude));
+                    LocationManager.GetLocationPoint());
             }
             ModuleManager.GetInstance().UpdateModule(navigationModule);
         }
