@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -54,17 +55,7 @@ namespace Casualty_Radar.Modules {
             UpdatePanel(alert);
             InitRouteMap(start.Lat, start.Lng, alert.Lat, alert.Lng);
 
-            List<Node> highWay = ParseRoute(ParseHighways(), start, alert.GetPoint());
-            List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
-            List<Node> dest = ParseRoute(FetchDataSection(alert.GetPoint()), highWay[0].GetPoint(), alert.GetPoint());
-
-            highWay.Reverse();
-            origin.Reverse();
-            dest.Reverse();
-
-            _route.RouteNodes = origin;
-            _route.RouteNodes.AddRange(highWay);
-            _route.RouteNodes.AddRange(dest);
+            ParseRoutes(start, alert.GetPoint());
 
             // Draw the entire calculated route
             _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
@@ -75,13 +66,28 @@ namespace Casualty_Radar.Modules {
             routeInfoLabel.Text = "Routebeschrijving (" + _route.TotalDistance + "km)";
         }
 
+        public List<PointLatLng> ParseRoutes(PointLatLng start, PointLatLng end) {
+            List<Node> highWay = ParseRoute(ParseHighways(), start, end);
+            List<Node> origin = ParseRoute(FetchDataSection(start), start, highWay[highWay.Count - 1].GetPoint());
+            List<Node> dest = ParseRoute(FetchDataSection(end), highWay[0].GetPoint(), end);
+
+            highWay.Reverse();
+            origin.Reverse();
+            dest.Reverse();
+            _route.RouteNodes = origin;
+            _route.RouteNodes.AddRange(highWay);
+            _route.RouteNodes.AddRange(dest);
+
+            return _route.GetRoutePoints();
+        }
+
         private void UpdatePanel(Alert alert) {
             infoTitleLabel.Text = string.Format("{0}\n{1}", alert.Title, alert.Info);
             alertTypePicturebox.Image = alert.Type == 1 ? Resources.Medic : Resources.Firefighter;
             timeLabel.Text = alert.PubDate.TimeOfDay.ToString();
         }
 
-        public List<Node> ParseRoute(DataCollection collection, PointLatLng origin, PointLatLng dest) {
+        private List<Node> ParseRoute(DataCollection collection, PointLatLng origin, PointLatLng dest) {
             Node start = MapUtil.GetNearest(origin.Lat, origin.Lng, collection.Intersections);
             Node end = MapUtil.GetNearest(dest.Lat, dest.Lng, collection.Intersections);
             RouteCalculation calc = new RouteCalculation(start, end);
@@ -154,6 +160,8 @@ namespace Casualty_Radar.Modules {
             }
             PageNumber.Text = "Pagina " + page + "/" + (_route.RouteStepPanels.Count / 5 + 1);
         }
+
+        public GeoMapLoader GetGeoMapLoader() => _mapLoader;
 
         /// <summary>
         /// Clears all route step panels

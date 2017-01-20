@@ -8,26 +8,21 @@ using Casualty_Radar.Core.Algorithms;
 using Casualty_Radar.Models;
 using Casualty_Radar.Models.DataControl;
 using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Utils;
 using GMap.NET;
 using GMap.NET.MapProviders;
 
 namespace Casualty_Radar.Modules {
     partial class TestModule : UserControl, IModule {
         private Random random;
-        private DataParser parser;
-        private DataCollection collection;
-        private List<Node> targetCollection;
         private List<long> cRadarTimes;
         private List<long> gMapsTimes;
         private Thread testingThread;
+        private NavigationModule nM;
 
         public TestModule() {
             InitializeComponent();
             random = new Random();
-            parser = new DataParser(@"../../Resources/XML/nederland_snelwegen.xml");
-            parser.Deserialize();
-            collection = parser.GetCollection();
-            targetCollection = collection.Intersections;
         }
 
         public Breadcrumb GetBreadcrumb() {
@@ -36,6 +31,8 @@ namespace Casualty_Radar.Modules {
         }
 
         private void startTestButton_Click(object sender, EventArgs e) {
+            if (nM == null)
+                nM = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             ClearTests();
             testingThread = new Thread(StartNewTest);
             testingThread.Start();
@@ -65,7 +62,7 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         /// <param name="text">The text that has to be appended</param>
         private void Log(string text) {
-            this.Invoke((MethodInvoker)delegate {
+            Invoke((MethodInvoker)delegate {
                 testStatusBox.AppendText(text + Environment.NewLine);
             });
         }
@@ -85,15 +82,8 @@ namespace Casualty_Radar.Modules {
             for (int i = 0; i < amountOfRoutes; i++) {
                 List<PointLatLng> locations = new List<PointLatLng>();
 
-                Node start = GetRandomNode();
-                Node end = GetRandomNode();
-
-                PointLatLng startPoint = new PointLatLng();
-                PointLatLng endPoint = new PointLatLng();
-                startPoint.Lat = start.Lat;
-                startPoint.Lng = start.Lon;
-                endPoint.Lat = end.Lat;
-                endPoint.Lng = end.Lon;
+                PointLatLng startPoint = GetRandomPoint();
+                PointLatLng endPoint = GetRandomPoint();
 
                 locations.Add(startPoint);
                 locations.Add(endPoint);
@@ -107,19 +97,34 @@ namespace Casualty_Radar.Modules {
             }
 
             Log(amountOfRoutes + " random route points generated");
-            this.Invoke((MethodInvoker)delegate {
+            Invoke((MethodInvoker)delegate {
                 testStatusBar.Value = 20;
             });
             return routeLocations;
         }
 
         /// <summary>
-        /// Retrieves a random node with lat & lng variables from the parsed XML file
+        /// Retrieves a random point with lat & lng variables from the parsed XML file
         /// </summary>
-        /// <returns>A random node</returns>
-        private Node GetRandomNode() {
-            int randomInt = random.Next(0, collection.Intersections.Count);
-            return collection.Nodes[randomInt];
+        /// <returns>A random point</returns>
+        private PointLatLng GetRandomPoint() {
+            PointLatLng randomPoint = new PointLatLng();
+            GeoMapSection section = GetRandomSection();
+
+            randomPoint.Lat = random.NextDouble() * (section.UpperBound.Lat - section.LowerBound.Lat) + section.LowerBound.Lat;
+            randomPoint.Lng = random.NextDouble() * (section.UpperBound.Lng - section.LowerBound.Lng) + section.LowerBound.Lng;
+
+            return randomPoint;
+        }
+
+        /// <summary>
+        /// Retrieves sections from the GeoMapLoader class and selects a random section
+        /// </summary>
+        /// <returns>Returns a random section</returns>
+        private GeoMapSection GetRandomSection() {
+            List<GeoMapSection> sections = nM.GetGeoMapLoader().GetGeoMapSections();
+            int randomInt = random.Next(0, sections.Count - 1);
+            return sections[randomInt];
         }
 
         /// <summary>
@@ -130,25 +135,25 @@ namespace Casualty_Radar.Modules {
         private long RunCasualtyRadarAlgorithm(List<List<PointLatLng>> locations) {
             Log("Running Casualty Radar Algorithm...");
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            var nM = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             int addToStatusBar = 40 / locations.Count;
             long previousWatchTime = 0;
+
+            List<PointLatLng> points = new List<PointLatLng>();
             // Loop through the list of nodes and run the algorithm for each route
             foreach (List<PointLatLng> routePoints in locations) {
                 Log("Calculating route " + (locations.IndexOf(routePoints) + 1) + "...");
-                nM.ParseRoute(collection, routePoints.First(), routePoints.Last());
+                points.AddRange(nM.ParseRoutes(routePoints.First(), routePoints.Last()));
 
                 // Add elapsed time of algorithm to list
                 cRadarTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
-                this.Invoke((MethodInvoker)delegate {
-                    testStatusBar.Value += addToStatusBar;
-                });
+                Invoke(new Action(() => testStatusBar.Value += addToStatusBar));
             }
             watch.Stop();
             Log("Finished running Casualty Radar Algorithm");
-            this.Invoke((MethodInvoker)delegate {
+            Invoke((MethodInvoker)delegate {
                 testStatusBar.Value = 60;
                 aOneTotalDurationLabel.Text = watch.ElapsedMilliseconds + " ms";
+                aOneTotalDistanceLabel.Text = Math.Round(MapUtil.GetTotalDistance(points), 2) + "km";
             });
 
             return watch.ElapsedMilliseconds;
@@ -176,14 +181,12 @@ namespace Casualty_Radar.Modules {
                 // Add elapsed time of algorithm to list
                 gMapsTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
 
-                this.Invoke((MethodInvoker)delegate {
-                    testStatusBar.Value += addToStatusBar;
-                });
+                Invoke(new Action(() => testStatusBar.Value += addToStatusBar));
             }
 
             watch.Stop();
             Log("Finished running Google Maps Algorithm");
-            this.Invoke((MethodInvoker)delegate {
+            Invoke((MethodInvoker)delegate {
                 testStatusBar.Value = 100;
                 aTwoTotalDurationLabel.Text = watch.ElapsedMilliseconds + " ms";
                 aTwoTotalDistanceLabel.Text = (totalDistance / 1000) + "km";
@@ -192,7 +195,7 @@ namespace Casualty_Radar.Modules {
         }
 
         private void AppendAverageRouteTime(int amountOfRoutes, long cRadarDuration, long gMapDuration) {
-            this.Invoke((MethodInvoker)delegate {
+            Invoke((MethodInvoker)delegate {
                 aOneAverageDurationLabel.Text = cRadarDuration / amountOfRoutes + " ms";
                 aTwoAverageDurationLabel.Text = gMapDuration / amountOfRoutes + " ms";
             });
@@ -212,7 +215,7 @@ namespace Casualty_Radar.Modules {
                 else if (gMapsTimes[index] < time) gMapsCount++;
             }
 
-            this.Invoke((MethodInvoker)delegate {
+            Invoke((MethodInvoker)delegate {
                 aOneBestRoutesLabel.Text = cRadarCount.ToString();
                 aTwoBestRoutesLabel.Text = gMapsCount.ToString();
             });
