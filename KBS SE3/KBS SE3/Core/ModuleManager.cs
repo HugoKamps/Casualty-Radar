@@ -7,7 +7,7 @@ using Casualty_Radar.Properties;
 
 namespace Casualty_Radar.Core {
     /// <summary>
-    /// Nog in te vullen door Eelco
+    /// Class that registers and manages all the modules
     /// </summary>
     public class ModuleManager {
 
