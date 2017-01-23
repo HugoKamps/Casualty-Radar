@@ -66,8 +66,6 @@ namespace Casualty_Radar.Models.DataControl.Graph {
         /// Determines whether the current Node is considered an intersection
         /// </summary>
         /// <returns>True if the Node is an intersection, false if it isn't</returns>
-        public bool IsIntersection() => ConnectedWays.Count > DataCollection.INTERSECTION_WAY_MINIMUM;
-
-
+        public bool IsIntersection() => this.ConnectedWays.Count > DataCollection.INTERSECTION_WAY_MINIMUM;
     }
 }
