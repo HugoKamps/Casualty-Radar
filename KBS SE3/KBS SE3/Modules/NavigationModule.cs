@@ -88,8 +88,7 @@ namespace Casualty_Radar.Modules {
             routeWorker.RunWorkerCompleted += delegate {
                 if (startingSection != null && endingSection != null) {
                     // Draw the entire calculated route
-                    _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay, Color.FromArgb(210, 73, 57));
-                    DrawSections();
+                    _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
 
                     // Calculate the navigation steps and generate a _panel for each step
                     _route.CalculateRouteSteps();
@@ -104,19 +103,6 @@ namespace Casualty_Radar.Modules {
             routeWorker.RunWorkerAsync();
         }
 
-        public void DrawSections() {
-            List<GeoMapSection> sections = MapLoader.GetGeoMapSections();
-            foreach (GeoMapSection section in sections) {
-                _locationManager.DrawRoute(new List<PointLatLng> {
-                    new PointLatLng(section.UpperBound.Lat, section.LowerBound.Lng),
-                    section.UpperBound,
-                    new PointLatLng(section.LowerBound.Lat, section.UpperBound.Lng),
-                    section.LowerBound,
-                    new PointLatLng(section.UpperBound.Lat, section.LowerBound.Lng)
-                }, _routeOverlay, Color.Black);
-            }
-        }
-
         /// <summary>
         /// Creates the route by using the algorithm
         /// First, a route on the highways will be generated
@@ -125,14 +111,14 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         /// <param name="start">The starting point for the route</param>
         /// <param name="end">The ending point for the route</param>
+        /// <param name="startingSection">The section the starting point is located in</param>
+        /// <param name="endingSection">The section the ending point is located in</param>
+        /// <param name="route">The route object which needs to be filled with data</param>
         /// <returns></returns>
         public void ParseRoutes(PointLatLng start, PointLatLng end, GeoMapSection startingSection, GeoMapSection endingSection, Route route) {
             List<Node> highWay = ParseRoute(ParseHighways(), start, end);
             List<Node> origin = ParseRoute(startingSection, start, highWay[highWay.Count - 1].GetPoint());
             List<Node> dest = ParseRoute(endingSection, highWay[0].GetPoint(), end);
-
-            map.Overlays[0].Markers.Add(_locationManager.CreateMarker(highWay[0].Lat, highWay[0].Lon, 1));
-            map.Overlays[0].Markers.Add(_locationManager.CreateMarker(highWay[highWay.Count - 1].Lat, highWay[highWay.Count - 1].Lon, 1));
 
             highWay.Reverse();
             origin.Reverse();
@@ -166,8 +152,8 @@ namespace Casualty_Radar.Modules {
         /// <param name="dest">The destination from the route</param>
         /// <returns>A list of nodes that represent the final route</returns>
         private List<Node> ParseRoute(DataCollection collection, PointLatLng origin, PointLatLng dest) {
-            Node start = MapUtil.GetNearest(origin.Lat, origin.Lng, collection.Nodes);
-            Node end = MapUtil.GetNearest(dest.Lat, dest.Lng, collection.Nodes);
+            Node start = MapUtil.GetNearest(origin.Lat, origin.Lng, collection.Intersections);
+            Node end = MapUtil.GetNearest(dest.Lat, dest.Lng, collection.Intersections);
             RouteCalculation calc = new RouteCalculation(start, end);
             calc.Search();
             return calc.GetNodes();

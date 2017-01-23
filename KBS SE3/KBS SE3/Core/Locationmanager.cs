@@ -81,11 +81,11 @@ namespace Casualty_Radar.Core {
         /// <param name="points">The list with points for the path</param>
         /// <param name="routeOverlay">The overlay which must be drawn on</param>
         /// <param name="color">The color of the route</param>
-        public void DrawRoute(List<PointLatLng> points, GMapOverlay routeOverlay, Color color) {
+        public void DrawRoute(List<PointLatLng> points, GMapOverlay routeOverlay) {
             routeOverlay.Routes.Add(new GMapRoute(points, "MyRoute") {
                 Stroke = {
                     DashStyle = DashStyle.Solid,
-                    Color = color
+                    Color = Color.FromArgb(210, 73, 57)
                 }
             });
         }
