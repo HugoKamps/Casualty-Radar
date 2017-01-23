@@ -11,13 +11,15 @@ Deze solution bevat 3 projecten:
 - KBS SE3 Unit Tests
 - XML Rewriter
 
-INSTALLATIE
------------
-Casualty Radar kan niet geïnstalleerd worden.
-
 GEBRUIKERSHANDLEIDING
 -----------
-Casualty Radar is een drama voor gebruikers zonder computer ervaring, vooral Eelco
+Wanneer Casualty Radar opgestart wordt, wordt het Home scherm weergegeven. Binnen dit scherm worden de actuele P2000 meldingen weergegeven en getoond met markers op een kaart. Een gebruiker kan een melding selecteren door op een marker te klikken of op een melding in de lijst te klikken. Wanneer een melding geselecteerd is kan er op 'Bereken route' geklikt worden.
+
+Wanneer er een route berekent wordt, wordt het navigatie scherm weergegeven. Binnen dit scherm zijn de routestappen te zien en te downloaden als PDF. Ook wordt de route weergeven op een kaart.
+
+De ververstijd van de meldingen in het Home scherm kan door de gebruiker worden aangepast bij de instellingen. Ook kan de startlocatie van de gebruiker worden aangepast in de instellingen.
+
+Voor geavanceerde gebruikers is er de optie om een testomgeving te openen. Hier kan het algoritme van Casualty Radar worden vergeleken met die van Google Maps.
 
 TEAM
 -----------
