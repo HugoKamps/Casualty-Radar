@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using Casualty_Radar.Properties;
 using Casualty_Radar.Core;
+using Casualty_Radar.Properties;
 
 namespace Casualty_Radar.Models {
     /// <summary>

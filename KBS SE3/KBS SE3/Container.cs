@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using Casualty_Radar.Core;
 using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Modules;
 using static Casualty_Radar.Core.Dialog.DialogType;
-using System.Threading;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using Casualty_Radar.Models;
-using GMap.NET;
 
 namespace Casualty_Radar {
     public partial class Container : Form {
@@ -161,11 +155,6 @@ namespace Casualty_Radar {
                 hm.PreviousButton_Click();
             }
             ModuleManager.GetInstance().UpdateModule(parentModule);
-        }
-
-        private void testBtn_Click(object sender, EventArgs e) {
-            GeoMapLoader geoMapLoader = new GeoMapLoader();
-            geoMapLoader.GetGeoMapSections();
         }
     }
 }

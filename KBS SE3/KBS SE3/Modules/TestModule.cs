@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Casualty_Radar.Core;
-using Casualty_Radar.Core.Algorithms;
 using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
-using Casualty_Radar.Models.DataControl;
-using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Models.Navigation;
 using Casualty_Radar.Utils;
 using GMap.NET;
 using GMap.NET.MapProviders;
 
 namespace Casualty_Radar.Modules {
+    /// <summary>
+    /// Module to create random routes and compare that same route with our algoritm and googles algoritm
+    /// </summary>
     partial class TestModule : UserControl, IModule {
         private Random _random;
         private List<long> _cRadarTimes;
         private List<long> _gMapsTimes;
         private Thread _testingThread;
-        private NavigationModule _nM;
+        private NavigationModule _navigationModule;
 
         public TestModule() {
             InitializeComponent();
@@ -33,8 +34,8 @@ namespace Casualty_Radar.Modules {
         }
 
         private void startTestButton_Click(object sender, EventArgs e) {
-            if (_nM == null)
-                _nM = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+            if (_navigationModule == null)
+                _navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             ClearTests();
             _testingThread = new Thread(StartNewTest);
             _testingThread.Start();
@@ -93,7 +94,7 @@ namespace Casualty_Radar.Modules {
                 routeLocations.Add(locations);
                 Log("Route point " + (i + 1) + " added");
 
-                this.Invoke((MethodInvoker)delegate {
+                Invoke((MethodInvoker)delegate {
                     testStatusBar.Value += addToStatusBar;
                 });
             }
@@ -124,7 +125,7 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         /// <returns>Returns a random section</returns>
         private GeoMapSection GetRandomSection() {
-            List<GeoMapSection> sections = _nM.GetGeoMapLoader().GetGeoMapSections();
+            List<GeoMapSection> sections = _navigationModule.MapLoader.GetGeoMapSections();
             int randomInt = _random.Next(0, sections.Count - 1);
             return sections[randomInt];
         }
@@ -136,7 +137,7 @@ namespace Casualty_Radar.Modules {
         /// <param name="locations">A list with lists which include two Node objects, the start and end points.</param>
         private long RunCasualtyRadarAlgorithm(List<List<PointLatLng>> locations) {
             Log("Running Casualty Radar Algorithm...");
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            var watch = Stopwatch.StartNew();
             int addToStatusBar = 40 / locations.Count;
             long previousWatchTime = 0;
 
@@ -144,7 +145,11 @@ namespace Casualty_Radar.Modules {
             // Loop through the list of nodes and run the algorithm for each route
             foreach (List<PointLatLng> routePoints in locations) {
                 Log("Calculating route " + (locations.IndexOf(routePoints) + 1) + "...");
-                points.AddRange(_nM.ParseRoutes(routePoints.First(), routePoints.Last(), new Route()));
+                GeoMapSection startSection = _navigationModule.MapLoader.ParseDataSection(routePoints.First());
+                GeoMapSection endSection = _navigationModule.MapLoader.ParseDataSection(routePoints.Last());
+                Route tempRoute = new Route();
+                _navigationModule.ParseRoutes(routePoints.First(), routePoints.Last(), startSection, endSection, tempRoute);
+                points.AddRange(tempRoute.GetRoutePoints());
 
                 // Add elapsed time of algorithm to list
                 _cRadarTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
@@ -168,7 +173,7 @@ namespace Casualty_Radar.Modules {
         /// <param name="locations">A list with lists which include two PointLatLng variables, the start and end points.</param>
         private long RunGoogleMapsAlgorithm(List<List<PointLatLng>> locations) {
             Log("Running Google Maps Algorithm...");
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            var watch = Stopwatch.StartNew();
             uint totalDistance = 0;
             bool query_limit = false;
 

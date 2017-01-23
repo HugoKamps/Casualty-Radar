@@ -4,14 +4,22 @@ using System.Xml.Serialization;
 
 namespace Casualty_Radar.Models.DataControl {
 
+    /// <summary>
+    /// The dataparser is used to create in-memory data based on the information of an XML Flat file.
+    /// The XML File will be deserialized and automatically build into data objects.
+    /// </summary>
     public class DataParser {
 
         private readonly string _filePath;
         private DataCollection _collection;
-
+        
+        /// <summary>
+        /// Creates a new instance from the DataParser class
+        /// </summary>
+        /// <param name="path">The filepath from a XML file that will be deserialized</param>
         public DataParser(string path) {
-            this._filePath = path;
-            this._collection = null;
+            _filePath = path;
+            _collection = null;
         }
 
         /// <summary>
@@ -22,8 +30,8 @@ namespace Casualty_Radar.Models.DataControl {
         public void Deserialize() {
             XmlSerializer serializer = new XmlSerializer(typeof(DataCollection));
             using(FileStream stream = new FileStream(_filePath, FileMode.Open)) {
-                this._collection = (DataCollection)serializer.Deserialize(stream);
-                this._collection.Index();
+                _collection = (DataCollection)serializer.Deserialize(stream);
+                _collection.Index();
             }
         }
 

@@ -1,6 +1,4 @@
-﻿using Casualty_Radar.Modules;
-using Casualty_Radar.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -11,11 +9,13 @@ using System.Xml;
 using System.Xml.Linq;
 using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
+using Casualty_Radar.Modules;
+using Casualty_Radar.Utils;
 
 namespace Casualty_Radar.Core {
     /// <summary>
-    /// The feed class arranges all the functionalities from the alerts we get out of our RSS feed
-    /// In this class we create,update and filter the alerts 
+    /// The feed class arranges all the functionalities for the alerts
+    /// In this class we create,update and filter the alert and refresh the feed
     /// </summary>
     public class Feed {
         private static Feed _instance;

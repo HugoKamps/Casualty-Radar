@@ -8,7 +8,7 @@ namespace Casualty_Radar.Core.Dialog {
         /// A DialogMessageType is a simple key that is used to define each dialog.
         /// This can differ in positive keys, like success, and negative keys like an error or a warning.
         /// </summary>
-        public enum DialogMessageType { WARNING, ERROR, SUCCESS };
+        public enum DialogMessageType { WARNING, ERROR, SUCCESS }
 
         /// <summary>
         /// Returns an icon based on the given message type

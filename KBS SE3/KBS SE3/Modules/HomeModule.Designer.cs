@@ -1,11 +1,13 @@
-﻿using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using GMap.NET.WindowsForms;
 
 namespace Casualty_Radar.Modules {
     partial class HomeModule {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -318,7 +320,7 @@ namespace Casualty_Radar.Modules {
         }
 
         #endregion
-        public GMap.NET.WindowsForms.GMapControl map;
+        public GMapControl map;
         private Panel refreshPanel;
         private Panel rightPanel;
         public PictureBox refreshFeedButton;

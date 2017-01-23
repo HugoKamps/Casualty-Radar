@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Casualty_Radar.Models.DataControl.Graph;
+using Casualty_Radar.Models.DataControl.Graph.Ways;
 using Casualty_Radar.Properties;
 
 namespace Casualty_Radar.Models.Navigation {

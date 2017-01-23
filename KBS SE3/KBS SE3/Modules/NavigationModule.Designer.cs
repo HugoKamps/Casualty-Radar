@@ -1,9 +1,13 @@
-﻿namespace Casualty_Radar.Modules {
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using GMap.NET.WindowsForms;
+
+namespace Casualty_Radar.Modules {
     partial class NavigationModule {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -352,26 +356,26 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel routePanel;
-        private System.Windows.Forms.Panel mapPanel;
-        public System.Windows.Forms.Panel alertInfoPanel;
-        private System.Windows.Forms.Label timeLabel;
-        private System.Windows.Forms.PictureBox alertTypePicturebox;
-        private System.Windows.Forms.Label infoTitleLabel;
-        private System.Windows.Forms.Panel alertInfoLabelPanel;
-        private System.Windows.Forms.Label alertInfoLabel;
-        private System.Windows.Forms.Panel routeInfoLabelPanel;
-        private System.Windows.Forms.Label routeInfoLabel;
-        private System.Windows.Forms.Panel routeInfoPanel;
-        private GMap.NET.WindowsForms.GMapControl map;
-        private System.Windows.Forms.PictureBox printingPictureBox;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button NextPageButton;
-        private System.Windows.Forms.Button PreviousPageButton;
-        private System.Windows.Forms.Label PageNumber;
-        private System.Windows.Forms.PictureBox mapLoadingOverlay;
-        private System.Windows.Forms.PictureBox loadMapIcon;
-        private System.Windows.Forms.Label mapLoadingLabel;
-        private System.Windows.Forms.Label stepsLoadingLabel;
+        private Panel routePanel;
+        private Panel mapPanel;
+        public Panel alertInfoPanel;
+        private Label timeLabel;
+        private PictureBox alertTypePicturebox;
+        private Label infoTitleLabel;
+        private Panel alertInfoLabelPanel;
+        private Label alertInfoLabel;
+        private Panel routeInfoLabelPanel;
+        private Label routeInfoLabel;
+        private Panel routeInfoPanel;
+        private GMapControl map;
+        private PictureBox printingPictureBox;
+        private Panel panel2;
+        private Button NextPageButton;
+        private Button PreviousPageButton;
+        private Label PageNumber;
+        private PictureBox mapLoadingOverlay;
+        private PictureBox loadMapIcon;
+        private Label mapLoadingLabel;
+        private Label stepsLoadingLabel;
     }
 }

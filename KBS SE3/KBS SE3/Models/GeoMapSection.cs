@@ -11,7 +11,6 @@ namespace Casualty_Radar.Models {
         public string FilePath { get; set; }  // The filename of the XML file
         public DataCollection Data { get; private set; }
 
-
         public GeoMapSection(PointLatLng upperBound, PointLatLng lowerBound, string filePath) {
             UpperBound = upperBound;
             LowerBound = lowerBound;

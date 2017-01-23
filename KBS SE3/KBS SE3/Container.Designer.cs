@@ -1,16 +1,13 @@
 
-﻿using Casualty_Radar.Core;
-using Casualty_Radar.Modules;
-using System;
-using System.Windows.Forms;
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+ using System.Windows.Forms;
 
 namespace Casualty_Radar {
     partial class Container {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -41,7 +38,6 @@ namespace Casualty_Radar {
             this.contentPanel = new System.Windows.Forms.Panel();
             this.menuPanel = new System.Windows.Forms.Panel();
             this.exitBtn = new System.Windows.Forms.Button();
-            this.testBtn = new System.Windows.Forms.Button();
             this.settingsBtn = new System.Windows.Forms.Button();
             this.homeBtn = new System.Windows.Forms.Button();
             this.menuLabel = new System.Windows.Forms.Label();
@@ -154,7 +150,6 @@ namespace Casualty_Radar {
             // menuPanel
             // 
             this.menuPanel.Controls.Add(this.exitBtn);
-            this.menuPanel.Controls.Add(this.testBtn);
             this.menuPanel.Controls.Add(this.settingsBtn);
             this.menuPanel.Controls.Add(this.homeBtn);
             this.menuPanel.Controls.Add(this.menuLabel);
@@ -173,29 +168,13 @@ namespace Casualty_Radar {
             this.exitBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.exitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.exitBtn.ForeColor = System.Drawing.Color.White;
-            this.exitBtn.Location = new System.Drawing.Point(0, 144);
+            this.exitBtn.Location = new System.Drawing.Point(0, 114);
             this.exitBtn.Name = "exitBtn";
             this.exitBtn.Size = new System.Drawing.Size(142, 30);
             this.exitBtn.TabIndex = 13;
             this.exitBtn.Text = "Afsluiten";
             this.exitBtn.UseVisualStyleBackColor = true;
             this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
-            // 
-            // testBtn
-            // 
-            this.testBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.testBtn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.testBtn.FlatAppearance.BorderSize = 0;
-            this.testBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.testBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.testBtn.ForeColor = System.Drawing.Color.White;
-            this.testBtn.Location = new System.Drawing.Point(0, 114);
-            this.testBtn.Name = "testBtn";
-            this.testBtn.Size = new System.Drawing.Size(142, 30);
-            this.testBtn.TabIndex = 12;
-            this.testBtn.Text = "Test";
-            this.testBtn.UseVisualStyleBackColor = true;
-            this.testBtn.Click += new System.EventHandler(this.testBtn_Click);
             // 
             // settingsBtn
             // 
@@ -272,20 +251,19 @@ namespace Casualty_Radar {
 
         #endregion
 
-        private System.Windows.Forms.Panel topBar;
-        private System.Windows.Forms.Panel subBar;
-        private System.Windows.Forms.Label minimizeBtn;
-        private System.Windows.Forms.Label closeBtn;
-        public System.Windows.Forms.Panel contentPanel;
-        private System.Windows.Forms.PictureBox logoTopBar;
-        private System.Windows.Forms.Panel menuPanel;
+        private Panel topBar;
+        private Panel subBar;
+        private Label minimizeBtn;
+        private Label closeBtn;
+        public Panel contentPanel;
+        private PictureBox logoTopBar;
+        private Panel menuPanel;
         public Label breadCrumbStart;
         public Button settingsBtn;
         public Button homeBtn;
         private Label menuLabel;
         private Label previousBtn;
         public Button exitBtn;
-        public Button testBtn;
     }
 }
 

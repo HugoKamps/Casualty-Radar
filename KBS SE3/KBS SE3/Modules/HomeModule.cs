@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Device.Location;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
-using GMap.NET;
-using GMap.NET.MapProviders;
-using GMap.NET.WindowsForms;
-using GMap.NET.WindowsForms.Markers;
 using Casualty_Radar.Core;
 using Casualty_Radar.Core.Dialog;
 using Casualty_Radar.Models;
 using Casualty_Radar.Properties;
+using GMap.NET;
+using GMap.NET.MapProviders;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 
 namespace Casualty_Radar.Modules {
     /// <summary>
@@ -99,7 +98,6 @@ namespace Casualty_Radar.Modules {
 
         public void HomeModule_Load(object sender, EventArgs e) {
             if (LocationManager == null) {
-                // Load the feed & instantiate the location manager
                 int tickTime = Settings.Default.feedTickerTime * 1000;
                 FeedTicker = new FeedTicker(tickTime, Feed.GetInstance());
             }
@@ -400,7 +398,7 @@ namespace Casualty_Radar.Modules {
 
             for (int i = 0; i < _alertPanels.Count; i++) {
                 if (_selectedPanel != _alertPanels[i]) continue;
-                selectedAlert = Feed.GetInstance().GetAlerts[i];
+                selectedAlert = Feed.GetInstance().GetFilteredAlerts[i];
                 break;
             }
 
