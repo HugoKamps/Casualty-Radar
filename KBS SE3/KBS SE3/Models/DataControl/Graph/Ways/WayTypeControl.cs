@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Casualty_Radar.Models.DataControl.Graph.Ways {
     /// <summary>

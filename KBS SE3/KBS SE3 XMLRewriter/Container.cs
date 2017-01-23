@@ -15,15 +15,15 @@ namespace XMLRewriter {
             dialog.Title = "Select XML File";
             dialog.Filter = "XML Files|*.xml|OSM Files|*.osm";
             dialog.InitialDirectory = @"C:\";
-            if(dialog.ShowDialog() == DialogResult.OK) {
+            if (dialog.ShowDialog() == DialogResult.OK) {
                 fileLocationBox.Text = dialog.FileName;
                 destinationFileSelectBtn.Enabled = true;
-            }    
+            }
         }
 
         private void destinationFileSelectBtn_Click(object sender, EventArgs e) {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
-            if(dialog.ShowDialog() == DialogResult.OK) {
+            if (dialog.ShowDialog() == DialogResult.OK) {
                 fileDestinationBox.Text = dialog.SelectedPath;
                 convertBtn.Enabled = true;
             }

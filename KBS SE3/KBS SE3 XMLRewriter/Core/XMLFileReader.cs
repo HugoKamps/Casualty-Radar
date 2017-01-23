@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
@@ -7,17 +6,16 @@ using System.Xml.Linq;
 
 namespace XMLRewriter.Core {
     class XmlFileReader {
-
-        private String _path, _destination, _fileName;
+        private string _path, _destination, _fileName;
         private XmlFileWriter _writer;
         public TextBox DataLog { set; private get; }
         public ProgressBar StatusBar { set; private get; }
 
-        public XmlFileReader(String path) {
+        public XmlFileReader(string path) {
             _path = path;
         }
 
-        public XmlFileReader(String path, String destination, String fileName) : this(path) {
+        public XmlFileReader(string path, string destination, string fileName) : this(path) {
             _destination = destination;
             _fileName = fileName;
         }
@@ -29,9 +27,11 @@ namespace XMLRewriter.Core {
         /// A progressbar is used to represent the status of the processing.
         /// </summary>
         public void Convert() {
-            if (String.IsNullOrEmpty(_fileName) || String.IsNullOrWhiteSpace(_fileName)) {
-                MessageBox.Show("Please supply a name for your XML File.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-            } else {
+            if (string.IsNullOrEmpty(_fileName) || string.IsNullOrWhiteSpace(_fileName)) {
+                MessageBox.Show("Please supply a name for your XML File.", "Warning", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+            }
+            else {
                 _writer = new XmlFileWriter(_destination, _fileName);
                 Log("Reading started");
                 IEnumerable<XElement> elements = ParsedElements();
@@ -46,7 +46,9 @@ namespace XMLRewriter.Core {
                 Log("Started Saving");
                 _writer.Save();
                 Log("Saved succesfully");
-                MessageBox.Show("Converting finished, you can locate the converted file at: " + _path + @"\" + _fileName + ".xml", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                MessageBox.Show(
+                    "Converting finished, you can locate the converted file at: " + _path + @"\" + _fileName + ".xml",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 Reset();
             }
         }
@@ -79,7 +81,7 @@ namespace XMLRewriter.Core {
         /// Logs the given message to the DataLog usercontrol
         /// </summary>
         /// <param name="msg">message that will be logged</param>
-        private void Log(String msg) {
+        private void Log(string msg) {
             DataLog.AppendText(msg + "\n");
         }
 
@@ -102,7 +104,8 @@ namespace XMLRewriter.Core {
                     string lon = origin.Attribute("lon").Value;
                     string lat = origin.Attribute("lat").Value;
                     string nodeId = origin.Attribute("id").Value;
-                    return new XElement("n", new XAttribute("id", nodeId), new XAttribute("l", lon), new XAttribute("b", lat));
+                    return new XElement("n", new XAttribute("id", nodeId), new XAttribute("l", lon),
+                        new XAttribute("b", lat));
                 default:
                 case "way":
                     string wayId = origin.Attribute("id").Value;
@@ -111,7 +114,8 @@ namespace XMLRewriter.Core {
                     foreach (XElement element in origin.Descendants()) {
                         if (element.Name.ToString().Equals("nd")) {
                             rtn.Add(new XElement("nd", new XAttribute("rf", element.FirstAttribute.Value)));
-                        } else if (element.Attribute("k") != null) {
+                        }
+                        else if (element.Attribute("k") != null) {
                             string value = element.Attribute("v").Value;
                             switch (element.Attribute("k").Value) {
                                 case "junction":
@@ -153,21 +157,33 @@ namespace XMLRewriter.Core {
         /// <returns>A shortened string (key) based on the origin value</returns>
         public static string ParseWayValue(string origin) {
             switch (origin) {
-                case "residential": return "res";
-                case "unclassified": return "unc";
-                case "motorway": return "mot";
-                case "living_street": return "liv";
-                case "primary": return "pri";
-                case "trunk": return "tru";
-                case "tertiary": return "ter";
-                case "motorway_link": return "mot_l";
-                case "trunk_link": return "tru_l";
-                case "primary_link": return "pri_l";
-                case "secondary_link": return "sec_l";
-                case "tertiary_link": return "ter_l";
-                default: return "sec";
+                case "residential":
+                    return "res";
+                case "unclassified":
+                    return "unc";
+                case "motorway":
+                    return "mot";
+                case "living_street":
+                    return "liv";
+                case "primary":
+                    return "pri";
+                case "trunk":
+                    return "tru";
+                case "tertiary":
+                    return "ter";
+                case "motorway_link":
+                    return "mot_l";
+                case "trunk_link":
+                    return "tru_l";
+                case "primary_link":
+                    return "pri_l";
+                case "secondary_link":
+                    return "sec_l";
+                case "tertiary_link":
+                    return "ter_l";
+                default:
+                    return "sec";
             }
         }
-
     }
 }

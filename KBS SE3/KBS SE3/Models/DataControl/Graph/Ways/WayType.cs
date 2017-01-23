@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Casualty_Radar.Models.DataControl.Graph.Ways {
+﻿namespace Casualty_Radar.Models.DataControl.Graph.Ways {
     /// <summary>
     /// A WayType is a simple description of a way.
     /// Each waytype is visible in a specific zoomlevel, this
