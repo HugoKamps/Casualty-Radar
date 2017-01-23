@@ -81,6 +81,7 @@ namespace Casualty_Radar.Modules {
             this.stepsLoadingLabel.AutoSize = true;
             this.stepsLoadingLabel.BackColor = System.Drawing.Color.White;
             this.stepsLoadingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stepsLoadingLabel.Location = new System.Drawing.Point(76, 255);
             this.stepsLoadingLabel.Name = "stepsLoadingLabel";
             this.stepsLoadingLabel.Size = new System.Drawing.Size(178, 15);
             this.stepsLoadingLabel.TabIndex = 9;
