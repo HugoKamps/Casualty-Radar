@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Casualty_Radar.Core;
 using Casualty_Radar.Core.Algorithms;
@@ -26,7 +27,7 @@ namespace Casualty_Radar.Modules {
         private Route _route;
         private int _page;
         private Panel _panel;
-        public GeoMapLoader MapLoader { get;}
+        public GeoMapLoader MapLoader { get; }
 
         public NavigationModule() {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace Casualty_Radar.Modules {
             _page = 1;
             _route = new Route();
             MapLoader = new GeoMapLoader();
+            MapLoader.GetGeoMapSections();
         }
 
         public Breadcrumb GetBreadcrumb() {
@@ -73,7 +75,7 @@ namespace Casualty_Radar.Modules {
                         ParseLocalRoute(start, alert.GetPoint(), startingSection);
                     else ParseRoutes(start, alert.GetPoint(), startingSection, endingSection, _route);
                 } else {
-                    Invoke((MethodInvoker) delegate {
+                    Invoke((MethodInvoker)delegate {
                         Casualty_Radar.Container.GetInstance()
                             .DisplayDialog(DialogType.DialogMessageType.ERROR, "Kan route niet berekenen",
                                 "Locatie is onbereikbaar.");
@@ -83,8 +85,7 @@ namespace Casualty_Radar.Modules {
 
             // When the BackgroundWorker is done, display the route on the map
             routeWorker.RunWorkerCompleted += delegate {
-                if (startingSection != null && endingSection != null)
-                {
+                if (startingSection != null && endingSection != null) {
                     // Draw the entire calculated route
                     _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
                     // Calculate the navigation steps and generate a _panel for each step
