@@ -49,7 +49,6 @@ namespace Casualty_Radar.Modules {
             this.mapLoadingLabel = new System.Windows.Forms.Label();
             this.loadMapIcon = new System.Windows.Forms.PictureBox();
             this.routePanel.SuspendLayout();
-            this.routeInfoPanel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.routeInfoLabelPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).BeginInit();
@@ -65,6 +64,7 @@ namespace Casualty_Radar.Modules {
             // routePanel
             // 
             this.routePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(57)))), ((int)(((byte)(61)))));
+            this.routePanel.Controls.Add(this.stepsLoadingLabel);
             this.routePanel.Controls.Add(this.routeInfoPanel);
             this.routePanel.Controls.Add(this.panel2);
             this.routePanel.Controls.Add(this.routeInfoLabelPanel);
@@ -81,7 +81,7 @@ namespace Casualty_Radar.Modules {
             this.stepsLoadingLabel.AutoSize = true;
             this.stepsLoadingLabel.BackColor = System.Drawing.Color.White;
             this.stepsLoadingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stepsLoadingLabel.Location = new System.Drawing.Point(88, 97);
+            this.stepsLoadingLabel.Location = new System.Drawing.Point(76, 209);
             this.stepsLoadingLabel.Name = "stepsLoadingLabel";
             this.stepsLoadingLabel.Size = new System.Drawing.Size(178, 15);
             this.stepsLoadingLabel.TabIndex = 9;
@@ -92,7 +92,6 @@ namespace Casualty_Radar.Modules {
             // 
             this.routeInfoPanel.AutoScroll = true;
             this.routeInfoPanel.BackColor = System.Drawing.Color.White;
-            this.routeInfoPanel.Controls.Add(this.stepsLoadingLabel);
             this.routeInfoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.routeInfoPanel.Location = new System.Drawing.Point(0, 179);
             this.routeInfoPanel.Name = "routeInfoPanel";
@@ -339,8 +338,7 @@ namespace Casualty_Radar.Modules {
             this.Name = "NavigationModule";
             this.Size = new System.Drawing.Size(953, 480);
             this.routePanel.ResumeLayout(false);
-            this.routeInfoPanel.ResumeLayout(false);
-            this.routeInfoPanel.PerformLayout();
+            this.routePanel.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.routeInfoLabelPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.printingPictureBox)).EndInit();
