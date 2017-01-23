@@ -174,8 +174,10 @@ namespace Casualty_Radar.Modules {
         private long RunGoogleMapsAlgorithm(List<List<PointLatLng>> locations) {
             Log("Running Google Maps Algorithm...");
             var watch = Stopwatch.StartNew();
+            long elapsed;
             uint totalDistance = 0;
             bool query_limit = false;
+            DirectionsStatusCode GMapDirections;
 
             int addToStatusBar = 40 / locations.Count;
             long previousWatchTime = watch.ElapsedMilliseconds;
@@ -184,11 +186,11 @@ namespace Casualty_Radar.Modules {
                 Log("Calculating route " + (locations.IndexOf(routePoints) + 1) + "...");
                 try {
                     GDirections directions;
-                    GMapProviders.GoogleMap.GetDirections(out directions, routePoints.First(), routePoints.Last(), false,
+                    GMapDirections = GMapProviders.GoogleMap.GetDirections(out directions, routePoints.First(), routePoints.Last(), false,
                         false, false, false, false);
                     totalDistance += directions.DistanceValue;
-                }
-                catch (NullReferenceException) {
+                    Thread.Sleep(500);
+                } catch (NullReferenceException) {
                     Invoke((MethodInvoker)delegate {
                         Casualty_Radar.Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.ERROR, "GMaps Query Limit", "Het aantal op te vragen routes bij Google Maps is overschreden.");
                     });
@@ -198,28 +200,28 @@ namespace Casualty_Radar.Modules {
                 }
 
                 // Add elapsed time of algorithm to list
-                _gMapsTimes.Add(watch.ElapsedMilliseconds - previousWatchTime);
+                _gMapsTimes.Add(watch.ElapsedMilliseconds - previousWatchTime - 500);
 
                 Invoke(new Action(() => testStatusBar.Value += addToStatusBar));
             }
 
             watch.Stop();
+            elapsed = watch.ElapsedMilliseconds - _gMapsTimes.Count * 500;
             if (query_limit) {
                 Log("Error: Query Limit reached");
                 Invoke((MethodInvoker)delegate {
                     testStatusBar.Value = 100;
-                    
+
                 });
-            }
-            else {
+            } else {
                 Log("Finished running Google Maps Algorithm");
                 Invoke((MethodInvoker)delegate {
                     testStatusBar.Value = 100;
-                    aTwoTotalDurationLabel.Text = watch.ElapsedMilliseconds + " ms";
-                    aTwoTotalDistanceLabel.Text = (totalDistance / 1000) + "km";
+                    aTwoTotalDurationLabel.Text = elapsed + " ms";
+                    aTwoTotalDistanceLabel.Text = totalDistance / 1000 + "km";
                 });
             }
-            return watch.ElapsedMilliseconds;
+            return elapsed;
         }
 
         private void AppendAverageRouteTime(int amountOfRoutes, long cRadarDuration, long gMapDuration) {
