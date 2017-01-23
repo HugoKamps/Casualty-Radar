@@ -54,7 +54,7 @@ namespace Casualty_Radar.Utils {
 
             while (!success) {
                 try {
-                    document.Save(filename = basefilename +  i + ".pdf");
+                    document.Save(filename = basefilename + i + ".pdf");
                     success = true;
                 }
                 catch (IOException) {
@@ -66,8 +66,7 @@ namespace Casualty_Radar.Utils {
 
         public XImage GetImageWithType(RouteStepType type) {
             XImage icon;
-            switch (type)
-            {
+            switch (type) {
                 case RouteStepType.Straight:
                     icon = Resources.straight_icon;
                     break;

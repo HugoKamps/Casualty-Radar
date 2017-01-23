@@ -7,14 +7,12 @@ using Casualty_Radar.Utils;
 using GMap.NET;
 
 namespace Casualty_Radar.Models.DataControl.Graph {
-
     /// <summary>
     /// A Node is a geographic point that is used to connect paths and ways.
     /// Multiple Nodes combined form a way
     /// </summary>
     [Serializable]
     public class Node {
-
         /// <summary>
         ///  Represents the ID from the Node
         /// </summary>
@@ -67,7 +65,5 @@ namespace Casualty_Radar.Models.DataControl.Graph {
         /// </summary>
         /// <returns>True if the Node is an intersection, false if it isn't</returns>
         public bool IsIntersection() => ConnectedWays.Count > DataCollection.INTERSECTION_WAY_MINIMUM;
-
-
     }
 }

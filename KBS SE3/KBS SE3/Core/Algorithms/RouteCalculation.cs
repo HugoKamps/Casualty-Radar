@@ -24,7 +24,7 @@ namespace Casualty_Radar.Core.Algorithms {
                 _current = _open.Select(x => x).OrderBy(x => x.StarData.F).First();
                 _open.Remove(_current);
                 _current.StarData.Closed = true;
-                if (_end.StarData!=null && _end.StarData.Closed) break;
+                if (_end.StarData != null && _end.StarData.Closed) break;
                 List<Node> nodes = MapUtil.GetAdjacentNodes(_current);
                 _g++;
                 foreach (Node n in nodes) {
@@ -35,8 +35,9 @@ namespace Casualty_Radar.Core.Algorithms {
                             H = MapUtil.GetAbsoluteDistance(n.Lat, n.Lon, _end.Lat, _end.Lon),
                             Parent = _current
                         };
-                        _open.Add(n); 
-                    } else if (_g + n.StarData.H < n.StarData.F) {
+                        _open.Add(n);
+                    }
+                    else if (_g + n.StarData.H < n.StarData.F) {
                         n.StarData.G = _g;
                         n.StarData.Parent = _current;
                     }

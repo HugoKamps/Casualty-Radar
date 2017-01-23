@@ -5,13 +5,13 @@ using System.Windows.Forms;
 using static Casualty_Radar.Core.Dialog.DialogType;
 
 namespace Casualty_Radar {
-     public partial class Dialog : Form {
-
+    public partial class Dialog : Form {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
 
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
         [DllImport("user32.dll")]
         private static extern bool ReleaseCapture();
 
@@ -27,7 +27,7 @@ namespace Casualty_Radar {
         /// <param name="title">The title of the dialog</param>
         /// <param name="content">The message content of the dialog</param>
         public void Display(DialogMessageType type, string title, string content) {
-            dialogHeaderTitle.Text = ParseHeaderMessage(type)+": ";
+            dialogHeaderTitle.Text = ParseHeaderMessage(type) + ": ";
             dialogHeaderText.Text = title;
             dialogContentLabel.Text = content;
             Bitmap img = GetDialogIcon(type);
@@ -40,12 +40,12 @@ namespace Casualty_Radar {
         }
 
         private void dialogCloseBtn_MouseEnter(object sender, EventArgs e) {
-            Control selected = (Control)sender;
+            Control selected = (Control) sender;
             selected.BackColor = Color.FromArgb(220, 82, 66);
         }
 
         private void dialogCloseBtn_MouseLeave(object sender, EventArgs e) {
-            Control selected = (Control)sender;
+            Control selected = (Control) sender;
             selected.BackColor = Color.FromArgb(210, 73, 57);
         }
 

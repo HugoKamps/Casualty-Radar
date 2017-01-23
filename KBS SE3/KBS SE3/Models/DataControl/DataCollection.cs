@@ -5,7 +5,6 @@ using Casualty_Radar.Models.DataControl.Graph;
 using Casualty_Radar.Models.DataControl.Graph.Ways;
 
 namespace Casualty_Radar.Models.DataControl {
-
     /// <summary>
     /// The DataCollection consists of the result of the DataParser class.
     /// All nodes, ways and references are accessed using the DataCollection;
@@ -13,9 +12,7 @@ namespace Casualty_Radar.Models.DataControl {
     /// </summary>
     [XmlRoot("osm")]
     public class DataCollection {
-
-        [XmlIgnore]
-        public static readonly int INTERSECTION_WAY_MINIMUM = 2;
+        [XmlIgnore] public static readonly int INTERSECTION_WAY_MINIMUM = 2;
 
         [XmlIgnore]
         public WayTypeControl WayControl { get; }

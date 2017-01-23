@@ -18,7 +18,6 @@ namespace Casualty_Radar.Core {
     /// Class that contains functionality which can be used on a GMAP.net control
     /// </summary>
     public class LocationManager {
-
         public double CurrentLatitude { get; set; } //The user's current latitude
         public double CurrentLongitude { get; set; } //The user's current longitude
         public List<Way> Ways = new List<Way>();

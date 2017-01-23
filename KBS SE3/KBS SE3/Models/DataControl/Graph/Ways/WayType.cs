@@ -5,15 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Casualty_Radar.Models.DataControl.Graph.Ways {
-
-
     /// <summary>
     /// A WayType is a simple description of a way.
     /// Each waytype is visible in a specific zoomlevel, this
     /// can be used to draw only specific ways to increase loadingspeed.
     /// </summary>
     public enum WayType {
-
         LivingStreet = WayZoomLevel.Local,
         MotorWay = WayZoomLevel.National,
         Path = WayZoomLevel.Local,
@@ -28,6 +25,5 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
         Trunk = WayZoomLevel.National,
         TrunkLink = WayZoomLevel.National,
         UnclassifiedWay = WayZoomLevel.Local
-
     }
 }

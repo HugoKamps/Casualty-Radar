@@ -2,7 +2,6 @@
 using Casualty_Radar.Utils;
 
 namespace Casualty_Radar.Core.Algorithms {
-    
     /// <summary>
     /// A class which contains all the data needed for a node in the A-Star algorithm
     /// </summary>
@@ -12,7 +11,7 @@ namespace Casualty_Radar.Core.Algorithms {
         public double G { get; set; } // The value which indicates the distance from the current node to an adjacent node
         public double H { get; set; } // The value which indicates the distance from the current node to the destination node
         public double F => G + H; // The value that determines the current node's usefulness for the route
-        public bool Closed { get; set; } 
+        public bool Closed { get; set; }
 
         /// <summary>
         /// Returns the parent of the current node.
@@ -22,7 +21,8 @@ namespace Casualty_Radar.Core.Algorithms {
             get { return _parentNode; }
             set {
                 _parentNode = value;
-                G = _parentNode.StarData.G + MapUtil.GetAbsoluteDistance(_origin.Lat, _origin.Lon, _parentNode.Lat, _parentNode.Lon);
+                G = _parentNode.StarData.G +
+                    MapUtil.GetAbsoluteDistance(_origin.Lat, _origin.Lon, _parentNode.Lat, _parentNode.Lon);
             }
         }
 

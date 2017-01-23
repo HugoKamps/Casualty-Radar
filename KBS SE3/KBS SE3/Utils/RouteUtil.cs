@@ -3,12 +3,12 @@ using Casualty_Radar.Models.DataControl.Graph;
 
 namespace Casualty_Radar.Utils {
     class RouteUtil {
-         /// <summary>		
-         /// Get the angle in degrees between two lat & long points		
-         /// </summary>		
-         /// <param name="node1">The current node in the route</param>		
-         /// <param name="node2">The next node in the route</param>				
-         /// <returns>The angle between two coordinates</returns>
+        /// <summary>		
+        /// Get the angle in degrees between two lat & long points		
+        /// </summary>		
+        /// <param name="node1">The current node in the route</param>		
+        /// <param name="node2">The next node in the route</param>				
+        /// <returns>The angle between two coordinates</returns>
         public static double AngleFromCoordinate(Node node1, Node node2) {
             double dLon = node2.Lon - node1.Lon;
 

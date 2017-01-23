@@ -2,7 +2,6 @@
 
 namespace Casualty_Radar.Models {
     public class Breadcrumb {
-
         public IModule Content { get; set; }
         public IModule Parent { get; set; }
         public IModule Child { get; set; }

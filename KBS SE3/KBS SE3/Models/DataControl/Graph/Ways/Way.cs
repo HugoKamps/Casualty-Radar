@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace Casualty_Radar.Models.DataControl.Graph.Ways {
-
     /// <summary>
     /// A Way is a geographical way that consists of multiple node references.
     /// Those nodes connected make the way.
@@ -11,7 +10,6 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
     /// </summary>
     [Serializable]
     public class Way {
-
         [XmlAttribute("id", DataType = "long")]
         public long ID { get; set; }
 
@@ -29,7 +27,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
         /// This tag is used to check if a the current Way is a roundabout or a different kind of junction.
         /// </summary>
         [XmlAttribute("jc", DataType = "string")]
-        public String JunctionType { get; set; } 
+        public String JunctionType { get; set; }
 
         /// <summary>
         /// The TypeDescription is a small key that represents a certain kind of way type.

@@ -9,12 +9,10 @@ using Casualty_Radar.Utils;
 using GMap.NET;
 
 namespace Casualty_Radar.Models.Navigation {
-
     /// <summary>
     /// Class where the route is calculated and creates route steps
     /// </summary>
     class Route {
-
         public List<Node> RouteNodes { get; set; } // All the nodes in the calculated route
         public List<NavigationStep> RouteSteps { get; set; } // All the calculated steps of the route
         public List<Panel> RouteStepPanels { get; set; } // All the generated panels for the route steps

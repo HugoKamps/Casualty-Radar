@@ -1,8 +1,7 @@
 ﻿using System;
 using GMap.NET;
 
-namespace Casualty_Radar.Models
-{
+namespace Casualty_Radar.Models {
     /// <summary>
     /// Model class which contains all information regarding alerts that are used for the feed
     /// </summary>
@@ -25,7 +24,7 @@ namespace Casualty_Radar.Models
             Lng = lng;
         }
 
-        public override string ToString(){
+        public override string ToString() {
             string returnString = Code + ": " + Type + ", " + Info;
             return returnString;
         }
@@ -33,6 +32,5 @@ namespace Casualty_Radar.Models
         public PointLatLng GetPoint() {
             return new PointLatLng(Lat, Lng);
         }
-
     }
 }

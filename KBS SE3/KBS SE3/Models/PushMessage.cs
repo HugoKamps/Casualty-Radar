@@ -4,11 +4,10 @@ using System.Drawing;
 using System.Windows.Forms;
 
 namespace Casualty_Radar.Models {
-
-     /// <summary>
-     /// Class which instantiates a PushMessage for when the user has the application in the background and new alerts come in.
-     /// </summary>
-     class PushMessage {
+    /// <summary>
+    /// Class which instantiates a PushMessage for when the user has the application in the background and new alerts come in.
+    /// </summary>
+    class PushMessage {
         private NotifyIcon _icon;
 
         public PushMessage(List<Alert> alerts) {
