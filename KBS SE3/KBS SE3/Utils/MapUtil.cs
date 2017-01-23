@@ -90,7 +90,7 @@ namespace Casualty_Radar.Utils {
         public static List<Node> GetAdjacentNodes(Node origin) {
             List<Node> rtn = new List<Node>();
             foreach (Way w in origin.ConnectedWays) {
-                List<Node> references = w.References.Select(x => x.Node).Where(x => x != null && x.IsIntersection()).ToList();
+                List<Node> references = w.References.Select(x => x.Node).Where(x => x != null).ToList();
 
                 int idx = references.IndexOf(origin);
                 if (idx > 0) rtn.Add(references[idx - 1]);
