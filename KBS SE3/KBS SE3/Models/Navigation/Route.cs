@@ -94,10 +94,10 @@ namespace Casualty_Radar.Models.Navigation {
                 }
                 TotalDistance = Math.Round(TotalDistance, 2);
             }
-            PrintPanels();
+            SetPanels();
         }
 
-        public void PrintPanels() {
+        public void SetPanels() {
             int height = 0;
             Color color = Color.Gainsboro;
             for (int i = 0; i < RouteSteps.Count; i++) {
