@@ -2,7 +2,6 @@
 using System.Xml.Serialization;
 
 namespace Casualty_Radar.Models.DataControl.Graph {
-
     /// <summary>
     /// A NodeReference instance is linked to a Node instance.
     /// Each ReferenceID attribute is equal to a Node ID attribute.
@@ -10,7 +9,6 @@ namespace Casualty_Radar.Models.DataControl.Graph {
     /// </summary>
     [Serializable]
     public class NodeReference {
-
         /// <summary>
         /// The reference ID represents the reference to a Node ID.
         /// Because multiple ways might contain the same Node we have to use references instead of the full node

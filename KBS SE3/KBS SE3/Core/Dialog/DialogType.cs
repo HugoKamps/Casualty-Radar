@@ -3,12 +3,15 @@ using System.Drawing;
 
 namespace Casualty_Radar.Core.Dialog {
     public static class DialogType {
-
         /// <summary>
         /// A DialogMessageType is a simple key that is used to define each dialog.
         /// This can differ in positive keys, like success, and negative keys like an error or a warning.
         /// </summary>
-        public enum DialogMessageType { WARNING, ERROR, SUCCESS }
+        public enum DialogMessageType {
+            WARNING,
+            ERROR,
+            SUCCESS
+        }
 
         /// <summary>
         /// Returns an icon based on the given message type
@@ -31,10 +34,14 @@ namespace Casualty_Radar.Core.Dialog {
         /// <returns>The header message of the dialog</returns>
         public static string ParseHeaderMessage(DialogMessageType type) {
             switch (type) {
-                case DialogMessageType.WARNING: return "Waarschuwing";
-                case DialogMessageType.ERROR:   return "Foutmelding";
-                case DialogMessageType.SUCCESS: return "Melding";
-                default: return null;     
+                case DialogMessageType.WARNING:
+                    return "Waarschuwing";
+                case DialogMessageType.ERROR:
+                    return "Foutmelding";
+                case DialogMessageType.SUCCESS:
+                    return "Melding";
+                default:
+                    return null;
             }
         }
     }

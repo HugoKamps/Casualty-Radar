@@ -10,9 +10,7 @@ using GMap.NET;
 
 namespace Casualty_Radar.Core {
     class GeoMapLoader {
-
-        private readonly List<GeoMapSection> _geoMapSections; // List that contains all the GeoMapSection instances of the XML files
-
+        private readonly List<GeoMapSection> _geoMapSections;
         private const string FILE_PATH = @"../../Resources/XML/Sections"; // File path that reads out the xml data
 
         public GeoMapLoader() {
@@ -25,14 +23,15 @@ namespace Casualty_Radar.Core {
         /// </summary>
         private void Init() {
             List<string> directory = Directory.GetFiles(FILE_PATH).Select(Path.GetFileName).ToList();
-            foreach (string fileName in directory) {              
+            foreach (string fileName in directory) {
                 XmlReader reader = XmlReader.Create(FILE_PATH + "/" + fileName);
                 if (reader.ReadToDescendant("bnd")) {
                     double minLat = double.Parse(reader.GetAttribute("minlat"), CultureInfo.InvariantCulture);
                     double minLon = double.Parse(reader.GetAttribute("minlon"), CultureInfo.InvariantCulture);
                     double maxLat = double.Parse(reader.GetAttribute("maxlat"), CultureInfo.InvariantCulture);
                     double maxLon = double.Parse(reader.GetAttribute("maxlon"), CultureInfo.InvariantCulture);
-                    _geoMapSections.Add(new GeoMapSection(new PointLatLng(maxLat, maxLon), new PointLatLng(minLat, minLon), FILE_PATH + "/" + fileName));
+                    _geoMapSections.Add(new GeoMapSection(new PointLatLng(maxLat, maxLon),
+                        new PointLatLng(minLat, minLon), FILE_PATH + "/" + fileName));
                     reader.Close();
                 }
             }
@@ -63,6 +62,5 @@ namespace Casualty_Radar.Core {
             }
             return null;
         }
-
     }
 }

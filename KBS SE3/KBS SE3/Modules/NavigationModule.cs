@@ -75,7 +75,7 @@ namespace Casualty_Radar.Modules {
                         ParseLocalRoute(start, alert.GetPoint(), startingSection);
                     else ParseRoutes(start, alert.GetPoint(), startingSection, endingSection, _route);
                 } else {
-                    Invoke((MethodInvoker)delegate {
+                    Invoke((MethodInvoker) delegate {
                         Casualty_Radar.Container.GetInstance()
                             .DisplayDialog(DialogType.DialogMessageType.ERROR, "Kan route niet berekenen",
                                 "Locatie is onbereikbaar.");
@@ -165,8 +165,11 @@ namespace Casualty_Radar.Modules {
             try {
                 section.Load();
                 return ParseRoute(section.Data, origin, dest);
-            } catch (NullReferenceException) {
-                Casualty_Radar.Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.ERROR, "Route niet gevonden", "Er is helaas geen route beschikbaar op dit moment.");
+            }
+            catch (NullReferenceException) {
+                Casualty_Radar.Container.GetInstance()
+                    .DisplayDialog(DialogType.DialogMessageType.ERROR, "Route niet gevonden",
+                        "Er is helaas geen route beschikbaar op dit moment.");
                 return new List<Node>();
             }
         }

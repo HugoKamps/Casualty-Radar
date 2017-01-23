@@ -3,7 +3,6 @@ using System.Net;
 
 namespace Casualty_Radar {
     static class ConnectionUtil {
-
         /// <summary>
         /// Function that returns true if the user has a working internet connection
         /// </summary>
@@ -15,7 +14,8 @@ namespace Casualty_Radar {
                         return true;
                     }
                 }
-            } catch {
+            }
+            catch {
                 return false;
             }
         }

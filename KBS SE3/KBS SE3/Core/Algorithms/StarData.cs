@@ -2,11 +2,11 @@
 using Casualty_Radar.Utils;
 
 namespace Casualty_Radar.Core.Algorithms {
-    
     /// <summary>
     /// A class which contains all the data needed for a node in the A-Star algorithm
     /// </summary>
     public class StarData {
+
         private Node _parentNode, _origin;
         /// <summary>
         /// The value which indicates the distance from the current node to an adjacent node
@@ -30,7 +30,8 @@ namespace Casualty_Radar.Core.Algorithms {
             get { return _parentNode; }
             set {
                 _parentNode = value;
-                G = _parentNode.StarData.G + MapUtil.GetAbsoluteDistance(_origin.Lat, _origin.Lon, _parentNode.Lat, _parentNode.Lon);
+                G = _parentNode.StarData.G +
+                    MapUtil.GetAbsoluteDistance(_origin.Lat, _origin.Lon, _parentNode.Lat, _parentNode.Lon);
             }
         }
 

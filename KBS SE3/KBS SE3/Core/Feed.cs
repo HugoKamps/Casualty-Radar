@@ -31,10 +31,7 @@ namespace Casualty_Radar.Core {
         /// Returns a single-ton instance from the Feed class
         /// </summary>
         /// <returns>Feed instance</returns>
-        public static Feed GetInstance() {
-            if (_instance == null) _instance = new Feed();
-            return _instance;
-        }
+        public static Feed GetInstance() => _instance ?? (_instance = new Feed());
 
         public List<Alert> GetAlerts => _alerts;
         public List<Alert> GetFilteredAlerts => _filteredAlerts;
@@ -58,9 +55,11 @@ namespace Casualty_Radar.Core {
                         "Een gecachede versie van deze website wordt ingeladen");
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
                 USE_FEED_URL = CACHED_FEED_URL;
-            } catch(XmlException)
-            {
-                Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.WARNING, "Website bevat geen xml data", "Een gecachede versie van deze website wordt ingeladen");
+            }
+            catch (XmlException) {
+                Container.GetInstance()
+                    .DisplayDialog(DialogType.DialogMessageType.WARNING, "Website bevat geen xml data",
+                        "Een gecachede versie van deze website wordt ingeladen");
                 _p2000 = SyndicationFeed.Load(XmlReader.Create(CACHED_FEED_URL));
                 USE_FEED_URL = CACHED_FEED_URL;
             }
@@ -84,7 +83,8 @@ namespace Casualty_Radar.Core {
                 string lng = item.ElementExtensions.Last().GetObject<XElement>().Value;
                 double parsedLat = double.Parse(lat, CultureInfo.InvariantCulture);
                 double parsedLng = double.Parse(lng, CultureInfo.InvariantCulture);
-                Alert newAlert = new Alert(item.Title.Text.Replace("~", " "), item.Summary.Text, item.PublishDate, parsedLat, parsedLng);
+                Alert newAlert = new Alert(item.Title.Text.Replace("~", " "), item.Summary.Text, item.PublishDate,
+                    parsedLat, parsedLng);
 
                 return AlertUtil.SetAlertAttributes(newAlert, alertItemString);
             }
@@ -114,13 +114,14 @@ namespace Casualty_Radar.Core {
         /// Check which filter is selected, 1 is for ambulance 2 is for firefighter and adds the selected filter
         /// </summary>
         public void UpdateAlerts() {
-            HomeModule hM = (HomeModule)ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
+            HomeModule hM = (HomeModule) ModuleManager.GetInstance().ParseInstance(typeof(HomeModule));
             int selectedFilter = hM.GetAlertType;
             if (selectedFilter == 1 || selectedFilter == 2) {
                 _filteredAlerts = new List<Alert>();
                 foreach (Alert a in _alerts)
                     if (a.Type == selectedFilter) _filteredAlerts.Add(a);
-            } else _filteredAlerts = _alerts;
+            }
+            else _filteredAlerts = _alerts;
             hM.DisplayLoadIcon();
             hM.LoadComponents();
         }
