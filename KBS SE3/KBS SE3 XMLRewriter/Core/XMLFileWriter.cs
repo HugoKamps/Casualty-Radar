@@ -1,13 +1,12 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace XMLRewriter.Core {
     class XmlFileWriter {
-
         private XDocument _doc;
-        private String _destination, _fileName;
+        private string _destination, _fileName;
         private XElement _root;
-        public XmlFileWriter(String dest, String fileName) {
+
+        public XmlFileWriter(string dest, string fileName) {
             _destination = dest;
             _fileName = fileName;
             _root = new XElement("osm");
@@ -26,7 +25,7 @@ namespace XMLRewriter.Core {
         /// Saves the new XDocument to the destination folder with the new file name
         /// </summary>
         public void Save() {
-            _doc.Save(_destination + "/"+_fileName+".xml", SaveOptions.DisableFormatting);
+            _doc.Save(_destination + "/" + _fileName + ".xml", SaveOptions.DisableFormatting);
         }
     }
 }

@@ -62,6 +62,5 @@ namespace Casualty_Radar.Models {
             _stateTimer.Tick += Tick;
             StartTimerIfEnabled();
         }
-
     }
 }

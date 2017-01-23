@@ -9,12 +9,10 @@ using Casualty_Radar.Utils;
 using GMap.NET;
 
 namespace Casualty_Radar.Models.Navigation {
-
     /// <summary>
     /// Class where the route is calculated and creates route steps
     /// </summary>
     class Route {
-
         public List<Node> RouteNodes { get; set; } // All the nodes in the calculated route
         public List<NavigationStep> RouteSteps { get; set; } // All the calculated steps of the route
         public List<Panel> RouteStepPanels { get; set; } // All the generated panels for the route steps
@@ -96,16 +94,14 @@ namespace Casualty_Radar.Models.Navigation {
                 }
                 TotalDistance = Math.Round(TotalDistance, 2);
             }
-            PrintPanels();
+            SetPanels();
         }
 
-        public void PrintPanels() {
+        public void SetPanels() {
             int height = 0;
             Color color = Color.Gainsboro;
             for (int i = 0; i < RouteSteps.Count; i++) {
-                if (i % 5 == 0) {
-                    height = 0;
-                }
+                if (i % 5 == 0) height = 0;
                 if (i == RouteSteps.Count - 2) continue;
                 RouteStepPanels.Add(NavigationStep.CreateRouteStepPanel(RouteSteps[i], color, height));
                 height += 51;

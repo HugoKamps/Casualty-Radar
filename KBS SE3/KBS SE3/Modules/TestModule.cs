@@ -35,7 +35,8 @@ namespace Casualty_Radar.Modules {
 
         private void startTestButton_Click(object sender, EventArgs e) {
             if (_navigationModule == null)
-                _navigationModule = (NavigationModule)ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
+                _navigationModule =
+                    (NavigationModule) ModuleManager.GetInstance().ParseInstance(typeof(NavigationModule));
             ClearTests();
             _testingThread = new Thread(StartNewTest);
             _testingThread.Start();
@@ -65,9 +66,7 @@ namespace Casualty_Radar.Modules {
         /// </summary>
         /// <param name="text">The text that has to be appended</param>
         private void Log(string text) {
-            Invoke((MethodInvoker)delegate {
-                testStatusBox.AppendText(text + Environment.NewLine);
-            });
+            Invoke((MethodInvoker) delegate { testStatusBox.AppendText(text + Environment.NewLine); });
         }
 
         /// <summary>
@@ -94,15 +93,11 @@ namespace Casualty_Radar.Modules {
                 routeLocations.Add(locations);
                 Log("Route point " + (i + 1) + " added");
 
-                Invoke((MethodInvoker)delegate {
-                    testStatusBar.Value += addToStatusBar;
-                });
+                Invoke((MethodInvoker) delegate { testStatusBar.Value += addToStatusBar; });
             }
 
             Log(amountOfRoutes + " random route points generated");
-            Invoke((MethodInvoker)delegate {
-                testStatusBar.Value = 20;
-            });
+            Invoke((MethodInvoker) delegate { testStatusBar.Value = 20; });
             return routeLocations;
         }
 
@@ -114,8 +109,10 @@ namespace Casualty_Radar.Modules {
             PointLatLng randomPoint = new PointLatLng();
             GeoMapSection section = GetRandomSection();
 
-            randomPoint.Lat = _random.NextDouble() * (section.UpperBound.Lat - section.LowerBound.Lat) + section.LowerBound.Lat;
-            randomPoint.Lng = _random.NextDouble() * (section.UpperBound.Lng - section.LowerBound.Lng) + section.LowerBound.Lng;
+            randomPoint.Lat = _random.NextDouble() * (section.UpperBound.Lat - section.LowerBound.Lat) +
+                              section.LowerBound.Lat;
+            randomPoint.Lng = _random.NextDouble() * (section.UpperBound.Lng - section.LowerBound.Lng) +
+                              section.LowerBound.Lng;
 
             return randomPoint;
         }
@@ -148,7 +145,8 @@ namespace Casualty_Radar.Modules {
                 GeoMapSection startSection = _navigationModule.MapLoader.ParseDataSection(routePoints.First());
                 GeoMapSection endSection = _navigationModule.MapLoader.ParseDataSection(routePoints.Last());
                 Route tempRoute = new Route();
-                _navigationModule.ParseRoutes(routePoints.First(), routePoints.Last(), startSection, endSection, tempRoute);
+                _navigationModule.ParseRoutes(routePoints.First(), routePoints.Last(), startSection, endSection,
+                    tempRoute);
                 points.AddRange(tempRoute.GetRoutePoints());
 
                 // Add elapsed time of algorithm to list
@@ -157,7 +155,7 @@ namespace Casualty_Radar.Modules {
             }
             watch.Stop();
             Log("Finished running Casualty Radar Algorithm");
-            Invoke((MethodInvoker)delegate {
+            Invoke((MethodInvoker) delegate {
                 testStatusBar.Value = 60;
                 aOneTotalDurationLabel.Text = watch.ElapsedMilliseconds + " ms";
                 aOneTotalDistanceLabel.Text = Math.Round(MapUtil.GetTotalDistance(points), 2) + "km";
@@ -225,7 +223,7 @@ namespace Casualty_Radar.Modules {
         }
 
         private void AppendAverageRouteTime(int amountOfRoutes, long cRadarDuration, long gMapDuration) {
-            Invoke((MethodInvoker)delegate {
+            Invoke((MethodInvoker) delegate {
                 aOneAverageDurationLabel.Text = cRadarDuration / amountOfRoutes + " ms";
                 if (_gMapsTimes.Count > 0)
                     aTwoAverageDurationLabel.Text = gMapDuration / amountOfRoutes + " ms";
@@ -248,7 +246,7 @@ namespace Casualty_Radar.Modules {
                 }
             }
 
-            Invoke((MethodInvoker)delegate {
+            Invoke((MethodInvoker) delegate {
                 aOneBestRoutesLabel.Text = cRadarCount.ToString();
                 aTwoBestRoutesLabel.Text = gMapsCount.ToString();
             });

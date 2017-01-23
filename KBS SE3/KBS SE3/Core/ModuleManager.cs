@@ -10,7 +10,6 @@ namespace Casualty_Radar.Core {
     /// Class that registers and manages all the modules
     /// </summary>
     public class ModuleManager {
-
         private static ModuleManager _instance;
         private IModule _defaultModule, _currentModule;
         private readonly List<IModule> _registeredModules;
@@ -18,11 +17,9 @@ namespace Casualty_Radar.Core {
         private ModuleManager() {
             _registeredModules = new List<IModule>();
             RegisterModules();
-            if (ConnectionUtil.HasInternetConnection()) {
-                _defaultModule = ParseInstance(Settings.Default.userLocation == "" ? typeof(GetStartedModule) : typeof(HomeModule));
-            } else {
-                _defaultModule = ParseInstance(typeof(NoConnectionModule));
-            }
+            _defaultModule = ConnectionUtil.HasInternetConnection()
+                ? ParseInstance(Settings.Default.userLocation == "" ? typeof(GetStartedModule) : typeof(HomeModule))
+                : ParseInstance(typeof(NoConnectionModule));
         }
 
         /// <summary>
@@ -31,16 +28,14 @@ namespace Casualty_Radar.Core {
         /// </summary>
         /// <param name="type">The original Type of the IModule instance</param>
         /// <returns>An IModule instance</returns>
-        public IModule ParseInstance(Type type) {
-            return _registeredModules.FirstOrDefault(mod => mod.GetType() == type);
-        }
+        public IModule ParseInstance(Type type) => _registeredModules.FirstOrDefault(mod => mod.GetType() == type);
 
         /// <summary>
         /// Registers all modules into cache so we can request them later.
         /// This method will make sure all modules are loaded in once.
         /// </summary>
         private void RegisterModules() {
-            _registeredModules.AddRange( new IModule[] {
+            _registeredModules.AddRange(new IModule[] {
                 new HomeModule(),
                 new SettingsModule(),
                 new NavigationModule(),
@@ -55,10 +50,7 @@ namespace Casualty_Radar.Core {
         /// Creates the instance if it doesn't exist yet
         /// </summary>
         /// <returns>An instance of ModuleManager</returns>
-        public static ModuleManager GetInstance() {
-            return _instance ?? (_instance = new ModuleManager());
-        }
-
+        public static ModuleManager GetInstance() => _instance ?? (_instance = new ModuleManager());
 
         /// <summary>
         /// Updates the content from the main container with the given Module (IModule)
@@ -72,7 +64,7 @@ namespace Casualty_Radar.Core {
         public void UpdateModule(Object module) {
             Label headerLabel = Container.GetInstance().breadCrumbStart;
             Panel contentPanel = Container.GetInstance().contentPanel;
-            if(module != null) {
+            if (module != null) {
                 IModule reInitialized = ParseInstance(module.GetType());
                 _currentModule = reInitialized;
                 if (headerLabel != null) UpdateBreadcrumb(headerLabel, reInitialized);
@@ -87,9 +79,7 @@ namespace Casualty_Radar.Core {
         /// If there is no active module it returns null
         /// </summary>
         /// <returns>An instance of the IModule interface</returns>
-        public IModule GetCurrentModule() {
-            return _currentModule;
-        }
+        public IModule GetCurrentModule() => _currentModule;
 
         /// <summary>
         /// Returns the top level page based on the given IModule.
@@ -125,8 +115,6 @@ namespace Casualty_Radar.Core {
         /// Returns the default module that will be shown when the app starts.
         /// </summary>
         /// <returns>An IModule instance</returns>
-        public IModule GetDefaultModule() {
-            return _defaultModule;
-        }
+        public IModule GetDefaultModule() => _defaultModule;
     }
 }

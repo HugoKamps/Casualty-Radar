@@ -8,7 +8,7 @@ namespace Casualty_Radar.Models {
     class GeoMapSection {
         public PointLatLng UpperBound { get; set; } // The coordinates for the upper boundary
         public PointLatLng LowerBound { get; set; } // The coordinates for the lower boundary
-        public string FilePath { get; set; }  // The filename of the XML file
+        public string FilePath { get; set; } // The filename of the XML file
         public DataCollection Data { get; private set; }
 
         public GeoMapSection(PointLatLng upperBound, PointLatLng lowerBound, string filePath) {
@@ -22,6 +22,5 @@ namespace Casualty_Radar.Models {
             parser.Deserialize();
             Data = parser.GetCollection();
         }
-
     }
 }

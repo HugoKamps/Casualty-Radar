@@ -26,7 +26,7 @@ namespace Casualty_Radar.Modules {
         private Route _route;
         private int _page;
         private Panel _panel;
-        public GeoMapLoader MapLoader { get;}
+        public GeoMapLoader MapLoader { get; }
 
         public NavigationModule() {
             InitializeComponent();
@@ -72,7 +72,8 @@ namespace Casualty_Radar.Modules {
                     if (startingSection.FilePath == endingSection.FilePath)
                         ParseLocalRoute(start, alert.GetPoint(), startingSection);
                     else ParseRoutes(start, alert.GetPoint(), startingSection, endingSection, _route);
-                } else {
+                }
+                else {
                     Invoke((MethodInvoker) delegate {
                         Casualty_Radar.Container.GetInstance()
                             .DisplayDialog(DialogType.DialogMessageType.ERROR, "Kan route niet berekenen",
@@ -83,8 +84,7 @@ namespace Casualty_Radar.Modules {
 
             // When the BackgroundWorker is done, display the route on the map
             routeWorker.RunWorkerCompleted += delegate {
-                if (startingSection != null && endingSection != null)
-                {
+                if (startingSection != null && endingSection != null) {
                     // Draw the entire calculated route
                     _locationManager.DrawRoute(_route.GetRoutePoints(), _routeOverlay);
                     // Calculate the navigation steps and generate a _panel for each step
@@ -109,7 +109,8 @@ namespace Casualty_Radar.Modules {
         /// <param name="start">The starting point for the route</param>
         /// <param name="end">The ending point for the route</param>
         /// <returns></returns>
-        public void ParseRoutes(PointLatLng start, PointLatLng end, GeoMapSection startingSection, GeoMapSection endingSection, Route route) {
+        public void ParseRoutes(PointLatLng start, PointLatLng end, GeoMapSection startingSection,
+            GeoMapSection endingSection, Route route) {
             List<Node> highWay = ParseRoute(ParseHighways(), start, end);
             List<Node> origin = ParseRoute(startingSection, start, highWay[highWay.Count - 1].GetPoint());
             List<Node> dest = ParseRoute(endingSection, highWay[0].GetPoint(), end);
@@ -164,8 +165,11 @@ namespace Casualty_Radar.Modules {
             try {
                 section.Load();
                 return ParseRoute(section.Data, origin, dest);
-            } catch (NullReferenceException) {
-                Casualty_Radar.Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.ERROR, "Route niet gevonden", "Er is helaas geen route beschikbaar op dit moment.");
+            }
+            catch (NullReferenceException) {
+                Casualty_Radar.Container.GetInstance()
+                    .DisplayDialog(DialogType.DialogMessageType.ERROR, "Route niet gevonden",
+                        "Er is helaas geen route beschikbaar op dit moment.");
                 return new List<Node>();
             }
         }
