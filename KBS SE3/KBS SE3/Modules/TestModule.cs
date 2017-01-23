@@ -170,6 +170,7 @@ namespace Casualty_Radar.Modules {
             Log("Running Google Maps Algorithm...");
             var watch = System.Diagnostics.Stopwatch.StartNew();
             uint totalDistance = 0;
+            bool query_limit = false;
 
             int addToStatusBar = 40 / locations.Count;
             long previousWatchTime = watch.ElapsedMilliseconds;
@@ -186,6 +187,9 @@ namespace Casualty_Radar.Modules {
                     Invoke((MethodInvoker)delegate {
                         Casualty_Radar.Container.GetInstance().DisplayDialog(DialogType.DialogMessageType.ERROR, "GMaps Query Limit", "Het aantal op te vragen routes bij Google Maps is overschreden.");
                     });
+                    query_limit = true;
+                    _gMapsTimes.Clear();
+                    break;
                 }
 
                 // Add elapsed time of algorithm to list
@@ -195,19 +199,29 @@ namespace Casualty_Radar.Modules {
             }
 
             watch.Stop();
-            Log("Finished running Google Maps Algorithm");
-            Invoke((MethodInvoker)delegate {
-                testStatusBar.Value = 100;
-                aTwoTotalDurationLabel.Text = watch.ElapsedMilliseconds + " ms";
-                aTwoTotalDistanceLabel.Text = (totalDistance / 1000) + "km";
-            });
+            if (query_limit) {
+                Log("Error: Query Limit reached");
+                Invoke((MethodInvoker)delegate {
+                    testStatusBar.Value = 100;
+                    
+                });
+            }
+            else {
+                Log("Finished running Google Maps Algorithm");
+                Invoke((MethodInvoker)delegate {
+                    testStatusBar.Value = 100;
+                    aTwoTotalDurationLabel.Text = watch.ElapsedMilliseconds + " ms";
+                    aTwoTotalDistanceLabel.Text = (totalDistance / 1000) + "km";
+                });
+            }
             return watch.ElapsedMilliseconds;
         }
 
         private void AppendAverageRouteTime(int amountOfRoutes, long cRadarDuration, long gMapDuration) {
             Invoke((MethodInvoker)delegate {
                 aOneAverageDurationLabel.Text = cRadarDuration / amountOfRoutes + " ms";
-                aTwoAverageDurationLabel.Text = gMapDuration / amountOfRoutes + " ms";
+                if (_gMapsTimes.Count > 0)
+                    aTwoAverageDurationLabel.Text = gMapDuration / amountOfRoutes + " ms";
             });
         }
 
@@ -221,8 +235,10 @@ namespace Casualty_Radar.Modules {
 
             foreach (long time in _cRadarTimes) {
                 int index = _cRadarTimes.IndexOf(time);
-                if (time < _gMapsTimes[index]) cRadarCount++;
-                else if (_gMapsTimes[index] < time) gMapsCount++;
+                if (index < _gMapsTimes.Count) {
+                    if (time < _gMapsTimes[index]) cRadarCount++;
+                    else if (_gMapsTimes[index] < time) gMapsCount++;
+                }
             }
 
             Invoke((MethodInvoker)delegate {
