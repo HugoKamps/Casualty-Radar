@@ -53,7 +53,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
         /// If there is no available tag the method will return false
         /// </summary>
         /// <returns>True if the way is considered a one-way street</returns>
-        public bool OneWay() {
+        public bool IsOneWay() {
             return OneWayTag != null && OneWayTag == "yes";
         }
 
@@ -63,7 +63,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
         /// is not available
         /// </summary>
         /// <returns>True if the way is a roundabout</returns>
-        public bool Roundabout() {
+        public bool IsRoundabout() {
             return JunctionType != null && JunctionType == "ra";
         }
     }
