@@ -26,7 +26,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
 
         /// <summary>
         /// A junctiontype is a simple tag that determines what kind of way the current way is.
-        /// This tag is used to check if a the current Way is a roundabout or a different kind of junction.
+        /// This tag is used to check if a the current Way is a roundabout or a different kind of junction
         /// </summary>
         [XmlAttribute("jc", DataType = "string")]
         public String JunctionType { get; set; } 
