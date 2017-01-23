@@ -6,12 +6,21 @@ namespace Casualty_Radar.Core.Algorithms {
     /// A class which contains all the data needed for a node in the A-Star algorithm
     /// </summary>
     public class StarData {
-        private Node _parentNode;
-        private Node _origin;
-        public double G { get; set; } // The value which indicates the distance from the current node to an adjacent node
-        public double H { get; set; } // The value which indicates the distance from the current node to the destination node
-        public double F => G + H; // The value that determines the current node's usefulness for the route
-        public bool Closed { get; set; }
+
+        private Node _parentNode, _origin;
+        /// <summary>
+        /// The value which indicates the distance from the current node to an adjacent node
+        /// </summary>
+        public double G { get; set; } 
+        /// <summary>
+        /// The value which indicates the distance from the current node to the destination node
+        /// </summary>
+        public double H { get; set; }  
+        /// <summary>
+        /// The value that determines the current node's usefulness for the route
+        /// </summary>
+        public double F => G + H;  
+        public bool Closed { get; set; } 
 
         /// <summary>
         /// Returns the parent of the current node.

@@ -373,7 +373,6 @@ namespace Casualty_Radar.Modules {
             InitAlertsMap(true);
         }
 
-        //Keeps track of the watcher's status. If the user has no GPS or has shut off the GPS the user's default location will be used
         private void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e) {
             switch (e.Status) {
                 case GeoPositionStatus.Initializing:

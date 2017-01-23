@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Casualty_Radar.Core;
 using Casualty_Radar.Core.Algorithms;
@@ -35,6 +36,7 @@ namespace Casualty_Radar.Modules {
             _page = 1;
             _route = new Route();
             MapLoader = new GeoMapLoader();
+            MapLoader.GetGeoMapSections();
         }
 
         public Breadcrumb GetBreadcrumb() {
@@ -72,8 +74,7 @@ namespace Casualty_Radar.Modules {
                     if (startingSection.FilePath == endingSection.FilePath)
                         ParseLocalRoute(start, alert.GetPoint(), startingSection);
                     else ParseRoutes(start, alert.GetPoint(), startingSection, endingSection, _route);
-                }
-                else {
+                } else {
                     Invoke((MethodInvoker) delegate {
                         Casualty_Radar.Container.GetInstance()
                             .DisplayDialog(DialogType.DialogMessageType.ERROR, "Kan route niet berekenen",
@@ -109,8 +110,7 @@ namespace Casualty_Radar.Modules {
         /// <param name="start">The starting point for the route</param>
         /// <param name="end">The ending point for the route</param>
         /// <returns></returns>
-        public void ParseRoutes(PointLatLng start, PointLatLng end, GeoMapSection startingSection,
-            GeoMapSection endingSection, Route route) {
+        public void ParseRoutes(PointLatLng start, PointLatLng end, GeoMapSection startingSection, GeoMapSection endingSection, Route route) {
             List<Node> highWay = ParseRoute(ParseHighways(), start, end);
             List<Node> origin = ParseRoute(startingSection, start, highWay[highWay.Count - 1].GetPoint());
             List<Node> dest = ParseRoute(endingSection, highWay[0].GetPoint(), end);

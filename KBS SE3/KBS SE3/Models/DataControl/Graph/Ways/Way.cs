@@ -24,7 +24,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
 
         /// <summary>
         /// A junctiontype is a simple tag that determines what kind of way the current way is.
-        /// This tag is used to check if a the current Way is a roundabout or a different kind of junction.
+        /// This tag is used to check if a the current Way is a roundabout or a different kind of junction
         /// </summary>
         [XmlAttribute("jc", DataType = "string")]
         public String JunctionType { get; set; }
@@ -51,7 +51,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
         /// If there is no available tag the method will return false
         /// </summary>
         /// <returns>True if the way is considered a one-way street</returns>
-        public bool OneWay() {
+        public bool IsOneWay() {
             return OneWayTag != null && OneWayTag == "yes";
         }
 
@@ -61,7 +61,7 @@ namespace Casualty_Radar.Models.DataControl.Graph.Ways {
         /// is not available
         /// </summary>
         /// <returns>True if the way is a roundabout</returns>
-        public bool Roundabout() {
+        public bool IsRoundabout() {
             return JunctionType != null && JunctionType == "ra";
         }
     }
